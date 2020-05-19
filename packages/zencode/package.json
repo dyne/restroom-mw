@@ -33,5 +33,6 @@
   },
   "dependencies": {
     "ignore-case": "^0.1.0"
-  }
+  },
+  "gitHead": "00805d62d1b827d56d08b6be67a825213940fcf0"
 }

@@ -39,5 +39,6 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "swagger-ui-express": "^4.1.4"
-  }
+  },
+  "gitHead": "00805d62d1b827d56d08b6be67a825213940fcf0"
 }
