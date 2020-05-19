@@ -1,7 +1,7 @@
 {
   "name": "@restroom-mw/ui",
   "description": "The swagger-ui mw to extend restroom",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "keywords": [
     "zenroom",
     "rest",
@@ -34,8 +34,8 @@
     "url": "https://github.com/dyne/restroom-wm/issues"
   },
   "dependencies": {
-    "@restroom-mw/utils": "^0.0.1",
-    "@restroom-mw/zencode": "^0.0.1",
+    "@restroom-mw/utils": "^0.1.0",
+    "@restroom-mw/zencode": "^0.1.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "swagger-ui-express": "^4.1.4"
