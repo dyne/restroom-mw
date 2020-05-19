@@ -12,8 +12,11 @@
   ],
   "license": "AGPL-3.0",
   "main": "dist/index.js",
+  "files": [
+    "dist"
+  ],
   "publishConfig": {
-    "registry": "http://localhost:4873"
+    "registry": "https://registry.npmjs.org/"
   },
   "repository": {
     "type": "git",
@@ -31,5 +34,5 @@
   "dependencies": {
     "dotenv": "^8.2.0"
   },
-  "gitHead": "00805d62d1b827d56d08b6be67a825213940fcf0"
+  "gitHead": "0919c8dbbe321b094dcb4bbcfadcd9bc5884e9da"
 }
