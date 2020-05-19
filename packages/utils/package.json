@@ -1,6 +1,6 @@
 {
   "name": "@restroom-mw/utils",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "Puria Nafisi Azizi <puria@dyne.org>",
   "homepage": "https://github.com/dyne/restroom-mw#readme",
   "description": "Restroom middleware utilities",
