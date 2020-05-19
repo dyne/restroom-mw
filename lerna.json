@@ -7,7 +7,7 @@
   "npmClient": "yarn",
   "command": {
     "publish": {
-      "registry": "http://localhost:4873",
+      "registry": "https://registry.npmjs.org/",
       "access": "public"
     }
   }
