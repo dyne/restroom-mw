@@ -4,7 +4,7 @@ This package is where the main magic happens.
 
 Listen to endpoints and look for the contracts in the right place.
 
-It manages also the lifecycle hooks system.
+It manages also the [lifecycle hooks](/architecture?id=lifecycle-hooks) system.
 
 ## Usage
 
