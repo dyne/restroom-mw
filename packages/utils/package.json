@@ -1,0 +1,34 @@
+{
+  "name": "@restroom-mw/utils",
+  "version": "0.0.1",
+  "author": "Puria Nafisi Azizi <puria@dyne.org>",
+  "homepage": "https://github.com/dyne/restroom-mw#readme",
+  "description": "Restroom middleware utilities",
+  "keywords": [
+    "restroom",
+    "zenroom",
+    "zencode",
+    "tools"
+  ],
+  "license": "AGPL-3.0",
+  "main": "dist/index.js",
+  "publishConfig": {
+    "registry": "http://localhost:4873"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dyne/restroom-mw.git"
+  },
+  "scripts": {
+    "clean": "rimraf dist",
+    "doc": "documentation readme src/** -g -f md -s 'API' --readme-file ../../docs/packages/utils.md --shallow",
+    "build": "lerna exec --parallel 'BABEL_ENV=build babel src --out-dir dist --config-file ../../babel.config.json --source-maps --delete-dir-on-start --no-comments'",
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/dyne/restroom-mw/issues"
+  },
+  "dependencies": {
+    "dotenv": "^8.2.0"
+  }
+}

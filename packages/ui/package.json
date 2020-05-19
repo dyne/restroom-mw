@@ -1,0 +1,43 @@
+{
+  "name": "@restroom-mw/ui",
+  "description": "The swagger-ui mw to extend restroom",
+  "version": "0.0.1",
+  "keywords": [
+    "zenroom",
+    "rest",
+    "smart",
+    "contracts",
+    "dsl",
+    "api"
+  ],
+  "author": "Puria Nafisi Azizi <puria@dyne.org>",
+  "homepage": "http://dev.zenroom.org/",
+  "license": "AGPL-3.0",
+  "main": "dist/index.js",
+  "publishConfig": {
+    "registry": "http://localhost:4873/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dyne/restroom-wm.git",
+    "directory": "packages/core"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1",
+    "clean": "rimraf dist",
+    "doc": "documentation readme src/** -g -f md -s 'API' --readme-file ../../docs/packages/ui.md --shallow",
+    "build": "lerna exec --parallel 'BABEL_ENV=build babel src --out-dir dist --config-file ../../babel.config.json --source-maps --delete-dir-on-start --no-comments'",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix ."
+  },
+  "bugs": {
+    "url": "https://github.com/dyne/restroom-wm/issues"
+  },
+  "dependencies": {
+    "@restroom-mw/utils": "^0.0.1",
+    "@restroom-mw/zencode": "^0.0.1",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "swagger-ui-express": "^4.1.4"
+  }
+}

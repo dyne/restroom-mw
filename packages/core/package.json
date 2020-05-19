@@ -1,0 +1,41 @@
+{
+  "name": "@restroom-mw/core",
+  "version": "0.0.1",
+  "description": "The core mw to extend the restroom",
+  "keywords": [
+    "zenroom",
+    "rest",
+    "smart",
+    "contracts",
+    "dsl",
+    "api"
+  ],
+  "author": "Puria Nafisi Azizi <puria@dyne.org>",
+  "homepage": "http://dev.zenroom.org/",
+  "license": "AGPL-3.0",
+  "main": "dist/index.js",
+  "publishConfig": {
+    "registry": "http://localhost:4873/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dyne/restroom-wm.git",
+    "directory": "packages/core"
+  },
+  "scripts": {
+    "test": "yarn run clean && yarn build && nyc mocha",
+    "clean": "rimraf dist",
+    "doc": "documentation readme src/** -g -f md -s 'API' --readme-file ../../docs/packages/core.md --shallow",
+    "build": "lerna exec --parallel 'BABEL_ENV=build babel src --out-dir dist --config-file ../../babel.config.json --source-maps --delete-dir-on-start --no-comments'",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix ."
+  },
+  "bugs": {
+    "url": "https://github.com/dyne/restroom-wm/issues"
+  },
+  "dependencies": {
+    "@restroom-mw/zencode": "^0.0.1",
+    "capture-console": "^1.0.1",
+    "zenroom": "^1.1.0"
+  }
+}

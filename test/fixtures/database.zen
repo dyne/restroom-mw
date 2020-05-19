@@ -1,0 +1,9 @@
+rule check version 1.0.0
+rule unknown ignore
+Scenario storage: Save some random value inside a database (sqlite3, postgres, mysql, maridb, mssql) 
+        Given I select '42' from 'table' where '1=1'
+        and I have a database connection uri at 'sqlite://./database.db'
+        and I have a valid 'string' in 'selected_value'
+        When I create the array of '5' random objects of '256' bits
+        Then print the 'array'
+        and save the result into the database

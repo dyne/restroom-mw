@@ -1,0 +1,37 @@
+{
+  "name": "@restroom-mw/zencode",
+  "version": "0.0.1",
+  "description": "Zencode utilities",
+  "keywords": [
+    "restroom",
+    "zenroom",
+    "zencode",
+    "tools"
+  ],
+  "author": "Puria Nafisi Azizi <puria@dyne.org>",
+  "homepage": "https://dev.zenroom.org/",
+  "license": "AGPL-3.0",
+  "main": "dist/index.js",
+  "publishConfig": {
+    "registry": "http://localhost:4873/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dyne/restroom-mw.git",
+    "directory": "packages/zencode"
+  },
+  "scripts": {
+    "build": "lerna exec --parallel 'BABEL_ENV=build babel src --out-dir dist --config-file ../../babel.config.json --source-maps --delete-dir-on-start --no-comments'",
+    "clean": "rimraf dist",
+    "doc": "documentation readme src/** -g -f md -s 'API' --readme-file ../../docs/packages/zencode.md --shallow",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix --ext .js,.jsx .",
+    "test": "yarn run clean && yarn build && nyc mocha"
+  },
+  "bugs": {
+    "url": "https://github.com/dyne/restroom-mw/issues"
+  },
+  "dependencies": {
+    "ignore-case": "^0.1.0"
+  }
+}
