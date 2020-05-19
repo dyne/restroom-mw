@@ -24,4 +24,3 @@
   - [Glossary](/glossary.md)
   - [Zencode command list](https://dev.zenroom.org/#/pages/zencode-list)
   - [Express API](https://expressjs.com/en/4x/api.html)
-  - [License](/links/LICENSE)
