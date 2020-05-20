@@ -1,0 +1,32 @@
+{
+  "name": "@restroom-mw/redis",
+  "version": "0.1.1",
+  "description": "Redis middleware for restroom",
+  "author": "Puria Nafisi Azizi <puria@dyne.org>",
+  "homepage": "https://github.com/puria/restroom-mw#readme",
+  "license": "AGPL-3.0",
+  "main": "dist/index.js",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/puria/restroom-mw.git"
+  },
+  "scripts": {
+    "clean": "rimraf dist",
+    "doc": "documentation readme src/** -g -f md -s 'API' --readme-file ../../docs/packages/redis.md --shallow",
+    "build": "lerna exec --parallel 'BABEL_ENV=build babel src --out-dir dist --config-file ../../babel.config.json --source-maps --delete-dir-on-start --no-comments'",
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/puria/restroom-mw/issues"
+  },
+  "dependencies": {
+    "redis": "^3.0.2"
+  }
+}
