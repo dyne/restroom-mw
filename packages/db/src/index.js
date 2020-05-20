@@ -32,7 +32,6 @@ export default (req, res, next) => {
   });
 
   rr.onSuccess((args) => {
-    console.log("POSTA");
     const { result, zencode } = args;
 
     if (zencode.match(ACTIONS.SAVE)) {

@@ -20,7 +20,7 @@ configuration in the environment separate from code) to define them in a `.env` 
 
 ### PORT
 
-[packages/utils/src/index.js:12-12](https://github.com/puria/restroom-mw/blob/074263cf2f39543c250dd2092d56de22ba265ecb/packages/utils/src/index.js#L12-L12 "Source code on GitHub")
+[packages/utils/src/index.js:12-12](https://github.com/dyne/restroom-mw/blob/f479162146b0a68f7c37928d00e18534f5faa974/packages/utils/src/index.js#L12-L12 "Source code on GitHub")
 
 The port on which the restroom middlewares can refer to listen for
 
@@ -28,7 +28,7 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 ### HOST
 
-[packages/utils/src/index.js:20-20](https://github.com/puria/restroom-mw/blob/074263cf2f39543c250dd2092d56de22ba265ecb/packages/utils/src/index.js#L20-L20 "Source code on GitHub")
+[packages/utils/src/index.js:20-20](https://github.com/dyne/restroom-mw/blob/f479162146b0a68f7c37928d00e18534f5faa974/packages/utils/src/index.js#L20-L20 "Source code on GitHub")
 
 The hostname on which the restroom middleware can refer to listen for
 
@@ -36,7 +36,7 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 ### ZENCODE_DIR
 
-[packages/utils/src/index.js:27-27](https://github.com/puria/restroom-mw/blob/074263cf2f39543c250dd2092d56de22ba265ecb/packages/utils/src/index.js#L27-L27 "Source code on GitHub")
+[packages/utils/src/index.js:27-27](https://github.com/dyne/restroom-mw/blob/f479162146b0a68f7c37928d00e18534f5faa974/packages/utils/src/index.js#L27-L27 "Source code on GitHub")
 
 The absolut path of the directory containing the smart contracts
 
