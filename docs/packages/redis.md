@@ -27,7 +27,7 @@ app.use("/api/*", zencode);
 
 ### actions
 
-[packages/redis/src/index.js:14-18](https://github.com/dyne/restroom-mw/blob/f479162146b0a68f7c37928d00e18534f5faa974/packages/redis/src/index.js#L14-L18 "Source code on GitHub")
+[packages/redis/src/index.js:14-18](https://github.com/dyne/restroom-mw/blob/9ddff6e708d8088a589c47eb6557d1b8764e1670/packages/redis/src/index.js#L14-L18 "Source code on GitHub")
 
 **CONNECT** `I have a valid redis connection on {}`
 

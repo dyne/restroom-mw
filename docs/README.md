@@ -11,7 +11,7 @@ Restroom enables to
 - create **web services** by just copying a zencode file into a directory
 - **augment zencode** with custom actions and operations
 - create your **own DSL with zenroom** as a companion for crypto operations
-- expose **crypto** hardened operations understandable to stackholders (**in plain English!**)
+- expose **crypto** hardened operations understandable to stakeholders (**in plain English!**)
 
 ## Who uses Restroom
 

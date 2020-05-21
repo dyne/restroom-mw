@@ -1,6 +1,5 @@
 {
   "name": "restroom-mw",
-  "private": true,
   "workspaces": [
     "packages/*"
   ],

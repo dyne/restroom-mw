@@ -11,6 +11,7 @@
     "src"
   ],
   "publishConfig": {
+    "access": "public",
     "registry": "https://registry.npmjs.org/"
   },
   "repository": {
@@ -28,5 +29,6 @@
   },
   "dependencies": {
     "redis": "^3.0.2"
-  }
+  },
+  "gitHead": "9ddff6e708d8088a589c47eb6557d1b8764e1670"
 }

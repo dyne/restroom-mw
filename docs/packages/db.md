@@ -29,7 +29,7 @@ app.use("/api/*", zencode);
 
 ### ACTIONS
 
-[packages/db/src/index.js:13-17](https://github.com/dyne/restroom-mw/blob/f479162146b0a68f7c37928d00e18534f5faa974/packages/db/src/index.js#L13-L17 "Source code on GitHub")
+[packages/db/src/index.js:13-17](https://github.com/dyne/restroom-mw/blob/9ddff6e708d8088a589c47eb6557d1b8764e1670/packages/db/src/index.js#L13-L17 "Source code on GitHub")
 
 **CONNECT** `I have a database connection uri at {}`
 
