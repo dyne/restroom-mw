@@ -1,50 +1,48 @@
 # Architecture
 
-Restroom is a bunch of tools in form of [Expressjs](https://expressjs.com/) apps.
-
-This allows you to be very flexible and adopt it also on existing codebase, by just plug the app in your server.
+RESTroom is made of a set of components built on [Expressjs](https://expressjs.com/), making it very flexible and easy to plug into an existing codebase.
 
 ## Middleware
 
-First make sure to read the [Using middleware](https://expressjs.com/en/guide/using-middleware.html) section of the Expressjs documentation.
+First **make sure to read the [Using middleware](https://expressjs.com/en/guide/using-middleware.html) section** of the Expressjs documentation.
 
-By middleware we intend the same one explained by the Expressjs documentation:
+Our concept of middleware is the same as the one explained in the Expressjs documentation:
 
 !> Middleware functions are functions that have access to the request object (req),
 the response object (res), and the next middleware function in the application’s
 request-response cycle
 
-The main purpose of middlewares is to bind new actions/operations to the Zencode contracts, that
+The main purpose of middlewares is to **bind new actions/operations** to the Zencode contracts, that
 are not already present into the [zencode command list](https://dev.zenroom.org/#/pages/zencode-list)
 
-**eg.** If we need to store the result of the smart contract into a database, we will write a `database` middleware that interprets the following sentences
+**eg.** If we need to store the output of a smart contract into a database, we can write a `database` middleware in RESTroom that interprets the following sentences:
 
 ```gherkin
     Given that I have a valid database connection
     Then save the result into the database
 ```
 
-and executes the correct releated operation.
+and then takes care of storing the data.
 
 ## Building blocks
 
-The main functionality relies on the [@restroom-mw/core](/packages/core) that reads a directory and exposes `POST`
-endpoints on the fly, based on the content files of the directory.
+The core functionalities are built inside the [@RESTroom-mw/core](/packages/core) module: 
 
-The **@restroom-mw/core** also have a [hooking](https://en.wikipedia.org/wiki/Hooking) system that allows to other
-apps/middlewares to interact with the lifecycle of the zenroom execution. _see the next section for details_
+- It first scans a directory (and its subfolders) looking for files having the *.zen* extension 
+- For each file, it creates and and exposes a `POST` endpoint on the fly
 
-Optionally the [@restroom-mw/ui](/packages/ui) creates a openapi (_ex-swagger_) interface,
-to interact with your contract directly from the browser, and also to generate API documentation
-based on your contract files.
+The **@RESTroom-mw/core** also has a [hooking](https://en.wikipedia.org/wiki/Hooking) system that allows other apps/middlewares to interact with Zenroom, during the execution of a smart contract (_see the next section for details_).
+
+The component [@RESTroom-mw/ui](/packages/ui) creates a openAPI (_ex-swagger_) interface,
+that allows you to execute a smart contract directly in the browser, while generating its API documentation based on the smart contract that **@RESTroom-mw/core** found and exposed.
 
 ## Lifecycle hooks
 
-In your middleware logic, you want to interact with the `core` execution of the contract.
-Maybe by defining new operations or by parsing new sentences. This is possible by defining
-some functions that are executed at some specific stage of the execution, a `hook`.
+In your middleware logic, you may want to interact with the `core` execution of the smart contract, for example by defining new operations or by parsing new sentences. 
 
-Each middleware could have some hooks, and if defined they are all executed, one after each other.
+You can achieve this by defining one or more functions that are executed at a specific _phase_ of the execution, a so-called `hook`.
+
+Each middleware can have one or more hooks, and once they are defined, they will all be executed:
 
 ```mermaid
 
@@ -60,32 +58,32 @@ stateDiagram-v2
     onFinish --> [*]
 ```
 
-Each request made to a endpoint have this hooks.
+Each request made to a endpoint uses the follow hooks:
 
 #### onInit()
 
-Is executed at the very begin of the request. Is a good idea to write your setup logic here, if needed.
+It is executed at the very begin of the request. It is recommended to write your setup logic here, if needed.
 
 #### onBefore(zencode)
 
-Is executed just before the zenroom execution, but after that the contract is found. This stage is useful if you need to parse `Given` in your middleware
+It is executed just before the Zenroom execution, but after that the smart contract is found and read from the file. This stage is useful if you need to parse a `Given` statement (see [Zenroom documentation](https://dev.zenroom.org/#/pages/zencode) for reference) in your middleware.
 
 #### onSucess(result, zencode)
 
-If the execution have no errors, this hook is fired with the result and the contract as params, this is where you want to put your `Then` logic
+If the execution of Zenroom has completed with no errors, this hook is fired and prints the result and the contract as params, this is where you want to put your `Then` logic.
 
 #### onAfter(result, zencode)
 
-This stage is executed after the zenroom execution
+This stage is executed after Zenroom's execution.
 
 #### onError(errors, zencode)
 
-If there is some error in the execution contract, this hook is fired, that passes the errors in form of array of strings and the contract
+If there are errors in the execution of the smart contract, this hook will be fired and will return the errors in form of _array of strings_ along with the smart contract.
 
 #### onException(stderr)
 
-This is fired when something bad happens
+This is fired when something bad happens (_guru meditation #00000003_).
 
 #### onFinish()
 
-This is fired at the very end of the request, wich you want to use for clenup things
+This is fired at the very end of the execution, you may want to use to cleanup things.
