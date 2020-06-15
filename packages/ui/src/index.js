@@ -8,8 +8,8 @@ const options = {
 };
 
 export default [
-  (req, res, next) => {
-    const swaggerDoc = generate();
+  async (req, res, next) => {
+    const swaggerDoc = await generate();
     swaggerDoc.servers[0].variables.host = { default: req.hostname };
     req.swaggerDoc = swaggerDoc;
     next();
