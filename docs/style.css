@@ -439,7 +439,7 @@ section.cover p {
 #main .mermaid .node .label,
 #main .mermaid text.actor {
   fill: white;
-  color: white;
+  color: var(--theme-color-dark);
 }
 
 #main .mermaid .cluster rect {
