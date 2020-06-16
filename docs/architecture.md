@@ -26,15 +26,15 @@ and then takes care of storing the data.
 
 ## Building blocks
 
-The core functionalities are built inside the [@RESTroom-mw/core](/packages/core) module: 
+The core functionalities are built inside the [@restroom-mw/core](/packages/core) module: 
 
 - It first scans a directory (and its subfolders) looking for files having the *.zen* extension 
 - For each file, it creates and and exposes a `POST` endpoint on the fly
 
-The **@RESTroom-mw/core** also has a [hooking](https://en.wikipedia.org/wiki/Hooking) system that allows other apps/middlewares to interact with Zenroom, during the execution of a smart contract (_see the next section for details_).
+The **@restroom-mw/core** also has a [hooking](https://en.wikipedia.org/wiki/Hooking) system that allows other apps/middlewares to interact with Zenroom, during the execution of a smart contract (_see the next section for details_).
 
-The component [@RESTroom-mw/ui](/packages/ui) creates a openAPI (_ex-swagger_) interface,
-that allows you to execute a smart contract directly in the browser, while generating its API documentation based on the smart contract that **@RESTroom-mw/core** found and exposed.
+The component [@restroom-mw/ui](/packages/ui) creates a openAPI (_ex-swagger_) interface,
+that allows you to execute a smart contract directly in the browser, while generating its API documentation based on the smart contract that **@restroom-mw/core** found and exposed.
 
 ## Lifecycle hooks
 
