@@ -1,6 +1,6 @@
 import { ZENCODE_DIR } from "@restroom-mw/utils";
-import { promises as fs } from 'fs';
-import { parse, relative, resolve } from 'path';
+import { promises as fs } from "fs";
+import { parse, relative, resolve } from "path";
 
 // https://qwtel.com/posts/software/async-generators-in-the-wild/
 async function* getFiles(rootPath) {
@@ -15,24 +15,17 @@ async function* getFiles(rootPath) {
   }
 }
 
-function forAwait(asyncIter, f) {
-  asyncIter.next().then(({ done, value }) => {
-    if (done) return;
-    f(value);
-    forAwait(asyncIter, f);
-  });
-}
-
 /**
  * Reads the directory and list all the files
  * into an object with the full path
+ * @param {string} path for where to look at folders
  * @returns {object}
  */
-export const ls = (async () => {
-  const files = {};
-  forAwait(getFiles(ZENCODE_DIR), item => {
-    const p = relative(ZENCODE_DIR, item).split(".")[0]
-    files[`${p}`] = item;
-  })
+export const ls = async (path) => {
+  let files = {};
+  for await (const item of getFiles(path)) {
+    const p = relative(ZENCODE_DIR, item).split(".")[0];
+    files[p] = item;
+  }
   return files;
-})();
+};

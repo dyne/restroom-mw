@@ -7,13 +7,16 @@ const options = {
  } .swagger-ui .topbar { background-color: #dedede }`,
 };
 
-export default [
-  async (req, res, next) => {
-    const swaggerDoc = await generate();
-    swaggerDoc.servers[0].variables.host = { default: req.hostname };
-    req.swaggerDoc = swaggerDoc;
-    next();
-  },
-  swaggerUi.serve,
-  swaggerUi.setup(null, options),
-];
+export default (options) => {
+  const rootPath = options.path;
+  return [
+    async (req, res, next) => {
+      const swaggerDoc = await generate(rootPath);
+      swaggerDoc.servers[0].variables.host = { default: req.hostname };
+      req.swaggerDoc = swaggerDoc;
+      next();
+    },
+    swaggerUi.serve,
+    swaggerUi.setup(null, options),
+  ];
+};
