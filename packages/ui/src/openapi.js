@@ -1,5 +1,5 @@
 import { PORT, HOST } from "@restroom-mw/utils";
-import { ls } from "./utils";
+import { ls, nl2br } from "./utils";
 import { relative } from "path";
 import { Zencode } from "@restroom-mw/zencode";
 import chalk from "chalk";
@@ -93,7 +93,7 @@ export const generate = async (rootPath) => {
     let endpoint = {
       post: {
         summary: contract.summary,
-        description: contract.content,
+        description: nl2br(contract.content),
         tags: [`🔖 ${contract.tag}`],
         consumes: mime,
         produces: mime,

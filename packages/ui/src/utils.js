@@ -29,3 +29,5 @@ export const ls = async (path) => {
   }
   return files;
 };
+
+export const nl2br = (str) => str.replace(/(?:\r\n|\r|\n)/g, "  \n");
