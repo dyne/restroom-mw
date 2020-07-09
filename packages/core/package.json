@@ -40,7 +40,7 @@
   "dependencies": {
     "@restroom-mw/zencode": "^0.3.0",
     "capture-console": "^1.0.1",
-    "zenroom": "^1.1.1"
+    "zenroom": "^1.1.3"
   },
   "gitHead": "9ddff6e708d8088a589c47eb6557d1b8764e1670"
 }

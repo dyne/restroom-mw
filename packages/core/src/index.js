@@ -1,3 +1,4 @@
+import fs from "fs";
 import { Zencode } from "@restroom-mw/zencode";
 import { ZENCODE_DIR } from "@restroom-mw/utils";
 const zenroom = require("zenroom");
@@ -48,13 +49,21 @@ export default (req, res, next) => {
   const errors = [];
   const contractName = req.params["0"];
   const zencode = Zencode.byName(contractName, ZENCODE_DIR);
+  let _conf,
+    _keys = null;
+  try {
+    _conf =
+      fs.readFileSync(`${ZENCODE_DIR}/${contractName}.conf`).toString() || null;
+    _keys =
+      fs.readFileSync(`${ZENCODE_DIR}/${contractName}.keys`).toString() || null;
+  } catch (err) {}
   var stderr = capcon.captureStderr(function scope() {
     callHook(hook.BEFORE, res, zencode);
     zenroom
       .script(zencode.content)
-      .conf(req.body.conf)
+      .conf(_conf)
       .data(getData(res, req))
-      .keys(req.body.keys)
+      .keys(_keys)
       .print_err((text) => errors.push(text))
       .print((text) => {
         result = result.concat(text);
