@@ -5,7 +5,7 @@ const zenroom = require("zenroom");
 const capcon = require("capture-console");
 
 export const getData = function (res, req) {
-  const data = res.locals?.zenroom_data || req.body.data || {};
+  return res.locals?.zenroom_data || req.body.data || {};
 };
 
 export const getKeys = () => {
