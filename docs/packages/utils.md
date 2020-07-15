@@ -14,21 +14,30 @@ configuration in the environment separate from code) to define them in a `.env` 
 
 #### Table of Contents
 
--   [PORT](#port)
+-   [HTTP_PORT](#http_port)
+-   [HTTPS_PORT](#https_port)
 -   [HOST](#host)
 -   [ZENCODE_DIR](#zencode_dir)
 
-### PORT
+### HTTP_PORT
 
-[packages/utils/src/index.js:12-12](https://github.com/dyne/restroom-mw/blob/2070f26ed2bbc93cb0bdb9cf19bfdbdfc0b9ae29/packages/utils/src/index.js#L12-L12 "Source code on GitHub")
+[packages/utils/src/index.js:12-12](https://github.com/dyne/restroom-mw/blob/7ed769931d4b1f96c74cb56181d50627d89667a5/packages/utils/src/index.js#L12-L12 "Source code on GitHub")
 
 The port on which the restroom middlewares can refer to listen for
 
 Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
 
+### HTTPS_PORT
+
+[packages/utils/src/index.js:20-20](https://github.com/dyne/restroom-mw/blob/7ed769931d4b1f96c74cb56181d50627d89667a5/packages/utils/src/index.js#L20-L20 "Source code on GitHub")
+
+The **secure port** on which the restroom middlewares can refer to listen for
+
+Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
+
 ### HOST
 
-[packages/utils/src/index.js:20-20](https://github.com/dyne/restroom-mw/blob/2070f26ed2bbc93cb0bdb9cf19bfdbdfc0b9ae29/packages/utils/src/index.js#L20-L20 "Source code on GitHub")
+[packages/utils/src/index.js:28-28](https://github.com/dyne/restroom-mw/blob/7ed769931d4b1f96c74cb56181d50627d89667a5/packages/utils/src/index.js#L28-L28 "Source code on GitHub")
 
 The hostname on which the restroom middleware can refer to listen for
 
@@ -36,7 +45,7 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 ### ZENCODE_DIR
 
-[packages/utils/src/index.js:27-27](https://github.com/dyne/restroom-mw/blob/2070f26ed2bbc93cb0bdb9cf19bfdbdfc0b9ae29/packages/utils/src/index.js#L27-L27 "Source code on GitHub")
+[packages/utils/src/index.js:35-35](https://github.com/dyne/restroom-mw/blob/7ed769931d4b1f96c74cb56181d50627d89667a5/packages/utils/src/index.js#L35-L35 "Source code on GitHub")
 
 The absolut path of the directory containing the smart contracts
 

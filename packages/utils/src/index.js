@@ -9,7 +9,15 @@ if (process.env.ZENCODE_DIR === undefined)
  *  @type {string}
  *  @default 3000
  */
-export const PORT = parseInt(process.env.PORT || "3000", 10);
+export const HTTP_PORT = parseInt(process.env.HTTP_PORT || "3000", 10);
+
+/**
+ *  The **secure port** on which the restroom middlewares can refer to listen for
+ *  @constant
+ *  @type {string}
+ *  @default 8443
+ */
+export const HTTPS_PORT = parseInt(process.env.HTTPS_PORT || "8443", 10);
 
 /**
  *  The hostname on which the restroom middleware can refer to listen for

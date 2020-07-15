@@ -24,7 +24,7 @@ Finally you can procede and create an `app.js`
 import express from "express";
 import bodyParser from "body-parser";
 import core from "@restroom-mw/core";
-import { PORT, HOST, ZENCODE_DIR } from "@restroom-mw/utils";
+import { HTTP_PORT, HOST, ZENCODE_DIR } from "@restroom-mw/utils";
 
 const app = express();
 
@@ -34,7 +34,7 @@ app.set("json spaces", 2);
 
 app.use("/api/*", core);
 
-app.listen(PORT, HOST, () => {
+app.listen(HTTP_PORT, HOST, () => {
   console.log("Restroom started\n");
   console.log(`ZENCODE DIR: ${ZENCODE_DIR}\n`);
 });

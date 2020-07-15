@@ -10,7 +10,7 @@
     "lint": "lerna run lint",
     "lint:fix": "lerna run lint:fix",
     "test": "lerna run test",
-    "build": "lerna run build",
+    "build": "lerna run clean && lerna run build",
     "doc": "lerna run doc"
   },
   "devDependencies": {

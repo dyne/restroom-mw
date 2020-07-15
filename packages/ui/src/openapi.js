@@ -1,4 +1,4 @@
-import { PORT, HOST } from "@restroom-mw/utils";
+import { HTTP_PORT, HTTPS_PORT, HOST } from "@restroom-mw/utils";
 import { ls, nl2br } from "./utils";
 import { relative } from "path";
 import { Zencode } from "@restroom-mw/zencode";
@@ -27,12 +27,13 @@ To add new endpoints you should add new zencode contracts in the directory.
   servers: [
     {
       description: "development local server",
-      url: "http://{host}:{port}/{basePath}",
+      url: "{protocol}://{host}:{port}/{basePath}",
       variables: {
         port: {
-          enum: [PORT],
-          default: PORT,
+          enum: [HTTP_PORT, HTTPS_PORT],
+          default: HTTP_PORT,
         },
+        protocol: { enum: ["http", "https"], default: "http" },
         host: { default: HOST },
         basePath: { default: "api" },
       },
