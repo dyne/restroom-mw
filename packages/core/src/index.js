@@ -48,7 +48,15 @@ export default (req, res, next) => {
   let result = "";
   const errors = [];
   const contractName = req.params["0"];
-  const zencode = Zencode.byName(contractName, ZENCODE_DIR);
+  let zencode = null;
+  try {
+    zencode = Zencode.byName(contractName, ZENCODE_DIR);
+  } catch (err) {
+    if (err.code === 'ENOENT') {
+      res.status(404).send();
+      return;
+    }
+  }
   let _conf,
     _keys = null;
   try {
