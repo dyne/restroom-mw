@@ -50,7 +50,7 @@ app.use("/api/*", core);
 
 ### Restroom
 
-[packages/core/src/restroom.js:13-108](https://github.com/dyne/restroom-mw/blob/7ed769931d4b1f96c74cb56181d50627d89667a5/packages/core/src/restroom.js#L13-L108 "Source code on GitHub")
+[packages/core/src/restroom.js:13-108](https://github.com/dyne/restroom-mw/blob/40e438f09229306dc898b6f6c9e5c03dfc975cd9/packages/core/src/restroom.js#L13-L108 "Source code on GitHub")
 
 #### Parameters
 
@@ -69,7 +69,7 @@ app.use("/api/*", core);
 
 #### setData
 
-[packages/core/src/restroom.js:25-29](https://github.com/dyne/restroom-mw/blob/7ed769931d4b1f96c74cb56181d50627d89667a5/packages/core/src/restroom.js#L25-L29 "Source code on GitHub")
+[packages/core/src/restroom.js:25-29](https://github.com/dyne/restroom-mw/blob/40e438f09229306dc898b6f6c9e5c03dfc975cd9/packages/core/src/restroom.js#L25-L29 "Source code on GitHub")
 
 Save a key value, accessible afterwards into the contracts DATA field
 
@@ -80,7 +80,7 @@ Save a key value, accessible afterwards into the contracts DATA field
 
 #### getData
 
-[packages/core/src/restroom.js:36-38](https://github.com/dyne/restroom-mw/blob/7ed769931d4b1f96c74cb56181d50627d89667a5/packages/core/src/restroom.js#L36-L38 "Source code on GitHub")
+[packages/core/src/restroom.js:36-38](https://github.com/dyne/restroom-mw/blob/40e438f09229306dc898b6f6c9e5c03dfc975cd9/packages/core/src/restroom.js#L36-L38 "Source code on GitHub")
 
 Get the value by key from the DATA field
 
@@ -90,7 +90,7 @@ Get the value by key from the DATA field
 
 #### onInit
 
-[packages/core/src/restroom.js:51-53](https://github.com/dyne/restroom-mw/blob/7ed769931d4b1f96c74cb56181d50627d89667a5/packages/core/src/restroom.js#L51-L53 "Source code on GitHub")
+[packages/core/src/restroom.js:51-53](https://github.com/dyne/restroom-mw/blob/40e438f09229306dc898b6f6c9e5c03dfc975cd9/packages/core/src/restroom.js#L51-L53 "Source code on GitHub")
 
 -   **See: [lifecycle](/architecture?id=lifecycle-hooks)
     **
@@ -103,7 +103,7 @@ Saves the function to be executed at the onInit lifecycle step
 
 #### onBefore
 
-[packages/core/src/restroom.js:60-62](https://github.com/dyne/restroom-mw/blob/7ed769931d4b1f96c74cb56181d50627d89667a5/packages/core/src/restroom.js#L60-L62 "Source code on GitHub")
+[packages/core/src/restroom.js:60-62](https://github.com/dyne/restroom-mw/blob/40e438f09229306dc898b6f6c9e5c03dfc975cd9/packages/core/src/restroom.js#L60-L62 "Source code on GitHub")
 
 -   **See: [lifecycle](/architecture?id=lifecycle-hooks)
     **
@@ -116,7 +116,7 @@ Saves the function to be executed at the onBefore lifecycle step
 
 #### onSuccess
 
-[packages/core/src/restroom.js:69-71](https://github.com/dyne/restroom-mw/blob/7ed769931d4b1f96c74cb56181d50627d89667a5/packages/core/src/restroom.js#L69-L71 "Source code on GitHub")
+[packages/core/src/restroom.js:69-71](https://github.com/dyne/restroom-mw/blob/40e438f09229306dc898b6f6c9e5c03dfc975cd9/packages/core/src/restroom.js#L69-L71 "Source code on GitHub")
 
 -   **See: [lifecycle](/architecture?id=lifecycle-hooks)
     **
@@ -129,7 +129,7 @@ Saves the function to be executed at the onSuccess lifecycle step
 
 #### onAfter
 
-[packages/core/src/restroom.js:78-80](https://github.com/dyne/restroom-mw/blob/7ed769931d4b1f96c74cb56181d50627d89667a5/packages/core/src/restroom.js#L78-L80 "Source code on GitHub")
+[packages/core/src/restroom.js:78-80](https://github.com/dyne/restroom-mw/blob/40e438f09229306dc898b6f6c9e5c03dfc975cd9/packages/core/src/restroom.js#L78-L80 "Source code on GitHub")
 
 -   **See: [lifecycle](/architecture?id=lifecycle-hooks)
     **
@@ -142,7 +142,7 @@ Saves the function to be executed at the onAfter lifecycle step
 
 #### onError
 
-[packages/core/src/restroom.js:87-89](https://github.com/dyne/restroom-mw/blob/7ed769931d4b1f96c74cb56181d50627d89667a5/packages/core/src/restroom.js#L87-L89 "Source code on GitHub")
+[packages/core/src/restroom.js:87-89](https://github.com/dyne/restroom-mw/blob/40e438f09229306dc898b6f6c9e5c03dfc975cd9/packages/core/src/restroom.js#L87-L89 "Source code on GitHub")
 
 -   **See: [lifecycle](/architecture?id=lifecycle-hooks)
     **
@@ -155,7 +155,7 @@ Saves the function to be executed at the onError lifecycle step
 
 #### onException
 
-[packages/core/src/restroom.js:96-98](https://github.com/dyne/restroom-mw/blob/7ed769931d4b1f96c74cb56181d50627d89667a5/packages/core/src/restroom.js#L96-L98 "Source code on GitHub")
+[packages/core/src/restroom.js:96-98](https://github.com/dyne/restroom-mw/blob/40e438f09229306dc898b6f6c9e5c03dfc975cd9/packages/core/src/restroom.js#L96-L98 "Source code on GitHub")
 
 -   **See: [lifecycle](/architecture?id=lifecycle-hooks)
     **
@@ -168,7 +168,7 @@ Saves the function to be executed at the onException lifecycle step
 
 #### onFinish
 
-[packages/core/src/restroom.js:105-107](https://github.com/dyne/restroom-mw/blob/7ed769931d4b1f96c74cb56181d50627d89667a5/packages/core/src/restroom.js#L105-L107 "Source code on GitHub")
+[packages/core/src/restroom.js:105-107](https://github.com/dyne/restroom-mw/blob/40e438f09229306dc898b6f6c9e5c03dfc975cd9/packages/core/src/restroom.js#L105-L107 "Source code on GitHub")
 
 -   **See: [lifecycle](/architecture?id=lifecycle-hooks)
     **

@@ -33,3 +33,10 @@ export const HOST = process.env.HOST || "0.0.0.0";
  *  @type {string}
  */
 export const ZENCODE_DIR = process.env.ZENCODE_DIR;
+
+/**
+ *  Custom error message to show when hit a non existent contract
+ *  @constant
+ *  @type {string}
+ */
+export const CUSTOM_404_MESSAGE = process.env.CUSTOM_404_MESSAGE;

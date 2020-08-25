@@ -2,7 +2,7 @@ import fs from "fs";
 import readdirp from "readdirp";
 import fuzzball from "fuzzball";
 import { Zencode } from "@restroom-mw/zencode";
-import { ZENCODE_DIR } from "@restroom-mw/utils";
+import { ZENCODE_DIR, CUSTOM_404_MESSAGE } from "@restroom-mw/utils";
 const zenroom = require("zenroom");
 const capcon = require("capture-console");
 
@@ -54,22 +54,34 @@ export default (req, res, next) => {
   try {
     zencode = Zencode.byName(contractName, ZENCODE_DIR);
   } catch (err) {
-    if (err.code === 'ENOENT') {
-      let message = '<h2>404: This contract does not exists</h2>';
+    if (err.code === "ENOENT") {
+      if (CUSTOM_404_MESSAGE) {
+        res.status(404).send(CUSTOM_404_MESSAGE);
+        return;
+      }
+      let message = "<h2>404: This contract does not exists</h2>";
       let choices = [];
-      const baseUrl = req.originalUrl.replace(contractName, '');
-      readdirp(ZENCODE_DIR, {fileFilter: '*.zen'})
-        .on('data', file => { choices.push(baseUrl + file.path.slice(0, -4)) })
-        .on('end', () => { 
-      const fuzzy = fuzzball.extract(contractName, choices, {limit: 1, cutoff: 60 })
-      if (fuzzy.length) {
-        message += `<p>Maybe you were looking for <strong><a href="${baseUrl}${fuzzy[0][0]}">${fuzzy[0][0]}</a></strong></p>`
-      }
-      if (choices.length) {
-        const listEndpoint = choices.map(e => `<a href="${e}">${e}</a>`)
-        message += `<h4>Other contract's endpoints are </h4><ul>${listEndpoint.join("<br/>")}</ul>`
-      }
-      res.status(404).send(message); })
+      const baseUrl = req.originalUrl.replace(contractName, "");
+      readdirp(ZENCODE_DIR, { fileFilter: "*.zen" })
+        .on("data", (file) => {
+          choices.push(baseUrl + file.path.slice(0, -4));
+        })
+        .on("end", () => {
+          const fuzzy = fuzzball.extract(contractName, choices, {
+            limit: 1,
+            cutoff: 60,
+          });
+          if (fuzzy.length) {
+            message += `<p>Maybe you were looking for <strong><a href="${baseUrl}${fuzzy[0][0]}">${fuzzy[0][0]}</a></strong></p>`;
+          }
+          if (choices.length) {
+            const listEndpoint = choices.map((e) => `<a href="${e}">${e}</a>`);
+            message += `<h4>Other contract's endpoints are </h4><ul>${listEndpoint.join(
+              "<br/>"
+            )}</ul>`;
+          }
+          res.status(404).send(message);
+        });
       return;
     }
   }
