@@ -118,6 +118,7 @@ export default (req, res, next) => {
     res.json(JSON.parse(result));
   } catch (e) {
     console.error(e, stderr);
+    res.set('Content-Type', 'text/plain');
     res.status(500).send(stderr);
     callHook(hook.EXCEPTION, res, { stderr });
   }
