@@ -1,7 +1,7 @@
 {
   "name": "@restroom-mw/ui",
   "description": "The swagger-ui mw to extend restroom",
-  "version": "0.4.2",
+  "version": "0.4.4",
   "keywords": [
     "zenroom",
     "rest",
