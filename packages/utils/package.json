@@ -2,7 +2,7 @@
   "name": "@restroom-mw/utils",
   "version": "0.4.2",
   "author": "Puria Nafisi Azizi <puria@dyne.org>",
-  "homepage": "https://github.com/dyne/restroom-mw#readme",
+  "homepage": "https://dyne.github.io/restroom-mw/",
   "description": "Restroom middleware utilities",
   "keywords": [
     "restroom",
@@ -27,7 +27,10 @@
     "clean": "rimraf dist",
     "doc": "documentation readme src/** -g -f md -s 'API' --readme-file ../../docs/packages/utils.md --shallow",
     "build": "lerna exec --parallel 'BABEL_ENV=build babel src --out-dir dist --config-file ../../babel.config.json --source-maps --delete-dir-on-start --no-comments'",
-    "test": "echo \"Error: run tests from root\" && exit 1"
+    "test": "nyc ava"
+  },
+  "ava": {
+    "babel": true
   },
   "bugs": {
     "url": "https://github.com/dyne/restroom-mw/issues"

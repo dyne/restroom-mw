@@ -1,7 +1,7 @@
 {
   "name": "@restroom-mw/zencode",
   "version": "0.4.0",
-  "description": "Zencode utilities",
+  "description": "Zencode utilities for Restroom",
   "keywords": [
     "restroom",
     "zenroom",
@@ -9,7 +9,7 @@
     "tools"
   ],
   "author": "Puria Nafisi Azizi <puria@dyne.org>",
-  "homepage": "https://dev.zenroom.org/",
+  "homepage": "https://dyne.github.io/restroom-mw/",
   "license": "AGPL-3.0",
   "main": "dist/index.js",
   "files": [
@@ -30,7 +30,10 @@
     "doc": "documentation readme src/** -g -f md -s 'API' --readme-file ../../docs/packages/zencode.md --shallow",
     "lint": "eslint .",
     "lint:fix": "eslint --fix --ext .js,.jsx .",
-    "test": "yarn run clean && yarn build && nyc mocha"
+    "test": "nyc ava"
+  },
+  "ava": {
+    "babel": true
   },
   "bugs": {
     "url": "https://github.com/dyne/restroom-mw/issues"

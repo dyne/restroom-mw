@@ -1,6 +1,6 @@
 {
   "name": "@restroom-mw/ui",
-  "description": "The swagger-ui mw to extend restroom",
+  "description": "The swagger-ui middleware to extend Restroom",
   "version": "0.4.4",
   "keywords": [
     "zenroom",
@@ -11,7 +11,7 @@
     "api"
   ],
   "author": "Puria Nafisi Azizi <puria@dyne.org>",
-  "homepage": "http://dev.zenroom.org/",
+  "homepage": "https://dyne.github.io/restroom-mw/",
   "license": "AGPL-3.0",
   "main": "dist/index.js",
   "files": [
@@ -27,7 +27,7 @@
     "directory": "packages/core"
   },
   "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1",
+    "test": "ava",
     "clean": "rimraf dist",
     "doc": "documentation readme src/** -g -f md -s 'API' --readme-file ../../docs/packages/ui.md --shallow",
     "build": "lerna exec --parallel 'BABEL_ENV=build babel src --out-dir dist --config-file ../../babel.config.json --source-maps --delete-dir-on-start --no-comments'",

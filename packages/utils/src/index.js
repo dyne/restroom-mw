@@ -1,7 +1,7 @@
 require("dotenv").config();
 
 if (process.env.ZENCODE_DIR === undefined)
-  throw "You must define `ZENCODE_DIR` before proceding";
+  throw new Error("You must define `ZENCODE_DIR` before proceding");
 
 /**
  *  The port on which the restroom middlewares can refer to listen for
