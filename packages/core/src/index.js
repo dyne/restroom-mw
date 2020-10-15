@@ -25,30 +25,31 @@ export default async (req, res, next) => {
       return;
     }
   }
-  var stderr = capcon.captureStderr(function scope() {
-    callHook(hook.BEFORE, res, zencode);
-    zenroom
-      .script(zencode.content)
-      .conf(getConf(contractName))
-      .data(getData(res, req))
-      .keys(getKeys(contractName))
-      .print_err((text) => errors.push(text))
-      .print((text) => {
-        result = result.concat(text);
-      })
-      .error(() => {
-        callHook(hook.ERROR, res, { errors, zencode });
-        res.set("Content-Type", "text/plain");
-        res.status(500);
-      })
-      .success(() => {
-        callHook(hook.SUCCESS, res, { result, zencode });
-      })
-      .zencode_exec();
-  });
   try {
+    var stderr = capcon.captureStderr(function scope() {
+      callHook(hook.BEFORE, res, zencode);
+      zenroom
+        .script(zencode.content)
+        .conf(getConf(contractName))
+        .data(getData(res, req))
+        .keys(getKeys(contractName))
+        .print_err((text) => errors.push(text))
+        .print((text) => {
+          result = result.concat(text);
+        })
+        .error(() => {
+          callHook(hook.ERROR, res, { errors, zencode });
+          res.set("Content-Type", "text/plain");
+          res.status(500);
+        })
+        .success(() => {
+          callHook(hook.SUCCESS, res, { result, zencode });
+          res.status(200);
+          res.json(JSON.parse(result));
+        })
+        .zencode_exec();
+    });
     callHook(hook.AFTER, res, { result, zencode });
-    res.json(JSON.parse(result));
   } catch (e) {
     console.error(e, stderr);
     res.set("Content-Type", "text/plain");

@@ -1,6 +1,5 @@
 import fs from "fs";
 import ic from "ignore-case";
-import { format } from "url";
 
 const quoted = new RegExp(/'[^']*'/, "g");
 

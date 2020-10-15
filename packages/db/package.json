@@ -30,7 +30,8 @@
     "url": "https://github.com/puria/restroom-mw/issues"
   },
   "dependencies": {
-    "sequelize": "^5.21.7"
+    "sequelize": "^5.21.7",
+    "sqlite3": "^5.0.0"
   },
   "gitHead": "9ddff6e708d8088a589c47eb6557d1b8764e1670"
 }
