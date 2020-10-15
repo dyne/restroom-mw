@@ -11,7 +11,7 @@ export default async (req, res, next) => {
   if (req.url === "/favicon.ico") {
     return;
   }
-  callHook(hook.INIT, res);
+  await callHook(hook.INIT, res);
   res.append("x-powered-by", " RESTROOM by Dyne.org");
   let result = "";
   const errors = [];
@@ -26,13 +26,16 @@ export default async (req, res, next) => {
     }
   }
   try {
-    var stderr = capcon.captureStderr(function scope() {
-      callHook(hook.BEFORE, res, zencode);
+    var stderr = capcon.captureStderr(async () => {
+      const conf = getConf(contractName);
+      const data = getData(res, req);
+      const keys = getKeys(contractName);
+      await callHook(hook.BEFORE, res, { zencode, conf, data, keys });
       zenroom
         .script(zencode.content)
-        .conf(getConf(contractName))
-        .data(getData(res, req))
-        .keys(getKeys(contractName))
+        .conf(conf)
+        .data(data)
+        .keys(keys)
         .print_err((text) => errors.push(text))
         .print((text) => {
           result = result.concat(text);
@@ -42,21 +45,21 @@ export default async (req, res, next) => {
           res.set("Content-Type", "text/plain");
           res.status(500);
         })
-        .success(() => {
-          callHook(hook.SUCCESS, res, { result, zencode });
+        .success(async () => {
+          await callHook(hook.SUCCESS, res, { result, zencode });
           res.status(200);
           res.json(JSON.parse(result));
         })
         .zencode_exec();
     });
-    callHook(hook.AFTER, res, { result, zencode });
+    await callHook(hook.AFTER, res, { result, zencode });
   } catch (e) {
     console.error(e, stderr);
     res.set("Content-Type", "text/plain");
     res.status(500).send(stderr);
-    callHook(hook.EXCEPTION, res, { stderr });
+    await callHook(hook.EXCEPTION, res, { stderr });
   }
-  callHook(hook.FINISH, res);
+  await callHook(hook.FINISH, res);
 };
 
 export const {

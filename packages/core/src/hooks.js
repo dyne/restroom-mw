@@ -8,10 +8,10 @@ export const hook = {
   FINISH: "onFinish",
 };
 
-export const callHook = (hook, res, ...args) => {
+export const callHook = async (hook, res, ...args) => {
   const hooks = res.locals[hook] || [];
   for (const fn of hooks) {
-    fn(...args);
+    await fn(...args);
   }
 };
 
