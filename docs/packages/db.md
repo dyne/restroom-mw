@@ -29,10 +29,10 @@ app.use("/api/*", zencode);
 
 ### ACTIONS
 
-[packages/db/src/index.js:13-17](https://github.com/dyne/restroom-mw/blob/40e438f09229306dc898b6f6c9e5c03dfc975cd9/packages/db/src/index.js#L13-L17 "Source code on GitHub")
+[packages/db/src/index.js:13-17](https://github.com/dyne/restroom-mw/blob/f8af9488d0719d50796f1c613b91c2d32cd0f3c8/packages/db/src/index.js#L13-L17 "Source code on GitHub")
 
-**CONNECT** `I have a database connection uri at {}`
-
-**SELECT** `I select {} from {} where {}`
+**CONNECT** `I have a database connection named {}`
 
 **SAVE** `save the result into the database`
+
+**SAVE_WITH_TABLENAME**: `save the result into the database within the table {}`
