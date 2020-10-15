@@ -8,7 +8,8 @@
   "command": {
     "publish": {
       "registry": "https://registry.npmjs.org/",
-      "access": "public"
+      "access": "public",
+      "conventionalCommits": true
     }
   }
 }
