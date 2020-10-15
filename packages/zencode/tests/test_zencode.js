@@ -109,3 +109,41 @@ test("should load contracts by name and path", (t) => {
   const contract = Zencode.byName("database", path);
   t.is(contract.tag, "storage");
 });
+
+test("should not broke with keywords in the middle", (t) => {
+  const contract = `Rule unknown ignore 
+Scenario 'ecdh': Create the keypair
+Given that I am known as 'Alice'
+Given that I have an endpoint named 'https://jsonplaceholder.typicode.com/todos/1'
+Given I connect to 'myEndPoint' and save the output into 'myApiOutput'
+When I create the random object of '1024' bits
+When I test
+Then pass the output to 'myOutputEndPoint' into 'data'
+Then print all data`;
+
+  const zencode = new Zencode(contract);
+  const ACTIONS = {
+    TEST: "I connect to {} and save the output into {}",
+  };
+  t.truthy(zencode.match(ACTIONS.TEST));
+  const [source, dest] = zencode.paramsOf(ACTIONS.TEST);
+  t.is(source, "myEndPoint");
+  t.is(dest, "myApiOutput");
+});
+
+test("should handle correctly duplicated sentences", (t) => {
+  const content = `Given I am I
+  and I am I
+  and I define 'alice'
+  and I define 'bob'`;
+
+  const SENTENCES = {
+    I: "I am I",
+    DEFINE: "I define {}",
+  };
+  const zencode = new Zencode(content);
+
+  t.true(zencode.match(SENTENCES.I));
+  t.true(zencode.match(SENTENCES.DEFINE));
+  t.deepEqual(["alice", "bob"], zencode.paramsOf(SENTENCES.DEFINE));
+});

@@ -13,8 +13,8 @@ const removeParams = (sentence) => sentence.replace(quoted, "{}");
 
 const removeWords = (sentence, words) => {
   const w = sentence.trim().split(" ");
-  const filtered = w.filter((x) => !words.includes(x.toLowerCase()));
-  return filtered.join(" ");
+  if (words.includes(w[0].toLowerCase())) w.shift();
+  return w.join(" ");
 };
 
 const removeKeywords = (str) =>
@@ -121,8 +121,13 @@ export class Zencode {
   parse() {
     const parsed = new Map();
     for (const line of this.content.split("\n")) {
-      const params = getParams(line) || [];
+      let params = [];
       const lid = removeKeywords(removeParams(line)).trim();
+      // duplicate sentences
+      if (parsed.has(lid)) {
+        params = parsed.get(lid);
+      }
+      params.push(...(getParams(line) || []));
       parsed.set(lid, params);
     }
     return parsed;
