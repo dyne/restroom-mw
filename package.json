@@ -10,7 +10,7 @@
     "lint": "lerna run lint",
     "lint:fix": "lerna run lint:fix",
     "test": "nyc ava",
-    "build": "lerna run clean && lerna run build",
+    "build": "lerna run clean && lerna run build --stream --concurrency=1 --include-dependencies",
     "doc": "lerna run doc"
   },
   "ava": {
