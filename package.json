@@ -58,7 +58,6 @@
     "eslint-plugin-standard": "^4.0.1",
     "husky": "^4.3.0",
     "lerna": "^3.22.1",
-    "lerna-changelog": "^1.0.1",
     "monorepo-changelog": "^0.1.0",
     "nyc": "^15.1.0",
     "prettier": "^2.1.2",
