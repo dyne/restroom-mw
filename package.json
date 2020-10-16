@@ -18,17 +18,20 @@
   "ava": {
     "failFast": true,
     "verbose": true,
-    "babel": true
+    "babel": true,
+    "require": [
+      "@babel/register"
+    ]
   },
   "nyc": {
     "reporter": [
       "lcovonly",
       "text"
     ],
-    "branches": 80,
+    "branches": 50,
     "lines": 80,
     "functions": 80,
-    "statements": 80,
+    "statements": 75,
     "check-coverage": true
   },
   "husky": {
@@ -44,6 +47,7 @@
     "@babel/plugin-proposal-optional-chaining": "^7.11.0",
     "@babel/plugin-transform-runtime": "^7.11.5",
     "@babel/preset-env": "^7.11.5",
+    "@babel/register": "^7.12.1",
     "ava": "^3.13.0",
     "babel-core": "7.0.0-bridge.0",
     "devmoji": "^2.1.10",
@@ -63,6 +67,7 @@
     "prettier": "^2.1.2",
     "readdirp": "^3.4.0",
     "rimraf": "^3.0.2",
+    "sinon": "^9.2.0",
     "start-server-and-test": "^1.11.4",
     "supertest": "^5.0.0"
   },

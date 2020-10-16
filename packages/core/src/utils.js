@@ -3,10 +3,6 @@ import readdirp from "readdirp";
 import fuzzball from "fuzzball";
 import { CUSTOM_404_MESSAGE, ZENCODE_DIR } from "@restroom-mw/utils";
 
-export const getData = (res, req) => {
-  return res.locals?.zenroom_data || req.body.data || {};
-};
-
 export const getKeys = (contractName) => {
   try {
     return (
