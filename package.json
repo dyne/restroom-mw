@@ -18,9 +18,13 @@
     "verbose": true,
     "babel": true
   },
+  "nyc": {
+    "reporter": ["lcovonly", "text"]
+  },
   "husky": {
     "hooks": {
-      "commit-msg": "devmoji -e"
+      "commit-msg": "devmoji -e",
+      "precommit": "yarn test"
     }
   },
   "devDependencies": {
