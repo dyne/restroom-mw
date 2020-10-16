@@ -1,11 +1,13 @@
 {
   "private": true,
   "name": "restroom-mw",
+  "repository": "https://github.com/dyne/restroom-mw",
   "workspaces": [
     "packages/*"
   ],
   "scripts": {
     "release": "npm whoami && lerna publish",
+    "changelog": "mrcl",
     "clean": "lerna run clean",
     "lint": "lerna run lint",
     "lint:fix": "lerna run lint:fix",
@@ -19,7 +21,15 @@
     "babel": true
   },
   "nyc": {
-    "reporter": ["lcovonly", "text"]
+    "reporter": [
+      "lcovonly",
+      "text"
+    ],
+    "branches": 80,
+    "lines": 80,
+    "functions": 80,
+    "statements": 80,
+    "check-coverage": true
   },
   "husky": {
     "hooks": {
@@ -48,6 +58,8 @@
     "eslint-plugin-standard": "^4.0.1",
     "husky": "^4.3.0",
     "lerna": "^3.22.1",
+    "lerna-changelog": "^1.0.1",
+    "monorepo-changelog": "^0.1.0",
     "nyc": "^15.1.0",
     "prettier": "^2.1.2",
     "readdirp": "^3.4.0",
