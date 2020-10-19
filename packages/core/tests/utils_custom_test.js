@@ -4,7 +4,7 @@ import express from "express";
 import bodyParser from "body-parser";
 
 process.env.ZENCODE_DIR = "./test/not_existent";
-const zencode = require("../../core").default;
+const zencode = require("../dist").default;
 
 test("getMessages show custom message", async (t) => {
   const app = express();

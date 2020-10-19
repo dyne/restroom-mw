@@ -4,25 +4,30 @@ import express from "express";
 import bodyParser from "body-parser";
 
 process.env.ZENCODE_DIR = "./test/fixtures";
-const zencode = require("../../core").default;
+const zencode = require("../dist").default;
 
 const {
   getKeys,
   getConf,
+  getData,
   getContracts,
   getMessage,
   getFuzzyContractMessage,
   getEndpointsMessage,
-} = require("../src/utils");
+} = require("../dist/utils");
 
 test("getKeys works correctly", (t) => {
   const keys = getKeys("contract_keys");
   t.is(keys, "{}\n");
+  const fakeKeys = getKeys("non existend contract");
+  t.is(fakeKeys, null);
 });
 
 test("getConf works correctly", (t) => {
   const conf = getConf("contract_keys");
   t.is(conf, "CONF");
+  const fakeConf = getConf("non existend contract");
+  t.is(fakeConf, null);
 });
 
 test("getContracts works correctly", async (t) => {
@@ -43,10 +48,7 @@ test("getMessages work correctly", async (t) => {
 
   const res = await request(app).post("/non-existent-endpoint");
   t.true(res.text.includes("404: This contract does not exists"));
-  t.is(
-    res.text,
-    '<h2>404: This contract does not exists</h2><h4>Other contract\'s endpoints are </h4><ul><a href="/broken">/broken</a><br/><a href="/contract_keys">/contract_keys</a><br/><a href="/database">/database</a><br/><a href="/database_table">/database_table</a><br/><a href="/random">/random</a></ul>'
-  );
+  t.is(res.text, "<h2>404: This contract does not exists</h2>");
 });
 
 test("Fuzzy contracts are found", (t) => {
@@ -76,4 +78,24 @@ test("Complete message", async (t) => {
 
   const result = await getMessage(req);
   t.is("<h2>404: This contract does not exists</h2>", result);
+});
+
+test("getData works correctly", (t) => {
+  const req = { body: { data: null } };
+  const res = { locals: { zenroom_data: null } };
+  t.deepEqual(getData(req, res), {});
+});
+
+test("getData with empty request", (t) => {
+  const req = { body: { data: null } };
+  const res = { locals: { zenroom_data: 42 } };
+
+  t.is(42, res.locals.zenroom_data || req.body.data || {});
+  t.is(getData({ body: { data: null } }, { locals: { zenroom_data: 42 } }), 42);
+});
+
+test("getData with empty response", (t) => {
+  const req = { body: { data: 42 } };
+  const res = { locals: { zenroom_data: null } };
+  t.is(getData(req, res), 42);
 });

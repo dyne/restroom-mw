@@ -66,3 +66,7 @@ export const getMessage = async (req) => {
   message.concat(getEndpointsMessage(choices, url));
   return message;
 };
+
+export const getData = (req, res) => {
+  return res.locals?.zenroom_data || req.body?.data || {};
+};
