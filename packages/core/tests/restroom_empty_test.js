@@ -1,5 +1,5 @@
 import test from "ava";
-import { Restroom } from "../src/restroom";
+import { Restroom } from "../dist/restroom";
 import * as sinon from "sinon";
 
 const mockResponse = () => {
