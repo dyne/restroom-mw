@@ -1,0 +1,35 @@
+{
+  "name": "@restroom-mw/http",
+  "version": "0.5.0",
+  "description": "Database utilities middleware for Restroom",
+  "author": "Sebastian Blichfeldt",
+  "contributors": [
+    "Puria Nafisi Azizi <puria@dyne.org>"
+  ],
+  "homepage": "https://dyne.github.io/restroom-mw/",
+  "license": "AGPL-3.0",
+  "main": "dist/index.js",
+  "files": [
+    "src",
+    "dist"
+  ],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dyne/restroom-mw.git"
+  },
+  "scripts": {
+    "clean": "rimraf dist",
+    "doc": "documentation readme src/** -g -f md -s 'API' --readme-file ../../docs/packages/http.md --shallow",
+    "build": "lerna exec --parallel 'BABEL_ENV=build babel src --out-dir dist --config-file ../../babel.config.json --source-maps --delete-dir-on-start --no-comments'"
+  },
+  "bugs": {
+    "url": "https://github.com/dyne/restroom-mw/issues"
+  },
+  "dependencies": {
+    "sequelize": "^5.21.7",
+    "sqlite3": "^5.0.0"
+  }
+}
