@@ -28,7 +28,7 @@ export default async (req, res, next) => {
   try {
     var stderr = capcon.captureStderr(async () => {
       const conf = getConf(contractName);
-      const data = getData(res, req);
+      const data = getData(req, res);
       const keys = getKeys(contractName);
       await callHook(hook.BEFORE, res, { zencode, conf, data, keys });
       zenroom
