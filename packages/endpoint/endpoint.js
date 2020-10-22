@@ -17,22 +17,17 @@ export default (req, res, next) => {
 
   rr.onBefore(async (params) => {
     const { zencode, keys, data } = params;
-    let parsedKeys;
-    let parsedData;
-    try {
-      parsedKeys = JSON.parse(keys);
-    } catch {
-      parsedKeys = keys;
-    }
-    try {
-      parsedData = JSON.parse(data);
-    } catch {
-      parsedData = data;
-    }
 
-    //used in rr.onSuccess
-    keysContent = parsedKeys;
-    dataContent = parsedData;
+    try {
+      keysContent = JSON.parse(keys);
+    } catch {
+      keysContent = keys;
+    }
+    try {
+      dataContent = JSON.parse(data);
+    } catch {
+      dataContent = data;
+    }
 
     if (zencode.match(ACTIONS.EXTERNAL_CONNECTION)) {
       externalSourceKeys = zencode.paramsOf(ACTIONS.EXTERNAL_CONNECTION);
@@ -43,7 +38,7 @@ export default (req, res, next) => {
         let ouputKeyValue;
         let outputDataValue;
         for (const key of externalSourceKeys) {
-          const url = parsedKeys[key] || parsedData[key];
+          const url = keysContent[key] || dataContent[key];
           if (url) {
             try {
               // make the api call with the keys key value url
