@@ -42,7 +42,8 @@ export default (req, res, next) => {
           if (url) {
             try {
               // make the api call with the keys key value url
-              ouputKeyValue = await axios.get(url).data;
+              const response = await axios.get(url);
+              ouputKeyValue = response.data;
             } catch (error) {
               ouputKeyValue = null;
             }
