@@ -8,6 +8,14 @@ const ACTIONS = {
   PASS_OUTPUT: "pass the output to {}"
 };
 
+const parse = (o) => {
+  try {
+    return JSON.parse(o)
+  } catch {
+    return o
+  }
+}
+
 export default (req, res, next) => {
   const rr = new Restroom(req, res);
   const outputName = 'output';
@@ -17,17 +25,8 @@ export default (req, res, next) => {
 
   rr.onBefore(async (params) => {
     const { zencode, keys, data } = params;
-
-    try {
-      keysContent = JSON.parse(keys);
-    } catch {
-      keysContent = keys;
-    }
-    try {
-      dataContent = JSON.parse(data);
-    } catch {
-      dataContent = data;
-    }
+    keysContent = parse(keys);
+    dataContent = parse(data);
 
     if (zencode.match(ACTIONS.EXTERNAL_CONNECTION)) {
       externalSourceKeys = zencode.paramsOf(ACTIONS.EXTERNAL_CONNECTION);
