@@ -11,7 +11,7 @@ const ACTIONS = {
 const parse = (o) => {
   try {
     return JSON.parse(o)
-  } catch {
+  } catch(e) {
     return o
   }
 }
@@ -37,7 +37,7 @@ export default (req, res, next) => {
         let ouputKeyValue;
         let outputDataValue;
         for (const key of externalSourceKeys) {
-          const url = keysContent[key] || dataContent[key];
+          const url = (keysContent || dataContent)[key];
           if (url) {
             try {
               // make the api call with the keys key value url

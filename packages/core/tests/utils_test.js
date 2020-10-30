@@ -37,6 +37,7 @@ test("getContracts works correctly", async (t) => {
     "/contract_keys",
     "/database",
     "/database_table",
+    "/http-test",
     "/random",
   ]);
 });
