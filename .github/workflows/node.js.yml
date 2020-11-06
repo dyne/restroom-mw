@@ -25,6 +25,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: yarn
+    - run: yarn install zenroom@next
     - run: yarn build
     - run: yarn test
     - uses: codecov/codecov-action@v1
