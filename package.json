@@ -13,12 +13,14 @@
     "lint:fix": "lerna run lint:fix",
     "test": "nyc ava",
     "build": "lerna run build --stream --concurrency=1 --include-dependencies",
+    "serve": "babel-watch test/fixtures/server.js",
     "doc": "lerna run doc"
   },
   "ava": {
     "failFast": true,
     "verbose": true,
     "babel": true,
+    "timeout": "1m",
     "require": [
       "@babel/register"
     ]
@@ -28,10 +30,7 @@
       "lcovonly",
       "text"
     ],
-    "branches": 80,
-    "lines": 80,
-    "functions": 80,
-    "statements": 80,
+    "lines": 88,
     "check-coverage": true
   },
   "husky": {
@@ -50,9 +49,11 @@
     "@babel/register": "^7.12.1",
     "ava": "^3.13.0",
     "babel-core": "7.0.0-bridge.0",
+    "babel-watch": "^7.0.0",
     "cypress": "^5.4.0",
     "devmoji": "^2.1.10",
     "documentation": "^13.0.2",
+    "errorhandler": "^1.5.1",
     "eslint": "^7.10.0",
     "eslint-config-prettier": "^6.12.0",
     "eslint-config-standard": "^14.1.1",
@@ -64,18 +65,17 @@
     "husky": "^4.3.0",
     "lerna": "^3.22.1",
     "monorepo-changelog": "^0.1.0",
+    "morgan": "^1.10.0",
     "nyc": "^15.1.0",
     "prettier": "^2.1.2",
     "readdirp": "^3.4.0",
     "rimraf": "^3.0.2",
     "sinon": "^9.2.0",
     "start-server-and-test": "^1.11.4",
-    "supertest": "^5.0.0"
+    "supertest": "^5.0.0",
+    "zenroom": "^1.1.5-e8732eb"
   },
   "resolutions": {
     "babel-core": "^7.0.0-bridge.0"
-  },
-  "dependencies": {
-    "zenroom": "^1.1.5"
   }
 }

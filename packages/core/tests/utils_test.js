@@ -2,6 +2,8 @@ import test from "ava";
 import request from "supertest";
 import express from "express";
 import bodyParser from "body-parser";
+import { getHooks, initHooks } from "../src/hooks";
+import { assert } from "sinon";
 
 process.env.ZENCODE_DIR = "./test/fixtures";
 const zencode = require("../dist").default;
@@ -27,7 +29,7 @@ test("getConf works correctly", (t) => {
   const conf = getConf("contract_keys");
   t.is(conf, "CONF");
   const fakeConf = getConf("non existend contract");
-  t.is(fakeConf, null);
+  t.is(fakeConf, `color=0`);
 });
 
 test("getContracts works correctly", async (t) => {
@@ -38,6 +40,7 @@ test("getContracts works correctly", async (t) => {
     "/database",
     "/database_table",
     "/http-test",
+    "/keygen",
     "/random",
   ]);
 });
@@ -99,4 +102,71 @@ test("getData with empty response", (t) => {
   const req = { body: { data: 42 } };
   const res = { locals: { zenroom_data: null } };
   t.is(getData(req, res), 42);
+});
+
+test("getHooks works correctly", async (t) => {
+  const promiseGen = (p) => {
+    return new Promise((resolve) => {
+      resolve(p);
+    });
+  };
+  const res = {
+    locals: { hookname: [promiseGen] },
+  };
+
+  const hooksPromise = getHooks("hookname", res, 2);
+  t.true(hooksPromise instanceof Promise);
+  const result = await hooksPromise;
+  t.deepEqual(result, [2]);
+});
+
+test("hook populate should correctly work", (t) => {
+  const res = { locals: [] };
+  const hookNames = [
+    "onSuccess",
+    "onInit",
+    "onBefore",
+    "onAfter",
+    "onSuccess",
+    "onError",
+    "onException",
+    "onFinish",
+  ];
+  for (const h of hookNames) {
+    t.is(res.locals[h], undefined);
+  }
+
+  const {
+    onInit,
+    onBefore,
+    onAfter,
+    onSuccess,
+    onError,
+    onException,
+    onFinish,
+  } = initHooks();
+  t.is(typeof onInit, "function");
+  t.is(typeof onBefore, "function");
+  t.is(typeof onAfter, "function");
+  t.is(typeof onSuccess, "function");
+  t.is(typeof onError, "function");
+  t.is(typeof onException, "function");
+  t.is(typeof onFinish, "function");
+
+  for (const h of hookNames) {
+    eval(`${h}(res, () => "${h}")`);
+    t.is(res.locals[h][0](), h);
+  }
+
+  // onInit(1);
+  // onBefore(2);
+  // onAfter(3);
+  // onSuccess(4);
+  // onError(5);
+  // onException(6);
+  // onFinish(7);
+  // let i = 0;
+  // for (const h of hookNames) {
+  //   t.is(res.locals[h], ++i);
+  // }
 });

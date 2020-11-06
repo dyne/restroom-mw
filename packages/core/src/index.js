@@ -1,65 +1,98 @@
 import { Zencode } from "@restroom-mw/zencode";
 import { ZENCODE_DIR } from "@restroom-mw/utils";
-import { callHook, hook, initHooks } from "./hooks";
+import { getHooks, hook, initHooks } from "./hooks";
 import { getConf, getData, getKeys, getMessage } from "./utils";
-const zenroom = require("zenroom");
-const capcon = require("capture-console");
-
+import { zencode_exec } from "zenroom";
 const functionHooks = initHooks;
 
 export default async (req, res, next) => {
   if (req.url === "/favicon.ico") {
     return;
   }
-  await callHook(hook.INIT, res);
-  res.append("x-powered-by", " RESTROOM by Dyne.org");
-  let result = "";
-  const errors = [];
-  const contractName = req.params["0"];
-  let zencode = null;
-  try {
-    zencode = Zencode.byName(contractName, ZENCODE_DIR);
-  } catch (err) {
-    if (err.code === "ENOENT") {
-      res.status(404).send(await getMessage(req));
-      return;
+
+  const getContractOrFail = async (name) => {
+    try {
+      return Zencode.byName(name, ZENCODE_DIR);
+    } catch (err) {
+      if (err.code === "ENOENT") {
+        const message = await getMessage(req);
+        res.status(404).send(message);
+      }
     }
-  }
+  };
+
+  const runHook = (hook, args) => {
+    const hooks = getHooks(hook, res, args);
+    hooks
+      .then((r) => {
+        return r;
+      })
+      .catch((e) => {
+        sendError(`Exception in hook ${hook}:`, e);
+      });
+  };
+
+  const sendError = (subject, e = null) => {
+    const exception = e ? e.stack || e.message : "";
+    const message = subject + "\n\n\n" + exception;
+    if (!res.headersSent) {
+      res.status(500).json({
+        zenroom_errors: zenroom_errors,
+        result: result,
+        exception: message,
+      });
+      if (e) next(e);
+    }
+  };
+
+  process.on("unhandledRejection", (e) => {
+    sendError(`[Inside 'uncaughtException' event]`, e);
+  });
+
+  process.on("uncaughtException", (e) => {
+    sendError(`[Inside 'uncaughtException' event]`, e);
+  });
+
+  runHook(hook.INIT, {});
+  res.set("x-powered-by", "RESTroom by Dyne.org");
+  let result, json, zenroom_errors;
+  result = zenroom_errors = json = "";
+  const contractName = req.params["0"];
+  let zencode = await getContractOrFail(contractName);
+  let conf = getConf(contractName);
+  let data = getData(req, res);
+  let keys = getKeys(contractName);
+
+  runHook(hook.BEFORE, { zencode, conf, data, keys });
   try {
-    var stderr = capcon.captureStderr(async () => {
-      const conf = getConf(contractName);
-      const data = getData(req, res);
-      const keys = getKeys(contractName);
-      await callHook(hook.BEFORE, res, { zencode, conf, data, keys });
-      zenroom
-        .script(zencode.content)
-        .conf(conf)
-        .data(data)
-        .keys(keys)
-        .print_err((text) => errors.push(text))
-        .print((text) => {
-          result = result.concat(text);
-        })
-        .error(() => {
-          callHook(hook.ERROR, res, { errors, zencode });
-          res.set("Content-Type", "text/plain");
-          res.status(500);
-        })
-        .success(async () => {
-          await callHook(hook.SUCCESS, res, { result, zencode });
-          res.status(200);
-          res.json(JSON.parse(result));
-        })
-        .zencode_exec();
-    });
-    await callHook(hook.AFTER, res, { result, zencode });
+    zencode_exec(zencode.content, { data: data, keys: keys, conf: conf })
+      .then((r) => {
+        runHook(hook.SUCCESS, { result, zencode, zenroom_errors });
+        res.status(200).json(JSON.parse(r));
+        return r;
+      })
+      .then((r) => {
+        result = r;
+        return JSON.parse(r);
+      })
+      .then((json) => {
+        runHook(hook.AFTER, { json, zencode });
+        next();
+      })
+      .catch((e) => {
+        zenroom_errors = e;
+        runHook(hook.ERROR, { zenroom_errors, zencode });
+        sendError("[ZENROOM EXECUTION ERROR]");
+      })
+      .finally(() => {
+        runHook(hook.FINISH, res);
+        next();
+      });
   } catch (e) {
-    console.error(e, stderr);
-    res.set("Content-Type", "text/plain");
-    res.status(500).send(stderr);
-    await callHook(hook.EXCEPTION, res, { stderr });
+    runHook(hook.EXCEPTION, res);
+    sendError("[UNEXPECTED EXCEPTION]", e);
+    next(e);
   }
-  await callHook(hook.FINISH, res);
 };
 
 export const {

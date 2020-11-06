@@ -38,6 +38,9 @@ export class Restroom {
   }
 
   _hook(name, promise) {
+    if (!promise instanceof Promise) {
+      throw new Error(`hook ${name} should be a Promise`);
+    }
     let locals = this._res.locals[name] || [];
     locals.push(promise);
     this._res.locals[name] = locals;
