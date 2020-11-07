@@ -24,7 +24,3 @@ test("Restroom instance is correctly created", (t) => {
   t.true(t.context.rr instanceof Restroom);
 });
 
-test("Restroom set data correctly", (t) => {
-  t.context.rr.setData("key", "value");
-  t.is(t.context.res.locals.zenroom_data.key, "value");
-});

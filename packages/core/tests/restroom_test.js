@@ -28,31 +28,6 @@ test("Restroom instance is correctly created", (t) => {
   t.true(t.context.rr instanceof Restroom);
 });
 
-test("Restroom set data correctly", (t) => {
-  t.context.rr.setData("key", "value");
-  t.is(t.context.res.locals.zenroom_data.key, "value");
-});
-
-test("Restroom set data correctly twice", (t) => {
-  t.context.rr.setData("key", "value");
-  t.is(t.context.res.locals.zenroom_data.key, "value");
-  t.context.rr.setData("key2", "value2");
-  t.is(t.context.res.locals.zenroom_data.key2, "value2");
-});
-
-test("Restroom set data correctly with body", (t) => {
-  t.context.req.body.data = { key: "value" };
-  t.context.rr.setData("key2", "value2");
-  t.is(t.context.res.locals.zenroom_data.key, "value");
-  t.is(t.context.res.locals.zenroom_data.key2, "value2");
-});
-
-test("Restroom get data correctly", (t) => {
-  t.context.res.locals.zenroom_data = { key: "data" };
-  t.is(t.context.rr.getData("key"), "data");
-  t.is(t.context.rr.getData("notfound"), undefined);
-});
-
 test("Restroom hooks correctly works", (t) => {
   const p = new Promise(
     () => {},

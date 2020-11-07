@@ -16,27 +16,6 @@ export class Restroom {
     this._res = res;
   }
 
-  /**
-   * Save a key value, accessible afterwards into the contracts DATA field
-   *
-   * @param {string} k
-   * @param {object} v
-   */
-  setData(k, v) {
-    let data = this._res.locals.zenroom_data || this._req.body.data || {};
-    data[k] = v;
-    this._res.locals.zenroom_data = data;
-  }
-
-  /**
-   * Get the value by key from the DATA field
-   *
-   * @param {string} k
-   */
-  getData(k) {
-    return this._res.locals.zenroom_data[k];
-  }
-
   _hook(name, promise) {
     if (!promise instanceof Promise) {
       throw new Error(`hook ${name} should be a Promise`);

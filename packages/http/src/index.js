@@ -1,30 +1,30 @@
-import fs from 'fs';
-import axios from 'axios';
-import { Restroom }  from "@restroom-mw/core";
+import fs from "fs";
+import axios from "axios";
+import { Restroom } from "@restroom-mw/core";
 
 const ACTIONS = {
   EXTERNAL_CONNECTION: "that I have an endpoint named {}",
   EXTERNAL_OUTPUT: "I connect to {} and save the output",
-  PASS_OUTPUT: "pass the output to {}"
+  PASS_OUTPUT: "pass the output to {}",
 };
 
 const parse = (o) => {
   try {
-    return JSON.parse(o)
-  } catch(e) {
-    return o
+    return JSON.parse(o);
+  } catch (e) {
+    return o;
   }
-}
+};
 
 export default (req, res, next) => {
   const rr = new Restroom(req, res);
-  const outputName = 'output';
+  const outputName = "output";
   let keysContent;
   let dataContent;
   let externalSourceKeys = [];
 
   rr.onBefore(async (params) => {
-    const { zencode, keys, data } = params;
+    let { zencode, keys, data } = params;
     keysContent = parse(keys);
     dataContent = parse(data);
 
@@ -46,7 +46,7 @@ export default (req, res, next) => {
             } catch (error) {
               ouputKeyValue = null;
             }
-            rr.setData(outputName, ouputKeyValue);
+            data.outputName = ouputKeyValue;
           }
         }
       }
@@ -59,7 +59,6 @@ export default (req, res, next) => {
       const outputNames = zencode.paramsOf(ACTIONS.PASS_OUTPUT);
 
       if (outputNames.length > 0) {
-
         for (const key of outputNames) {
           const url = keysContent[key] || dataContent[key];
           if (url) {
@@ -69,11 +68,10 @@ export default (req, res, next) => {
               //could not send the result
             }
           }
-        };
+        }
       }
     }
   });
 
   next();
 };
-
