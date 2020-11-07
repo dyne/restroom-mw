@@ -8,6 +8,7 @@
   "scripts": {
     "release": "npm whoami && lerna publish",
     "changelog": "mrcl",
+    "c": "gacp --emoji emoji --editor true --add false",
     "clean": "lerna run clean",
     "lint": "lerna run lint",
     "lint:fix": "lerna run lint:fix",
@@ -62,6 +63,7 @@
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
+    "gacp": "^2.10.2",
     "husky": "^4.3.0",
     "lerna": "^3.22.1",
     "monorepo-changelog": "^0.1.0",
