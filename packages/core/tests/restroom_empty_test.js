@@ -23,4 +23,3 @@ test.beforeEach((t) => {
 test("Restroom instance is correctly created", (t) => {
   t.true(t.context.rr instanceof Restroom);
 });
-

@@ -16,7 +16,7 @@ export const getKeys = (contractName) => {
 export const getConf = (contractName) => {
   try {
     return (
-      fs.readFileSync(`${ZENCODE_DIR}/${contractName}.conf`).toString() ||null
+      fs.readFileSync(`${ZENCODE_DIR}/${contractName}.conf`).toString() || null
     );
   } catch (e) {
     return "color=0";
