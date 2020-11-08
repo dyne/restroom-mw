@@ -46,7 +46,7 @@ app.use("/api/*", core);
 
 ### Restroom
 
-[packages/core/src/restroom.js:13-90](https://github.com/dyne/restroom-mw/blob/502770213e967fbe3d2e5371395518c13b6c437f/packages/core/src/restroom.js#L13-L90 "Source code on GitHub")
+[packages/core/src/restroom.js:13-90](https://github.com/dyne/restroom-mw/blob/fb5b823272829273208f314c7bdae0c5c9be050b/packages/core/src/restroom.js#L13-L90 "Source code on GitHub")
 
 #### Parameters
 
@@ -65,7 +65,7 @@ app.use("/api/*", core);
 
 #### onInit
 
-[packages/core/src/restroom.js:33-35](https://github.com/dyne/restroom-mw/blob/502770213e967fbe3d2e5371395518c13b6c437f/packages/core/src/restroom.js#L33-L35 "Source code on GitHub")
+[packages/core/src/restroom.js:33-35](https://github.com/dyne/restroom-mw/blob/fb5b823272829273208f314c7bdae0c5c9be050b/packages/core/src/restroom.js#L33-L35 "Source code on GitHub")
 
 -   **See: [lifecycle](/architecture?id=lifecycle-hooks)
     **
@@ -78,7 +78,7 @@ Saves the promise to be executed at the onInit lifecycle step
 
 #### onBefore
 
-[packages/core/src/restroom.js:42-44](https://github.com/dyne/restroom-mw/blob/502770213e967fbe3d2e5371395518c13b6c437f/packages/core/src/restroom.js#L42-L44 "Source code on GitHub")
+[packages/core/src/restroom.js:42-44](https://github.com/dyne/restroom-mw/blob/fb5b823272829273208f314c7bdae0c5c9be050b/packages/core/src/restroom.js#L42-L44 "Source code on GitHub")
 
 -   **See: [lifecycle](/architecture?id=lifecycle-hooks)
     **
@@ -91,7 +91,7 @@ Saves the promise to be executed at the onBefore lifecycle step
 
 #### onSuccess
 
-[packages/core/src/restroom.js:51-53](https://github.com/dyne/restroom-mw/blob/502770213e967fbe3d2e5371395518c13b6c437f/packages/core/src/restroom.js#L51-L53 "Source code on GitHub")
+[packages/core/src/restroom.js:51-53](https://github.com/dyne/restroom-mw/blob/fb5b823272829273208f314c7bdae0c5c9be050b/packages/core/src/restroom.js#L51-L53 "Source code on GitHub")
 
 -   **See: [lifecycle](/architecture?id=lifecycle-hooks)
     **
@@ -104,7 +104,7 @@ Saves the promise to be executed at the onSuccess lifecycle step
 
 #### onAfter
 
-[packages/core/src/restroom.js:60-62](https://github.com/dyne/restroom-mw/blob/502770213e967fbe3d2e5371395518c13b6c437f/packages/core/src/restroom.js#L60-L62 "Source code on GitHub")
+[packages/core/src/restroom.js:60-62](https://github.com/dyne/restroom-mw/blob/fb5b823272829273208f314c7bdae0c5c9be050b/packages/core/src/restroom.js#L60-L62 "Source code on GitHub")
 
 -   **See: [lifecycle](/architecture?id=lifecycle-hooks)
     **
@@ -117,7 +117,7 @@ Saves the promise to be executed at the onAfter lifecycle step
 
 #### onError
 
-[packages/core/src/restroom.js:69-71](https://github.com/dyne/restroom-mw/blob/502770213e967fbe3d2e5371395518c13b6c437f/packages/core/src/restroom.js#L69-L71 "Source code on GitHub")
+[packages/core/src/restroom.js:69-71](https://github.com/dyne/restroom-mw/blob/fb5b823272829273208f314c7bdae0c5c9be050b/packages/core/src/restroom.js#L69-L71 "Source code on GitHub")
 
 -   **See: [lifecycle](/architecture?id=lifecycle-hooks)
     **
@@ -130,7 +130,7 @@ Saves the promise to be executed at the onError lifecycle step
 
 #### onException
 
-[packages/core/src/restroom.js:78-80](https://github.com/dyne/restroom-mw/blob/502770213e967fbe3d2e5371395518c13b6c437f/packages/core/src/restroom.js#L78-L80 "Source code on GitHub")
+[packages/core/src/restroom.js:78-80](https://github.com/dyne/restroom-mw/blob/fb5b823272829273208f314c7bdae0c5c9be050b/packages/core/src/restroom.js#L78-L80 "Source code on GitHub")
 
 -   **See: [lifecycle](/architecture?id=lifecycle-hooks)
     **
@@ -143,7 +143,7 @@ Saves the promise to be executed at the onException lifecycle step
 
 #### onFinish
 
-[packages/core/src/restroom.js:87-89](https://github.com/dyne/restroom-mw/blob/502770213e967fbe3d2e5371395518c13b6c437f/packages/core/src/restroom.js#L87-L89 "Source code on GitHub")
+[packages/core/src/restroom.js:87-89](https://github.com/dyne/restroom-mw/blob/fb5b823272829273208f314c7bdae0c5c9be050b/packages/core/src/restroom.js#L87-L89 "Source code on GitHub")
 
 -   **See: [lifecycle](/architecture?id=lifecycle-hooks)
     **
