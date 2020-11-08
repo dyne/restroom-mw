@@ -29,28 +29,24 @@ app.use("/api/*", core);
 
 -   [Restroom](#restroom)
     -   [Parameters](#parameters)
-    -   [setData](#setdata)
-        -   [Parameters](#parameters-1)
-    -   [getData](#getdata)
-        -   [Parameters](#parameters-2)
     -   [onInit](#oninit)
-        -   [Parameters](#parameters-3)
+        -   [Parameters](#parameters-1)
     -   [onBefore](#onbefore)
-        -   [Parameters](#parameters-4)
+        -   [Parameters](#parameters-2)
     -   [onSuccess](#onsuccess)
-        -   [Parameters](#parameters-5)
+        -   [Parameters](#parameters-3)
     -   [onAfter](#onafter)
-        -   [Parameters](#parameters-6)
+        -   [Parameters](#parameters-4)
     -   [onError](#onerror)
-        -   [Parameters](#parameters-7)
+        -   [Parameters](#parameters-5)
     -   [onException](#onexception)
-        -   [Parameters](#parameters-8)
+        -   [Parameters](#parameters-6)
     -   [onFinish](#onfinish)
-        -   [Parameters](#parameters-9)
+        -   [Parameters](#parameters-7)
 
 ### Restroom
 
-[packages/core/src/restroom.js:13-108](https://github.com/dyne/restroom-mw/blob/f8af9488d0719d50796f1c613b91c2d32cd0f3c8/packages/core/src/restroom.js#L13-L108 "Source code on GitHub")
+[packages/core/src/restroom.js:13-90](https://github.com/dyne/restroom-mw/blob/276c21e7e04ddd143c82ba336ff29a0166f6e89a/packages/core/src/restroom.js#L13-L90 "Source code on GitHub")
 
 #### Parameters
 
@@ -64,117 +60,96 @@ app.use("/api/*", core);
 -   **author**: Puria Nafisi Azizi &lt;puria@dyne.org> @pna
 -   **license**: AGPL-3.0-only
 
-    Main class that will allow to define function hooks and
+    Main class that will allow to define promise hooks and
     save \`data\` between different middlewares
-
-#### setData
-
-[packages/core/src/restroom.js:25-29](https://github.com/dyne/restroom-mw/blob/f8af9488d0719d50796f1c613b91c2d32cd0f3c8/packages/core/src/restroom.js#L25-L29 "Source code on GitHub")
-
-Save a key value, accessible afterwards into the contracts DATA field
-
-##### Parameters
-
--   `k` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
--   `v` **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
-
-#### getData
-
-[packages/core/src/restroom.js:36-38](https://github.com/dyne/restroom-mw/blob/f8af9488d0719d50796f1c613b91c2d32cd0f3c8/packages/core/src/restroom.js#L36-L38 "Source code on GitHub")
-
-Get the value by key from the DATA field
-
-##### Parameters
-
--   `k` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
 
 #### onInit
 
-[packages/core/src/restroom.js:51-53](https://github.com/dyne/restroom-mw/blob/f8af9488d0719d50796f1c613b91c2d32cd0f3c8/packages/core/src/restroom.js#L51-L53 "Source code on GitHub")
+[packages/core/src/restroom.js:33-35](https://github.com/dyne/restroom-mw/blob/276c21e7e04ddd143c82ba336ff29a0166f6e89a/packages/core/src/restroom.js#L33-L35 "Source code on GitHub")
 
 -   **See: [lifecycle](/architecture?id=lifecycle-hooks)
     **
 
-Saves the function to be executed at the onInit lifecycle step
+Saves the promise to be executed at the onInit lifecycle step
 
 ##### Parameters
 
--   `fn` **[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)** 
+-   `promise` **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)** 
 
 #### onBefore
 
-[packages/core/src/restroom.js:60-62](https://github.com/dyne/restroom-mw/blob/f8af9488d0719d50796f1c613b91c2d32cd0f3c8/packages/core/src/restroom.js#L60-L62 "Source code on GitHub")
+[packages/core/src/restroom.js:42-44](https://github.com/dyne/restroom-mw/blob/276c21e7e04ddd143c82ba336ff29a0166f6e89a/packages/core/src/restroom.js#L42-L44 "Source code on GitHub")
 
 -   **See: [lifecycle](/architecture?id=lifecycle-hooks)
     **
 
-Saves the function to be executed at the onBefore lifecycle step
+Saves the promise to be executed at the onBefore lifecycle step
 
 ##### Parameters
 
--   `fn` **[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)** 
+-   `promise` **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)** 
 
 #### onSuccess
 
-[packages/core/src/restroom.js:69-71](https://github.com/dyne/restroom-mw/blob/f8af9488d0719d50796f1c613b91c2d32cd0f3c8/packages/core/src/restroom.js#L69-L71 "Source code on GitHub")
+[packages/core/src/restroom.js:51-53](https://github.com/dyne/restroom-mw/blob/276c21e7e04ddd143c82ba336ff29a0166f6e89a/packages/core/src/restroom.js#L51-L53 "Source code on GitHub")
 
 -   **See: [lifecycle](/architecture?id=lifecycle-hooks)
     **
 
-Saves the function to be executed at the onSuccess lifecycle step
+Saves the promise to be executed at the onSuccess lifecycle step
 
 ##### Parameters
 
--   `fn` **[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)** 
+-   `promise` **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)** 
 
 #### onAfter
 
-[packages/core/src/restroom.js:78-80](https://github.com/dyne/restroom-mw/blob/f8af9488d0719d50796f1c613b91c2d32cd0f3c8/packages/core/src/restroom.js#L78-L80 "Source code on GitHub")
+[packages/core/src/restroom.js:60-62](https://github.com/dyne/restroom-mw/blob/276c21e7e04ddd143c82ba336ff29a0166f6e89a/packages/core/src/restroom.js#L60-L62 "Source code on GitHub")
 
 -   **See: [lifecycle](/architecture?id=lifecycle-hooks)
     **
 
-Saves the function to be executed at the onAfter lifecycle step
+Saves the promise to be executed at the onAfter lifecycle step
 
 ##### Parameters
 
--   `fn` **[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)** 
+-   `promise` **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)** 
 
 #### onError
 
-[packages/core/src/restroom.js:87-89](https://github.com/dyne/restroom-mw/blob/f8af9488d0719d50796f1c613b91c2d32cd0f3c8/packages/core/src/restroom.js#L87-L89 "Source code on GitHub")
+[packages/core/src/restroom.js:69-71](https://github.com/dyne/restroom-mw/blob/276c21e7e04ddd143c82ba336ff29a0166f6e89a/packages/core/src/restroom.js#L69-L71 "Source code on GitHub")
 
 -   **See: [lifecycle](/architecture?id=lifecycle-hooks)
     **
 
-Saves the function to be executed at the onError lifecycle step
+Saves the promise to be executed at the onError lifecycle step
 
 ##### Parameters
 
--   `fn` **[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)** 
+-   `promise` **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)** 
 
 #### onException
 
-[packages/core/src/restroom.js:96-98](https://github.com/dyne/restroom-mw/blob/f8af9488d0719d50796f1c613b91c2d32cd0f3c8/packages/core/src/restroom.js#L96-L98 "Source code on GitHub")
+[packages/core/src/restroom.js:78-80](https://github.com/dyne/restroom-mw/blob/276c21e7e04ddd143c82ba336ff29a0166f6e89a/packages/core/src/restroom.js#L78-L80 "Source code on GitHub")
 
 -   **See: [lifecycle](/architecture?id=lifecycle-hooks)
     **
 
-Saves the function to be executed at the onException lifecycle step
+Saves the promise to be executed at the onException lifecycle step
 
 ##### Parameters
 
--   `fn` **[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)** 
+-   `promise` **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)** 
 
 #### onFinish
 
-[packages/core/src/restroom.js:105-107](https://github.com/dyne/restroom-mw/blob/f8af9488d0719d50796f1c613b91c2d32cd0f3c8/packages/core/src/restroom.js#L105-L107 "Source code on GitHub")
+[packages/core/src/restroom.js:87-89](https://github.com/dyne/restroom-mw/blob/276c21e7e04ddd143c82ba336ff29a0166f6e89a/packages/core/src/restroom.js#L87-L89 "Source code on GitHub")
 
 -   **See: [lifecycle](/architecture?id=lifecycle-hooks)
     **
 
-Saves the function to be executed at the onFinish lifecycle step
+Saves the promise to be executed at the onFinish lifecycle step
 
 ##### Parameters
 
--   `fn` **[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)** 
+-   `promise` **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)** 

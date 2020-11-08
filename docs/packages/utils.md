@@ -22,7 +22,7 @@ configuration in the environment separate from code) to define them in a `.env` 
 
 ### HTTP_PORT
 
-[packages/utils/src/index.js:12-12](https://github.com/dyne/restroom-mw/blob/f8af9488d0719d50796f1c613b91c2d32cd0f3c8/packages/utils/src/index.js#L12-L12 "Source code on GitHub")
+[packages/utils/src/index.js:12-12](https://github.com/dyne/restroom-mw/blob/276c21e7e04ddd143c82ba336ff29a0166f6e89a/packages/utils/src/index.js#L12-L12 "Source code on GitHub")
 
 The port on which the restroom middlewares can refer to listen for
 
@@ -30,7 +30,7 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 ### HTTPS_PORT
 
-[packages/utils/src/index.js:20-20](https://github.com/dyne/restroom-mw/blob/f8af9488d0719d50796f1c613b91c2d32cd0f3c8/packages/utils/src/index.js#L20-L20 "Source code on GitHub")
+[packages/utils/src/index.js:20-20](https://github.com/dyne/restroom-mw/blob/276c21e7e04ddd143c82ba336ff29a0166f6e89a/packages/utils/src/index.js#L20-L20 "Source code on GitHub")
 
 The **secure port** on which the restroom middlewares can refer to listen for
 
@@ -38,7 +38,7 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 ### HOST
 
-[packages/utils/src/index.js:28-28](https://github.com/dyne/restroom-mw/blob/f8af9488d0719d50796f1c613b91c2d32cd0f3c8/packages/utils/src/index.js#L28-L28 "Source code on GitHub")
+[packages/utils/src/index.js:28-28](https://github.com/dyne/restroom-mw/blob/276c21e7e04ddd143c82ba336ff29a0166f6e89a/packages/utils/src/index.js#L28-L28 "Source code on GitHub")
 
 The hostname on which the restroom middleware can refer to listen for
 
@@ -46,7 +46,7 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 ### ZENCODE_DIR
 
-[packages/utils/src/index.js:35-35](https://github.com/dyne/restroom-mw/blob/f8af9488d0719d50796f1c613b91c2d32cd0f3c8/packages/utils/src/index.js#L35-L35 "Source code on GitHub")
+[packages/utils/src/index.js:35-35](https://github.com/dyne/restroom-mw/blob/276c21e7e04ddd143c82ba336ff29a0166f6e89a/packages/utils/src/index.js#L35-L35 "Source code on GitHub")
 
 The absolut path of the directory containing the smart contracts
 
@@ -54,7 +54,7 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 ### CUSTOM_404_MESSAGE
 
-[packages/utils/src/index.js:42-42](https://github.com/dyne/restroom-mw/blob/f8af9488d0719d50796f1c613b91c2d32cd0f3c8/packages/utils/src/index.js#L42-L42 "Source code on GitHub")
+[packages/utils/src/index.js:42-42](https://github.com/dyne/restroom-mw/blob/276c21e7e04ddd143c82ba336ff29a0166f6e89a/packages/utils/src/index.js#L42-L42 "Source code on GitHub")
 
 Custom error message to show when hit a non existent contract
 
