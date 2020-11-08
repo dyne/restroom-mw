@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.2](https://github.com/dyne/restroom-mw/compare/v0.6.1...v0.6.2) (2020-11-08)
+
+
+### Performance Improvements
+
+* **core:** ⚡️  Prevent EventEmitter memory leak ([fb5b823](https://github.com/dyne/restroom-mw/commit/fb5b823272829273208f314c7bdae0c5c9be050b))
+
+
+
+
+
 ## [0.6.1](https://github.com/dyne/restroom-mw/compare/v0.6.0...v0.6.1) (2020-11-08)
 
 
