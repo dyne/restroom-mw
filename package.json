@@ -6,7 +6,7 @@
     "packages/*"
   ],
   "scripts": {
-    "prerelease": "yarn doc && git add docs && git commit -m 'docs: 📚️ 📝 Update docs'",
+    "prerelease": "yarn build && yarn doc && git add docs && git commit -m 'docs: 📚️ 📝 Update docs'",
     "release": "npm whoami && lerna publish",
     "c": "gacp --emoji emoji --add false",
     "clean": "lerna run clean",

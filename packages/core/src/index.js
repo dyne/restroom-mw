@@ -45,14 +45,6 @@ export default async (req, res, next) => {
     }
   };
 
-  process.on("unhandledRejection", (e) => {
-    sendError(`[Inside 'uncaughtException' event]`, e);
-  });
-
-  process.on("uncaughtException", (e) => {
-    sendError(`[Inside 'uncaughtException' event]`, e);
-  });
-
   runHook(hook.INIT, {});
   res.set("x-powered-by", "RESTroom by Dyne.org");
   let result, json, zenroom_errors;
