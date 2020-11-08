@@ -1,6 +1,3 @@
-import { ZENCODE_DIR } from "@restroom-mw/utils";
-import { promises as fs } from "fs";
-import { parse, relative, resolve } from "path";
 import readdirp from "readdirp";
 
 /**
@@ -11,10 +8,14 @@ import readdirp from "readdirp";
  */
 export const ls = async (root) => {
   const contracts = {};
-  for await (const contract of readdirp(root, { fileFilter: "*.zen" })) {
-    const { path, fullPath } = contract;
-    const name = path.split(".")[0];
-    contracts[name] = fullPath;
+  try {
+    for await (const contract of readdirp(root, { fileFilter: "*.zen" })) {
+      const { path, fullPath } = contract;
+      const name = path.split(".")[0];
+      contracts[name] = fullPath;
+    }
+  } catch (e) {
+    throw e;
   }
   return contracts;
 };
