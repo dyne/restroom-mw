@@ -10,8 +10,15 @@ export const hook = {
 
 export const getHooks = async (hook, res, ...args) => {
   const hooks = res.locals[hook] || [];
-  const promises = hooks.map((fn) => fn(...args));
-  return Promise.all(promises);
+  return Promise.all(
+    hooks.map(async (fn) => {
+      try {
+        await fn(...(await args));
+      } catch (e) {
+        throw e;
+      }
+    })
+  );
 };
 
 export const initHooks = () => {

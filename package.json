@@ -12,7 +12,7 @@
     "clean": "lerna run clean",
     "lint": "lerna run lint",
     "lint:fix": "lerna run lint:fix",
-    "test": "nyc ava",
+    "test": "c8 ava",
     "build": "lerna run build --stream --concurrency=1 --include-dependencies",
     "serve": "babel-watch test/fixtures/server.js",
     "doc": "lerna run doc"
@@ -51,6 +51,7 @@
     "ava": "^3.13.0",
     "babel-core": "7.0.0-bridge.0",
     "babel-watch": "^7.0.0",
+    "c8": "^7.3.5",
     "cypress": "^5.4.0",
     "devmoji": "^2.1.10",
     "documentation": "^13.0.2",
@@ -67,14 +68,13 @@
     "husky": "^4.3.0",
     "lerna": "^3.22.1",
     "morgan": "^1.10.0",
-    "nyc": "^15.1.0",
     "prettier": "^2.1.2",
     "readdirp": "^3.4.0",
     "rimraf": "^3.0.2",
     "sinon": "^9.2.0",
     "start-server-and-test": "^1.11.4",
     "supertest": "^5.0.0",
-    "zenroom": "^2.0.0"
+    "zenroom": "^2.1.0"
   },
   "resolutions": {
     "babel-core": "^7.0.0-bridge.0"

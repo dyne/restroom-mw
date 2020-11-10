@@ -39,6 +39,7 @@ test("getContracts works correctly", async (t) => {
     "/contract_keys",
     "/database",
     "/database_table",
+    "/http-output",
     "/http-test",
     "/keygen",
     "/random",
@@ -105,19 +106,19 @@ test("getData with empty response", (t) => {
 });
 
 test("getHooks works correctly", async (t) => {
+  let result = 2;
   const promiseGen = (p) => {
     return new Promise((resolve) => {
-      resolve(p);
+      result += 2;
+      resolve();
     });
   };
   const res = {
     locals: { hookname: [promiseGen] },
   };
 
-  const hooksPromise = getHooks("hookname", res, 2);
-  t.true(hooksPromise instanceof Promise);
-  const result = await hooksPromise;
-  t.deepEqual(result, [2]);
+  await getHooks("hookname", res, 2);
+  t.deepEqual(result, 4);
 });
 
 test("hook populate should correctly work", (t) => {

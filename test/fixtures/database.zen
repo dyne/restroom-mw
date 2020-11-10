@@ -1,6 +1,6 @@
 rule check version 1.0.0
 rule unknown ignore
-Scenario storage: Save some random value inside a database (sqlite3, postgres, mysql, maridb, mssql) 
+Scenario storage: Save some random value inside a database (sqlite3, postgres, mysql, maridb, mssql)
         Given I have a database connection named 'sqlite'
         When I create the array of '5' random objects of '256' bits
         Then print the 'array'

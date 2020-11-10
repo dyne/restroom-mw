@@ -1,0 +1,6 @@
+Rule unknown ignore
+Scenario 'ecdh': Create the keypair
+Given that I have an endpoint named 'endpoint'
+Given I connect to 'endpoint' and save the output
+Given I have a 'string dictionary' named 'output' 
+Then print the 'output'

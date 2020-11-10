@@ -13,7 +13,6 @@ test("Middleware db should exists", (t) => {
   t.truthy(typeof db, "object");
 });
 
-/*
 test("Middleware db should correctly work and save data", async (t) => {
   try {
     const app = express();
@@ -43,7 +42,6 @@ test("Middleware db should correctly work and save data", async (t) => {
     throw e;
   }
 });
-*/
 
 test("Middleware db should correctly work and save data with given tablename", async (t) => {
   const app = express();
