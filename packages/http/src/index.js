@@ -3,7 +3,7 @@ import { Restroom } from "@restroom-mw/core";
 
 const ACTIONS = {
   EXTERNAL_CONNECTION: "that I have an endpoint named {}",
-  EXTERNAL_OUTPUT: "I connect to {} and save the output",
+  EXTERNAL_OUTPUT: "I connect to {} and save the output into {}",
   PASS_OUTPUT: "pass the output to {}",
 };
 
@@ -33,17 +33,19 @@ export default (req, res, next) => {
     }
 
     if (zencode.match(ACTIONS.EXTERNAL_OUTPUT)) {
+      const outputNames = zencode.paramsOf(ACTIONS.EXTERNAL_OUTPUT);
       if (!externalSourceKeys.length)
         throw new Error(`[HTTP]
-              Endpoints are missing, please define them with the 
-              following zencode sentence "${ACTIONS.EXTERNAL_CONNECTION}"`);
+            Endpoints are missing, please define them with the 
+            following zencode sentence "${ACTIONS.EXTERNAL_CONNECTION}"`);
 
       try {
-        for (const key of externalSourceKeys) {
+        for (const [index, key] of externalSourceKeys.entries()) {
           const url = content[key];
           // make the api call with the keys key value url
           const response = await axios.get(url);
-          data["output"] = response.data;
+          // data key is output name - declared in the same statement as url key
+          data[outputNames[index]] = response.data;
         }
       } catch (e) {
         throw e;
