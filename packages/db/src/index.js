@@ -31,7 +31,6 @@ export default (req, res, next) => {
 
     rr.onSuccess(async (args) => {
       const { result, zencode } = args;
-      console.log("RESULTTTTT ", result);
 
       if (zencode.match(ACTIONS.SAVE)) {
         try {
