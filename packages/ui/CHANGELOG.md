@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.3](https://github.com/dyne/restroom-wm/compare/v0.6.2...v0.6.3) (2020-11-11)
+
+
+### Performance Improvements
+
+* ⚡️  Parallel building faster dev experience ([6c2a934](https://github.com/dyne/restroom-wm/commit/6c2a934aba83fc88c888078f183105d0531243fe))
+
+
+
+
+
 ## [0.6.1](https://github.com/dyne/restroom-wm/compare/v0.6.0...v0.6.1) (2020-11-08)
 
 
