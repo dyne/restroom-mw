@@ -25,7 +25,7 @@
     "directory": "packages/zencode"
   },
   "scripts": {
-    "build": "lerna exec --parallel 'BABEL_ENV=build babel src --out-dir dist --config-file ../../babel.config.json --source-maps --delete-dir-on-start --no-comments'",
+    "build": "BABEL_ENV=build babel src --out-dir dist --config-file ../../babel.config.json --source-maps --delete-dir-on-start --no-comments",
     "clean": "rimraf dist",
     "doc": "documentation readme src/** -g -f md -s 'API' --readme-file ../../docs/packages/zencode.md --shallow",
     "lint": "eslint .",
