@@ -17,6 +17,7 @@ export default async (req, res, next) => {
       if (err.code === "ENOENT") {
         const message = await getMessage(req);
         res.status(404).send(message);
+        next(err);
       }
     }
   };
@@ -31,14 +32,15 @@ export default async (req, res, next) => {
 
   const sendError = (subject, e = null) => {
     const exception = e ? e.stack || e.message : "";
-    const message = subject + "\n\n\n" + exception;
+    const message = `${subject}\n\n${zenroom_errors}\n\n${zenroom_errors}`;
+
     if (!res.headersSent) {
-      res.status(500).json({
-        zenroom_errors: zenroom_errors,
-        result: zenroom_result,
-        exception: message,
-      });
-      if (e) next(e);
+      res.status(500);
+      const error = new Error();
+      error.name = subject;
+      error.stack = exception;
+      error.message = zenroom_errors;
+      next(error);
     }
   };
 
@@ -52,6 +54,7 @@ export default async (req, res, next) => {
   try {
     await runHook(hook.INIT, {});
     let zencode = await getContractOrFail(contractName);
+    if (!zencode) return;
     res.set("x-powered-by", "RESTroom by Dyne.org");
     await runHook(hook.BEFORE, { zencode, conf, data, keys });
     zencode_exec(zencode.content, {
@@ -61,6 +64,7 @@ export default async (req, res, next) => {
     })
       .then(async ({ result, logs }) => {
         zenroom_result = result;
+        zenroom_errors = logs;
         await runHook(hook.SUCCESS, { result, zencode, zenroom_errors });
         res.status(200).json(JSON.parse(result));
       })
@@ -69,7 +73,8 @@ export default async (req, res, next) => {
         next();
       })
       .catch(async (e) => {
-        zenroom_errors = e;
+        zenroom_errors = e.result;
+        zenroom_errors = e.logs;
         await runHook(hook.ERROR, { zenroom_errors, zencode });
         sendError("[ZENROOM EXECUTION ERROR]");
       })

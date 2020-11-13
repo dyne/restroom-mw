@@ -62,8 +62,10 @@ export const getMessage = async (req) => {
   const message = "<h2>404: This contract does not exists</h2>";
   const url = baseUrl(req);
   const choices = await getContracts(url);
-  message.concat(getFuzzyContractMessage(contract, choices, url));
-  message.concat(getEndpointsMessage(choices, url));
+  if (choices.length) {
+    message.concat(getFuzzyContractMessage(contract, choices, url));
+    message.concat(getEndpointsMessage(choices, url));
+  }
   return message;
 };
 
