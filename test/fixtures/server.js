@@ -7,7 +7,6 @@ const db = require("../../packages/db/src").default;
 const httpmw = require("../../packages/http/src").default;
 import http from "http";
 import morgan from "morgan";
-import errorhandler from "errorhandler";
 
 const app = express();
 app.use(morgan("combined"));
@@ -18,7 +17,8 @@ app.use(httpmw);
 app.use(db);
 app.use("/api/*", core);
 app.use("/docs", ui({ path: process.env.ZENCODE_DIR }));
-app.use(errorhandler);
-
+app.use((err, req, res, next) => {
+  res.send(err.stack || err.message);
+});
 const httpServer = http.createServer(app);
 httpServer.listen(3000, "0.0.0.0");
