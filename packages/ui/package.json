@@ -28,9 +28,10 @@
   },
   "scripts": {
     "test": "ava",
-    "clean": "rimraf dist",
+    "clean": "rimraf dist && rimraf tsconfig.tsbuildinfo",
     "doc": "documentation readme src/** -g -f md -s 'API' --readme-file ../../docs/packages/ui.md --shallow",
-    "build": "BABEL_ENV=build babel src --out-dir dist --config-file ../../babel.config.json --source-maps --delete-dir-on-start --no-comments",
+    "prebuild": "npm run clean",
+    "build": "tsc -b tsconfig.json", 
     "lint": "eslint .",
     "lint:fix": "eslint --fix ."
   },

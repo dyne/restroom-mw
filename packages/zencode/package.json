@@ -25,8 +25,9 @@
     "directory": "packages/zencode"
   },
   "scripts": {
-    "build": "BABEL_ENV=build babel src --out-dir dist --config-file ../../babel.config.json --source-maps --delete-dir-on-start --no-comments",
-    "clean": "rimraf dist",
+    "clean": "rimraf dist && rimraf tsconfig.tsbuildinfo",
+    "prebuild": "npm run clean",
+    "build": "tsc -b tsconfig.json",
     "doc": "documentation readme src/** -g -f md -s 'API' --readme-file ../../docs/packages/zencode.md --shallow",
     "lint": "eslint .",
     "lint:fix": "eslint --fix --ext .js,.jsx .",

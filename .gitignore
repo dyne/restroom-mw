@@ -9,4 +9,6 @@ lerna-debug.log
 .tool-versions
 coverage
 .envrc
+tsconfig.tsbuildinfo
+
 
