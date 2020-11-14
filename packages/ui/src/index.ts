@@ -1,4 +1,5 @@
 import swaggerUi from "swagger-ui-express";
+import { MiddlewareUIOption, OpenAPI } from "./interfaces";
 import { generate } from "./openapi";
 
 const options = {
@@ -7,10 +8,14 @@ const options = {
  } .swagger-ui .topbar { background-color: #dedede }`,
 };
 
-export default (options) => {
+export default (options: MiddlewareUIOption) => {
   const rootPath = options.path;
   return [
-    async (req, res, next) => {
+    async (
+      req: { hostname: any; swaggerDoc: OpenAPI },
+      res: any,
+      next: () => void
+    ) => {
       const swaggerDoc = await generate(rootPath);
       swaggerDoc.servers[0].variables.host = { default: req.hostname };
       req.swaggerDoc = swaggerDoc;
