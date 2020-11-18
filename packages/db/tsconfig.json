@@ -4,6 +4,7 @@
     "outDir": "./dist",
     "rootDir": "./src"
   },
+  "references": [{ "path": "../core" }],
   "exclude": ["node_modules", "dist", "tests"],
   "experimentalDecorators": true,
   "emitDecoratorMetadata": true
