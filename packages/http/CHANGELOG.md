@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.7.0](https://github.com/dyne/restroom-mw/compare/v0.6.3...v0.7.0) (2020-11-18)
+
+
+### Features
+
+* **http:** :zap: middleware implementation + tests and contracts ([#21](https://github.com/dyne/restroom-mw/issues/21)) ([132c419](https://github.com/dyne/restroom-mw/commit/132c41935160e5d3ff7ba8641096796e219bdc9f))
+
+
+
+
+
 ## [0.6.3](https://github.com/dyne/restroom-mw/compare/v0.6.2...v0.6.3) (2020-11-11)
 
 

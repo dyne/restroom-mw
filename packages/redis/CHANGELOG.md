@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.7.0](https://github.com/puria/restroom-mw/compare/v0.6.3...v0.7.0) (2020-11-18)
+
+**Note:** Version bump only for package @restroom-mw/redis
+
+
+
+
+
 ## [0.6.3](https://github.com/puria/restroom-mw/compare/v0.6.2...v0.6.3) (2020-11-11)
 
 
