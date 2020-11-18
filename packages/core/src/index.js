@@ -71,7 +71,7 @@ export default async (req, res, next) => {
       .catch(async (e) => {
         zenroom_errors = e;
         await runHook(hook.ERROR, { zenroom_errors, zencode });
-        sendError("[ZENROOM EXECUTION ERROR]");
+        sendError("[ZENROOM EXECUTION ERROR]", e);
       })
       .finally(async () => {
         await runHook(hook.FINISH, res);
