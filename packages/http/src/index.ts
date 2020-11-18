@@ -7,7 +7,7 @@ const ACTIONS = {
   PASS_OUTPUT: "pass the output to {}",
 };
 
-const parse = (o) => {
+const parse = (o: string) => {
   try {
     return JSON.parse(o);
   } catch (e) {
@@ -15,14 +15,14 @@ const parse = (o) => {
   }
 };
 
-export default (req, res, next) => {
+export default (req: any, res: any, next: () => void) => {
   const rr = new Restroom(req, res);
   let keysContent;
   let dataContent;
-  let content = {};
-  let externalSourceKeys = [];
+  let content: { [key: string]: any } = {};
+  let externalSourceKeys: string | any[] = [];
 
-  rr.onBefore(async (params) => {
+  rr.onBefore(async (params: { zencode: any; keys: any; data: any }) => {
     let { zencode, keys, data } = params;
     keysContent = parse(keys);
     dataContent = parse(data);

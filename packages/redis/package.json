@@ -21,7 +21,6 @@
   "scripts": {
     "clean": "rimraf dist && rimraf tsconfig.tsbuildinfo",
     "doc": "documentation readme src/** -g -f md -s 'API' --readme-file ../../docs/packages/redis.md --shallow",
-    "prebuild": "npm run clean",
     "build": "tsc -b tsconfig.json",
     "test": "ava"
   },
