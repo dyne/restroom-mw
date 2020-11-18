@@ -2,8 +2,9 @@ import fs from "fs";
 import readdirp from "readdirp";
 import fuzzball from "fuzzball";
 import { CUSTOM_404_MESSAGE, ZENCODE_DIR } from "@restroom-mw/utils";
+import { Request, Response } from "express";
 
-export const getKeys = (contractName) => {
+export const getKeys = (contractName: string) => {
   try {
     return (
       fs.readFileSync(`${ZENCODE_DIR}/${contractName}.keys`).toString() || null
@@ -13,7 +14,7 @@ export const getKeys = (contractName) => {
   }
 };
 
-export const getConf = (contractName) => {
+export const getConf = (contractName: string) => {
   try {
     return (
       fs.readFileSync(`${ZENCODE_DIR}/${contractName}.conf`).toString() || null
@@ -23,7 +24,7 @@ export const getConf = (contractName) => {
   }
 };
 
-export const getContracts = async (baseUrl) => {
+export const getContracts = async (baseUrl: string) => {
   const contracts = [];
   for await (const file of readdirp(ZENCODE_DIR, { fileFilter: "*.zen" })) {
     contracts.push(baseUrl + file.path.slice(0, -4));
@@ -31,11 +32,16 @@ export const getContracts = async (baseUrl) => {
   return contracts;
 };
 
-export const contractName = (req) => req.params[0];
+export const contractName = (req: Request) => req.params[0];
 
-export const baseUrl = (req) => req.originalUrl.replace(req.params[0], "");
+export const baseUrl = (req: Request) =>
+  req.originalUrl.replace(req.params[0], "");
 
-export const getFuzzyContractMessage = (contractName, choices, baseUrl) => {
+export const getFuzzyContractMessage = (
+  contractName: string,
+  choices: string[],
+  baseUrl: string
+) => {
   const fuzzy = fuzzball.extract(contractName, choices, {
     limit: 1,
     cutoff: 60,
@@ -46,7 +52,7 @@ export const getFuzzyContractMessage = (contractName, choices, baseUrl) => {
   return "";
 };
 
-export const getEndpointsMessage = (choices, baseUrl) => {
+export const getEndpointsMessage = (choices: string[], baseUrl: string) => {
   if (!choices.length) return "";
   const listEndpoint = choices
     .map((e) => `<a href="${baseUrl}${e}">${e}</a>`)
@@ -54,7 +60,7 @@ export const getEndpointsMessage = (choices, baseUrl) => {
   return `<h4>Other contract's endpoints are </h4><ul>${listEndpoint}</ul>`;
 };
 
-export const getMessage = async (req) => {
+export const getMessage = async (req: Request) => {
   if (CUSTOM_404_MESSAGE) {
     return CUSTOM_404_MESSAGE;
   }
@@ -67,6 +73,6 @@ export const getMessage = async (req) => {
   return message;
 };
 
-export const getData = (req, res) => {
+export const getData = (req: Request, res: Response) => {
   return res.locals?.zenroom_data || req.body?.data || {};
 };

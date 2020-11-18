@@ -3,14 +3,15 @@ import { ZENCODE_DIR } from "@restroom-mw/utils";
 import { getHooks, hook, initHooks } from "./hooks";
 import { getConf, getData, getKeys, getMessage } from "./utils";
 import { zencode_exec } from "zenroom";
+import { NextFunction, Request, Response } from "express";
 const functionHooks = initHooks;
 
-export default async (req, res, next) => {
+export default async (req: Request, res: Response, next: NextFunction) => {
   if (req.url === "/favicon.ico") {
     return;
   }
 
-  const getContractOrFail = async (name) => {
+  const getContractOrFail = async (name: string) => {
     try {
       return Zencode.byName(name, ZENCODE_DIR);
     } catch (err) {
@@ -21,7 +22,7 @@ export default async (req, res, next) => {
     }
   };
 
-  const runHook = (hook, args) => {
+  const runHook = (hook: string, args: any) => {
     try {
       return getHooks(hook, res, args);
     } catch (e) {
@@ -29,7 +30,7 @@ export default async (req, res, next) => {
     }
   };
 
-  const sendError = (subject, e = null) => {
+  const sendError = (subject: string, e: Error = null) => {
     const exception = e ? e.stack || e.message : "";
     const message = subject + "\n\n\n" + exception;
     if (!res.headersSent) {
@@ -42,7 +43,7 @@ export default async (req, res, next) => {
     }
   };
 
-  let zenroom_result, json, zenroom_errors;
+  let zenroom_result: string, json: string, zenroom_errors: string;
   zenroom_result = zenroom_errors = json = "";
   const contractName = req.params["0"];
   let conf = getConf(contractName);
