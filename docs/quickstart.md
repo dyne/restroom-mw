@@ -8,8 +8,8 @@ _npx is included with npm > v5.2 or can be installed separately_
 ```bash
 npx degit dyne/restroom-template my-restroom
 cd my-restroom
-npm i
-npm run start
+yarn
+yarn start
 ```
 
 if you point now your browser to http://localhost:3000/docs you'll
