@@ -88,7 +88,7 @@ test("Complete message", async (t) => {
 test("getData works correctly", (t) => {
   const req = { body: { data: null } };
   const res = { locals: { zenroom_data: null } };
-  t.deepEqual(getData(req, res), {});
+  t.deepEqual(getData(req, res), undefined);
 });
 
 test("getData with empty request", (t) => {

@@ -68,5 +68,5 @@ export const getMessage = async (req) => {
 };
 
 export const getData = (req, res) => {
-  return res.locals?.zenroom_data || req.body?.data || {};
+  return res.locals?.zenroom_data || req.body?.data || void 0;
 };

@@ -9,4 +9,5 @@ lerna-debug.log
 .tool-versions
 coverage
 .envrc
-
+.coverage
+/.gtm/
