@@ -1,4 +1,5 @@
 import axios from "axios";
+import https from 'https';
 import { Restroom } from "@restroom-mw/core";
 
 const ACTIONS = {
@@ -66,8 +67,11 @@ export default (req, res, next) => {
       for (const output of externalOutputs) {
         try {
           const url = content[output.urlKey];
+          const agent = new https.Agent({
+            rejectUnauthorized: false
+          })
           // make the api call with the keys key value url
-          const response = await axios.get(url);
+          const response = await axios.get(url, { httpsAgent: agent });
           //Check that response object does not contain boolean values
           (typeof response.data === 'object') && checkForNestedBoolean(response.data);
           data[output.outputName] = response.data;
