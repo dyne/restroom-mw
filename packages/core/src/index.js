@@ -55,7 +55,7 @@ export default async (req, res, next) => {
     res.set("x-powered-by", "RESTroom by Dyne.org");
     await runHook(hook.BEFORE, { zencode, conf, data, keys });
     zencode_exec(zencode.content, {
-      data: JSON.stringify(data),
+      data: (Object.keys(data).length) ? JSON.stringify(data) : undefined,
       keys: keys,
       conf: conf,
     })
