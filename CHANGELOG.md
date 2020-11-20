@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.7.1](https://github.com/dyne/restroom-mw/compare/v0.7.0...v0.7.1) (2020-11-20)
+
+
+### Bug Fixes
+
+* **core:** 🐛  Fix empty object literal data when nothing is expected ([c6e22e2](https://github.com/dyne/restroom-mw/commit/c6e22e2bffa814f6f6177c40acb61f3d4030c77b))
+* **http:** 🐛 Make the http work with SSL and fix `Given nothing` sentences ([c614e7c](https://github.com/dyne/restroom-mw/commit/c614e7c94920e6230ff9b2f538148d711f5dbfaf))
+
+
+
+
+
 # [0.7.0](https://github.com/dyne/restroom-mw/compare/v0.6.3...v0.7.0) (2020-11-18)
 
 
