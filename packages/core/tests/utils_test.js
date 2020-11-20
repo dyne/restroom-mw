@@ -85,11 +85,11 @@ test("Complete message", async (t) => {
   t.is("<h2>404: This contract does not exists</h2>", result);
 });
 
-// test("getData works correctly", (t) => {
-//   const req = { body: { data: null } };
-//   const res = { locals: { zenroom_data: null } };
-//   t.deepEqual(getData(req, res), undefined);
-// });
+test("getData works correctly", (t) => {
+  const req = { body: { data: null } };
+  const res = { locals: { zenroom_data: null } };
+  t.deepEqual(getData(req, res), {});
+});
 
 test("getData with empty request", (t) => {
   const req = { body: { data: null } };
