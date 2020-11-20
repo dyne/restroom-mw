@@ -1,10 +1,9 @@
 import { HTTP_PORT, HTTPS_PORT, HOST } from "@restroom-mw/utils";
 import { ls, nl2br } from "./utils";
-import { relative } from "path";
 import { Zencode } from "@restroom-mw/zencode";
-import chalk from "chalk";
+import { OpenAPI } from "./interfaces";
 
-let openapi = {
+let openapi: OpenAPI = {
   openapi: "3.0.3",
   info: {
     title: "Restroom",
@@ -48,7 +47,7 @@ To add new endpoints you should add new zencode contracts in the directory.
  * @param {string} rootPath root folder directory to look for the swagger generation
  * @see {@link http://spec.openapis.org/oas/v3.0.3|Openapi Specs}
  */
-export const generate = async (rootPath) => {
+export const generate = async (rootPath: string) => {
   const paths = await ls(rootPath);
   const mime = ["application/json"];
   const requestBody = {

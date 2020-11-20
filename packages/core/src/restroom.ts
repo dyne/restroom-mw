@@ -11,15 +11,14 @@
  * @param {object} res express res object
  */
 export class Restroom {
-  constructor(req, res) {
+  _req: any;
+  _res: any;
+  constructor(req: any, res: any) {
     this._req = req;
     this._res = res;
   }
 
-  _hook(name, promise) {
-    if (!promise instanceof Promise) {
-      throw new Error(`hook ${name} should be a Promise`);
-    }
+  _hook(name: string, promise: (params: Promise<void>) => Promise<void>) {
     let locals = this._res.locals[name] || [];
     locals.push(promise);
     this._res.locals[name] = locals;
@@ -30,7 +29,7 @@ export class Restroom {
    * @see [lifecycle](/architecture?id=lifecycle-hooks)
    * @param {Promise} promise
    */
-  onInit(promise) {
+  onInit(promise: (params: any) => Promise<void>) {
     this._hook("onInit", promise);
   }
 
@@ -39,7 +38,7 @@ export class Restroom {
    * @see [lifecycle](/architecture?id=lifecycle-hooks)
    * @param {Promise} promise
    */
-  onBefore(promise) {
+  onBefore(promise: (params: any) => Promise<void>) {
     this._hook("onBefore", promise);
   }
 
@@ -48,7 +47,7 @@ export class Restroom {
    * @see [lifecycle](/architecture?id=lifecycle-hooks)
    * @param {Promise} promise
    */
-  onSuccess(promise) {
+  onSuccess(promise: (params: any) => Promise<void>) {
     this._hook("onSuccess", promise);
   }
 
@@ -57,7 +56,7 @@ export class Restroom {
    * @see [lifecycle](/architecture?id=lifecycle-hooks)
    * @param {Promise} promise
    */
-  onAfter(promise) {
+  onAfter(promise: (params: any) => Promise<void>) {
     this._hook("onAfter", promise);
   }
 
@@ -66,7 +65,7 @@ export class Restroom {
    * @see [lifecycle](/architecture?id=lifecycle-hooks)
    * @param {Promise} promise
    */
-  onError(promise) {
+  onError(promise: (params: any) => Promise<void>) {
     this._hook("onError", promise);
   }
 
@@ -75,7 +74,7 @@ export class Restroom {
    * @see [lifecycle](/architecture?id=lifecycle-hooks)
    * @param {Promise} promise
    */
-  onException(promise) {
+  onException(promise: (params: any) => Promise<void>) {
     this._hook("onException", promise);
   }
 
@@ -84,7 +83,7 @@ export class Restroom {
    * @see [lifecycle](/architecture?id=lifecycle-hooks)
    * @param {Promise} promise
    */
-  onFinish(promise) {
+  onFinish(promise: (params: any) => Promise<void>) {
     this._hook("onFinish", promise);
   }
 }

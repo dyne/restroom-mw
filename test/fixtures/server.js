@@ -1,10 +1,10 @@
 process.env.ZENCODE_DIR = "./test/fixtures";
 import express from "express";
 import bodyParser from "body-parser";
-const core = require("../../packages/core/src").default;
-const ui = require("../../packages/ui/src").default;
-const db = require("../../packages/db/src").default;
-const httpmw = require("../../packages/http/src").default;
+const core = require("../../packages/core/dist").default;
+const ui = require("../../packages/ui/dist").default;
+const db = require("../../packages/db/dist").default;
+const httpmw = require("../../packages/http/dist").default;
 import http from "http";
 import morgan from "morgan";
 import errorhandler from "errorhandler";

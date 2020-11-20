@@ -24,9 +24,9 @@
     "url": "git+https://github.com/dyne/restroom-mw.git"
   },
   "scripts": {
-    "clean": "rimraf dist",
+    "clean": "rimraf dist && rimraf tsconfig.tsbuildinfo",
     "doc": "documentation readme src/** -g -f md -s 'API' --readme-file ../../docs/packages/utils.md --shallow",
-    "build": "BABEL_ENV=build babel src --out-dir dist --config-file ../../babel.config.json --source-maps --delete-dir-on-start --no-comments",
+    "build": "tsc -b tsconfig.json",
     "test": "nyc ava"
   },
   "ava": {

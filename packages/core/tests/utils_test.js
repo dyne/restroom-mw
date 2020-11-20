@@ -2,8 +2,7 @@ import test from "ava";
 import request from "supertest";
 import express from "express";
 import bodyParser from "body-parser";
-import { getHooks, initHooks } from "../src/hooks";
-import { assert } from "sinon";
+import { getHooks, initHooks } from "../dist/hooks";
 
 process.env.ZENCODE_DIR = "./test/fixtures";
 const zencode = require("../dist").default;

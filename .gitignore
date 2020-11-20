@@ -11,3 +11,4 @@ coverage
 .envrc
 .coverage
 /.gtm/
+tsconfig.tsbuildinfo

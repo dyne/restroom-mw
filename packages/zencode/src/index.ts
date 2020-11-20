@@ -1,22 +1,25 @@
 import fs from "fs";
-import ic from "ignore-case";
+
+interface DescriptionParser {
+  (words: string[]): string;
+}
 
 const quoted = new RegExp(/'[^']*'/, "g");
 
-const getParams = (sentence) => {
+const getParams = (sentence: string) => {
   const params = sentence.match(quoted);
   return params ? params.map((p) => p.replace(/'/g, "")) : null;
 };
 
-const removeParams = (sentence) => sentence.replace(quoted, "{}");
+const removeParams = (sentence: string) => sentence.replace(quoted, "{}");
 
-const removeWords = (sentence, words) => {
+const removeWords = (sentence: string, words: string[]) => {
   const w = sentence.trim().split(" ");
   if (words.includes(w[0].toLowerCase())) w.shift();
   return w.join(" ");
 };
 
-const removeKeywords = (str) =>
+const removeKeywords = (str: string) =>
   removeWords(str, ["when", "given", "and", "then"]);
 
 /**
@@ -31,7 +34,9 @@ const removeKeywords = (str) =>
  * @param {string} content
  */
 export class Zencode {
-  constructor(content) {
+  _content: string;
+
+  constructor(content: string) {
     this._content = content;
   }
 
@@ -49,15 +54,16 @@ export class Zencode {
    * @type {string}
    */
   get scenario() {
+    const re = /^scenario/i;
     for (const line of this.content.split("\n")) {
-      if (ic.startsWith(line.trim(), "SCENARIO")) {
+      if (re.test(line.trim())) {
         return line.trim();
       }
     }
     return null;
   }
 
-  __parseDescription(fn) {
+  __parseDescription(fn: DescriptionParser) {
     if (this.scenario !== null) {
       const words = this.scenario.split(":");
       if (words) {
@@ -137,7 +143,7 @@ export class Zencode {
    * @param {string} sentenceId
    * @returns {boolean}
    */
-  match(sentenceId) {
+  match(sentenceId: string) {
     return Array.from(this.parse().keys()).includes(sentenceId);
   }
 
@@ -146,7 +152,7 @@ export class Zencode {
    * @param {string} sentenceId
    * @returns {Array<string>}
    */
-  paramsOf(sentenceId) {
+  paramsOf(sentenceId: string) {
     return this.parse().get(sentenceId);
   }
 
@@ -155,7 +161,7 @@ export class Zencode {
    * @param {string} path
    * @returns {Zencode}
    */
-  static fromPath(path) {
+  static fromPath(path: string) {
     const content = fs.readFileSync(path).toString();
     return new Zencode(content);
   }
@@ -166,7 +172,7 @@ export class Zencode {
    * @param {string} basedir
    * @returns {Zencode}
    */
-  static byName(name, basedir) {
+  static byName(name: string, basedir: string) {
     return Zencode.fromPath(`${basedir}/${name}.zen`);
   }
 }
