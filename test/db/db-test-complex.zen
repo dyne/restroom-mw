@@ -1,0 +1,16 @@
+Rule unknown ignore 
+Scenario 'ecdh': Create the keypair
+Given my name is 'John'
+Given I have a database uri named 'myDb1'
+Given I have a database uri named 'myDb2'
+Given I have a database table named 'myTable'
+Given I have a database table named 'myCache'
+Given I have a 'string dictionary' named 'myZenroomStringDictionary'
+# the value of the record could be 0 to max could be 
+Given I read the record '3' of the table 'myTable' of the database 'myDb1' and save the result into 'myZenroomStringDictionary'
+When I create the keypair
+When I create the signature of 'myZenroomStringDictionary'
+When I create the array of '8' random objects of '256' bits
+Then print all data
+Then I save the output into the database 'myDb1' into the table 'myTable'
+Then I save the 'keypair' into the database 'myDb2' into the table 'myCache'

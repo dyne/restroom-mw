@@ -1,0 +1,12 @@
+{
+	"myDb1": "sqlite://./test/db/db1.db",
+	"myDb2": "sqlite://./test/db/db2.db",
+	"myTable": "firstTable",
+	"myCache": "firstCache",
+	"myZenroomStringDictionary": {
+		"data": {
+			"data1": "9WgBlK+Kcq3AKpmhituXQe4UPkzH3zpZiQa4Szm1Q40=",
+			"data2": "BCEo8MgRiSxtLfxE4UEDVnbdZ21h+xc+egLIRk3VTagpJxlBfu9MjqXGUi2N7tIewpcDrr5V7Z2cmMcNsbKWSGQ="
+		}
+	}
+}
