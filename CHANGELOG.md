@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.8.0](https://github.com/dyne/restroom-mw/compare/v0.7.1...v0.8.0) (2020-12-01)
+
+
+### Features
+
+* **db:** Updated db middleware with new ACTIONS ([#26](https://github.com/dyne/restroom-mw/issues/26)) ([8b89c2b](https://github.com/dyne/restroom-mw/commit/8b89c2bc24606ab6d26de735547d35a750bf8c3f)), closes [#22](https://github.com/dyne/restroom-mw/issues/22)
+
+
+
+
+
 ## [0.7.1](https://github.com/dyne/restroom-mw/compare/v0.7.0...v0.7.1) (2020-11-20)
 
 

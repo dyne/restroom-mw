@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.8.0](https://github.com/dyne/restroom-mw/compare/v0.7.1...v0.8.0) (2020-12-01)
+
+**Note:** Version bump only for package @restroom-mw/utils
+
+
+
+
+
 # [0.7.0](https://github.com/dyne/restroom-mw/compare/v0.6.3...v0.7.0) (2020-11-18)
 
 **Note:** Version bump only for package @restroom-mw/utils

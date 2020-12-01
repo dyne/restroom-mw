@@ -1,6 +1,6 @@
 {
   "name": "@restroom-mw/core",
-  "version": "0.7.1",
+  "version": "0.8.0",
   "description": "The core mw to extend the restroom",
   "keywords": [
     "zenroom",
@@ -39,7 +39,7 @@
     "url": "https://github.com/dyne/restroom-wm/issues"
   },
   "dependencies": {
-    "@restroom-mw/zencode": "^0.7.0",
+    "@restroom-mw/zencode": "^0.8.0",
     "fuzzball": "^1.3.0"
   },
   "gitHead": "1552c3de8d11cb57c3c9cd303722c647623c4eb1",
