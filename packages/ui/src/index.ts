@@ -17,10 +17,14 @@ export default (options: MiddlewareUIOption) => {
       res: Response,
       next: NextFunction
     ) => {
+      try {
         const swaggerDoc = await generate(rootPath);
         swaggerDoc.servers[0].variables.host = { default: req.hostname };
         req.swaggerDoc = swaggerDoc;
-      next();
+        next();
+      } catch (e) {
+        next(e);
+      }
     },
     swaggerUi.serve,
     swaggerUi.setup(null, options),
