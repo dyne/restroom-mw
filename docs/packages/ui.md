@@ -27,21 +27,21 @@ app.use("/docs/", ui);
 
 ### ls
 
-[packages/ui/src/utils.js:9-21](https://github.com/dyne/restroom-mw/blob/c614e7c94920e6230ff9b2f538148d711f5dbfaf/packages/ui/src/utils.js#L9-L21 "Source code on GitHub")
+[packages/ui/src/utils.ts:9-25](https://github.com/dyne/restroom-mw/blob/c89ca1b12912f2bf86b835b8953caa2583b7489f/packages/ui/src/utils.ts#L9-L25 "Source code on GitHub")
 
 Reads the directory and list all the files
 into an object with the full path
 
 #### Parameters
 
--   `root`  
+-   `root` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
 -   `path` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** for where to look at folders
 
 Returns **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
 
 ### generate
 
-[packages/ui/src/openapi.js:51-111](https://github.com/dyne/restroom-mw/blob/c614e7c94920e6230ff9b2f538148d711f5dbfaf/packages/ui/src/openapi.js#L51-L111 "Source code on GitHub")
+[packages/ui/src/openapi.ts:50-110](https://github.com/dyne/restroom-mw/blob/c89ca1b12912f2bf86b835b8953caa2583b7489f/packages/ui/src/openapi.ts#L50-L110 "Source code on GitHub")
 
 -   **See: [Openapi Specs](http://spec.openapis.org/oas/v3.0.3)
     **
