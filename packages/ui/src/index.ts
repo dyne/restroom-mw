@@ -1,6 +1,7 @@
 import swaggerUi from "swagger-ui-express";
 import { MiddlewareUIOption, OpenAPI } from "./interfaces";
 import { generate } from "./openapi";
+import { Request, Response, NextFunction } from "express";
 
 const options = {
   customCss: `.swagger-ui .topbar a img {
@@ -13,12 +14,12 @@ export default (options: MiddlewareUIOption) => {
   return [
     async (
       req: { hostname: any; swaggerDoc: OpenAPI },
-      res: any,
-      next: () => void
+      res: Response,
+      next: NextFunction
     ) => {
-      const swaggerDoc = await generate(rootPath);
-      swaggerDoc.servers[0].variables.host = { default: req.hostname };
-      req.swaggerDoc = swaggerDoc;
+        const swaggerDoc = await generate(rootPath);
+        swaggerDoc.servers[0].variables.host = { default: req.hostname };
+        req.swaggerDoc = swaggerDoc;
       next();
     },
     swaggerUi.serve,

@@ -8,14 +8,18 @@ import readdirp from "readdirp";
  */
 export const ls = async (root: string) => {
   const contracts: { [key: string]: string } = {};
-  try {
-    for await (const contract of readdirp(root, { fileFilter: "*.zen" })) {
-      const { path, fullPath } = contract;
-      const name = path.split(".")[0];
-      contracts[name] = fullPath;
-    }
-  } catch (e) {
-    throw e;
+  /*
+  const entries = await readdirp.promise(root, { fileFilter: "*.zen" });
+  entries.map( e => {
+    const { path, fullPath } = e;
+    const name = path.split(".")[0];
+    contracts[name] = fullPath;
+  })
+  */
+  for await (const contract of readdirp(root, { fileFilter: "*.zen" })) {
+    const { path, fullPath } = contract;
+    const name = path.split(".")[0];
+    contracts[name] = fullPath;
   }
   return contracts;
 };

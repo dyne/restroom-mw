@@ -31,6 +31,7 @@
     "clean": "rimraf dist && rimraf tsconfig.tsbuildinfo",
     "doc": "documentation readme src/** -g -f md -s 'API' --readme-file ../../docs/packages/ui.md --shallow",
     "build": "tsc -b tsconfig.json",
+    "watch": "tsc -b tsconfig.json -w",
     "lint": "eslint .",
     "lint:fix": "eslint --fix ."
   },

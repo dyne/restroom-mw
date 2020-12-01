@@ -26,6 +26,7 @@
   },
   "scripts": {
     "clean": "rimraf dist && rimraf tsconfig.tsbuildinfo",
+    "watch": "tsc -b tsconfig.json -w",
     "build": "tsc -b tsconfig.json",
     "doc": "documentation readme src/** -g -f md -s 'API' --readme-file ../../docs/packages/zencode.md --shallow",
     "lint": "eslint .",

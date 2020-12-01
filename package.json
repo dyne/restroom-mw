@@ -14,6 +14,7 @@
     "lint:fix": "lerna run lint:fix",
     "pretest": "yarn build",
     "test": "c8 ava",
+    "watch": "lerna run watch --parallel",
     "build": "lerna run build --parallel --include-dependencies",
     "serve": "babel-watch test/fixtures/server.js",
     "doc": "lerna run doc"

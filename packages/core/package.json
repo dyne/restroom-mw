@@ -30,6 +30,7 @@
     "test": "nyc ava",
     "clean": "rimraf dist && rimraf tsconfig.tsbuildinfo",
     "doc": "documentation readme src/** -g -f md -s 'API' --readme-file ../../docs/packages/core.md --shallow",
+    "watch": "tsc -b tsconfig.json -w",
     "build": "tsc -b tsconfig.json",
     "lint": "eslint .",
     "lint:fix": "eslint --fix ."
