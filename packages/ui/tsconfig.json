@@ -1,9 +1,10 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "./dist",
-    "rootDir": "./src"
+    "rootDir": "./src",
+    "outDir": "./dist"
   },
-  "references": [{ "path": "../utils" }, { "path": "../zencode" }],
+  "references": [{ "path": "../zencode/" }, {"path": "../utils/"}],
+
   "exclude": ["node_modules", "dist", "cypress"]
 }
