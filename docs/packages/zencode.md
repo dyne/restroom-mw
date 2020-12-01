@@ -67,7 +67,7 @@ const zencode = new Zencode(content);
 
 ### Zencode
 
-[packages/zencode/src/index.ts:36-178](https://github.com/dyne/restroom-mw/blob/c89ca1b12912f2bf86b835b8953caa2583b7489f/packages/zencode/src/index.ts#L36-L178 "Source code on GitHub")
+[packages/zencode/src/index.ts:36-178](https://github.com/dyne/restroom-mw/blob/2e3f421e07a9f2ddfccc1f09ea805c61e290065e/packages/zencode/src/index.ts#L36-L178 "Source code on GitHub")
 
 #### Parameters
 
@@ -85,7 +85,7 @@ const zencode = new Zencode(content);
 
 #### content
 
-[packages/zencode/src/index.ts:47-49](https://github.com/dyne/restroom-mw/blob/c89ca1b12912f2bf86b835b8953caa2583b7489f/packages/zencode/src/index.ts#L47-L49 "Source code on GitHub")
+[packages/zencode/src/index.ts:47-49](https://github.com/dyne/restroom-mw/blob/2e3f421e07a9f2ddfccc1f09ea805c61e290065e/packages/zencode/src/index.ts#L47-L49 "Source code on GitHub")
 
 The **Content** of the contract
 
@@ -93,7 +93,7 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 #### scenario
 
-[packages/zencode/src/index.ts:56-64](https://github.com/dyne/restroom-mw/blob/c89ca1b12912f2bf86b835b8953caa2583b7489f/packages/zencode/src/index.ts#L56-L64 "Source code on GitHub")
+[packages/zencode/src/index.ts:56-64](https://github.com/dyne/restroom-mw/blob/2e3f421e07a9f2ddfccc1f09ea805c61e290065e/packages/zencode/src/index.ts#L56-L64 "Source code on GitHub")
 
 The sentence that starts with `Scenario:` within the contract.
 Returns [null](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/null) if is not present
@@ -102,7 +102,7 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 #### summary
 
-[packages/zencode/src/index.ts:80-82](https://github.com/dyne/restroom-mw/blob/c89ca1b12912f2bf86b835b8953caa2583b7489f/packages/zencode/src/index.ts#L80-L82 "Source code on GitHub")
+[packages/zencode/src/index.ts:80-82](https://github.com/dyne/restroom-mw/blob/2e3f421e07a9f2ddfccc1f09ea805c61e290065e/packages/zencode/src/index.ts#L80-L82 "Source code on GitHub")
 
 Summary: the description that follows in the first line of the Scenario
 
@@ -110,7 +110,7 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 #### tag
 
-[packages/zencode/src/index.ts:89-93](https://github.com/dyne/restroom-mw/blob/c89ca1b12912f2bf86b835b8953caa2583b7489f/packages/zencode/src/index.ts#L89-L93 "Source code on GitHub")
+[packages/zencode/src/index.ts:89-93](https://github.com/dyne/restroom-mw/blob/2e3f421e07a9f2ddfccc1f09ea805c61e290065e/packages/zencode/src/index.ts#L89-L93 "Source code on GitHub")
 
 Tag: the very first word of the scenario used as tag to
 aggregate contracts by scenario
@@ -119,7 +119,7 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 #### parse
 
-[packages/zencode/src/index.ts:126-139](https://github.com/dyne/restroom-mw/blob/c89ca1b12912f2bf86b835b8953caa2583b7489f/packages/zencode/src/index.ts#L126-L139 "Source code on GitHub")
+[packages/zencode/src/index.ts:126-139](https://github.com/dyne/restroom-mw/blob/2e3f421e07a9f2ddfccc1f09ea805c61e290065e/packages/zencode/src/index.ts#L126-L139 "Source code on GitHub")
 
 Creates a easy accessible data structure of the contract
 In form of a [Map](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Map) (to ensure order). Each entry has the
@@ -156,7 +156,7 @@ Returns **[Map](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Glob
 
 #### match
 
-[packages/zencode/src/index.ts:146-148](https://github.com/dyne/restroom-mw/blob/c89ca1b12912f2bf86b835b8953caa2583b7489f/packages/zencode/src/index.ts#L146-L148 "Source code on GitHub")
+[packages/zencode/src/index.ts:146-148](https://github.com/dyne/restroom-mw/blob/2e3f421e07a9f2ddfccc1f09ea805c61e290065e/packages/zencode/src/index.ts#L146-L148 "Source code on GitHub")
 
 Test existence of a sentenceId within the contract
 
@@ -168,7 +168,7 @@ Returns **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/
 
 #### paramsOf
 
-[packages/zencode/src/index.ts:155-157](https://github.com/dyne/restroom-mw/blob/c89ca1b12912f2bf86b835b8953caa2583b7489f/packages/zencode/src/index.ts#L155-L157 "Source code on GitHub")
+[packages/zencode/src/index.ts:155-157](https://github.com/dyne/restroom-mw/blob/2e3f421e07a9f2ddfccc1f09ea805c61e290065e/packages/zencode/src/index.ts#L155-L157 "Source code on GitHub")
 
 Return the parameters for a given sentenceId
 
@@ -180,7 +180,7 @@ Returns **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Gl
 
 #### fromPath
 
-[packages/zencode/src/index.ts:164-167](https://github.com/dyne/restroom-mw/blob/c89ca1b12912f2bf86b835b8953caa2583b7489f/packages/zencode/src/index.ts#L164-L167 "Source code on GitHub")
+[packages/zencode/src/index.ts:164-167](https://github.com/dyne/restroom-mw/blob/2e3f421e07a9f2ddfccc1f09ea805c61e290065e/packages/zencode/src/index.ts#L164-L167 "Source code on GitHub")
 
 Create a [Zencode](#zencode) instance from the full path of the contract
 
@@ -192,7 +192,7 @@ Returns **[Zencode](#zencode)**
 
 #### byName
 
-[packages/zencode/src/index.ts:175-177](https://github.com/dyne/restroom-mw/blob/c89ca1b12912f2bf86b835b8953caa2583b7489f/packages/zencode/src/index.ts#L175-L177 "Source code on GitHub")
+[packages/zencode/src/index.ts:175-177](https://github.com/dyne/restroom-mw/blob/2e3f421e07a9f2ddfccc1f09ea805c61e290065e/packages/zencode/src/index.ts#L175-L177 "Source code on GitHub")
 
 Create a [Zencode](#zencode) instance from the contract name without extension
 from the given base directory
