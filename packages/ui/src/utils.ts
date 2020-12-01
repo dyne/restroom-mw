@@ -16,10 +16,14 @@ export const ls = async (root: string) => {
     contracts[name] = fullPath;
   })
   */
-  for await (const contract of readdirp(root, { fileFilter: "*.zen" })) {
-    const { path, fullPath } = contract;
-    const name = path.split(".")[0];
-    contracts[name] = fullPath;
+  try {
+    for await (const contract of readdirp(root, { fileFilter: "*.zen" })) {
+      const { path, fullPath } = contract;
+      const name = path.split(".")[0];
+      contracts[name] = fullPath;
+    }
+  } catch (e) {
+    throw e;
   }
   return contracts;
 };
