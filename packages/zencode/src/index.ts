@@ -13,14 +13,24 @@ const getParams = (sentence: string) => {
 
 const removeParams = (sentence: string) => sentence.replace(quoted, "{}");
 
-const removeWords = (sentence: string, words: string[]) => {
+const removeKeywords = (sentence: string) => {
+  const words = ["when", "given", "and", "then"];
   const w = sentence.trim().split(" ");
   if (words.includes(w[0].toLowerCase())) w.shift();
   return w.join(" ");
 };
 
-const removeKeywords = (str: string) =>
-  removeWords(str, ["when", "given", "and", "then"]);
+const removeSuperfluousWords = (str: string) => {
+  str = ["I ", "that ", "valid ", "known as ", "all "].reduce(
+    (result: string, w: string) => result.split(w).join(""),
+    str
+  );
+
+  return [
+    [" inside ", " in "],
+    [" an ", " a "],
+  ].reduce((result, [s, j]) => result.split(s).join(j), str);
+};
 
 /**
  *
@@ -97,9 +107,27 @@ export class Zencode {
    * In form of a {@link Map} (to ensure order). Each entry has the
    * key of the **sentenceId**.
    * A **sentenceId** is the contract line where the reserved
-   * words (`when`, `given`, `and`, `then`) are stripped away
-   * and all arguments (whatever is inside a single quote) is
-   * replaced with `{}`.
+   * keywords are stripped away and all arguments (whatever is
+   * inside a single quote) are replaced with `{}`.
+   * All the transformation are case insensitive.
+   *
+   * List of keywords (removed if the first word of a sentence):
+   *   * `when`
+   *   * `given`
+   *   * `and`
+   *   * `then`
+   *
+   * List of ignored words (each occurence is removed):
+   *   * `I `
+   *   * `that `
+   *   * `valid `
+   *   * `known as `
+   *   * `all `
+   *
+   * Also these are aliased:
+   *  * `inside` → `in`
+   *  * `an` → `a`
+   *
    * The values of the {@link Map} are the parameters of the
    * **sentenceId** in form of an {@link Array}<{@link String}>
    *
@@ -116,7 +144,7 @@ export class Zencode {
    * //   'rule unknown ignore' => [],
    * //   'Scenario simple: Some scenario description' => [],
    * //   'nothing' => [],
-   * //   'I create the array of {} random objects of {} bits' => [ '16', '32' ],
+   * //   'create the array of {} random objects of {} bits' => [ '16', '32' ],
    * //   'print all data' => [],
    * //   '' => []
    * // }
@@ -127,7 +155,9 @@ export class Zencode {
     const parsed = new Map();
     for (const line of this.content.split("\n")) {
       let params = [];
-      const lid = removeKeywords(removeParams(line)).trim();
+      const lid = removeSuperfluousWords(
+        removeKeywords(removeParams(line))
+      ).trim();
       // duplicate sentences
       if (parsed.has(lid)) {
         params = parsed.get(lid);
@@ -144,7 +174,7 @@ export class Zencode {
    * @returns {boolean}
    */
   match(sentenceId: string) {
-    return Array.from(this.parse().keys()).includes(sentenceId);
+    return [...this.parse().keys()].includes(sentenceId);
   }
 
   /**

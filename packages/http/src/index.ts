@@ -4,8 +4,8 @@ import { Restroom } from "@restroom-mw/core";
 import { Request, Response, NextFunction } from "express";
 
 const ACTIONS = {
-  EXTERNAL_CONNECTION: "that I have an endpoint named {}",
-  EXTERNAL_OUTPUT: "I connect to {} and save the output into {}",
+  EXTERNAL_CONNECTION: "have a endpoint named {}",
+  EXTERNAL_OUTPUT: "connect to {} and save the output into {}",
   PASS_OUTPUT: "pass the output to {}",
 };
 

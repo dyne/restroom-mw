@@ -42,27 +42,23 @@ test("Should parse contracts", (t) => {
       Scenario simple: Some scenario description
       Given nothing
       When I create the array of '16' random objects of '32' bits
-      Then print all data
-    `;
+      Then print all data`;
   const contract = new Zencode(content);
   const p = contract.parse();
   t.truthy(p instanceof Map);
   const keys = [
-    "nothing",
-    "I create the array of {} random objects of {} bits",
-    "print all data",
-    "rule unknown ignore",
-    "",
-    "Scenario simple: Some scenario description",
     "rule check version 1.0.0",
+    "rule unknown ignore",
+    "Scenario simple: Some scenario description",
+    "nothing",
+    "create the array of {} random objects of {} bits",
+    "print data",
   ];
-  for (const k of keys) {
-    t.truthy(p.has(k));
-  }
+  t.deepEqual([...p.keys()], keys);
 });
 
 test("Should match sentenceIds", (t) => {
-  const content = `rule check version 1.0.0
+  const content = `rule check version 2.0.0
       rule unknown ignore
       Scenario simple: Some scenario description
       Given nothing
@@ -71,17 +67,17 @@ test("Should match sentenceIds", (t) => {
     `;
   const contract = new Zencode(content);
   const sentenceIds = [
-    "nothing",
-    "I create the array of {} random objects of {} bits",
-    "print all data",
+    "rule check version 2.0.0",
     "rule unknown ignore",
-    "",
     "Scenario simple: Some scenario description",
-    "rule check version 1.0.0",
+    "nothing",
+    "create the array of {} random objects of {} bits",
+    "print data",
+    "",
   ];
 
   for (const sid of sentenceIds) {
-    t.truthy(contract.match(sid));
+    t.true(contract.match(sid));
   }
 });
 
@@ -94,7 +90,7 @@ test("should give me params", (t) => {
       Then print all data
     `;
   const contract = new Zencode(content);
-  const sid = "I create the array of {} random objects of {} bits";
+  const sid = "create the array of {} random objects of {} bits";
   t.deepEqual(contract.paramsOf(sid), ["16", "32"]);
 });
 
@@ -123,7 +119,7 @@ Then print all data`;
 
   const zencode = new Zencode(contract);
   const ACTIONS = {
-    TEST: "I connect to {} and save the output into {}",
+    TEST: "connect to {} and save the output into {}",
   };
   t.truthy(zencode.match(ACTIONS.TEST));
   const [source, dest] = zencode.paramsOf(ACTIONS.TEST);
@@ -138,8 +134,8 @@ test("should handle correctly duplicated sentences", (t) => {
   and I define 'bob'`;
 
   const SENTENCES = {
-    I: "I am I",
-    DEFINE: "I define {}",
+    I: "am I",
+    DEFINE: "define {}",
   };
   const zencode = new Zencode(content);
 

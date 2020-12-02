@@ -7,11 +7,12 @@ class Result extends Model {
 }
 
 const ACTIONS = {
-  GET_URI_KEYS: "I have a database uri named {}",
-  GET_TABLE_KEYS: "I have a database table named {}",
-  GET_RECORD: "I read the record {} of the table {} of the database {} and save the result into {}", //done
-  SAVE_OUTPUT: "I save the output into the database {} into the table {}",
-  SAVE_VAR: "I save the {} into the database {} into the table {}"
+  GET_URI_KEYS: "have a database uri named {}",
+  GET_TABLE_KEYS: "have a database table named {}",
+  GET_RECORD:
+    "read the record {} of the table {} of the database {} and save the result into {}", //done
+  SAVE_OUTPUT: "save the output into the database {} into the table {}",
+  SAVE_VAR: "save the {} into the database {} into the table {}",
 };
 
 const parse = (o: string) => {
@@ -28,21 +29,21 @@ interface ObjectLiteral {
 }
 
 interface QueryGetRecord {
-  id: string,
-  table: string,
-  database: string,
-  varName: string
+  id: string;
+  table: string;
+  database: string;
+  varName: string;
 }
 
 interface QuerySaveOutput {
-  table: string,
-  database: string
+  table: string;
+  database: string;
 }
 
 interface QuerySaveVar {
-  varName: string,
-  database: string,
-  table: string,
+  varName: string;
+  database: string;
+  table: string;
 }
 
 export default (req: Request, res: Response, next: NextFunction) => {
@@ -73,14 +74,14 @@ export default (req: Request, res: Response, next: NextFunction) => {
           typeof keys === "undefined"
             ? {}
             : keys && typeof keys === "object"
-              ? keys
-              : parse(keys);
+            ? keys
+            : parse(keys);
         dataContent =
           typeof data === "undefined"
             ? {}
             : data && typeof data === "object"
-              ? data
-              : parse(data);
+            ? data
+            : parse(data);
         content = { ...dataContent, ...keysContent };
         contentKeys = Object.keys(content);
         //create object(s) with the FOUR values of each GET_RECORD
@@ -90,25 +91,32 @@ export default (req: Request, res: Response, next: NextFunction) => {
             id: dbAllRecordData[i],
             table: dbAllRecordData[i + 1],
             database: dbAllRecordData[i + 2],
-            varName: dbAllRecordData[i + 3]
+            varName: dbAllRecordData[i + 3],
           });
         }
-        runChecks(dbQueries, dbUriKeys, contentKeys, 'database');
-        runChecks(dbQueries, tableKeys, contentKeys, 'table');
+        runChecks(dbQueries, dbUriKeys, contentKeys, "database");
+        runChecks(dbQueries, tableKeys, contentKeys, "table");
         try {
           for (const query of dbQueries) {
             const db = new Sequelize(content[query.database]);
             Result.init(
               { result: DataTypes.TEXT },
-              { tableName: content[query.table], freezeTableName: true, sequelize: db }
+              {
+                tableName: content[query.table],
+                freezeTableName: true,
+                sequelize: db,
+              }
             );
             await Result.sync();
             try {
               let result = await Result.findByPk(query.id);
               if (result) {
-                result = result.get({ plain: true })
+                result = result.get({ plain: true });
                 // column name is result
-                const resultData = typeof result['result'] === 'object' ? result['result'] : parse(result['result']);
+                const resultData =
+                  typeof result["result"] === "object"
+                    ? result["result"]
+                    : parse(result["result"]);
                 checkForNestedBoolean(resultData);
                 data[query.varName] = resultData;
               } else {
@@ -120,15 +128,15 @@ export default (req: Request, res: Response, next: NextFunction) => {
                       Something went wrong for id "${query.id}" in table "${query.table}" in db "${query.database}".`);
             }
             db.close();
-          };
+          }
         } catch (e) {
           throw new Error(`[DATABASE]
           Databse error: ${e}`);
         }
-      };
+      }
     });
 
-    rr.onSuccess(async (args: { result: any; zencode: any; }) => {
+    rr.onSuccess(async (args: { result: any; zencode: any }) => {
       const { result, zencode } = args;
 
       if (zencode.match(ACTIONS.SAVE_OUTPUT)) {
@@ -142,14 +150,18 @@ export default (req: Request, res: Response, next: NextFunction) => {
           });
         }
         //check that table and db are defined in keys or data, and in zencode
-        runChecks(dbQueries, dbUriKeys, contentKeys, 'database');
-        runChecks(dbQueries, tableKeys, contentKeys, 'table');
+        runChecks(dbQueries, dbUriKeys, contentKeys, "database");
+        runChecks(dbQueries, tableKeys, contentKeys, "table");
         try {
           for (const query of dbQueries) {
             const db = new Sequelize(content[query.database]);
             Result.init(
               { result: DataTypes.TEXT },
-              { tableName: content[query.table], freezeTableName: true, sequelize: db }
+              {
+                tableName: content[query.table],
+                freezeTableName: true,
+                sequelize: db,
+              }
             );
             await Result.sync();
             try {
@@ -160,13 +172,13 @@ export default (req: Request, res: Response, next: NextFunction) => {
                     Error in table "${query.table}" in db "${query.database}": ${e}`);
             }
             db.close();
-          };
+          }
         } catch (e) {
           throw new Error(`[DATABASE]
             Databse error: ${e}`);
         }
       }
-      
+
       if (zencode.match(ACTIONS.SAVE_VAR)) {
         const resultObj: any = parse(result);
         const dbAllSaveVar: string[] = zencode.paramsOf(ACTIONS.SAVE_VAR);
@@ -180,8 +192,8 @@ export default (req: Request, res: Response, next: NextFunction) => {
           });
         }
         //check that table and db are defined in keys or data and in zencode
-        runChecks(dbQueries, dbUriKeys, contentKeys, 'database');
-        runChecks(dbQueries, tableKeys, contentKeys, 'table');
+        runChecks(dbQueries, dbUriKeys, contentKeys, "database");
+        runChecks(dbQueries, tableKeys, contentKeys, "table");
         try {
           for (const query of dbQueries) {
             if (!resultObj[query.varName])
@@ -191,18 +203,26 @@ export default (req: Request, res: Response, next: NextFunction) => {
             const db = new Sequelize(content[query.database]);
             Result.init(
               { result: DataTypes.TEXT },
-              { tableName: content[query.table], freezeTableName: true, sequelize: db }
+              {
+                tableName: content[query.table],
+                freezeTableName: true,
+                sequelize: db,
+              }
             );
             await Result.sync();
             try {
               //column name must be result
-              await Result.create({ result: JSON.stringify({ [query.varName]: resultObj[query.varName] }) });
+              await Result.create({
+                result: JSON.stringify({
+                  [query.varName]: resultObj[query.varName],
+                }),
+              });
             } catch (e) {
               throw new Error(`[DATABASE]
                     Error in table "${query.table}" in db "${query.database}": ${e}`);
             }
             db.close();
-          };
+          }
         } catch (e) {
           throw new Error(`[DATABASE]
             Databse error: ${e}`);
