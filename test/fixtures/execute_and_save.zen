@@ -1,0 +1,15 @@
+
+Rule unknown ignore
+Scenario sawroom: Execute and save on remote endpoint and read
+Given that I have a sawroom endpoint named 'endpoint'
+Given I have a 'string dictionary' named 'data'
+Given that I have a 'string' named 'contract'
+Given that I have a 'string' named 'cid'
+
+Given I have a 'string' named 'endpoint'
+And I have a 'string' named 'batchId'
+And I have a 'string dictionary' named 'sawroom'
+When I create the array of '5' random objects of '256' bits
+And I ask sawroom to execute the smart contract 'contract' with the data 'data' and save the output with the context id 'cid'
+And I connect the sawroom endpoint 'endpoint' and read the batch with id 'batchId' and save the output into 'sawroom'
+Then print all data

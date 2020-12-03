@@ -1,0 +1,42 @@
+{
+  "name": "@restroom-mw/sawroom",
+  "version": "0.8.1",
+  "description": "\"Sawroom.dyne.org middleware to interact with sawtooth",
+  "keywords": [
+    "blockchain",
+    "zenroom",
+    "sawtooth",
+    "sawroom",
+    "api",
+    "nodejs"
+  ],
+  "author": "Puria Nafisi Azizi <puria@dyne.org>",
+  "homepage": "https://dyne.github.io/restroom-mw/",
+  "license": "AGPL-3.0",
+  "main": "dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dyne/restroom-mw.git"
+  },
+  "scripts": {
+    "clean": "rimraf dist && rimraf tsconfig.tsbuildinfo",
+    "doc": "documentation readme src/** -g -f md -s 'API' --readme-file ../../docs/packages/sawroom.md --shallow",
+    "watch": "tsc -b tsconfig.json -w",
+    "build": "tsc -b tsconfig.json"
+  },
+  "bugs": {
+    "url": "https://github.com/dyne/restroom-mw/issues"
+  },
+  "ava": {
+    "babel": true
+  },
+  "devDependencies": {
+    "@types/supertest": "^2.0.10"
+  }
+}

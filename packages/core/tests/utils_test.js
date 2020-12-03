@@ -38,10 +38,14 @@ test("getContracts works correctly", async (t) => {
     "/contract_keys",
     "/database",
     "/database_table",
+    "/execute_and_save",
+    "/execute_with_data",
     "/http-output",
     "/http-test",
     "/keygen",
     "/random",
+    "/sawroom_execute",
+    "/sawroom_read",
   ]);
 });
 

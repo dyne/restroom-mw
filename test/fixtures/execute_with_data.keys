@@ -1,0 +1,6 @@
+{
+  "endpoint": "http://195.201.42.48",
+  "data": { "message": "Hello World!" },
+  "contract": "Given I have a 'string' named 'message'\nThen print data",
+  "cid": "test-cid-"
+}

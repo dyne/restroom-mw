@@ -1,0 +1,12 @@
+Rule unknown ignore
+rule check version 1.0.0
+Scenario 'petition' : store in sawroom
+Given that I have a sawroom endpoint named 'sawroomEndpoint'
+Given that I have a sawroom username named 'sawroomUser' and a password named 'sawroomPassword' 
+Given that I have an id for a sawroom transaction named 'myTransactionId'
+Given I have a 'petition' 
+When I create the random object of '128' bits
+When I rename the 'random_object' to 'my128BitsRandom'
+Then print the 'my128BitsRandom'
+Then print the 'petition'
+Then I ask sawroom to create the petition
