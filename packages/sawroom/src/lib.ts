@@ -14,7 +14,8 @@ export const executeOnSawroom = async (
   const contract = input[_c];
   const data = input[_d];
   const uid = input[_u];
-  return sendToSawroom(sawroomAddress, contract, data, {}, uid);
+  const result = await sendToSawroom(sawroomAddress, contract, data, {}, uid);
+  return [result, uid];
 };
 
 export const sendToSawroom = async (

@@ -30,9 +30,9 @@ test.serial("Middleware should execute on sawtooth correctly", async (t) => {
   const res = await app.post("/sawroom_execute");
   t.is(res.status, 200, res.text);
   t.true(Array.isArray(res.body));
-  t.is(typeof res.body[0].sawroom_link, "string");
-  t.is(typeof res.body[0].batch_id, "string");
-  t.is(res.body[0].batch_id.length, 128);
+  t.is(typeof res.body[0].sawroom.test.sawroom_link, "string");
+  t.is(typeof res.body[0].sawroom.test.batch_id, "string");
+  t.is(res.body[0].sawroom.test.batch_id.length, 128);
 });
 
 test.serial("getToken works correctly", async (t) => {
@@ -51,9 +51,13 @@ test.serial("Setup the context id", async (t) => {
 test.serial("Save data on sawroom works correctly", async (t) => {
   const { app } = t.context;
   const res = await app.post("/sawroom-save-data");
+  const cid1 = "0Uu+Ldk04+JSw9V0TQW2ufZuxe1v3K8jffunxxLLI0o=";
+  const cid2 = "LCsmEBZblccKjrWCJi7tvg==";
   t.is(res.status, 200, res.text);
-  t.log(res.body);
-  t.is(typeof res.body.sawroom_link, "string");
-  t.is(typeof res.body.batch_id, "string");
-  t.is(res.body.batch_id.length, 128);
+  t.is(typeof res.body.sawroom[cid1].sawroom_link, "string");
+  t.is(typeof res.body.sawroom[cid1].batch_id, "string");
+  t.is(res.body.sawroom[cid1].batch_id.length, 128);
+  t.is(typeof res.body.sawroom[cid2].sawroom_link, "string");
+  t.is(typeof res.body.sawroom[cid2].batch_id, "string");
+  t.is(res.body.sawroom[cid2].batch_id.length, 128);
 });

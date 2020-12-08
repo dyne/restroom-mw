@@ -9,17 +9,11 @@ import {
   sendToSawroom,
 } from "./lib";
 
-let tid = null;
 let username;
 let password;
 let token;
-let inputData = null;
-let remoteData = null;
-let outputResult = null;
-let remoteZencode = null;
 let sawroomAddress: string = null;
 
-// const readFromSawtooth = async (endpoint: string) => {};
 let input: ObjectLiteral = {};
 
 export default async (req: Request, res: Response, next: NextFunction) => {
@@ -50,12 +44,6 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         token = response.data.access_token;
         data["token"] = token;
       }
-      // const [username, password] = getFromData(TOKEN);
-      // tid = getFromData(TID);
-      // [remoteZencode, remoteData] = getFromData(EXECUTE);
-      // [tid, inputData] = getFromData(SAVE_DATA);
-      // [sawroom_address, tid, outputResult] = getFromData(READ);
-      // [tid] = getFromData(SAVE_PETITION);
 
       if (zencode.match(READ)) {
         const [endpoint, bid, outputVariable] = namedParamsOf(READ);
@@ -67,34 +55,34 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       let { zencode, result } = params;
 
       if (zencode.match(EXECUTE)) {
-        const sawroomResult = await executeOnSawroom(
+        const [sawroomResult, uid] = await executeOnSawroom(
           sawroomAddress,
           zencode,
           input
         );
 
-        saveToResult(sawroomResult, result);
+        saveToResult(sawroomResult, uid, result);
       }
 
       if (zencode.match(SAVE)) {
         validateAddress();
-        const [_d, _c] = zencode.paramsOf(SAVE);
-        const dataResult =
-          typeof result[_d] === "string"
-            ? result[_d]
-            : JSON.stringify(result[_d]);
-        const contextId = input[_c];
-        const contract = `Given nothing
-          When I write string '${dataResult}' in 'result'
-          Then print data`;
-        const sawroomResult = await sendToSawroom(
-          sawroomAddress,
-          contract,
-          {},
-          {},
-          contextId
-        );
-        saveToResult(sawroomResult, result);
+        const params = zencode.paramsOf(SAVE);
+        const sawroomResult = {};
+        for (var i = 0; i < params.length; i += 2) {
+          const dataResult = result[params[i]];
+          const contextId = input[params[i + 1]];
+          const contract = `Given nothing
+                            When I write string '${dataResult}' in 'result'
+                            Then print data`;
+          const sawroomResult = await sendToSawroom(
+            sawroomAddress,
+            contract,
+            {},
+            {},
+            contextId
+          );
+          saveToResult(sawroomResult, contextId, result);
+        }
       }
     });
     next();
@@ -103,12 +91,17 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const saveToResult = (
-  sawroomResult: unknown,
-  result: Array<unknown> | ObjectLiteral
-) => {
-  if (Array.isArray(result)) result.push(sawroomResult);
-  else if (typeof result === "object") Object.assign(result, sawroomResult);
+const saveToResult = (sawroomResult: unknown, uid: string, result: any) => {
+  let toSave: ObjectLiteral = { sawroom: {} };
+  toSave.sawroom[uid] = sawroomResult;
+  if (Array.isArray(result)) result.push(toSave);
+  if (typeof result === "object") {
+    if (result.hasOwnProperty("sawroom")) {
+      result.sawroom[uid] = sawroomResult;
+    } else {
+      Object.assign(result, toSave);
+    }
+  }
 };
 
 const validateAddress = () => {
