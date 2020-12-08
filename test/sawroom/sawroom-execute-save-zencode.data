@@ -1,0 +1,18 @@
+{
+	"sawroomEndpoint": "http://195.201.41.35:8008/blocks",
+	"sawroomUser": "demo",
+	"sawroomPassword": "demo",
+	"zencodeEndpoint": "https://apiroom.net/showme/dyneorg/Create-a-keypair",
+	"myTransactionId1": "eVERyJLktCVLeMVjt80MO/ldmb+Y9xeknj0oQ3Ece+aERJAie1LO/qahEl1wEAWTsVM3lqycYB3hdxbTsYMQRp9AoPZqej+I0SMc13+QsDPLRiJLehS2XQtZ0svBLdZdVobjMdpBF9CCTuNzfP8wsQklZkCnfGjcF/RKlBmo6y4=",
+	"myTransactionId2": "V8Ag8jBk+N7lHLMoGSeeBQ==",
+	"myZencodeScript": "Scenario 'ecdh': Decrypt the message with the password \r\nGiven that I have a valid 'secret message' \r\nGiven that I have a 'string' named 'password' \r\nWhen I decrypt the text of 'secret message' with 'password' \r\nWhen I rename the 'text' to 'textDecrypted' \r\nThen print the 'textDecrypted' as 'string'",
+	"myZencodeData": {
+		"password": "myVerySecretPassword",
+		"secret_message": {
+			"checksum": "76U+nWVZBwBMbOOktCnZug==",
+			"header": "QSB2ZXJ5IGltcG9ydGFudCBzZWNyZXQ=",
+			"iv": "R+B2z2pTLkMVGFCuFHnYL5sAIeuolYmgUOdMm2AOvTI=",
+			"text": "Df8C8Kkd+ngVAi/tGUe905VPTwId4hv+iL31dgylkDaDumI3BpRO5bN1qKfSsBi2KOA="
+		}
+	}
+}

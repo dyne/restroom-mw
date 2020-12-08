@@ -166,7 +166,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
             await Result.sync();
             try {
               //column name must be result
-              await Result.create({ result });
+              await Result.create({ result: JSON.stringify(result) });
             } catch (e) {
               throw new Error(`[DATABASE]
                     Error in table "${query.table}" in db "${query.database}": ${e}`);
@@ -180,7 +180,8 @@ export default (req: Request, res: Response, next: NextFunction) => {
       }
 
       if (zencode.match(ACTIONS.SAVE_VAR)) {
-        const resultObj: any = parse(result);
+        const resultObj: any =
+          typeof result === "object" ? result : parse(result);
         const dbAllSaveVar: string[] = zencode.paramsOf(ACTIONS.SAVE_VAR);
         const dbQueries: QuerySaveVar[] = [];
         //create object(s) with the THREE values in each GET_RECORD

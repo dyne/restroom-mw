@@ -1,0 +1,28 @@
+Rule unknown ignore
+rule check version 1.0.0
+Given that I have a sawroom endpoint named 'sawroomEndpoint'
+Given that I have a sawroom username named 'sawroomUser' and a password named 'sawroomPassword' 
+
+Given that I have an id for a sawroom transaction named 'myTransactionId1'
+Given that I have an id for a sawroom transaction named 'myTransactionId2'
+
+
+# Qui dichiaro lo smart contract letto dal json 
+Given that I have a 'string' named 'myZencodeScript'
+Given I have a 'string dictionary' named 'myZencodeData'
+
+# Qui dichiaro lo smart contract lo smart contract importato da "showme"
+Given that I have an endpoint named 'zencodeEndpoint' 
+Given I have a 'string' named 'myImportedZencode'
+Given I connect to 'zencodeEndpoint' and save the output into 'myImportedZencode'
+
+When I create the random object of '128' bits
+When I rename the 'random_object' to 'my128BitsRandom'
+Then print the 'my128BitsRandom'
+Then print the 'myZencodeScript'
+Then print the 'myZencodeData'
+Then print the 'myImportedZencode'
+# queesto statement dovrebbe funzionare
+Then I ask sawroom to execute the smart contract 'myZencodeScript' with the data 'myZencodeData' and save the output with the transaction id 'myTransactionId1'
+# queesto statement dovrebbe fallire, perchè genera un keypair 
+Then I ask sawroom to execute the smart contract 'myImportedZencode' with the data '' and save the output with the transaction id 'myTransactionId2'

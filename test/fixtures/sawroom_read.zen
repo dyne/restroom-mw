@@ -1,0 +1,8 @@
+Rule unknown ignore
+Scenario sawroom: Read from endpoint
+Given I have a 'string' named 'endpoint'
+And I have a 'string' named 'batchId'
+And I have a 'string dictionary' named 'sawroom'
+And I connect the sawroom endpoint 'endpoint' and read the batch with id 'batchId' and save the output into 'sawroom'
+When I create the array of '5' random objects of '256' bits
+Then print all data

@@ -56,14 +56,15 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     res.set("x-powered-by", "RESTroom by Dyne.org");
     await runHook(hook.BEFORE, { zencode, conf, data, keys });
     zencode_exec(zencode.content, {
-      data: (Object.keys(data).length) ? JSON.stringify(data) : undefined,
+      data: Object.keys(data).length ? JSON.stringify(data) : undefined,
       keys: keys,
       conf: conf,
     })
       .then(async ({ result, logs }) => {
         zenroom_result = result;
+        result = JSON.parse(result);
         await runHook(hook.SUCCESS, { result, zencode, zenroom_errors });
-        res.status(200).json(JSON.parse(result));
+        res.status(200).json(result);
       })
       .then(async (json) => {
         await runHook(hook.AFTER, { json, zencode });

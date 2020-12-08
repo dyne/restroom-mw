@@ -1,0 +1,14 @@
+Rule unknown ignore
+rule check version 1.0.0
+Scenario sawroom: Save data into the blockchain
+Given that I have a sawroom endpoint named 'sawroomEndpoint'
+Given that I have an id for a sawroom context named 'myTransactionId1'
+Given that I have an id for a sawroom context named 'myTransactionId2'
+When I create the random object of '128' bits
+When I rename the 'random_object' to 'my128BitsRandom'
+When I create the random object of '64' bits
+When I rename the 'random_object' to 'my64BitsRandom'
+Then print the 'my128BitsRandom'
+Then I ask sawroom to save the data named 'my128BitsRandom' with the context id 'myTransactionId1'
+Then print the 'my64BitsRandom'
+Then I ask sawroom to save the data named 'my64BitsRandom' with the context id 'myTransactionId2'

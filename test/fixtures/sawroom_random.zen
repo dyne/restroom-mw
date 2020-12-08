@@ -1,0 +1,4 @@
+Scenario sawroom: Save random data
+Rule unknown ignore
+Given I am 'Alice'
+Given I have my 'keypair'

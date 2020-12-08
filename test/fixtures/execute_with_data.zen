@@ -1,0 +1,7 @@
+Rule unknown ignore
+Scenario sawroom: Execute on remote endpoint
+Given that I have a sawroom endpoint named 'endpoint'
+Given I have a 'string dictionary' named 'data'
+Given that I have a 'string' named 'contract'
+Given that I have a 'string' named 'cid'
+Then I ask sawroom to execute the smart contract 'contract' with the data 'data' and save the output with the context id 'cid'
