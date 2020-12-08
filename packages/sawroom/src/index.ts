@@ -1,8 +1,13 @@
 import { Restroom } from "@restroom-mw/core";
 import axios from "axios";
 import { NextFunction, Request, Response } from "express";
-import { EXECUTE, READ, SAWROOM_ADDRESS, TOKEN } from "./actions";
-import { combineDataKeys, executeOnSawroom, getState } from "./lib";
+import { EXECUTE, READ, SAVE, SAWROOM_ADDRESS, TOKEN } from "./actions";
+import {
+  combineDataKeys,
+  executeOnSawroom,
+  getState,
+  sendToSawroom,
+} from "./lib";
 
 let tid = null;
 let username;
@@ -37,11 +42,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
 
       if (zencode.match(TOKEN)) {
         [username, password] = namedParamsOf(TOKEN);
-        if (!sawroomAddress) {
-          throw new Error(
-            `Missing sawroom address add the following sentence to your contract: '${SAWROOM_ADDRESS}'`
-          );
-        }
+        validateAddress();
         const response = await axios.post(
           `${sawroomAddress}:9009/token`,
           `username=${username}&password=${password}`
@@ -71,12 +72,49 @@ export default async (req: Request, res: Response, next: NextFunction) => {
           zencode,
           input
         );
-        if (Array.isArray(result)) result.push(sawroomResult);
-        if (typeof result === "object") Object.assign(result, sawroomResult);
+
+        saveToResult(sawroomResult, result);
+      }
+
+      if (zencode.match(SAVE)) {
+        validateAddress();
+        const [_d, _c] = zencode.paramsOf(SAVE);
+        const dataResult =
+          typeof result[_d] === "string"
+            ? result[_d]
+            : JSON.stringify(result[_d]);
+        const contextId = input[_c];
+        const contract = `Given nothing
+          When I write string '${dataResult}' in 'result'
+          Then print data`;
+        const sawroomResult = await sendToSawroom(
+          sawroomAddress,
+          contract,
+          {},
+          {},
+          contextId
+        );
+        saveToResult(sawroomResult, result);
       }
     });
     next();
   } catch (e) {
     next(e);
+  }
+};
+
+const saveToResult = (
+  sawroomResult: unknown,
+  result: Array<unknown> | ObjectLiteral
+) => {
+  if (Array.isArray(result)) result.push(sawroomResult);
+  else if (typeof result === "object") Object.assign(result, sawroomResult);
+};
+
+const validateAddress = () => {
+  if (!sawroomAddress) {
+    throw new Error(
+      `Missing sawroom address add the following sentence to your contract: '${SAWROOM_ADDRESS}'`
+    );
   }
 };

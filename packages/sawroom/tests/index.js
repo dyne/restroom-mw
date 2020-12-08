@@ -52,4 +52,8 @@ test.serial("Save data on sawroom works correctly", async (t) => {
   const { app } = t.context;
   const res = await app.post("/sawroom-save-data");
   t.is(res.status, 200, res.text);
+  t.log(res.body);
+  t.is(typeof res.body.sawroom_link, "string");
+  t.is(typeof res.body.batch_id, "string");
+  t.is(res.body.batch_id.length, 128);
 });

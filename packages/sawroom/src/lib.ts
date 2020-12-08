@@ -11,17 +11,27 @@ export const executeOnSawroom = async (
   input: ObjectLiteral
 ) => {
   const [_c, _d, _u] = zencode.paramsOf(EXECUTE);
-  const address = `${sawroomAddress}:8008/batches`;
   const contract = input[_c];
   const data = input[_d];
   const uid = input[_u];
+  return sendToSawroom(sawroomAddress, contract, data, {}, uid);
+};
+
+export const sendToSawroom = async (
+  sawroomAddress: string,
+  contract: string,
+  data: ObjectLiteral,
+  keys: ObjectLiteral,
+  uid: string
+) => {
+  const address = `${sawroomAddress}:8008/batches`;
   const endpoint = `${sawroomAddress}:9009/petitions/zencode_exec`;
   const response = await axios.post(
     endpoint,
     {
       data: data,
       contract: contract,
-      keys: {},
+      keys: keys,
     },
     {
       params: {
