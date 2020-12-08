@@ -54,7 +54,7 @@ jobs:
           yarn logout
           echo "//registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN" > .npmrc
           npm whoami
-          lerna publish --no-verify-access -c -y --pre-dist-tag next --force-publish=*
+          lerna publish --no-verify-access -c -y --pre-dist-tag next
       env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
