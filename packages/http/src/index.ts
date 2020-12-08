@@ -119,7 +119,8 @@ export default (req: Request, res: Response, next: NextFunction) => {
       for (const output of allPassOutputs) {
         try {
           const url = content[output];
-          const response = await axios.post(url, JSON.parse(result));
+          const r = typeof result === "object" ? result : JSON.parse(result);
+          const response = await axios.post(url, r);
         } catch (e) {
           next(e);
           throw new Error(`[HTTP]

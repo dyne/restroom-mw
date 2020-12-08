@@ -1,0 +1,5 @@
+Rule unknown ignore
+Scenario sawroom: check the context id are passed correctly
+Given I have a id for a sawroom context named 'cid1'
+Given I have a id for a sawroom context named 'cid2'
+Then print all data

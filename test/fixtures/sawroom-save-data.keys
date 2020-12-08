@@ -1,5 +1,5 @@
 {
-	"sawroomEndpoint": "http://195.201.41.35:8008/blocks",
+	"sawroomEndpoint": "http://195.201.41.35",
 	"sawroomUser": "user123",
 	"sawroomPassword": "password123",
 	"myTransactionId1": "0Uu+Ldk04+JSw9V0TQW2ufZuxe1v3K8jffunxxLLI0o=",

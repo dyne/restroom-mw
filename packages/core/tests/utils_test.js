@@ -33,6 +33,7 @@ test("getConf works correctly", (t) => {
 
 test("getContracts works correctly", async (t) => {
   const contracts = await getContracts("/");
+  t.log(contracts);
   t.deepEqual(contracts, [
     "/broken",
     "/contract_keys",
@@ -44,7 +45,11 @@ test("getContracts works correctly", async (t) => {
     "/http-test",
     "/keygen",
     "/random",
+    "/sawroom-save-data",
+    "/sawroom_context_id",
     "/sawroom_execute",
+    "/sawroom_login",
+    "/sawroom_random",
     "/sawroom_read",
   ]);
 });

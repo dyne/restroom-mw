@@ -2,5 +2,5 @@
   "endpoint": "http://195.201.42.48",
   "data": {},
   "contract": "Scenario 'ecdh': Create the keypair\nGiven that I am known as 'Alice'\nWhen I create the keypair\nThen print my data",
-  "cid": "test-did-"
+  "cid": "test"
 }

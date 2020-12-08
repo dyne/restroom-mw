@@ -1,0 +1,63 @@
+import { Zencode } from "@restroom-mw/zencode";
+import axios from "axios";
+import cbor from "cbor";
+import qs from "qs";
+import url from "url";
+import { EXECUTE } from "./actions";
+
+export const executeOnSawroom = async (
+  sawroomAddress: string,
+  zencode: Zencode,
+  input: ObjectLiteral
+) => {
+  const [_c, _d, _u] = zencode.paramsOf(EXECUTE);
+  const address = `${sawroomAddress}:8008/batches`;
+  const contract = input[_c];
+  const data = input[_d];
+  const uid = input[_u];
+  const endpoint = `${sawroomAddress}:9009/petitions/zencode_exec`;
+  const response = await axios.post(
+    endpoint,
+    {
+      data: data,
+      contract: contract,
+      keys: {},
+    },
+    {
+      params: {
+        address: address,
+        uid: uid,
+      },
+    }
+  );
+  return {
+    sawroom_link: response.data.link,
+    batch_id: qs.parse(url.parse(response.data.link).query).id,
+  };
+};
+
+export const combineDataKeys = (data: ObjectLiteral, keys: string) => {
+  try {
+    return { ...data, ...JSON.parse(keys) };
+  } catch (e) {
+    throw new Error("Keys or data in wrong format");
+  }
+};
+
+export const getState = async (endpoint: string, batchId: string) => {
+  const batch_response = await axios.get(`${endpoint}:8008/batches/${batchId}`);
+  const tids = batch_response.data.data.header.transaction_ids;
+  const states: ObjectLiteral[] = [];
+
+  for (const t of tids) {
+    const receipt_response = await axios.get(`${endpoint}:8008/receipts`, {
+      params: { id: t },
+    });
+    for (const d of receipt_response.data.data) {
+      const v = d.state_changes[0].value;
+      const value = await cbor.decodeAll(Buffer.from(v, "base64"));
+      states.push(...value);
+    }
+  }
+  return states;
+};
