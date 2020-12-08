@@ -38,5 +38,8 @@
   },
   "devDependencies": {
     "@types/supertest": "^2.0.10"
+  },
+  "dependencies": {
+    "cbor": "^5.1.0"
   }
 }
