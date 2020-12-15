@@ -1,7 +1,7 @@
 import test from "ava";
-import request from "supertest";
-import express from "express";
 import bodyParser from "body-parser";
+import express from "express";
+import request from "supertest";
 import { getHooks, initHooks } from "../dist/hooks";
 
 process.env.ZENCODE_DIR = "./test/fixtures";
@@ -49,6 +49,7 @@ test("getContracts works correctly", async (t) => {
     "/sawroom_context_id",
     "/sawroom_execute",
     "/sawroom_login",
+    "/sawroom_object",
     "/sawroom_random",
     "/sawroom_read",
   ]);

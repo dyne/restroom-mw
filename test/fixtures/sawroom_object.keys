@@ -1,0 +1,6 @@
+{
+ "sawroomEndpoint": "http://195.201.41.35",
+ "myContextId1": "jsonPayload",
+ "myContextId2": "andrea4-LCsmEBZblccKjrWCJi7tvg==",
+ "timeServer": "http://showcase.api.linx.twenty57.net/UnixTime/tounix?date=now"
+}

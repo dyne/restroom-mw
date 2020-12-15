@@ -1,7 +1,7 @@
 import test from "ava";
-import supertest from "supertest";
-import express from "express";
 import bodyParser from "body-parser";
+import express from "express";
+import supertest from "supertest";
 
 process.env.ZENCODE_DIR = "./test/fixtures";
 const sawroom = require("../dist");
@@ -19,7 +19,7 @@ test.serial("Middleware should read from sawtooth correctly", async (t) => {
   const { app } = t.context;
   const res = await app.post("/sawroom_read");
   t.is(res.status, 200, res.text);
-  const result = res.body.sawroom[0].result;
+  const result = res.body.sawroom[0];
   t.true(result.includes("keypair"));
   t.true(result.includes("public_key"));
   t.true(result.includes("private_key"));

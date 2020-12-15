@@ -67,9 +67,8 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       if (zencode.match(SAVE)) {
         validateAddress();
         const params = zencode.paramsOf(SAVE);
-        const sawroomResult = {};
         for (var i = 0; i < params.length; i += 2) {
-          const dataResult = result[params[i]];
+          const dataResult = JSON.stringify(result[params[i]]);
           const contextId = input[params[i + 1]];
           const contract = `Given nothing
                             When I write string '${dataResult}' in 'result'

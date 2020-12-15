@@ -66,8 +66,12 @@ export const getState = async (endpoint: string, batchId: string) => {
     });
     for (const d of receipt_response.data.data) {
       const v = d.state_changes[0].value;
-      const value = await cbor.decodeAll(Buffer.from(v, "base64"));
-      states.push(...value);
+      const [result] = await cbor.decodeAll(Buffer.from(v, "base64"));
+      try {
+        states.push(JSON.parse(JSON.parse(result.result).result));
+      } catch (e) {
+        states.push(result.result);
+      }
     }
   }
   return states;
