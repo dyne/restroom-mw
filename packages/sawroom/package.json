@@ -40,6 +40,7 @@
     "@types/supertest": "^2.0.10"
   },
   "dependencies": {
-    "cbor": "^5.1.0"
+    "cbor": "^5.1.0",
+    "@dyne/sawroom-client": "^1.4.0"
   }
 }
