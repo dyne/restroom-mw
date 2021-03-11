@@ -61,3 +61,10 @@ test.serial("Save data on sawroom works correctly", async (t) => {
   t.is(typeof res.body.sawroom[cid2].batch_id, "string");
   t.is(res.body.sawroom[cid2].batch_id.length, 128);
 });
+
+test.serial("Store on rust TP works correctly", async (t) => {
+  const { app } = t.context;
+  const res = await app.post("/sawroom_store");
+  t.is(res.status, 200, res.text);
+  t.is(typeof res.body["my128Tag"], "string");
+});

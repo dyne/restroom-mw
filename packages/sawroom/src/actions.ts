@@ -8,3 +8,7 @@ export const READ =
 export const EXECUTE =
   "ask sawroom to execute the smart contract {} with the data {} and save the output with the context id {}";
 export const SAVE_PETITION = "ask sawroom to create the petition named {}";
+export const STORE =
+  "ask sawroom to store the data named {} and save the tag into {}";
+export const RETRIEVE =
+  "read the data with tag {} from sawroom and save the output into {}";

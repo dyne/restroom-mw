@@ -1,7 +1,16 @@
 import { Restroom } from "@restroom-mw/core";
 import axios from "axios";
 import { NextFunction, Request, Response } from "express";
-import { EXECUTE, READ, SAVE, SAWROOM_ADDRESS, TOKEN } from "./actions";
+import {
+  EXECUTE,
+  READ,
+  SAVE,
+  SAWROOM_ADDRESS,
+  TOKEN,
+  STORE,
+  RETRIEVE,
+} from "./actions";
+import { store, retrieve } from "@dyne/sawroom-client";
 import {
   combineDataKeys,
   executeOnSawroom,
@@ -62,6 +71,17 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         );
 
         saveToResult(sawroomResult, uid, result);
+      }
+
+      if (zencode.match(STORE)) {
+        validateAddress();
+        const params = zencode.paramsOf(STORE);
+        for (var i = 0; i < params.length; i += 2) {
+          const toStore = result[params[i]];
+          const tagId = params[i + 1];
+          const tag = await store(toStore, sawroomAddress);
+          Object.assign(result, { [tagId]: tag });
+        }
       }
 
       if (zencode.match(SAVE)) {
