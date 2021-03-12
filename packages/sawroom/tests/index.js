@@ -73,5 +73,6 @@ test.serial("Retrieve on rust TP works correctly", async (t) => {
   const { app } = t.context;
   const res = await app.post("/sawroom_retrieve");
   t.is(res.status, 200, res.text);
-  t.is(res.body["result"], "u0cAuigKpEaiP1xljKiWkg==");
+  t.log(res.body)
+  t.is(res.body["myResult"], "u0cAuigKpEaiP1xljKiWkg==");
 });
