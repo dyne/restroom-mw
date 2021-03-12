@@ -1,8 +1,5 @@
 Rule unknown ignore
-Scenario sawroom: ReaRetrieved from endpoint
 Given that I have a sawroom endpoint named 'endpoint'
-And I have a 'string' named 'tag'
-And I have a 'string' named 'result'
-And I read the data with tag 'tag' from sawroom and save the output into 'result'
-When I create the array of '5' random objects of '256' bits
+And I have a 'string' named 'myResult'
+When I read from Sawroom the data in tag 'myTag' and save the output into 'myResult'
 Then print all data
