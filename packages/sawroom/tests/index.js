@@ -68,3 +68,10 @@ test.serial("Store on rust TP works correctly", async (t) => {
   t.is(res.status, 200, res.text);
   t.is(typeof res.body["my128Tag"], "string");
 });
+
+test.serial("Retrieve on rust TP works correctly", async (t) => {
+  const { app } = t.context;
+  const res = await app.post("/sawroom_retrieve");
+  t.is(res.status, 200, res.text);
+  t.is(res.body["result"], "u0cAuigKpEaiP1xljKiWkg==");
+});
