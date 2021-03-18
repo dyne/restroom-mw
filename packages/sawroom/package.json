@@ -41,6 +41,6 @@
   },
   "dependencies": {
     "cbor": "^5.1.0",
-    "@dyne/sawroom-client": "^1.6.0"
+    "@dyne/sawroom-client": "^1.6.2"
   }
 }
