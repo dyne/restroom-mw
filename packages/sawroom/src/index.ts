@@ -62,7 +62,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       if (zencode.match(RETRIEVE)) {
         const [tag, outputVariable] = namedParamsOf(RETRIEVE);
         validateAddress();
-        data[outputVariable] = JSON.parse(await retrieve(tag, sawroomAddress));
+        data[outputVariable] = await retrieve(tag, sawroomAddress);
       }
     });
 
