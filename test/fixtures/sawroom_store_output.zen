@@ -1,0 +1,9 @@
+Rule unknown ignore
+rule check version 1.0.0
+Scenario sawroom: Store data into the blockchain
+Given that I have a sawroom endpoint named 'sawroomEndpoint'
+When I create the random object of '128' bits
+When I rename the 'random_object' to 'my128BitsRandom'
+Then print the 'my128BitsRandom'
+Then I ask Sawroom to store the output into the tag 'my128Tag'
+Then print the data

@@ -69,10 +69,18 @@ test.serial("Store on rust TP works correctly", async (t) => {
   t.is(typeof res.body["my128Tag"], "string");
 });
 
+test.serial("Store OUTPUT on rust TP works correctly", async (t) => {
+  const { app } = t.context;
+  const res = await app.post("/sawroom_store_output");
+  t.is(res.status, 200, res.text);
+  t.log(res.text);
+  t.is(typeof res.body["my128Tag"], "string");
+});
+
 test.serial("Retrieve on rust TP works correctly", async (t) => {
   const { app } = t.context;
   const res = await app.post("/sawroom_retrieve");
   t.is(res.status, 200, res.text);
-  t.log(res.body)
+  t.log(res.body);
   t.is(res.body["myResult"], "u0cAuigKpEaiP1xljKiWkg==");
 });

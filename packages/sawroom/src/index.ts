@@ -8,6 +8,7 @@ import {
   SAWROOM_ADDRESS,
   TOKEN,
   STORE,
+  STORE_OUTPUT,
   RETRIEVE,
 } from "./actions";
 import { store, retrieve } from "@dyne/sawroom-client";
@@ -77,6 +78,13 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         );
 
         saveToResult(sawroomResult, uid, result);
+      }
+
+      if (zencode.match(STORE_OUTPUT)) {
+        validateAddress();
+        const [tagId] = zencode.paramsOf(STORE_OUTPUT);
+        const tag = await store(result, sawroomAddress);
+        Object.assign(result, { [tagId]: tag });
       }
 
       if (zencode.match(STORE)) {

@@ -1,0 +1,7 @@
+{
+	"sawroomEndpoint": "http://195.201.41.35:8008",
+	"dataToStore1": "0Uu+Ldk04+JSw9V0TQW2ufZuxe1v3K8jffunxxLLI0o=",
+	"dataToStore2": 42,
+    "dataToStore3": {"data": 42},
+    "dataToStore4": [1, 2, "string"]
+}

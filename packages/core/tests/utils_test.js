@@ -54,6 +54,7 @@ test("getContracts works correctly", async (t) => {
     "/sawroom_read",
     "/sawroom_retrieve",
     "/sawroom_store",
+    "/sawroom_store_output",
   ]);
 });
 
