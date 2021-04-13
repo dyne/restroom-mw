@@ -59,6 +59,20 @@ export default (req: Request, res: Response, next: NextFunction) => {
 
     rr.onBefore(async (params) => {
       const { zencode, keys, data } = params;
+      keysContent =
+        typeof keys === "undefined"
+          ? {}
+          : keys && typeof keys === "object"
+            ? keys
+            : parse(keys);
+      dataContent =
+        typeof data === "undefined"
+          ? {}
+          : data && typeof data === "object"
+            ? data
+            : parse(data);
+      content = { ...dataContent, ...keysContent };
+      contentKeys = Object.keys(content);
 
       if (zencode.match(ACTIONS.GET_URI_KEYS)) {
         dbUriKeys = zencode.paramsOf(ACTIONS.GET_URI_KEYS);
@@ -70,20 +84,6 @@ export default (req: Request, res: Response, next: NextFunction) => {
 
       if (zencode.match(ACTIONS.GET_RECORD)) {
         const dbAllRecordData: string[] = zencode.paramsOf(ACTIONS.GET_RECORD);
-        keysContent =
-          typeof keys === "undefined"
-            ? {}
-            : keys && typeof keys === "object"
-            ? keys
-            : parse(keys);
-        dataContent =
-          typeof data === "undefined"
-            ? {}
-            : data && typeof data === "object"
-            ? data
-            : parse(data);
-        content = { ...dataContent, ...keysContent };
-        contentKeys = Object.keys(content);
         //create object(s) with the FOUR values of each GET_RECORD
         const dbQueries: QueryGetRecord[] = [];
         for (var i = 0; i < dbAllRecordData.length; i += 4) {
@@ -125,7 +125,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
               }
             } catch (e) {
               throw new Error(`[DATABASE]
-                      Something went wrong for id "${query.id}" in table "${query.table}" in db "${query.database}".`);
+                      Something went wrong for id "${query.id}" in table "${query.table}" in db "${query.database}": ${e}`);
             }
             db.close();
           }
