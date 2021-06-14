@@ -12,3 +12,7 @@ export const STORE = "ask Sawroom to store the data named {} into the tag {}";
 export const STORE_OUTPUT = "ask Sawroom to store the output into the tag {}";
 export const RETRIEVE =
   "read from Sawroom the data in tag {} and save the output into {}";
+export const BALANCE = "balance of {} in {}";
+export const DEPOSIT = "deposit {} to {} and store the result in {}";
+export const WITHDRAW = "withdraw {} from {} and store the result in {}";
+export const TRANSFER = "transfer {} from {} to {} and store the result in {}";
