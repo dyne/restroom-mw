@@ -10,8 +10,12 @@ import {
   STORE,
   STORE_OUTPUT,
   RETRIEVE,
+  BALANCE,
+  DEPOSIT,
+  WITHDRAW,
+  TRANSFER,
 } from "./actions";
-import { store, retrieve } from "@dyne/sawroom-client";
+import { store, retrieve, balance, deposit, withdraw, transfer } from "@dyne/sawroom-client";
 import {
   combineDataKeys,
   executeOnSawroom,
@@ -65,6 +69,17 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         validateAddress();
         data[outputVariable] = await retrieve(tag, sawroomAddress);
       }
+
+      if (zencode.match(BALANCE)) {
+        const [tag, outputVariable] = namedParamsOf(BALANCE);
+        validateAddress();
+        const mybalance = await balance(tag, sawroomAddress);
+        if (mybalance != undefined) {
+          data[outputVariable] = Number(mybalance);
+        } else {
+          data[outputVariable] = 0;
+        }
+      }
     });
 
     rr.onSuccess(async (params) => {
@@ -117,6 +132,28 @@ export default async (req: Request, res: Response, next: NextFunction) => {
           saveToResult(sawroomResult, contextId, result);
         }
       }
+
+      if (zencode.match(DEPOSIT)) {
+        validateAddress();
+        const [value, tag, outputVariable] = zencode.paramsOf(DEPOSIT);
+        const res = await deposit(input[tag], value, sawroomAddress);
+        Object.assign(result, { [outputVariable] : res });
+      }
+
+      if (zencode.match(WITHDRAW)) {
+        validateAddress();
+        const [value, tag, outputVariable] = zencode.paramsOf(WITHDRAW);
+        const res = await withdraw(input[tag], value, sawroomAddress);
+        Object.assign(result, { [outputVariable] : res });
+      }
+
+      if (zencode.match(TRANSFER)) {
+        validateAddress();
+        const [value, tag, beneficiaryPublicKey, outputVariable] = zencode.paramsOf(TRANSFER);
+        const res = await transfer(input[tag], value, input[beneficiaryPublicKey], sawroomAddress);
+        Object.assign(result, { [outputVariable] : res });
+      }
+
     });
     next();
   } catch (e) {
