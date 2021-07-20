@@ -40,7 +40,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
         new Set(externalSourceKeys).size !== externalSourceKeys.length;
       if (duplicateFound) {
         throw new Error(`[HTTP]
-          Found a duplicate. Please ensure there are no duplicates 
+          Found a duplicate. Please ensure there are no duplicates
           when defining endpoints in "${ACTIONS.EXTERNAL_CONNECTION}"`);
       }
     }
@@ -65,7 +65,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
 
       if (!externalSourceKeys.length)
         throw new Error(`[HTTP]
-            Endpoints are missing, please define them with the 
+            Endpoints are missing, please define them with the
             following zencode sentence "${ACTIONS.EXTERNAL_CONNECTION}"`);
 
       //join the two values in each EXTERNAL_OUTPUT
@@ -95,7 +95,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
         } catch (e) {
           throw new Error(`Error when getting from endpoint "${
             content[output.urlKey]
-          }": 
+          }":
                   ${e}`);
         }
       }
@@ -152,13 +152,15 @@ const runChecks = (
     }
 
     // check that all endpoints (urlKeys) are properties in either data or keys
-    if (contentKeys.includes(endpoint.urlKey) === false) {
-      console.log(
-        "FAILED CHECK: not defined in keys or files. Throwing error for files: " +
-          endpoint.urlKey
-      );
-      throw new Error(`[HTTP]
-              Endpoint "${endpoint.urlKey}" has not been defined in keys or data.`);
+    if (contentKeys) {
+      if (contentKeys.includes(endpoint.urlKey) === false) {
+        console.log(
+          "FAILED CHECK: not defined in keys or files. Throwing error for files: " +
+            endpoint.urlKey
+        );
+        throw new Error(`[HTTP]
+                Endpoint "${endpoint.urlKey}" has not been defined in keys or data.`);
+      }
     }
   });
 };
@@ -174,7 +176,7 @@ const checkForNestedBoolean = (obj: any) => {
         } else {
           if (typeof value === "boolean") {
             throw new Error(`[HTTP]
-                      Boolean values are not permitted. Response JSON has property "${key}" with a boolean value. 
+                      Boolean values are not permitted. Response JSON has property "${key}" with a boolean value.
                       Please use, for example, 0 and 1`);
           }
         }
