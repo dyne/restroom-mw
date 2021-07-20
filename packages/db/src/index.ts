@@ -19,8 +19,7 @@ const parse = (o: string) => {
   try {
     return JSON.parse(o);
   } catch (e) {
-    throw new Error(`[DATABASE]
-      Error in JSON format "${o}"`);
+    throw new Error(`[DATABASE] Error in JSON format "${o}"`);
   }
 };
 
@@ -59,6 +58,20 @@ export default (req: Request, res: Response, next: NextFunction) => {
 
     rr.onBefore(async (params) => {
       const { zencode, keys, data } = params;
+      keysContent =
+        typeof keys === "undefined"
+          ? {}
+          : keys && typeof keys === "object"
+          ? keys
+          : parse(keys);
+      dataContent =
+        typeof data === "undefined"
+          ? {}
+          : data && typeof data === "object"
+          ? data
+          : parse(data);
+      content = { ...dataContent, ...keysContent };
+      contentKeys = Object.keys(content);
 
       if (zencode.match(ACTIONS.GET_URI_KEYS)) {
         dbUriKeys = zencode.paramsOf(ACTIONS.GET_URI_KEYS);
@@ -70,20 +83,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
 
       if (zencode.match(ACTIONS.GET_RECORD)) {
         const dbAllRecordData: string[] = zencode.paramsOf(ACTIONS.GET_RECORD);
-        keysContent =
-          typeof keys === "undefined"
-            ? {}
-            : keys && typeof keys === "object"
-            ? keys
-            : parse(keys);
-        dataContent =
-          typeof data === "undefined"
-            ? {}
-            : data && typeof data === "object"
-            ? data
-            : parse(data);
-        content = { ...dataContent, ...keysContent };
-        contentKeys = Object.keys(content);
+
         //create object(s) with the FOUR values of each GET_RECORD
         const dbQueries: QueryGetRecord[] = [];
         for (var i = 0; i < dbAllRecordData.length; i += 4) {
@@ -251,9 +251,11 @@ const runChecks = (
     }
 
     // check that all endpoints (urlKeys) are properties in either data or keys
-    if (contentKeys.includes(key[keyName]) === false) {
-      throw new Error(`[DATABASE]
-              Endpoint "${key[keyName]}" has not been defined in keys or data.`);
+    if (contentKeys) {
+      if (contentKeys.includes(key[keyName]) === false) {
+        throw new Error(`[DATABASE]
+                Endpoint "${key[keyName]}" has not been defined in keys or data.`);
+      }
     }
   });
 };
@@ -269,7 +271,7 @@ const checkForNestedBoolean = (obj: any) => {
         } else {
           if (typeof value === "boolean") {
             throw new Error(`[HTTP]
-                      Boolean values are not permitted. Response JSON has property "${key}" with a boolean value. 
+                      Boolean values are not permitted. Response JSON has property "${key}" with a boolean value.
                       Please use, for example, 0 and 1`);
           }
         }
