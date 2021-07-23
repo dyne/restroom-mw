@@ -15,6 +15,7 @@
   - [@restroom-mw/ui](/packages/ui.md)
   - [@restroom-mw/db](/packages/db.md)
   - [@restroom-mw/redis](/packages/redis.md)
+  - [@restroom-mw/sawroom](/packages/sawroom.md)
 
 - 🧰 Tools
 
