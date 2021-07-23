@@ -17,6 +17,7 @@
   - [@restroom-mw/http](/packages/http.md)
   - [@restroom-mw/sawroom](/packages/sawroom.md)
   - [@restroom-mw/redis](/packages/redis.md)
+  - [@restroom-mw/sawroom](/packages/sawroom.md)
 
 - 🧰 Tools
 
