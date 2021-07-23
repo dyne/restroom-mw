@@ -2,6 +2,20 @@
 
 A middleware to make operations on a the blockchain [Sawroom](https://github.com/dyne/sawroom), based on [Hyperledger Sawtooth](https://www.hyperledger.org/use/sawtooth) and [Zenroom](https://zenroom.org/).
 
+## Usage
+
+```js
+import express from "express";
+import zencode from "@restroom-mw/core";
+import sawroom from "@restroom-mw/sawroom";
+
+const app = express();
+
+app.use(sawroom);
+app.use("/api/*", zencode);
+```
+
+
 ## Zencode examples
 
 The syntax of the actions is [here](https://github.com/dyne/restroom-mw/blob/master/packages/sawroom/src/actions.ts#L1-L14). 
