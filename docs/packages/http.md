@@ -1,6 +1,21 @@
 # @restroom-mw/http
 
-Is a basic middleware to make basic operations with http endpoints
+Is a basic middleware to make REST calles to read and post data to endpoints.
+
+## Usage
+
+```js
+import express from "express";
+import zencode from "@restroom-mw/core";
+import http from "@restroom-mw/http";
+
+const app = express();
+
+app.use(http);
+app.use("/api/*", zencode);
+```
+
+
 
 ## Zencode examples
 
