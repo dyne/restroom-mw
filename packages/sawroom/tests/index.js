@@ -95,11 +95,11 @@ const is_transaction_valid = async (link) => {
     if (batchResult.data.data == undefined) throw new Error("Waiting for Data");
     if (batchResult.data.data[0].status == "PENDING") throw new Error;
     return batchResult;
-  }, { retries: 5 });
+  }, { retries: 25 });
   return (res.data.data[0].status);
 };
 
-test.serial("Deposit on wallet TP work correctly", async (t) => {
+test.serial("Assure that Deposit on wallet TP does not work", async (t) => {
   const { app } = t.context;
   var res = await app.post("/sawroom_ask_balance");
   const oldBalance = res.body["myBalance"];
@@ -107,10 +107,10 @@ test.serial("Deposit on wallet TP work correctly", async (t) => {
   t.is(res.status, 200, res.text);
   t.is(typeof res.body["myOutput"], "string");
   const status = await is_transaction_valid(res.body["myOutput"]);
-  t.is(status, "COMMITTED");
+  t.is(status, "INVALID");
   var res = await app.post("/sawroom_ask_balance");
   const newBalance = res.body["myBalance"];
-  t.is(newBalance - oldBalance, 3);
+  t.is(newBalance - oldBalance, 0);
 });
 
 test.serial("Asking the balance on wallet TP work correctly", async (t) => {
