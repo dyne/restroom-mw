@@ -1,0 +1,5 @@
+Rule unknown ignore
+Given that I have a sawroom endpoint named 'myEndpoint'
+Given I have a 'number' named 'myBalance'
+Given balance of 'myKey' in 'myBalance'
+Then print all data

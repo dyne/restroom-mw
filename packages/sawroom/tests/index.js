@@ -2,6 +2,9 @@ import test from "ava";
 import bodyParser from "body-parser";
 import express from "express";
 import supertest from "supertest";
+import axios from "axios";
+import retry from "async-retry";
+
 
 process.env.ZENCODE_DIR = "./test/fixtures";
 const sawroom = require("../dist");
@@ -84,3 +87,36 @@ test.serial("Retrieve on rust TP works correctly", async (t) => {
   t.log(res.body);
   t.is(res.body["myResult"], "u0cAuigKpEaiP1xljKiWkg==");
 });
+
+const is_transaction_valid = async (link) => {
+  var res = await retry(async () => {
+    var batchResult = await axios.get(link);
+    if (batchResult == undefined) throw new Error("Waiting fro batch");
+    if (batchResult.data.data == undefined) throw new Error("Waiting for Data");
+    if (batchResult.data.data[0].status == "PENDING") throw new Error;
+    return batchResult;
+  }, { retries: 25 });
+  return (res.data.data[0].status);
+};
+
+test.serial("Assure that Deposit on wallet TP does not work", async (t) => {
+  const { app } = t.context;
+  var res = await app.post("/sawroom_ask_balance");
+  const oldBalance = res.body["myBalance"];
+  res = await app.post("/sawroom_deposit");
+  t.is(res.status, 200, res.text);
+  t.is(typeof res.body["myOutput"], "string");
+  const status = await is_transaction_valid(res.body["myOutput"]);
+  t.is(status, "INVALID");
+  var res = await app.post("/sawroom_ask_balance");
+  const newBalance = res.body["myBalance"];
+  t.is(newBalance - oldBalance, 0);
+});
+
+test.serial("Asking the balance on wallet TP work correctly", async (t) => {
+  const { app } = t.context;
+  const res = await app.post("/sawroom_ask_balance");
+  t.is(res.status, 200, res.text);
+  t.is(typeof res.body["myBalance"], "number");
+});
+

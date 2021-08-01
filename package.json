@@ -91,6 +91,6 @@
   },
   "dependencies": {
     "@babel/preset-env": "^7.12.16",
-    "@dyne/sawroom-client": "^1.6.2"
+    "@dyne/sawroom-client": "^1.8.0"
   }
 }
