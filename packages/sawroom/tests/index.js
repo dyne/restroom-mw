@@ -107,7 +107,7 @@ test.serial("Assure that Deposit on wallet TP does not work", async (t) => {
   t.is(res.status, 200, res.text);
   t.is(typeof res.body["myOutput"], "string");
   const status = await is_transaction_valid(res.body["myOutput"]);
-  t.is(status, "INVALID");
+  t.is(status, "COMMITTED");
   var res = await app.post("/sawroom_ask_balance");
   const newBalance = res.body["myBalance"];
   t.is(newBalance - oldBalance, 0);
