@@ -89,21 +89,26 @@ export const generate = async (rootPath: string) => {
 
   openapi.paths = {};
   for (const path in paths) {
-    const contract = Zencode.fromPath(paths[path]);
+    const contract = Zencode.fromPath(paths[path].fullPath);
+    const isChain = paths[path].type == 'yml' ? true : false
+    const tag = isChain ? '⛓️ chain of contracts' : `🔖 ${contract.tag}`;
+    const exposedPath = isChain ? `${path}.chain` : path;
+
     let endpoint = {
       post: {
         summary: contract.summary,
         description: nl2br(contract.content),
-        tags: [`🔖 ${contract.tag}`],
+        tags: [`${tag}`],
         consumes: mime,
         produces: mime,
-        operationId: `_function_${path}_post`,
+        operationId: `_function_${exposedPath}_post`,
         requestBody,
         responses,
       },
     };
 
-    openapi.paths[`/${path}`] = endpoint;
+    openapi.paths[`/${exposedPath}`] = endpoint;
+
   }
 
   return openapi;

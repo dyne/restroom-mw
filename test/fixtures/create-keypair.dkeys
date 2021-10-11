@@ -1,0 +1,5 @@
+{   
+    "userChallenges": "context.get('first-user-answers').data",
+    "username": "context.get('user-data').data.userData.email",
+    "key_derivation": "context.get('create-pbkdf').output.key_derivation"
+}

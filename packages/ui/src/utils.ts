@@ -7,13 +7,14 @@ import readdirp from "readdirp";
  * @returns {object}
  */
 export const ls = async (root: string) => {
-  const contracts: { [key: string]: string } = {};
+  const contracts: { [key: string]: any } = {};
   try {
-    const entries = await readdirp.promise(root, { fileFilter: "*.zen" });
+    const entries = await readdirp.promise(root, { fileFilter: ["*.zen", "*.yml"] });
     entries.map((e) => {
       const { path, fullPath } = e;
       const name = path.split(".")[0];
-      contracts[name] = fullPath;
+      const type = path.split(".")[1];
+      contracts[name] = {fullPath: fullPath, type: type};
     });
   } catch (e) {
     throw e;

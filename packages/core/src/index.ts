@@ -43,46 +43,73 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     }
   };
 
+  async function callZenroom (zencode: Zencode, conf: string, data: string, keys: string): Promise<any>{
+    
+    let outcome : any = {
+      result: null,
+      status: 0,
+      error: null,
+      errorMessage: null
+    };
+    console.log(1);
+    try {
+      await runHook(hook.INIT, {});
+      await runHook(hook.BEFORE, { zencode, conf, data, keys });
+      zencode_exec(zencode.content, {
+        data: Object.keys(data).length ? JSON.stringify(data) : undefined,
+        keys: keys,
+        conf: conf,
+      })
+        .then(async ({ result, logs }) => {
+          console.log(result);
+          zenroom_result = result;
+          result = JSON.parse(result);
+          await runHook(hook.SUCCESS, { result, zencode, zenroom_errors, outcome });
+          outcome.result = result;
+          outcome.status = 200;
+        })
+        .then(async (json) => {
+          await runHook(hook.AFTER, { json, zencode, outcome });
+          next();
+        })
+        .catch(async (e) => {
+          zenroom_errors = e;
+          await runHook(hook.ERROR, { zenroom_errors, zencode, outcome });
+          //sendError("[ZENROOM EXECUTION ERROR]", e);
+          outcome.error = e;
+          outcome.errorMessage = "[ZENROOM EXECUTION ERROR]";
+        })
+        .finally(async () => {
+          await runHook(hook.FINISH, { res, outcome });
+          console.log("outcome is" + outcome);
+          next();
+          return Promise.resolve(outcome);
+        });
+    } catch (e) {
+      await runHook(hook.EXCEPTION, res);
+      //sendError("[UNEXPECTED EXCEPTION]", e);
+      outcome.errorMessage = "[ZENROOM EXECUTION ERROR]";
+      outcome.error = e;
+      next(e);
+    }
+  }
+
   let zenroom_result: string, json: string, zenroom_errors: string;
   zenroom_result = zenroom_errors = json = "";
   const contractName = req.params["0"];
   let conf = getConf(contractName);
   let data = getData(req, res);
   let keys = getKeys(contractName);
+  let zencode = await getContractOrFail(contractName);
 
-  try {
-    await runHook(hook.INIT, {});
-    let zencode = await getContractOrFail(contractName);
-    res.set("x-powered-by", "RESTroom by Dyne.org");
-    await runHook(hook.BEFORE, { zencode, conf, data, keys });
-    zencode_exec(zencode.content, {
-      data: Object.keys(data).length ? JSON.stringify(data) : undefined,
-      keys: keys,
-      conf: conf,
-    })
-      .then(async ({ result, logs }) => {
-        zenroom_result = result;
-        result = JSON.parse(result);
-        await runHook(hook.SUCCESS, { result, zencode, zenroom_errors });
-        res.status(200).json(result);
-      })
-      .then(async (json) => {
-        await runHook(hook.AFTER, { json, zencode });
-        next();
-      })
-      .catch(async (e) => {
-        zenroom_errors = e;
-        await runHook(hook.ERROR, { zenroom_errors, zencode });
-        sendError("[ZENROOM EXECUTION ERROR]", e);
-      })
-      .finally(async () => {
-        await runHook(hook.FINISH, res);
-        next();
-      });
-  } catch (e) {
-    await runHook(hook.EXCEPTION, res);
-    sendError("[UNEXPECTED EXCEPTION]", e);
-    next(e);
+  const outcome = await callZenroom(zencode, conf, data, keys);
+  res.set("x-powered-by", "RESTroom by Dyne.org");
+
+  console.log(outcome);
+  if (outcome.error) {
+    sendError(outcome.errorMessage, outcome.error);
+  } else {
+    res.status(200).json(outcome.result);
   }
 };
 

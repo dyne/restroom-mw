@@ -14,6 +14,16 @@ export const getKeys = (contractName: string) => {
   }
 };
 
+export const getDinamicKeys = (contractName: string) => {
+  try {
+    return (
+      fs.readFileSync(`${ZENCODE_DIR}/${contractName}.dkeys`).toString() || null
+    );
+  } catch (e) {
+    return null;
+  }
+};
+
 export const getConf = (contractName: string) => {
   try {
     return (
@@ -21,6 +31,16 @@ export const getConf = (contractName: string) => {
     );
   } catch (e) {
     return "color=0";
+  }
+};
+
+export const getYml = (ymlName: string) => {
+  try {
+    return (
+      fs.readFileSync(`${ZENCODE_DIR}/${ymlName}.yml`).toString() || null
+    );
+  } catch (e) {
+    return null;
   }
 };
 
