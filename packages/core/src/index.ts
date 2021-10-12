@@ -1,12 +1,15 @@
 import { Zencode } from "@restroom-mw/zencode";
 import { ZENCODE_DIR } from "@restroom-mw/utils";
 import { getHooks, hook, initHooks } from "./hooks";
-import { getConf, getData, getKeys, getMessage } from "./utils";
+import { getConf, getData, getKeys, getMessage, getYml } from "./utils";
 import { zencode_exec } from "zenroom";
+import { addKeysToContext, storeContext, iterateAndEvaluateExpressions, updateContext, BLOCK_TYPE } from "./zenchain";
 import { NextFunction, Request, Response } from "express";
+import * as yaml from "js-yaml";
 const functionHooks = initHooks;
 
 export default async (req: Request, res: Response, next: NextFunction) => {
+
   if (req.url === "/favicon.ico") {
     return;
   }
@@ -43,7 +46,60 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     }
   };
 
-  async function callZenroom (zencode: Zencode, conf: string, data: string, keys: string): Promise<any>{
+  async function executeChain(ymlFile: string, data: any): Promise<any> {
+
+    const fileContents = getYml(ymlFile);
+    const ymlContent: any = yaml.load(fileContents);
+  
+    const context: Map<string, any> = new Map<string, any>();
+    const firstBlock: string = ymlContent.first;
+  
+    return await evaluateBlock(firstBlock, context, ymlContent, data);
+  }
+
+  async function evaluateBlock(
+    block: string,
+    context: Map<string, any>,
+    ymlContent: any,
+    endpointData: any
+  ): Promise<any> {
+    console.log("Current block is " + block);
+    //take it from endpointData using proper contract key!
+    const singleContext: any = { keys: {}, data: {}};
+    addKeysToContext(singleContext, block);
+    storeContext(singleContext, block, ymlContent, context);
+    iterateAndEvaluateExpressions(context.get(block), context);
+  
+    if (ymlContent.blocks[block].type === BLOCK_TYPE.ZENROOM) {
+      let conf = getConf(block);
+      let zencode = await getContractOrFail(block);
+
+      const restroomResult: any = await callRestroom(zencode, conf, singleContext.data, JSON.stringify(singleContext.keys), block);
+      if (restroomResult?.error) {
+        return new Promise((resolve) => {
+          resolve(restroomResult);
+        });
+      }
+      singleContext.output = restroomResult.result;
+      updateContext(singleContext, context, block);
+    } else if (ymlContent.blocks[block].type === BLOCK_TYPE.OUTPUT) {
+
+      return new Promise((resolve) => {
+        let outcome : any = {
+          result: null,
+          status: 0,
+          error: null,
+          errorMessage: null
+        };
+        outcome.result = singleContext.output;
+        outcome.status = 200;
+        resolve(outcome);
+      });
+    }
+    return await evaluateBlock(singleContext.next, context, ymlContent, data);
+  }
+
+  async function callRestroom(zencode: Zencode, conf: string, data: string, keys: string, contractName:string): Promise<any>{
     
     let outcome : any = {
       result: null,
@@ -51,17 +107,16 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       error: null,
       errorMessage: null
     };
-    console.log(1);
+
     try {
       await runHook(hook.INIT, {});
       await runHook(hook.BEFORE, { zencode, conf, data, keys });
-      zencode_exec(zencode.content, {
+      await zencode_exec(zencode.content, {
         data: Object.keys(data).length ? JSON.stringify(data) : undefined,
         keys: keys,
         conf: conf,
       })
-        .then(async ({ result, logs }) => {
-          console.log(result);
+        .then(async ({ result }) => {
           zenroom_result = result;
           result = JSON.parse(result);
           await runHook(hook.SUCCESS, { result, zencode, zenroom_errors, outcome });
@@ -75,23 +130,23 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         .catch(async (e) => {
           zenroom_errors = e;
           await runHook(hook.ERROR, { zenroom_errors, zencode, outcome });
-          //sendError("[ZENROOM EXECUTION ERROR]", e);
           outcome.error = e;
-          outcome.errorMessage = "[ZENROOM EXECUTION ERROR]";
+          outcome.errorMessage = `[ZENROOM EXECUTION ERROR FOR CONTRACT ${contractName}]`;
+          next(e);
+          return outcome;
         })
         .finally(async () => {
           await runHook(hook.FINISH, { res, outcome });
-          console.log("outcome is" + outcome);
           next();
-          return Promise.resolve(outcome);
         });
     } catch (e) {
       await runHook(hook.EXCEPTION, res);
-      //sendError("[UNEXPECTED EXCEPTION]", e);
-      outcome.errorMessage = "[ZENROOM EXECUTION ERROR]";
+      outcome.errorMessage = `[UNEXPECTED EXCEPTION FOR CONTRACT ${contractName}]`;
       outcome.error = e;
       next(e);
+      return outcome;
     }
+    return outcome;
   }
 
   let zenroom_result: string, json: string, zenroom_errors: string;
@@ -100,16 +155,23 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   let conf = getConf(contractName);
   let data = getData(req, res);
   let keys = getKeys(contractName);
-  let zencode = await getContractOrFail(contractName);
+  
+  const isChain = contractName.split(".")[1] === 'chain' || false;
 
-  const outcome = await callZenroom(zencode, conf, data, keys);
-  res.set("x-powered-by", "RESTroom by Dyne.org");
-
-  console.log(outcome);
-  if (outcome.error) {
-    sendError(outcome.errorMessage, outcome.error);
+  let outcomeRes: any = null;
+  if (isChain){
+    const ymlName = contractName.split(".")[0];
+    outcomeRes = await executeChain(ymlName, data);
   } else {
-    res.status(200).json(outcome.result);
+    let zencode = await getContractOrFail(contractName);
+    outcomeRes = await callRestroom(zencode, conf, data, keys, contractName);
+  }  
+
+  res.set("x-powered-by", "RESTroom by Dyne.org");
+  if (outcomeRes?.error) {
+    sendError(outcomeRes.errorMessage, outcomeRes.error);
+  } else {
+    res.status(outcomeRes.status).json(outcomeRes?.result);
   }
 };
 

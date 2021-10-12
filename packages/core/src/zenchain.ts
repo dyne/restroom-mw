@@ -9,16 +9,20 @@ export enum BLOCK_TYPE {
 }
 
 export const iterateAndEvaluateExpressions = (obj: any, context: Map<string, any>) => {
-  Object.keys(obj).forEach((key: string) => {
-    if (typeof obj[key] === "string") {
-      if (obj[key].includes(CONTEXT_PLACEHOLDER)) {
-        const evaluate = new Function("obj", "context", "return " + obj[key]);
-        obj[key] = evaluate(obj[key], context);
+  try {
+    Object.keys(obj).forEach((key: string) => {
+      if (typeof obj[key] === "string") {
+        if (obj[key].includes(CONTEXT_PLACEHOLDER)) {
+          const evaluate = new Function("obj", "context", "return " + obj[key]);
+          obj[key] = evaluate(obj[key], context);
+        }
+      } else if (typeof obj[key] === "object") {
+        iterateAndEvaluateExpressions(obj[key], context);
       }
-    } else if (typeof obj[key] === "object") {
-      iterateAndEvaluateExpressions(obj[key], context);
-    }
-  });
+    });
+  } catch (e) {
+    console.error(e);
+  }
 };
 
 export function updateContext(
