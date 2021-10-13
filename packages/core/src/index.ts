@@ -3,7 +3,7 @@ import { ZENCODE_DIR } from "@restroom-mw/utils";
 import { getHooks, hook, initHooks } from "./hooks";
 import { getConf, getData, getKeys, getMessage, getYml } from "./utils";
 import { zencode_exec } from "zenroom";
-import { addKeysToContext, addDataToContext, storeContext, iterateAndEvaluateExpressions, updateContext, BLOCK_TYPE } from "./context";
+import { addKeysToContext, addDataToContext, updateContextUsingYamlFields, iterateAndEvaluateExpressions, updateContext, BLOCK_TYPE } from "./context";
 import { NextFunction, Request, Response } from "express";
 import * as yaml from "js-yaml";
 import { RestroomResult } from "./restroom-result";
@@ -54,15 +54,11 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     }
   };
 
-  async function resolveRestroomResult(singleContext: any): Promise<RestroomResult> {
+  async function resolveRestroomResult(restroomResult: RestroomResult): Promise<RestroomResult> {
     return new Promise((resolve) => {
-      let outcome : RestroomResult = {
-        result: singleContext.output,
-        status: 200,
-      };
-      resolve(outcome);
+      resolve(restroomResult);
     });
-  }
+  };
 
   async function executeChain(ymlFile: string, data: any): Promise<any> {
 
@@ -84,22 +80,23 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     console.log("Current block is " + block);
     const singleContext: any = { keys: {}, data: {}};
     
-    storeContext(singleContext, block, ymlContent, context);
+    updateContextUsingYamlFields(singleContext, block, ymlContent, context);
     addKeysToContext(singleContext, block);
-    addDataToContext(singleContext, data[block]);
+    addDataToContext(singleContext, endpointData[block]);
     iterateAndEvaluateExpressions(context.get(block), context);
   
     if (ymlContent.blocks[block].type === BLOCK_TYPE.ZENROOM) {
       const restroomResult: any = await callRestroom(singleContext.data, JSON.stringify(singleContext.keys), block);
       if (restroomResult?.error) {
-        return new Promise((resolve) => {
-          resolve(restroomResult);
-        });
+        return await resolveRestroomResult(restroomResult);
       }
       singleContext.output = restroomResult.result;
       updateContext(singleContext, context, block);
     } else if (ymlContent.blocks[block].type === BLOCK_TYPE.OUTPUT) {
-      return await resolveRestroomResult(singleContext);
+      return await resolveRestroomResult({
+        result: singleContext.output,
+        status: 200,
+      });
     }
     return await evaluateBlock(singleContext.next, context, ymlContent, data);
   }

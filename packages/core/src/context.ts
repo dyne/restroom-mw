@@ -44,7 +44,7 @@ export function addKeysToContext(singleContext: any, block: string) {
   });
 }
 
-export function storeContext(
+export function updateContextUsingYamlFields(
   singleContext: any,
   block: string,
   ymlContent: any,
