@@ -1,5 +1,5 @@
 import { HTTP_PORT, HTTPS_PORT, HOST } from "@restroom-mw/utils";
-import { ls, nl2br } from "./utils";
+import { ls, nl2br, preserveTabs } from "./utils";
 import { Zencode } from "@restroom-mw/zencode";
 import { OpenAPI } from "./interfaces";
 
@@ -89,15 +89,17 @@ export const generate = async (rootPath: string) => {
 
   openapi.paths = {};
   for (const path in paths) {
+
     const contract = Zencode.fromPath(paths[path].fullPath);
-    const isChain = paths[path].type == 'yml' ? true : false
+    const isChain = paths[path].type == 'yml' ? true : false;
+    const description = isChain ? nl2br(preserveTabs(contract.content)) : nl2br(contract.content);
     const tag = isChain ? '⛓️ chain of contracts' : `🔖 ${contract.tag}`;
     const exposedPath = isChain ? `${path}.chain` : path;
 
     let endpoint = {
       post: {
         summary: contract.summary,
-        description: nl2br(contract.content),
+        description: description,
         tags: [`${tag}`],
         consumes: mime,
         produces: mime,

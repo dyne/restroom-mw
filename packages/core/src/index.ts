@@ -79,6 +79,11 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     }
   }
 
+  const getRestroomResult = async (contractName:string, data:any, keys:any) : Promise<RestroomResult> => {
+    const isChain = contractName.split(".")[1] === 'chain' || false;
+    return isChain ? await executeChain(contractName.split(".")[0], data) : await callRestroom(data, keys, contractName)
+  }
+
   async function evaluateBlock(
     block: string,
     context: Map<string, any>,
@@ -170,17 +175,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   let keys = getKeys(contractName);
   
   res.set("x-powered-by", "RESTroom by Dyne.org");
-  const isChain = contractName.split(".")[1] === 'chain' || false;
-
-  let restroomResult: RestroomResult;
-  if (isChain){
-    const ymlName = contractName.split(".")[0];
-    restroomResult = await executeChain(ymlName, data);
-  } else {
-    restroomResult = await callRestroom(data, keys, contractName);
-  }  
-
-  buildEndpointResponse(restroomResult, res);
+  buildEndpointResponse(await getRestroomResult(contractName, data, keys), res);
 };
 
 export const {
