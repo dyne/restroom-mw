@@ -3,7 +3,7 @@ import { ZENCODE_DIR } from "@restroom-mw/utils";
 import { getHooks, hook, initHooks } from "./hooks";
 import { getConf, getData, getKeys, getMessage, getYml } from "./utils";
 import { zencode_exec } from "zenroom";
-import { addKeysToContext, storeContext, iterateAndEvaluateExpressions, updateContext, BLOCK_TYPE } from "./context";
+import { addKeysToContext, addDataToContext, storeContext, iterateAndEvaluateExpressions, updateContext, BLOCK_TYPE } from "./context";
 import { NextFunction, Request, Response } from "express";
 import * as yaml from "js-yaml";
 import { RestroomResult } from "./restroom-result";
@@ -82,10 +82,11 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     endpointData: any
   ): Promise<RestroomResult> {
     console.log("Current block is " + block);
-    //take it from endpointData using proper contract key!
     const singleContext: any = { keys: {}, data: {}};
-    addKeysToContext(singleContext, block);
+    
     storeContext(singleContext, block, ymlContent, context);
+    addKeysToContext(singleContext, block);
+    addDataToContext(singleContext, endpointData[block]);
     iterateAndEvaluateExpressions(context.get(block), context);
   
     if (ymlContent.blocks[block].type === BLOCK_TYPE.ZENROOM) {

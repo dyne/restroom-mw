@@ -28,6 +28,13 @@ export function updateContext(
 ) {
   context.set(block, singleContext);
 }
+export function addDataToContext(singleContext: any, data:any) {
+  if(data){
+    Object.keys(data).forEach((key: string) => {
+      singleContext.data[key] = data[key];
+    });
+  }
+}
 
 export function addKeysToContext(singleContext: any, block: string) {
   const extractedKeys = getDinamicKeys(block) || '{}';
