@@ -71,6 +71,14 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     return await evaluateBlock(firstBlock, context, ymlContent, data);
   }
 
+  const getBlockTypeOrFail = (block:any) : string =>{
+    if (Object.values(BLOCK_TYPE).includes(block?.type)) {
+      return block.type;
+    } else {
+      throw new TypeError(`[EXCEPTION: ${block?.type} is not a valid block type]`);
+    }
+  }
+
   async function evaluateBlock(
     block: string,
     context: Map<string, any>,
@@ -80,22 +88,29 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     console.log("Current block is " + block);
     const singleContext: any = { keys: {}, data: {}};
     
-    updateContextUsingYamlFields(singleContext, block, ymlContent, context);
-    addKeysToContext(singleContext, block);
-    addDataToContext(singleContext, endpointData[block]);
-    iterateAndEvaluateExpressions(context.get(block), context);
-  
-    if (ymlContent.blocks[block].type === BLOCK_TYPE.ZENROOM) {
-      const restroomResult: any = await callRestroom(singleContext.data, JSON.stringify(singleContext.keys), block);
-      if (restroomResult?.error) {
-        return await resolveRestroomResult(restroomResult);
+    try {
+      updateContextUsingYamlFields(singleContext, block, ymlContent, context);
+      addKeysToContext(singleContext, block);
+      addDataToContext(singleContext, endpointData[block]);
+      iterateAndEvaluateExpressions(context.get(block), context);
+      const blockType = getBlockTypeOrFail(ymlContent.blocks[block]);
+      if (BLOCK_TYPE.ZENROOM === blockType) {
+        const restroomResult: any = await callRestroom(singleContext.data, JSON.stringify(singleContext.keys), block);
+        if (restroomResult?.error) {
+          return await resolveRestroomResult(restroomResult);
+        }
+        singleContext.output = restroomResult.result;
+        updateContext(singleContext, context, block);
+      } else if (BLOCK_TYPE.OUTPUT === blockType) {
+        return await resolveRestroomResult({
+          result: singleContext?.output,
+          status: 200,
+        });
       }
-      singleContext.output = restroomResult.result;
-      updateContext(singleContext, context, block);
-    } else if (ymlContent.blocks[block].type === BLOCK_TYPE.OUTPUT) {
+    } catch (err){
       return await resolveRestroomResult({
-        result: singleContext.output,
-        status: 200,
+        error: err,
+        errorMessage: `[CHAIN EXECUTION ERROR FOR CONTRACT ${block}]`
       });
     }
     return await evaluateBlock(singleContext.next, context, ymlContent, data);
