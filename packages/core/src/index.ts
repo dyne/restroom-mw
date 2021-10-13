@@ -35,12 +35,14 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         res.status(404).send(mes);
       });
     } else{
-      res.status(500).json({
-        zenroom_errors: zenroom_errors,
-        result: zenroom_result,
-        exception: message,
-      });
-      if (e) next(e);
+      if (!res.headersSent) {
+        res.status(500).json({
+          zenroom_errors: zenroom_errors,
+          result: zenroom_result,
+          exception: message,
+        });
+        if (e) next(e);
+      }
     }
   };
 
@@ -132,7 +134,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
           outcome.error = e;
           outcome.errorMessage = `[ZENROOM EXECUTION ERROR FOR CONTRACT ${contractName}]`;
           next(e);
-          return outcome;
+          //return outcome;
         })
         .finally(async () => {
           await runHook(hook.FINISH, { res, outcome });
@@ -143,7 +145,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       outcome.errorMessage = `[UNEXPECTED EXCEPTION FOR CONTRACT ${contractName}]`;
       outcome.error = e;
       next(e);
-      return outcome;
+      //return outcome;
     }
     return outcome;
   }
