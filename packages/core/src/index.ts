@@ -86,7 +86,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     
     storeContext(singleContext, block, ymlContent, context);
     addKeysToContext(singleContext, block);
-    addDataToContext(singleContext, endpointData[block]);
+    addDataToContext(singleContext, data[block]);
     iterateAndEvaluateExpressions(context.get(block), context);
   
     if (ymlContent.blocks[block].type === BLOCK_TYPE.ZENROOM) {
@@ -145,7 +145,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       await runHook(hook.EXCEPTION, res);
       outcome.errorMessage = `[UNEXPECTED EXCEPTION FOR CONTRACT ${contractName}]`;
       outcome.error = e;
-      next(e);
+      //next(e);
       //return outcome;
     }
     return outcome;
