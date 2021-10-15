@@ -70,11 +70,12 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   };
 
   /**
-   * Centralized api response handling
+   * Function responsible to execute the chain
    * @param {ymlFile} string containing restroom result 
    * @param {data} object data object coming from endpoint 
+   * @param {keys} object keys object coming from file 
    */
-  async function executeChain(ymlFile: string, data: any): Promise<any> {
+  async function executeChain(ymlFile: string, data: any, keys:any): Promise<any> {
 
     const fileContents = getYml(ymlFile);
     const ymlContent: any = yaml.load(fileContents);
@@ -82,30 +83,35 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     const context: Map<string, any> = new Map<string, any>();
     const firstBlock: string = ymlContent.first;
   
-    return await evaluateBlock(firstBlock, context, ymlContent, data);
+    return await evaluateBlock(firstBlock, context, ymlContent, data, keys);
   }
 
-  const getBlockTypeOrFail = (block:any) : string =>{
-    if (Object.values(BLOCK_TYPE).includes(block?.type)) {
-      return block.type;
+  /**
+   * Function that checks that block type is in the defined enum
+   * @param {blockName} string containing restroom result 
+   */
+  const getBlockTypeOrFail = (blockName:any) : string =>{
+    if (Object.values(BLOCK_TYPE).includes(blockName?.type)) {
+      return blockName.type;
     } else {
-      throw new TypeError(`[EXCEPTION: ${block?.type} is not a valid block type]`);
+      throw new TypeError(`[EXCEPTION: ${blockName?.type} is not a valid block type]`);
     }
   }
 
   const getRestroomResult = async (contractName:string, data:any, keys:any) : Promise<RestroomResult> => {
     const isChain = contractName.split(".")[1] === 'chain' || false;
-    return isChain ? await executeChain(contractName.split(".")[0], data) : await callRestroom(data, keys, contractName)
+    return isChain ? await executeChain(contractName.split(".")[0], data, keys) : await callRestroom(data, keys, contractName)
   }
 
   async function evaluateBlock(
     block: string,
     context: Map<string, any>,
     ymlContent: any,
-    endpointData: any
+    endpointData: any,
+    fileKeys:any
   ): Promise<RestroomResult> {
     console.log("Current block is " + block);
-    const singleContext: any = { keys: {}, data: {}};
+    const singleContext: any = { keys: fileKeys, data: {}};
     
     try {
       updateContextUsingYamlFields(singleContext, block, ymlContent, context);
@@ -132,7 +138,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         errorMessage: `[CHAIN EXECUTION ERROR FOR CONTRACT ${block}]`
       });
     }
-    return await evaluateBlock(singleContext.next, context, ymlContent, data);
+    return await evaluateBlock(singleContext.next, context, ymlContent, data, keys);
   }
 
   async function callRestroom(data: string, keys: string, contractName:string): Promise<RestroomResult>{
