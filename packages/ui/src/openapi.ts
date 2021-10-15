@@ -2,7 +2,7 @@ import { HTTP_PORT, HTTPS_PORT, HOST } from "@restroom-mw/utils";
 import { ls, nl2br, preserveTabs } from "./utils";
 import { Zencode } from "@restroom-mw/zencode";
 import { OpenAPI } from "./interfaces";
-import { getYml } from "./utils";
+import { getYml } from "@restroom-mw/utils";
 import * as yaml from "js-yaml";
 
 let openapi: OpenAPI = {

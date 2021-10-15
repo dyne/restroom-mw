@@ -1,7 +1,7 @@
 import { Zencode } from "@restroom-mw/zencode";
-import { ZENCODE_DIR } from "@restroom-mw/utils";
+import { ZENCODE_DIR, getYml } from "@restroom-mw/utils";
 import { getHooks, hook, initHooks } from "./hooks";
-import { getConf, getData, getKeys, getMessage, getYml } from "./utils";
+import { getConf, getData, getKeys, getMessage } from "./utils";
 import { zencode_exec } from "zenroom";
 import { addKeysToContext, addDataToContext, updateContextUsingYamlFields, iterateAndEvaluateExpressions, updateContext, BLOCK_TYPE } from "./context";
 import { NextFunction, Request, Response } from "express";

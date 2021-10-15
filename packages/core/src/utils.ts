@@ -34,16 +34,6 @@ export const getConf = (contractName: string) => {
   }
 };
 
-export const getYml = (ymlName: string) => {
-  try {
-    return (
-      fs.readFileSync(`${ZENCODE_DIR}/${ymlName}.yml`).toString() || null
-    );
-  } catch (e) {
-    return null;
-  }
-};
-
 export const getContracts = async (baseUrl: string) => {
   const contracts = [];
   for await (const file of readdirp(ZENCODE_DIR, { fileFilter: "*.zen" })) {
