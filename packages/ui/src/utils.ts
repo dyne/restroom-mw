@@ -1,5 +1,6 @@
 import readdirp from "readdirp";
-
+import fs from "fs";
+import { ZENCODE_DIR } from "@restroom-mw/utils";
 /**
  * Reads the directory and list all the files
  * into an object with the full path
@@ -25,3 +26,13 @@ export const ls = async (root: string) => {
 export const nl2br = (str: string) => str.replace(/(?:\r\n|\r|\n)/g, "  \n");
 
 export const preserveTabs = (str: string) => str.replace(/ /g,'&nbsp;');
+
+export const getYml = (ymlName: string) => {
+  try {
+    return (
+      fs.readFileSync(`${ZENCODE_DIR}/${ymlName}.yml`).toString() || null
+    );
+  } catch (e) {
+    return null;
+  }
+};

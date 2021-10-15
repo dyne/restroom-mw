@@ -32,6 +32,7 @@ export interface OpenAPI {
     }
   ];
   schemes: string[];
+  components: any;
 }
 
 export interface MiddlewareUIOption extends SwaggerUiOptions {

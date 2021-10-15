@@ -124,7 +124,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   async function callRestroom(data: string, keys: string, contractName:string): Promise<RestroomResult>{
     
     let conf = getConf(contractName);
-    let outcome: RestroomResult = {};
+    let restroomResult: RestroomResult = {};
 
     try {
       await runHook(hook.INIT, {});
@@ -138,34 +138,34 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         .then(async ({ result }) => {
           zenroom_result = result;
           result = JSON.parse(result);
-          await runHook(hook.SUCCESS, { result, zencode, zenroom_errors, outcome });
-          outcome.result = result;
-          outcome.status = 200;
+          await runHook(hook.SUCCESS, { result, zencode, zenroom_errors, outcome: restroomResult });
+          restroomResult.result = result;
+          restroomResult.status = 200;
         })
         .then(async (json) => {
-          await runHook(hook.AFTER, { json, zencode, outcome });
+          await runHook(hook.AFTER, { json, zencode, outcome: restroomResult });
           next();
         })
         .catch(async (e) => {
           zenroom_errors = e;
-          await runHook(hook.ERROR, { zenroom_errors, zencode, outcome });
-          outcome.error = e;
-          outcome.errorMessage = `[ZENROOM EXECUTION ERROR FOR CONTRACT ${contractName}]`;
+          await runHook(hook.ERROR, { zenroom_errors, zencode, outcome: restroomResult });
+          restroomResult.error = e;
+          restroomResult.errorMessage = `[ZENROOM EXECUTION ERROR FOR CONTRACT ${contractName}]`;
           next(e);
           //return outcome;
         })
         .finally(async () => {
-          await runHook(hook.FINISH, { res, outcome });
+          await runHook(hook.FINISH, { res, outcome: restroomResult });
           next();
         });
     } catch (e) {
       await runHook(hook.EXCEPTION, res);
-      outcome.errorMessage = `[UNEXPECTED EXCEPTION FOR CONTRACT ${contractName}]`;
-      outcome.error = e;
+      restroomResult.errorMessage = `[UNEXPECTED EXCEPTION FOR CONTRACT ${contractName}]`;
+      restroomResult.error = e;
       //next(e);
       //return outcome;
     }
-    return outcome;
+    return restroomResult;
   }
 
   let zenroom_result: string, json: string, zenroom_errors: string;

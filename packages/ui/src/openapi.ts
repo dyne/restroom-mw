@@ -2,6 +2,8 @@ import { HTTP_PORT, HTTPS_PORT, HOST } from "@restroom-mw/utils";
 import { ls, nl2br, preserveTabs } from "./utils";
 import { Zencode } from "@restroom-mw/zencode";
 import { OpenAPI } from "./interfaces";
+import { getYml } from "./utils";
+import * as yaml from "js-yaml";
 
 let openapi: OpenAPI = {
   openapi: "3.0.3",
@@ -40,6 +42,9 @@ To add new endpoints you should add new zencode contracts in the directory.
   ],
   schemes: ["http"],
   paths: {},
+  components:{
+    schemas: {},
+  },
 };
 
 /**
@@ -50,24 +55,6 @@ To add new endpoints you should add new zencode contracts in the directory.
 export const generate = async (rootPath: string) => {
   const paths = await ls(rootPath);
   const mime = ["application/json"];
-  const requestBody = {
-    content: {
-      "application/json": {
-        schema: {
-          properties: {
-            data: {
-              description: "DATA field",
-              type: "object",
-            },
-            keys: {
-              description: "KEYS field",
-              type: "object",
-            },
-          },
-        },
-      },
-    },
-  };
   const responses = {
     200: {
       description: "Successful Response",
@@ -90,11 +77,47 @@ export const generate = async (rootPath: string) => {
   openapi.paths = {};
   for (const path in paths) {
 
+    const requestBody = {
+      content: {
+        "application/json": {
+          schema: {
+            properties: {
+              data: {
+                description: "DATA field",
+                type: "object",
+              },
+              keys: {
+                description: "KEYS field",
+                type: "object",
+              },
+            },
+          },
+        },
+      },
+    };
+
     const contract = Zencode.fromPath(paths[path].fullPath);
     const isChain = paths[path].type == 'yml' ? true : false;
     const description = isChain ? nl2br(preserveTabs(contract.content)) : nl2br(contract.content);
     const tag = isChain ? '⛓️ chain of contracts' : `🔖 ${contract.tag}`;
     const exposedPath = isChain ? `${path}.chain` : path;
+
+    if(isChain){
+      const fileContents = getYml(path);
+      const ymlContent: any = yaml.load(fileContents);
+      let newData : any = {};
+      let properties : any = {properties:{}};
+      for(const block in ymlContent?.blocks){
+        newData[block] = {
+          description: `${block} field`,
+          type: "object",
+        }
+        properties.properties[block] = {};
+        properties.properties[block]['$ref'] = `#/components/schemas/${block}`;
+      }
+      requestBody.content["application/json"].schema.properties.data = properties;
+      openapi.components.schemas = newData;
+    }
 
     let endpoint = {
       post: {
