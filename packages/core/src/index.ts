@@ -75,7 +75,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
    * @param {data} object data object coming from endpoint 
    * @param {keys} object keys object coming from file 
    */
-  async function executeChain(ymlFile: string, data: any, keys:any): Promise<any> {
+  async function executeChain(ymlFile: string, data: any): Promise<any> {
 
     const fileContents = getYml(ymlFile);
     const ymlContent: any = yaml.load(fileContents);
@@ -83,7 +83,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     const context: Map<string, any> = new Map<string, any>();
     const firstBlock: string = ymlContent.first;
   
-    return await evaluateBlock(firstBlock, context, ymlContent, data, keys);
+    return await evaluateBlock(firstBlock, context, ymlContent, data);
   }
 
   /**
@@ -100,25 +100,24 @@ export default async (req: Request, res: Response, next: NextFunction) => {
 
   const getRestroomResult = async (contractName:string, data:any, keys:any) : Promise<RestroomResult> => {
     const isChain = contractName.split(".")[1] === 'chain' || false;
-    return isChain ? await executeChain(contractName.split(".")[0], data, keys) : await callRestroom(data, keys, contractName)
+    return isChain ? await executeChain(contractName.split(".")[0], data) : await callRestroom(data, keys, contractName)
   }
 
   async function evaluateBlock(
     block: string,
     context: Map<string, any>,
     ymlContent: any,
-    endpointData: any,
-    fileKeys:any
+    endpointData: any
   ): Promise<RestroomResult> {
     console.log("Current block is " + block);
+    const fileKeys = getKeys(block);
+
     const singleContext: any = { keys: fileKeys || {}, data: {}};
-    
     try {
       console.log(context);
       updateContextUsingYamlFields(singleContext, block, ymlContent, context);
       addKeysToContext(singleContext, block);
       addDataToContext(singleContext, endpointData[block]);
-      console.log(context);
       iterateAndEvaluateExpressions(context.get(block), context);
       const blockType = getBlockTypeOrFail(ymlContent.blocks[block]);
       if (BLOCK_TYPE.ZENROOM === blockType) {
