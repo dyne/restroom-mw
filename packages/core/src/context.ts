@@ -8,51 +8,80 @@ export enum BLOCK_TYPE {
   OUTPUT = "output",
 }
 
-export const iterateAndEvaluateExpressions = (obj: any, context: Map<string, any>) => {
-  Object.keys(obj).forEach((key: string) => {
-    if (typeof obj[key] === "string") {
-      if (obj[key].includes(CONTEXT_PLACEHOLDER)) {
-        const evaluate = new Function("obj", "context", "return " + obj[key]);
-        obj[key] = evaluate(obj[key], context);
+/**
+ * This function is responsible for evaluating and replacing all the context placeholder 
+ * @param {singleBlockObject} object containing the placeholders
+ * @param {context} object to resolve the references
+ */
+export const iterateAndEvaluateExpressions = (singleBlockObject: any, context: Map<string, any>) => {
+  Object.keys(singleBlockObject).forEach((key: string) => {
+    if (typeof singleBlockObject[key] === "string") {
+      if (singleBlockObject[key].includes(CONTEXT_PLACEHOLDER)) {
+        const evaluate = new Function("obj", "context", "return " + singleBlockObject[key]);
+        singleBlockObject[key] = evaluate(singleBlockObject[key], context);
       }
-    } else if (typeof obj[key] === "object") {
-      iterateAndEvaluateExpressions(obj[key], context);
+    } else if (typeof singleBlockObject[key] === "object") {
+      iterateAndEvaluateExpressions(singleBlockObject[key], context);
     }
   });
 };
 
+/**
+ * This function is responsible to set the global context 
+ * @param {singleBlockObject} object context of a single block
+ * @param {globalContext} object global context
+ * @param {blockName} string block name
+ */
 export function updateContext(
-  singleContext: any,
-  context: Map<string, any>,
-  block: string
+  singleBlockContext: any,
+  globalContext: Map<string, any>,
+  blockName: string
 ) {
-  context.set(block, singleContext);
+  globalContext.set(blockName, singleBlockContext);
 }
-export function addDataToContext(singleContext: any, data:any) {
+
+/**
+ * This function is responsible to add data into single block context 
+ * @param {singleBlockContext} object context of a single block
+ * @param {data} object data for the contract
+ */
+export function addDataToContext(singleBlockContext: any, data:any) {
   if(data){
     Object.keys(data).forEach((key: string) => {
-      singleContext.data[key] = data[key];
+      singleBlockContext.data[key] = data[key];
     });
   }
 }
 
-export function addKeysToContext(singleContext: any, block: string) {
-  const extractedKeys = getDinamicKeys(block) || '{}';
+/**
+ * This function is responsible to add data into single block context 
+ * @param {singleBlockContext} object context of a single block
+ * @param {blockName} string block name
+ */
+export function addKeysToContext(singleBlockContext: any, blockName: string) {
+  const extractedKeys = getDinamicKeys(blockName) || '{}';
   const keys = JSON.parse(extractedKeys);
   Object.keys(keys).forEach((key: string) => {
-    singleContext.keys[key] = keys[key];
+    singleBlockContext.keys[key] = keys[key];
   });
 }
 
+/**
+ * This function is responsible to add data into single block context 
+ * @param {singleBlockContext} object context of a single block
+ * @param {blockName} string block name
+ * @param {ymlContent} object containing yml informations 
+ * @param {globalContext} object global context
+ */
 export function updateContextUsingYamlFields(
-  singleContext: any,
-  block: string,
+  singleBlockContext: any,
+  blockName: string,
   ymlContent: any,
-  context: Map<string, any>
+  globalContext: Map<string, any>
 ) {
-  Object.keys(ymlContent.blocks[block]).forEach((key: string) => {
-    singleContext[key] = ymlContent.blocks[block][key];
+  Object.keys(ymlContent.blocks[blockName]).forEach((key: string) => {
+    singleBlockContext[key] = ymlContent.blocks[blockName][key];
   });
 
-  updateContext(singleContext, context, block);
+  updateContext(singleBlockContext, globalContext, blockName);
 }

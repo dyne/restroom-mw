@@ -26,7 +26,11 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       sendError(`[EXCEPTION IN REGISTERED HOOK ${hook}]`, e);
     }
   };
-
+  /**
+   * Centralized api error handling
+   * @param {subject} string subject 
+   * @param {e} NodeJS.ErrnoException error
+   */
   const sendError = (subject: string, e: NodeJS.ErrnoException = null) => {
     const exception = e ? e.stack || e.message : "";
     const message = subject + "\n\n\n" + exception;
@@ -46,6 +50,11 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     }
   };
 
+  /**
+   * Centralized api response handling
+   * @param {restroomResult} RestroomResult containing restroom result 
+   * @param {res} Response endpoint response
+   */
   const buildEndpointResponse = (restroomResult: RestroomResult, res: Response) => {
     if (restroomResult?.error) {
       sendError(restroomResult.errorMessage, restroomResult.error);
@@ -60,6 +69,11 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     });
   };
 
+  /**
+   * Centralized api response handling
+   * @param {ymlFile} string containing restroom result 
+   * @param {data} object data object coming from endpoint 
+   */
   async function executeChain(ymlFile: string, data: any): Promise<any> {
 
     const fileContents = getYml(ymlFile);

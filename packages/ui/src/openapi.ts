@@ -123,7 +123,14 @@ export const generate = async (rootPath: string) => {
 
   return openapi;
 };
-function enrichRequestBody(isChain: boolean, path: string, requestBody: { content: { "application/json": { schema: { properties: { data: { description: string; type: string; }; keys: { description: string; type: string; }; }; }; }; }; }) {
+
+/**
+ * This function is responsible to enrich the data object information with contract names for OpenAPI definition 
+ * @param {isChain} boolean discriminate if current contract is chain
+ * @param {path} string path string
+ * @param {requestBody} object OpenAPI requestBody definition
+ */
+function enrichRequestBody(isChain: boolean, path: string, requestBody:any) {
   if (isChain) {
     const fileContents = getYml(path);
     const ymlContent: any = yaml.load(fileContents);

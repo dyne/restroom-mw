@@ -1,6 +1,4 @@
 import readdirp from "readdirp";
-import fs from "fs";
-import { ZENCODE_DIR } from "@restroom-mw/utils";
 /**
  * Reads the directory and list all the files
  * into an object with the full path
