@@ -139,7 +139,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         errorMessage: `[CHAIN EXECUTION ERROR FOR CONTRACT ${block}]`
       });
     }
-    return await evaluateBlock(singleContext.next, context, ymlContent, data, keys);
+    return await evaluateBlock(singleContext.next, context, ymlContent, data);
   }
 
   async function callRestroom(data: string, keys: string, contractName:string): Promise<RestroomResult>{
