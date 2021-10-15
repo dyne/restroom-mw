@@ -111,12 +111,14 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     fileKeys:any
   ): Promise<RestroomResult> {
     console.log("Current block is " + block);
-    const singleContext: any = { keys: fileKeys, data: {}};
+    const singleContext: any = { keys: fileKeys || {}, data: {}};
     
     try {
+      console.log(context);
       updateContextUsingYamlFields(singleContext, block, ymlContent, context);
       addKeysToContext(singleContext, block);
       addDataToContext(singleContext, endpointData[block]);
+      console.log(context);
       iterateAndEvaluateExpressions(context.get(block), context);
       const blockType = getBlockTypeOrFail(ymlContent.blocks[block]);
       if (BLOCK_TYPE.ZENROOM === blockType) {

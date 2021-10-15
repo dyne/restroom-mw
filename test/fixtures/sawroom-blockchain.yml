@@ -1,0 +1,15 @@
+zenchain: 1.0
+name: sawroom-blockchain
+first: sawroom_store
+blocks:
+  sawroom_store:
+    type: zenroom-contract
+    next: sawroom_read
+  sawroom_read:
+    type: zenroom-contract
+    keys: 
+      batchId: context.get('sawroom_store').output.my128Tag
+    next: result
+  result:
+    type: output
+    output: context.get("sawroom_read").output
