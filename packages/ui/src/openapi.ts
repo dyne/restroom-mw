@@ -102,22 +102,7 @@ export const generate = async (rootPath: string) => {
     const tag = isChain ? '⛓️ chain of contracts' : `🔖 ${contract.tag}`;
     const exposedPath = isChain ? `${path}.chain` : path;
 
-    if(isChain){
-      const fileContents = getYml(path);
-      const ymlContent: any = yaml.load(fileContents);
-      let newData : any = {};
-      let properties : any = {properties:{}};
-      for(const block in ymlContent?.blocks){
-        newData[block] = {
-          description: `${block} field`,
-          type: "object",
-        }
-        properties.properties[block] = {};
-        properties.properties[block]['$ref'] = `#/components/schemas/${block}`;
-      }
-      requestBody.content["application/json"].schema.properties.data = properties;
-      openapi.components.schemas = newData;
-    }
+    enrichRequestBody(isChain, path, requestBody);
 
     let endpoint = {
       post: {
@@ -138,3 +123,22 @@ export const generate = async (rootPath: string) => {
 
   return openapi;
 };
+function enrichRequestBody(isChain: boolean, path: string, requestBody: { content: { "application/json": { schema: { properties: { data: { description: string; type: string; }; keys: { description: string; type: string; }; }; }; }; }; }) {
+  if (isChain) {
+    const fileContents = getYml(path);
+    const ymlContent: any = yaml.load(fileContents);
+    let newData: any = {};
+    let properties: any = { properties: {} };
+    for (const block in ymlContent?.blocks) {
+      newData[block] = {
+        description: `${block} field`,
+        type: "object",
+      };
+      properties.properties[block] = {};
+      properties.properties[block]['$ref'] = `#/components/schemas/${block}`;
+    }
+    requestBody.content["application/json"].schema.properties.data = properties;
+    openapi.components.schemas = newData;
+  }
+}
+
