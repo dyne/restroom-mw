@@ -35,6 +35,7 @@ test("getContracts works correctly", async (t) => {
   const contracts = await getContracts("/");
   t.log(contracts);
   t.deepEqual(contracts, [
+    '/broken.chain',
     '/broken',
     '/contract_keys',
     '/create-keypair',
@@ -47,7 +48,9 @@ test("getContracts works correctly", async (t) => {
     '/http-test',
     '/keygen',
     '/random',
+    '/sawroom-read-secret-message',
     '/sawroom-save-data',
+    '/sawroom-store-secret-message',
     '/sawroom_ask_balance',
     '/sawroom_context_id',
     '/sawroom_deposit',
@@ -59,6 +62,7 @@ test("getContracts works correctly", async (t) => {
     '/sawroom_retrieve',
     '/sawroom_store',
     '/sawroom_store_output',
+    '/single-random',
     '/verify-keypair',
   ]);
 });

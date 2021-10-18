@@ -1,12 +1,15 @@
 zenchain: 1.0
 name: sawroom-blockchain
-first: sawroom-store-secret-message
+first: single-random
 blocks:
+  single-random:
+    type: zenroom-contract
+    next: sawroom-store-secret-message
   sawroom-store-secret-message:
     type: zenroom-contract
     data:
       password: myVerySecretPassword
-      message: Dear Bob, your name is too short, goodbye - Alice.
+      message: context.get('single-random').output.array[0]
     next: timeout-input
   timeout-input:
     type: wait
