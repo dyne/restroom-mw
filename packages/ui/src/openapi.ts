@@ -43,7 +43,7 @@ To add new endpoints you should add new zencode contracts in the directory.
   schemes: ["http"],
   paths: {},
   components:{
-    schemas: {},
+    schemas: {}
   },
 };
 
@@ -134,10 +134,9 @@ function enrichRequestBody(isChain: boolean, path: string, requestBody:any) {
   if (isChain) {
     const fileContents = getYml(path);
     const ymlContent: any = yaml.load(fileContents);
-    let newData: any = {};
     let properties: any = { properties: {} };
     for (const block in ymlContent?.blocks) {
-      newData[block] = {
+      openapi.components.schemas[block] = {
         description: `${block} field`,
         type: "object",
       };
@@ -145,7 +144,5 @@ function enrichRequestBody(isChain: boolean, path: string, requestBody:any) {
       properties.properties[block]['$ref'] = `#/components/schemas/${block}`;
     }
     requestBody.content["application/json"].schema.properties.data = properties;
-    openapi.components.schemas = newData;
   }
 }
-
