@@ -34,20 +34,20 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   const sendError = (subject: string, e: NodeJS.ErrnoException = null) => {
     const exception = e ? e.stack || e.message : "";
     const message = subject + "\n\n\n" + exception;
-    if (e.code === "ENOENT") {
+   if (e.code === "ENOENT") {
       getMessage(req).then((mes)=>{
         res.status(404).send(mes);
       });
     } else{
-      if (!res.headersSent) {
+    if (!res.headersSent) {
         res.status(500).json({
           zenroom_errors: zenroom_errors,
           result: zenroom_result,
           exception: message,
         });
         if (e) next(e);
-      }
     }
+   }
   };
 
   /**
@@ -112,9 +112,9 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     console.log("Current block is " + block);
     const fileKeys = getKeys(block);
 
-    const singleContext: any = { keys: fileKeys || {}, data: {}};
+    const singleContext: any = { keys: fileKeys ? JSON.parse(fileKeys) : {}, data: {}};
     try {
-      console.log(context);
+
       updateContextUsingYamlFields(singleContext, block, ymlContent, context);
       addKeysToContext(singleContext, block);
       addDataToContext(singleContext, endpointData[block]);
@@ -146,7 +146,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     
     let conf = getConf(contractName);
     let restroomResult: RestroomResult = {};
-
+    
     try {
       await runHook(hook.INIT, {});
       const zencode = getContract(contractName);
@@ -165,19 +165,19 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         })
         .then(async (json) => {
           await runHook(hook.AFTER, { json, zencode, outcome: restroomResult });
-          next();
+          //next();
         })
         .catch(async (e) => {
           zenroom_errors = e;
           await runHook(hook.ERROR, { zenroom_errors, zencode, outcome: restroomResult });
           restroomResult.error = e;
           restroomResult.errorMessage = `[ZENROOM EXECUTION ERROR FOR CONTRACT ${contractName}]`;
-          next(e);
+          //next(e);
           //return outcome;
         })
         .finally(async () => {
           await runHook(hook.FINISH, { res, outcome: restroomResult });
-          next();
+          //next();
         });
     } catch (e) {
       await runHook(hook.EXCEPTION, res);

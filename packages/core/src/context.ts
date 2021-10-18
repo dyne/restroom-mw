@@ -80,7 +80,13 @@ export function updateContextUsingYamlFields(
   globalContext: Map<string, any>
 ) {
   Object.keys(ymlContent.blocks[blockName]).forEach((key: string) => {
-    singleBlockContext[key] = ymlContent.blocks[blockName][key];
+    if((key === 'keys' || key === 'data') && typeof ymlContent.blocks[blockName][key] === "object" ){
+      Object.keys(ymlContent.blocks[blockName][key]).forEach((keysInObject: string) => {
+        singleBlockContext[key][keysInObject] = ymlContent.blocks[blockName][key][keysInObject];
+      })
+    } else {
+      singleBlockContext[key] = ymlContent.blocks[blockName][key];
+    }
   });
 
   updateContext(singleBlockContext, globalContext, blockName);
