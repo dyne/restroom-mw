@@ -6,6 +6,7 @@ export enum BLOCK_TYPE {
   ZENROOM = "zenroom-contract",
   INPUT = "input",
   OUTPUT = "output",
+  WAIT = "wait",
 }
 
 /**

@@ -1,0 +1,23 @@
+zenchain: 1.0
+name: sawroom-blockchain
+first: sawroom-store-secret-message
+blocks:
+  sawroom-store-secret-message:
+    type: zenroom-contract
+    data:
+      password: myVerySecretPassword
+      message: Dear Bob, your name is too short, goodbye - Alice.
+    next: timeout-input
+  timeout-input:
+    type: wait
+    milliseconds: 1000
+    next: sawroom-read-secret-message
+  sawroom-read-secret-message:
+    type: zenroom-contract
+    keys: 
+      password: context.get('sawroom-store-secret-message').data.password
+      transactionId: context.get('sawroom-store-secret-message').output.transactionId
+    next: result
+  result:
+    type: output
+    output: context.get("sawroom-read-secret-message").output

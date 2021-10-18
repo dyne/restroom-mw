@@ -121,6 +121,8 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       iterateAndEvaluateExpressions(context.get(block), context);
       const blockType = getBlockTypeOrFail(ymlContent.blocks[block]);
       if (BLOCK_TYPE.ZENROOM === blockType) {
+        console.log(singleContext.data)
+        console.log(singleContext.keys)
         const restroomResult: any = await callRestroom(singleContext.data, JSON.stringify(singleContext.keys), block);
         if (restroomResult?.error) {
           return await resolveRestroomResult(restroomResult);
@@ -131,6 +133,10 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         return await resolveRestroomResult({
           result: singleContext?.output,
           status: 200,
+        });
+      } else if (BLOCK_TYPE.WAIT === blockType) {
+        await new Promise(resolve => {
+          setTimeout(resolve, singleContext?.milliseconds || 1000)
         });
       }
     } catch (err){
@@ -146,7 +152,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     
     let conf = getConf(contractName);
     let restroomResult: RestroomResult = {};
-    
+
     try {
       await runHook(hook.INIT, {});
       const zencode = getContract(contractName);
