@@ -55,7 +55,7 @@ export function addDataToContext(singleBlockContext: any, data:any) {
 }
 
 /**
- * This function is responsible to add data into single block context 
+ * This function is responsible to add keys into single block context from .dkeys file
  * @param {singleBlockContext} object context of a single block
  * @param {blockName} string block name
  */
