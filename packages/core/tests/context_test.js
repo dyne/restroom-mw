@@ -1,11 +1,5 @@
-import test from "ava";
-import bodyParser from "body-parser";
-import express from "express";
-import request from "supertest";
-import { getHooks, initHooks } from "../dist/hooks";
-
+import test from "ava"
 process.env.ZENCODE_DIR = "./test/fixtures";
-const zencode = require("../dist").default;
 
 const {
   iterateAndEvaluateExpressions,
