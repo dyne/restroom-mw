@@ -11,18 +11,18 @@ const {
 
 test("iterateAndEvaluateExpressions works correctly", (t) => {
 
-  const singleBlockObject = { result: 'context.get("something").output'};
+  const singleBlockObject = { result: 'contract.get("something").output'};
   const context = new Map;
   context.set("something", {output: "myoutput"});
 
   iterateAndEvaluateExpressions(singleBlockObject, context);
-  t.is(singleBlockObject.result, context.get('something').output);
+  t.is(singleBlockObject.result, contract.get('something').output);
 });
 
 test("iterateAndEvaluateExpressions throws exception", (t) => {
 
   const error = t.throws(() => {
-    const singleBlockObject = { result: 'context.get("something").output'};
+    const singleBlockObject = { result: 'contract.get("something").output'};
     const context = new Map;
     context.set("somethin", {output: "myoutput"});
 
@@ -42,7 +42,7 @@ test("updateContext works correctly", (t) => {
   const blockName = "blockName";
 
   updateContext(singleBlockContext, globalContext, blockName);
-  t.is(globalContext.get('blockName'), singleBlockContext);
+  t.is(globalcontract.get('blockName'), singleBlockContext);
 });
 
 test("updateContext works correctly with more than one contract", (t) => {
@@ -62,8 +62,8 @@ test("updateContext works correctly with more than one contract", (t) => {
 
   updateContext(secondSingleBlockContext, globalContext, secondBlockName);
 
-  t.is(globalContext.get('firstBlockName'), firstSingleBlockContext);
-  t.is(globalContext.get('secondBlockName'), secondSingleBlockContext);
+  t.is(globalcontract.get('firstBlockName'), firstSingleBlockContext);
+  t.is(globalcontract.get('secondBlockName'), secondSingleBlockContext);
 });
 
 test("addDataToContext works correctly", (t) => {
@@ -109,7 +109,7 @@ test("updateContextUsingYamlFields works correctly", (t) => {
       "second-contract":{
         type: "zencode",
         keys: {
-          changeme: "context.get('first-contract').data.userData"
+          changeme: "contract.get('first-contract').data.userData"
         }
       }
     }
@@ -118,5 +118,5 @@ test("updateContextUsingYamlFields works correctly", (t) => {
 
   updateContextUsingYamlFields(singleBlockContext, "first-contract", ymlContent, globalContext);
   updateContextUsingYamlFields(singleBlockContext, "second-contract", ymlContent, globalContext);
-  t.deepEqual(singleBlockContext.keys, {"changeme":"context.get(\'first-contract\').data.userData"});
+  t.deepEqual(singleBlockContext.keys, {"changeme":"contract.get(\'first-contract\').data.userData"});
 });

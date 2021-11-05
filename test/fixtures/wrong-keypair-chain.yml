@@ -14,5 +14,5 @@ blocks:
     type: zencode
     fileKeys: verify-keypair-input-wrong
     output: 
-      isSameKeypair: context.get("create-keypair").output[context.get("create-keypair").keys.username].keypair.public_key === context.get("verify-keypair").output[context.get("verify-keypair").keys.username].keypair.public_key
-      createKeypairOutput: context.get("create-keypair").output
+      isSameKeypair: contract.get("create-keypair").output[contract.get("create-keypair").keys.username].keypair.public_key === contract.get("verify-keypair").output[contract.get("verify-keypair").keys.username].keypair.public_key
+      createKeypairOutput: contract.get("create-keypair").output

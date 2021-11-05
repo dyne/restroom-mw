@@ -1,6 +1,6 @@
 import { getKeys } from "./utils";
 
-const CONTEXT_PLACEHOLDER = "context.get(";
+const CONTEXT_PLACEHOLDER = "contract.get(";
 
 export enum BLOCK_TYPE {
   ZENCODE = "zencode",
@@ -11,18 +11,18 @@ export enum BLOCK_TYPE {
 /**
  * This function is responsible for evaluating and replacing all the context placeholder 
  * @param {singleBlockObject} object containing the placeholders
- * @param {context} object to resolve the references
+ * @param {contract} object to resolve the references
  * @param {outputFilter} boolean indicates if output should be resolved
  */
-export const iterateAndEvaluateExpressions = (singleBlockObject: any, context: Map<string, any>) => {
+export const iterateAndEvaluateExpressions = (singleBlockObject: any, contract: Map<string, any>) => {
   Object.keys(singleBlockObject).filter(key => key !=="output").forEach((key: string) => {
     if (typeof singleBlockObject[key] === "string") {
       if (singleBlockObject[key].includes(CONTEXT_PLACEHOLDER)) {
-        const evaluate = new Function("obj", "context", "return " + singleBlockObject[key]);
-        singleBlockObject[key] = evaluate(singleBlockObject[key], context);
+        const evaluate = new Function("obj", "contract", "return " + singleBlockObject[key]);
+        singleBlockObject[key] = evaluate(singleBlockObject[key], contract);
       }
     } else if (typeof singleBlockObject[key] === "object") {
-      iterateAndEvaluateExpressions(singleBlockObject[key], context);
+      iterateAndEvaluateExpressions(singleBlockObject[key], contract);
     }
   });
 };
