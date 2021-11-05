@@ -107,7 +107,7 @@ test("updateContextUsingYamlFields works correctly", (t) => {
         next:"second-contract"
       },
       "second-contract":{
-        type: "zenroom-contract",
+        type: "zencode",
         keys: {
           changeme: "context.get('first-contract').data.userData"
         }

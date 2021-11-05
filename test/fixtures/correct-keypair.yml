@@ -9,7 +9,7 @@ blocks:
         email: john@doe.com
     next: create-pbkdf
   create-pbkdf:
-    type: zenroom-contract
+    type: zencode
     next: "context.get('user-data').data.userData.email == 'john@doe.com' ? 'first-user-answers' : 'create-pbkdf'"
   first-user-answers:
     type: input
@@ -21,7 +21,7 @@ blocks:
       question5: "Gervasoni"
     next: create-keypair
   create-keypair:
-    type: zenroom-contract
+    type: zencode
     next: second-user-answers
   second-user-answers:
     type: input
@@ -33,7 +33,7 @@ blocks:
       question5: "Gervasoni"
     next: verify-keypair
   verify-keypair:
-    type: zenroom-contract
+    type: zencode
     next: result
   result:
     type: output

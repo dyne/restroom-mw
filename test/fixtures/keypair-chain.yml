@@ -1,25 +1,17 @@
 zenchain: 1.0
 name: correct-keypair
-first: user-data
+start: create-pbkdf
 blocks:
-  user-data:
-    type: input
-    next: create-pbkdf
   create-pbkdf:
-    type: zenroom-contract
-    next: "context.get('user-data').data.userData.email == 'john@doe.com' ? 'first-user-answers' : 'create-pbkdf'"
-  first-user-answers:
-    type: input
+    type: zencode
     next: create-keypair
+    fileKeys: create-pbkdf-input
   create-keypair:
-    type: zenroom-contract
-    next: second-user-answers
-  second-user-answers:
-    type: input
+    type: zencode
     next: verify-keypair
+    fileKeys: create-keypair-input
   verify-keypair:
-    type: zenroom-contract
-    next: result
-  result:
-    type: output
-    output: context.get("create-keypair").output[context.get("create-keypair").keys.username].keypair.public_key === context.get("verify-keypair").output[context.get("verify-keypair").keys.username].keypair.public_key
+    type: zencode
+    fileKeys: verify-keypair-input
+    output: 
+      isSameKeypair: context.get("create-keypair").output[context.get("create-keypair").keys.username].keypair.public_key === context.get("verify-keypair").output[context.get("verify-keypair").keys.username].keypair.public_key

@@ -6,5 +6,7 @@
         }
     },
     "theBackendPassword": "myVerySecretPassword",
-    "userData": "context.get('user-data').data.userData"
+    "userData": {
+        "email": "john@doe.com"
+    }
 }

@@ -1,21 +1,21 @@
-import { getDinamicKeys } from "./utils";
+import { getKeys } from "./utils";
 
 const CONTEXT_PLACEHOLDER = "context.get(";
 
 export enum BLOCK_TYPE {
-  ZENROOM = "zenroom-contract",
-  INPUT = "input",
-  OUTPUT = "output",
+  ZENCODE = "zencode",
   WAIT = "wait",
 }
+
 
 /**
  * This function is responsible for evaluating and replacing all the context placeholder 
  * @param {singleBlockObject} object containing the placeholders
  * @param {context} object to resolve the references
+ * @param {outputFilter} boolean indicates if output should be resolved
  */
 export const iterateAndEvaluateExpressions = (singleBlockObject: any, context: Map<string, any>) => {
-  Object.keys(singleBlockObject).forEach((key: string) => {
+  Object.keys(singleBlockObject).filter(key => key !=="output").forEach((key: string) => {
     if (typeof singleBlockObject[key] === "string") {
       if (singleBlockObject[key].includes(CONTEXT_PLACEHOLDER)) {
         const evaluate = new Function("obj", "context", "return " + singleBlockObject[key]);
@@ -55,12 +55,12 @@ export function addDataToContext(singleBlockContext: any, data:any) {
 }
 
 /**
- * This function is responsible to add keys into single block context from .dkeys file
+ * This function is responsible to add keys into single block context from selected .keys file
  * @param {singleBlockContext} object context of a single block
  * @param {blockName} string block name
  */
-export function addKeysToContext(singleBlockContext: any, blockName: string) {
-  const extractedKeys = getDinamicKeys(blockName) || '{}';
+export function addKeysToContext(singleBlockContext: any) {
+  const extractedKeys = getKeys(singleBlockContext?.fileKeys) || '{}';
   const keys = JSON.parse(extractedKeys);
   Object.keys(keys).forEach((key: string) => {
     singleBlockContext.keys[key] = keys[key];
@@ -81,7 +81,7 @@ export function updateContextUsingYamlFields(
   globalContext: Map<string, any>
 ) {
   Object.keys(ymlContent.blocks[blockName]).forEach((key: string) => {
-    if((key === 'keys' || key === 'data') && typeof ymlContent.blocks[blockName][key] === "object" ){
+    if((key === 'keys' || key === 'data' || key === 'output') && typeof ymlContent.blocks[blockName][key] === "object" ){
       Object.keys(ymlContent.blocks[blockName][key]).forEach((keysInObject: string) => {
         singleBlockContext[key][keysInObject] = ymlContent.blocks[blockName][key][keysInObject];
       })

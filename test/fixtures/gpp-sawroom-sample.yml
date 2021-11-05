@@ -1,26 +1,18 @@
 zenchain: 1.0
 name: sawroom-blockchain
-first: single-random
+start: single-random
 blocks:
   single-random:
-    type: zenroom-contract
+    type: zencode
     next: sawroom-store-secret-message
   sawroom-store-secret-message:
-    type: zenroom-contract
-    data:
-      password: myVerySecretPassword
-      message: context.get('single-random').output.array[0]
+    type: zencode
+    fileKeys: sawroom-store-secret-message-input
     next: timeout-input
   timeout-input:
     type: wait
     milliseconds: 1000
     next: sawroom-read-secret-message
   sawroom-read-secret-message:
-    type: zenroom-contract
-    keys: 
-      password: context.get('sawroom-store-secret-message').data.password
-      transactionId: context.get('sawroom-store-secret-message').output.transactionId
-    next: result
-  result:
-    type: output
-    output: context.get("sawroom-read-secret-message").output
+    type: zencode
+    fileKeys: sawroom-read-secret-message-input

@@ -81,9 +81,9 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     const ymlContent: any = yaml.load(fileContents);
   
     const context: Map<string, any> = new Map<string, any>();
-    const firstBlock: string = ymlContent.first;
+    const startBlock: string = ymlContent.start;
   
-    return await evaluateBlock(firstBlock, context, ymlContent, data);
+    return await evaluateBlock(startBlock, context, ymlContent, data);
   }
 
   /**
@@ -110,31 +110,32 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     endpointData: any
   ): Promise<RestroomResult> {
     console.log("Current block is " + block);
-    const fileKeys = getKeys(block);
 
-    const singleContext: any = { keys: fileKeys ? JSON.parse(fileKeys) : {}, data: {}};
+    const singleContext: any = { keys: {}, data: {}, output:{}};
     try {
 
       updateContextUsingYamlFields(singleContext, block, ymlContent, context);
-      addKeysToContext(singleContext, block);
+      addKeysToContext(singleContext);
       addDataToContext(singleContext, endpointData[block]);
       iterateAndEvaluateExpressions(context.get(block), context);
       const blockType = getBlockTypeOrFail(ymlContent.blocks[block]);
-      if (BLOCK_TYPE.ZENROOM === blockType) {
+      if (BLOCK_TYPE.ZENCODE === blockType) {
         const restroomResult: any = await callRestroom(singleContext.data, JSON.stringify(singleContext.keys), block);
         if (restroomResult?.error) {
           return await resolveRestroomResult(restroomResult);
         }
-        singleContext.output = restroomResult.result;
+        Object.assign(singleContext.output, restroomResult.result);
         updateContext(singleContext, context, block);
-      } else if (BLOCK_TYPE.OUTPUT === blockType) {
-        return await resolveRestroomResult({
-          result: singleContext?.output,
-          status: 200,
-        });
       } else if (BLOCK_TYPE.WAIT === blockType) {
         await new Promise(resolve => {
           setTimeout(resolve, singleContext?.milliseconds || 1000)
+        });
+      } 
+      if(!singleContext?.next){
+        iterateAndEvaluateExpressions(context.get(block).output, context);
+        return await resolveRestroomResult({
+          result: singleContext?.output,
+          status: 200,
         });
       }
     } catch (err){
@@ -172,26 +173,20 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         })
         .then(async (json) => {
           await runHook(hook.AFTER, { json, zencode, outcome: restroomResult });
-          //next();
         })
         .catch(async (e) => {
           zenroom_errors = e;
           await runHook(hook.ERROR, { zenroom_errors, zencode, outcome: restroomResult });
           restroomResult.error = e;
           restroomResult.errorMessage = `[ZENROOM EXECUTION ERROR FOR CONTRACT ${contractName}]`;
-          //next(e);
-          //return outcome;
         })
         .finally(async () => {
           await runHook(hook.FINISH, { res, outcome: restroomResult });
-          //next();
         });
     } catch (e) {
       await runHook(hook.EXCEPTION, res);
       restroomResult.errorMessage = `[UNEXPECTED EXCEPTION FOR CONTRACT ${contractName}]`;
       restroomResult.error = e;
-      //next(e);
-      //return outcome;
     }
     return restroomResult;
   }

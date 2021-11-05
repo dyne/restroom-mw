@@ -14,16 +14,6 @@ export const getKeys = (contractName: string) => {
   }
 };
 
-export const getDinamicKeys = (contractName: string) => {
-  try {
-    return (
-      fs.readFileSync(`${ZENCODE_DIR}/${contractName}.dkeys`).toString() || null
-    );
-  } catch (e) {
-    return null;
-  }
-};
-
 export const getConf = (contractName: string) => {
   try {
     return (
