@@ -16,7 +16,7 @@ test("iterateAndEvaluateExpressions works correctly", (t) => {
   context.set("something", {output: "myoutput"});
 
   iterateAndEvaluateExpressions(singleBlockObject, context);
-  t.is(singleBlockObject.result, contract.get('something').output);
+  t.is(singleBlockObject.result, context.get('something').output);
 });
 
 test("iterateAndEvaluateExpressions throws exception", (t) => {
@@ -42,7 +42,7 @@ test("updateContext works correctly", (t) => {
   const blockName = "blockName";
 
   updateContext(singleBlockContext, globalContext, blockName);
-  t.is(globalcontract.get('blockName'), singleBlockContext);
+  t.is(globalContext.get('blockName'), singleBlockContext);
 });
 
 test("updateContext works correctly with more than one contract", (t) => {
@@ -62,8 +62,8 @@ test("updateContext works correctly with more than one contract", (t) => {
 
   updateContext(secondSingleBlockContext, globalContext, secondBlockName);
 
-  t.is(globalcontract.get('firstBlockName'), firstSingleBlockContext);
-  t.is(globalcontract.get('secondBlockName'), secondSingleBlockContext);
+  t.is(globalContext.get('firstBlockName'), firstSingleBlockContext);
+  t.is(globalContext.get('secondBlockName'), secondSingleBlockContext);
 });
 
 test("addDataToContext works correctly", (t) => {
