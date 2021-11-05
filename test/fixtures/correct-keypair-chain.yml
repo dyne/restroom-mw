@@ -9,8 +9,10 @@ blocks:
   create-keypair:
     type: zencode
     next: verify-keypair
+    fileKeys: create-keypair-input
   verify-keypair:
     type: zencode
+    fileKeys: verify-keypair-input
     output: 
-      isSameKeypair: contract.get("create-keypair").output[contract.get("create-keypair").data.username].keypair.public_key === contract.get("verify-keypair").output[contract.get("verify-keypair").data.username].keypair.public_key
+      isSameKeypair: contract.get("create-keypair").output[contract.get("create-keypair").keys.username].keypair.public_key === contract.get("verify-keypair").output[contract.get("verify-keypair").keys.username].keypair.public_key
       createKeypairOutput: contract.get("create-keypair").output
