@@ -50,7 +50,7 @@ blocks:
   verify-keypair.zen:
     keysFile: verify-keypair-input.keys`);
   t.throws(() => {
-    getYml("non existend zen file")
+    getYml("non existend zen file");
   });
 });
 
