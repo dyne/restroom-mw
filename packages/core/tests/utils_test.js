@@ -63,7 +63,7 @@ Given that I have a 'string' named 'message'
 When I encrypt the secret message 'message' with 'password' 
 Then print the 'secret message'`);
   t.throws(() => {
-  getContractByContractName("non existend zen file")
+  getContractByContractName("non existend zen file");
   });
 });
 
@@ -76,7 +76,7 @@ Given that I have a 'string' named 'message'
 When I encrypt the secret message 'message' with 'password' 
 Then print the 'secret message'`);
   t.throws(() => {
-    getContractFromPath("non existend zen file")
+    getContractFromPath("non existend zen file");
   });
 });
 
