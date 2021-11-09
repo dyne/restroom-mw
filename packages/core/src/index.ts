@@ -6,6 +6,7 @@ import { NextFunction, Request, Response } from "express";
 import * as yaml from "js-yaml";
 import { RestroomResult } from "./restroom-result";
 import { Zencode } from "@restroom-mw/zencode";
+import { BlockContext } from "./block-context";
 const functionHooks = initHooks;
 
 export default async (req: Request, res: Response, next: NextFunction) => {
@@ -96,7 +97,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   ): Promise<RestroomResult> {
     console.log("Current block is " + block);
 
-    const singleContext: any = { keys: {}, data: {}, next: null, conf: "", output:{}};
+    const singleContext: BlockContext = { keys: {}, data: {}, next: null, conf: "", output:{}};
     try {
 
       addKeysToContext(singleContext, ymlContent.blocks[block]);
