@@ -1,18 +1,11 @@
 zenchain: 1.0
 name: sawroom-blockchain
-start: single-random
+start: single-random.zen
 blocks:
-  single-random:
-    type: zencode
-    next: sawroom-store-secret-message
-  sawroom-store-secret-message:
-    type: zencode
-    fileKeys: sawroom-store-secret-message-input
-    next: timeout-input
-  timeout-input:
-    type: wait
-    milliseconds: 1000
-    next: sawroom-read-secret-message
-  sawroom-read-secret-message:
-    type: zencode
-    fileKeys: sawroom-read-secret-message-input
+  single-random.zen:
+    next: sawroom-store-secret-message.zen
+  sawroom-store-secret-message.zen:
+    fileKeys: sawroom-store-secret-message-input.keys
+    next: sawroom-read-secret-message.zen
+  sawroom-read-secret-message.zen:
+    fileKeys: sawroom-read-secret-message-input.keys

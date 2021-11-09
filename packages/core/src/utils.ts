@@ -1,8 +1,9 @@
-import fs from "fs";
+import { Zencode } from "@restroom-mw/zencode";
 import readdirp from "readdirp";
 import fuzzball from "fuzzball";
 import { CUSTOM_404_MESSAGE, ZENCODE_DIR } from "@restroom-mw/utils";
 import { Request, Response } from "express";
+import fs from "fs";
 
 export const getKeys = (contractName: string) => {
   try {
@@ -12,6 +13,43 @@ export const getKeys = (contractName: string) => {
   } catch (e) {
     return null;
   }
+};
+
+export const getFile = (fileWithExtension: string) => {
+  try {
+    return (
+      fs.readFileSync(`${ZENCODE_DIR}/${fileWithExtension}`).toString() || null
+    );
+  } catch (e) {
+    return null;
+  }
+};
+
+/**
+ *  Returns zencode from a contract name
+ *  @param contractName 
+ *  @returns {Zencode}
+ */
+export const getContractByContractName = (contractName: string) : Zencode => {
+  return Zencode.byName(contractName, ZENCODE_DIR);
+};
+
+/**
+ *  Returns zencode from a partial path
+ *  @param path 
+ *  @returns {Zencode}
+ */
+export const getContractFromPath = (path: string) : Zencode => {
+  return Zencode.fromPath(`${ZENCODE_DIR}/${path}`);
+};
+
+/**
+ *  Returns string representing a .yml file
+ *  @param ymlName 
+ *  @returns {string}
+ */
+export const getYml = (ymlName: string) => {
+  return fs.readFileSync(`${ZENCODE_DIR}/${ymlName}.yml`).toString() || null;
 };
 
 export const getConf = (contractName: string) => {

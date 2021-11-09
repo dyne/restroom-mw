@@ -1,7 +1,7 @@
 Scenario 'ecdh': create keypair from data
 
 # Loading the user name from data
-Given my name is in a 'string' named 'username'
+Given my name is in a 'string' named 'email'
 
 # Loading the answers from 3 secret questions. The user will have to pick the 3 challenges from a list 
 # and have to remember the questions - the order is not important cause Zenroom will sort alphabetically 
@@ -61,9 +61,4 @@ When I create the hash of 'question5'
 and I rename the 'hash' to 'question5.hash'
 When I insert 'question5.hash' in 'hashedAnswers'
 
-
-
-Then print my 'keypair'
-
-# Comment the line below, if you don't want to output the hashes of the challenges
-Then print 'hashedAnswers'
+Then print all data

@@ -1,4 +1,3 @@
-import fs from "fs";
 require("dotenv").config();
 
 if (process.env.ZENCODE_DIR === undefined)
@@ -41,18 +40,3 @@ export const ZENCODE_DIR = process.env.ZENCODE_DIR;
  *  @type {string}
  */
 export const CUSTOM_404_MESSAGE = process.env.CUSTOM_404_MESSAGE;
-
-/**
- *  Returns string representing a .yml file
- *  @param ymlName 
- *  @returns {string}
- */
-export const getYml = (ymlName: string) => {
-  try {
-    return (
-      fs.readFileSync(`${ZENCODE_DIR}/${ymlName}.yml`).toString() || null
-    );
-  } catch (e) {
-    return null;
-  }
-};

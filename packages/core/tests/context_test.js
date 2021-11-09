@@ -2,68 +2,19 @@ import test from "ava"
 process.env.ZENCODE_DIR = "./test/fixtures";
 
 const {
-  iterateAndEvaluateExpressions,
-  updateContext,
   addDataToContext,
   addKeysToContext,
-  updateContextUsingYamlFields
+  addNextToContext,
 } = require("../dist/context");
 
-test("iterateAndEvaluateExpressions works correctly", (t) => {
+test("addNextToContext works correctly", (t) => {
 
-  const singleBlockObject = { result: 'contract.get("something").output'};
-  const context = new Map;
-  context.set("something", {output: "myoutput"});
+  const ymlContent =  {"next": 'next-contract'};
 
-  iterateAndEvaluateExpressions(singleBlockObject, context);
-  t.is(singleBlockObject.result, context.get('something').output);
-});
+  const singleBlockContext = {data: {"inputData":"iwillbechanged", "otherStuff": "other"}};
 
-test("iterateAndEvaluateExpressions throws exception", (t) => {
-
-  const error = t.throws(() => {
-    const singleBlockObject = { result: 'contract.get("something").output'};
-    const context = new Map;
-    context.set("somethin", {output: "myoutput"});
-
-    iterateAndEvaluateExpressions(singleBlockObject, context);
-  });
-
-  t.is(error.message, 'Cannot read property \'output\' of undefined')
-});
-
-
-test("updateContext works correctly", (t) => {
-
-  const singleBlockContext = new Map;
-  singleBlockContext.set({output: "myoutput"});
-
-  const globalContext = new Map;
-  const blockName = "blockName";
-
-  updateContext(singleBlockContext, globalContext, blockName);
-  t.is(globalContext.get('blockName'), singleBlockContext);
-});
-
-test("updateContext works correctly with more than one contract", (t) => {
-
-  const globalContext = new Map;
-  const firstSingleBlockContext = new Map;
-  firstSingleBlockContext.set({output: "myoutput"});
-  
-  const firstBlockName = "firstBlockName";
-
-  updateContext(firstSingleBlockContext, globalContext, firstBlockName);
-
-  const secondSingleBlockContext = new Map;
-  secondSingleBlockContext.set({output: "output", next:"next"});
-  
-  const secondBlockName = "secondBlockName";
-
-  updateContext(secondSingleBlockContext, globalContext, secondBlockName);
-
-  t.is(globalContext.get('firstBlockName'), firstSingleBlockContext);
-  t.is(globalContext.get('secondBlockName'), secondSingleBlockContext);
+  addNextToContext(singleBlockContext, ymlContent);
+  t.deepEqual(singleBlockContext.next, 'next-contract');
 });
 
 test("addDataToContext works correctly", (t) => {
@@ -90,33 +41,4 @@ test("addKeysToContext works correctly if .dkeys not found", (t) => {
 
   addKeysToContext(singleBlockContext, "not-existing-dkeys");
   t.deepEqual(singleBlockContext.keys, {"userChallenges":"iwillbechanged", "username": "iwillbechanged", "key_derivation": "iwillbechanged" });
-});
-
-test("updateContextUsingYamlFields works correctly", (t) => {
-
-  const singleBlockContext = {keys: {"changeme":"iwillbechanged"}, data: {}};
-  const ymlContent = {
-    zenchain: "1.0",
-    name: "sample",
-    blocks: {
-      "first-contract":{
-        type: "input",
-        data:{
-          userData:"pippo"
-        },
-        next:"second-contract"
-      },
-      "second-contract":{
-        type: "zencode",
-        keys: {
-          changeme: "contract.get('first-contract').data.userData"
-        }
-      }
-    }
-  };
-  const globalContext = new Map();
-
-  updateContextUsingYamlFields(singleBlockContext, "first-contract", ymlContent, globalContext);
-  updateContextUsingYamlFields(singleBlockContext, "second-contract", ymlContent, globalContext);
-  t.deepEqual(singleBlockContext.keys, {"changeme":"contract.get(\'first-contract\').data.userData"});
 });

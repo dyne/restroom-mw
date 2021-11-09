@@ -13,3 +13,5 @@ When I create the key derivation of 'userData' with password 'theBackendPassword
 
 # Here we print the PBKDF
 Then print the 'key derivation'
+
+Then print the 'email' from 'userData' as 'string'

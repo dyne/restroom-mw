@@ -8,10 +8,14 @@ process.env.ZENCODE_DIR = "./test/fixtures";
 const zencode = require("../dist").default;
 
 const {
+  getYml, 
   getKeys,
+  getFile,
   getConf,
   getData,
   getContracts,
+  getContractByContractName,
+  getContractFromPath,
   getMessage,
   getFuzzyContractMessage,
   getEndpointsMessage,
@@ -22,6 +26,58 @@ test("getKeys works correctly", (t) => {
   t.is(keys, "{}\n");
   const fakeKeys = getKeys("non existend contract");
   t.is(fakeKeys, null);
+});
+
+test("getFile works correctly", (t) => {
+  const keys = getFile("contract_keys.keys");
+  t.is(keys, "{}\n");
+  const fakeKeys = getFile("non existend keys file");
+  t.is(fakeKeys, null);
+});
+
+test("getYml works correctly", (t) => {
+  const yml = getYml("keypair-chain");
+  t.is(yml, `zenchain: 1.0
+name: correct-keypair
+start: create-pbkdf.zen
+blocks:
+  create-pbkdf.zen:
+    next: create-keypair.zen
+    fileKeys: create-pbkdf-input.keys
+  create-keypair.zen:
+    next: verify-keypair.zen
+    fileKeys: create-keypair-input.keys
+  verify-keypair.zen:
+    fileKeys: verify-keypair-input.keys`);
+  t.throws(() => {
+    getYml("non existend zen file")
+  });
+});
+
+test("getContractByContractName works correctly", (t) => {
+  const zencode = getContractByContractName("broken");
+  t.is(zencode.content, `Scenario 'ecdh': Encrypt a message with the password 
+Given that I have a 'string' named 'password' 
+Given that I have a 'string' named 'header' 
+Given that I have a 'string' named 'message' 
+When I encrypt the secret message 'message' with 'password' 
+Then print the 'secret message'`);
+  t.throws(() => {
+  getContractByContractName("non existend zen file")
+  });
+});
+
+test("getContractFromPath works correctly", (t) => {
+  const zencode = getContractFromPath("broken.zen");
+  t.is(zencode.content, `Scenario 'ecdh': Encrypt a message with the password 
+Given that I have a 'string' named 'password' 
+Given that I have a 'string' named 'header' 
+Given that I have a 'string' named 'message' 
+When I encrypt the secret message 'message' with 'password' 
+Then print the 'secret message'`);
+  t.throws(() => {
+    getContractFromPath("non existend zen file")
+  });
 });
 
 test("getConf works correctly", (t) => {
@@ -35,7 +91,6 @@ test("getContracts works correctly", async (t) => {
   const contracts = await getContracts("/");
   t.log(contracts);
   t.deepEqual(contracts, [
-    '/broken.chain',
     '/broken',
     '/contract_keys',
     '/create-keypair',

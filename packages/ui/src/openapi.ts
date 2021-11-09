@@ -2,8 +2,6 @@ import { HTTP_PORT, HTTPS_PORT, HOST } from "@restroom-mw/utils";
 import { ls, nl2br, preserveTabs } from "./utils";
 import { Zencode } from "@restroom-mw/zencode";
 import { OpenAPI } from "./interfaces";
-import { getYml } from "@restroom-mw/utils";
-import * as yaml from "js-yaml";
 
 let openapi: OpenAPI = {
   openapi: "3.0.3",
@@ -102,8 +100,6 @@ export const generate = async (rootPath: string) => {
     const tag = isChain ? '⛓️ chain of contracts' : `🔖 ${contract.tag}`;
     const exposedPath = isChain ? `${path}.chain` : path;
 
-    enrichRequestBody(isChain, path, requestBody);
-
     let endpoint = {
       post: {
         summary: contract.summary,
@@ -123,26 +119,3 @@ export const generate = async (rootPath: string) => {
 
   return openapi;
 };
-
-/**
- * This function is responsible to enrich the data object information with contract names for OpenAPI definition 
- * @param {isChain} boolean discriminate if current contract is chain
- * @param {path} string path string
- * @param {requestBody} object OpenAPI requestBody definition
- */
-function enrichRequestBody(isChain: boolean, path: string, requestBody:any) {
-  if (isChain) {
-    const fileContents = getYml(path);
-    const ymlContent: any = yaml.load(fileContents);
-    let properties: any = { properties: {} };
-    for (const block in ymlContent?.blocks) {
-      openapi.components.schemas[block] = {
-        description: `${block} field`,
-        type: "object",
-      };
-      properties.properties[block] = {};
-      properties.properties[block]['$ref'] = `#/components/schemas/${block}`;
-    }
-    requestBody.content["application/json"].schema.properties.data = properties;
-  }
-}

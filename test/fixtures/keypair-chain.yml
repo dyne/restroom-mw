@@ -1,16 +1,12 @@
 zenchain: 1.0
 name: correct-keypair
-start: create-pbkdf
+start: create-pbkdf.zen
 blocks:
-  create-pbkdf:
-    type: zencode
-    next: create-keypair
-    fileKeys: create-pbkdf-input
-  create-keypair:
-    type: zencode
-    next: verify-keypair
-  verify-keypair:
-    type: zencode
-    output: 
-      isSameKeypair: contract.get("create-keypair").output[contract.get("create-keypair").data.username].keypair.public_key === contract.get("verify-keypair").output[contract.get("verify-keypair").data.username].keypair.public_key
-      createKeypairOutput: contract.get("create-keypair").output
+  create-pbkdf.zen:
+    next: create-keypair.zen
+    fileKeys: create-pbkdf-input.keys
+  create-keypair.zen:
+    next: verify-keypair.zen
+    fileKeys: create-keypair-input.keys
+  verify-keypair.zen:
+    fileKeys: verify-keypair-input.keys
