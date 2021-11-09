@@ -19,7 +19,7 @@ export function addDataToContext(singleBlockContext: any, data:any) {
  * @param {blockName} string block name
  */
 export function addKeysToContext(singleBlockContext: any, ymlContent:any) {
-  const extractedKeys = getFile(ymlContent?.fileKeys) || '{}';
+  const extractedKeys = getFile(ymlContent?.keysFile) || '{}';
   const keys = JSON.parse(extractedKeys);
   Object.keys(keys).forEach((key: string) => {
     singleBlockContext.keys[key] = keys[key];
@@ -32,7 +32,7 @@ export function addKeysToContext(singleBlockContext: any, ymlContent:any) {
  * @param {blockName} string block name
  */
  export function addConfToContext(singleBlockContext: any, ymlContent:any) {
-  const conf = getFile(ymlContent?.confKeys) || "color=0";
+  const conf = getFile(ymlContent?.confFile) || "color=0";
   singleBlockContext.conf = conf;
 }
 

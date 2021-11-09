@@ -5,7 +5,7 @@ blocks:
   single-random.zen:
     next: sawroom-store-secret-message.zen
   sawroom-store-secret-message.zen:
-    fileKeys: sawroom-store-secret-message-input.keys
+    keysFile: sawroom-store-secret-message-input.keys
     next: sawroom-read-secret-message.zen
   sawroom-read-secret-message.zen:
-    fileKeys: sawroom-read-secret-message-input.keys
+    keysFile: sawroom-read-secret-message-input.keys

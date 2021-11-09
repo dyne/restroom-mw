@@ -10,12 +10,22 @@ const {
 
 test("addConfToContext works correctly", (t) => {
 
-  const ymlContent =  {"confKeys": 'not-exists'};
+  const ymlContent =  {"confFile": 'not-exists'};
 
   const singleBlockContext = {data: {"inputData":"iwillbechanged", "otherStuff": "other"}};
 
   addConfToContext(singleBlockContext, ymlContent);
   t.deepEqual(singleBlockContext.conf, "color=0");
+});
+
+test("addConfToContext works with a file", (t) => {
+
+  const ymlContent =  {"confFile": 'create-keypair-configuration.conf'};
+
+  const singleBlockContext = {data: {"inputData":"iwillbechanged", "otherStuff": "other"}};
+
+  addConfToContext(singleBlockContext, ymlContent);
+  t.deepEqual(singleBlockContext.conf, "color=3");
 });
 
 test("addNextToContext works correctly", (t) => {

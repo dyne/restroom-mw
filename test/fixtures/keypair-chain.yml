@@ -4,9 +4,9 @@ start: create-pbkdf.zen
 blocks:
   create-pbkdf.zen:
     next: create-keypair.zen
-    fileKeys: create-pbkdf-input.keys
+    keysFile: create-pbkdf-input.keys
   create-keypair.zen:
     next: verify-keypair.zen
-    fileKeys: create-keypair-input.keys
+    keysFile: create-keypair-input.keys
   verify-keypair.zen:
-    fileKeys: verify-keypair-input.keys
+    keysFile: verify-keypair-input.keys
