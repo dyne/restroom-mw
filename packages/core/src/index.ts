@@ -1,7 +1,7 @@
 import { getHooks, hook, initHooks } from "./hooks";
 import { getConf, getData, getKeys, getMessage, getYml, getContractByContractName, getContractFromPath } from "./utils";
 import { zencode_exec } from "zenroom";
-import { addKeysToContext, addDataToContext, addNextToContext } from "./context";
+import { addKeysToContext, addDataToContext, addNextToContext, addConfToContext } from "./context";
 import { NextFunction, Request, Response } from "express";
 import * as yaml from "js-yaml";
 import { RestroomResult } from "./restroom-result";
@@ -81,7 +81,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     const isChain = contractName.split(".")[1] === 'chain' || false;
     const keys = isChain ? "{}" : getKeys(contractName);
     try {
-      return isChain ? executeChain(getYml(contractName.split(".")[0]), data) : callRestroom(data, keys, getContractByContractName(contractName), contractName);
+      return isChain ? executeChain(getYml(contractName.split(".")[0]), data) : callRestroom(data, keys, getConf(contractName), getContractByContractName(contractName), contractName);
     } catch (err){
       return await resolveRestroomResult({
         error: err
@@ -96,15 +96,16 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   ): Promise<RestroomResult> {
     console.log("Current block is " + block);
 
-    const singleContext: any = { keys: {}, data: {}, next: null, output:{}};
+    const singleContext: any = { keys: {}, data: {}, next: null, conf: "", output:{}};
     try {
 
       addKeysToContext(singleContext, ymlContent.blocks[block]);
       addDataToContext(singleContext, data);
+      addConfToContext(singleContext, ymlContent.blocks[block]);
       addNextToContext(singleContext, ymlContent.blocks[block]);
       const zencode = getContractFromPath(block);
 
-      const restroomResult: any = await callRestroom(singleContext.data, JSON.stringify(singleContext.keys), zencode, block);
+      const restroomResult: any = await callRestroom(singleContext.data, JSON.stringify(singleContext.keys), singleContext.conf, zencode, block);
       if (restroomResult?.error) {
         return await resolveRestroomResult(restroomResult);
       }
@@ -129,9 +130,8 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     return await evaluateBlock(singleContext.next, ymlContent, singleContext.output);
   }
 
-  async function callRestroom(data: string, keys: string, zencode:Zencode, contractPath:string): Promise<RestroomResult>{
+  async function callRestroom(data: string, keys: string, conf:string, zencode:Zencode, contractPath:string): Promise<RestroomResult>{
     
-    let conf = getConf(contractPath.split(".")[0]);
     let restroomResult: RestroomResult = {};
     if (keys==='{}'){
       keys = null;

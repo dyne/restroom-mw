@@ -27,6 +27,16 @@ export function addKeysToContext(singleBlockContext: any, ymlContent:any) {
 }
 
 /**
+ * This function is responsible to add keys into single block context from selected .keys file
+ * @param {singleBlockContext} object context of a single block
+ * @param {blockName} string block name
+ */
+ export function addConfToContext(singleBlockContext: any, ymlContent:any) {
+  const conf = getFile(ymlContent?.confKeys) || "color=0";
+  singleBlockContext.conf = conf;
+}
+
+/**
  * This function is responsible to add next into single block context from yaml flow
  * @param {singleBlockContext} object context of a single block
  * @param {ymlContent} object yaml content

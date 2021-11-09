@@ -5,7 +5,18 @@ const {
   addDataToContext,
   addKeysToContext,
   addNextToContext,
+  addConfToContext,
 } = require("../dist/context");
+
+test("addConfToContext works correctly", (t) => {
+
+  const ymlContent =  {"confKeys": 'not-exists'};
+
+  const singleBlockContext = {data: {"inputData":"iwillbechanged", "otherStuff": "other"}};
+
+  addConfToContext(singleBlockContext, ymlContent);
+  t.deepEqual(singleBlockContext.conf, "color=0");
+});
 
 test("addNextToContext works correctly", (t) => {
 
