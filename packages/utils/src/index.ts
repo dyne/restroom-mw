@@ -40,3 +40,24 @@ export const ZENCODE_DIR = process.env.ZENCODE_DIR;
  *  @type {string}
  */
 export const CUSTOM_404_MESSAGE = process.env.CUSTOM_404_MESSAGE;
+
+/**
+ *  Chain extension
+ *  @constant
+ *  @type {string}
+ */
+export const CHAIN_EXTENSION = process.env.CHAIN_EXT || "chain";
+
+/**
+ *  YML extension
+ *  @constant
+ *  @type {string}
+ */
+ export const YML_EXTENSION = process.env.YML_EXT || "yml";
+
+ /**
+ *  YML extension
+ *  @constant
+ *  @type {string}
+ */
+  export const GLOBAL_MIDDLEWARE_TIMEOUT = parseInt(process.env.MIDDLEWARE_TIMEOUT || "1000", 10);

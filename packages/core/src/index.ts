@@ -7,6 +7,7 @@ import * as yaml from "js-yaml";
 import { RestroomResult } from "./restroom-result";
 import { Zencode } from "@restroom-mw/zencode";
 import { BlockContext } from "./block-context";
+import { CHAIN_EXTENSION, GLOBAL_MIDDLEWARE_TIMEOUT } from "@restroom-mw/utils";
 const functionHooks = initHooks;
 
 export default async (req: Request, res: Response, next: NextFunction) => {
@@ -69,7 +70,6 @@ export default async (req: Request, res: Response, next: NextFunction) => {
    * Function responsible to execute the chain
    * @param {ymlFile} string containing restroom result 
    * @param {data} object data object coming from endpoint 
-   * @param {keys} object keys object coming from file 
    */
   async function executeChain(fileContents: string, data: any): Promise<any> {
     const ymlContent: any = yaml.load(fileContents);
@@ -79,7 +79,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   }
 
   const getRestroomResult = async (contractName:string, data:any) : Promise<RestroomResult> => {
-    const isChain = contractName.split(".")[1] === 'chain' || false;
+    const isChain = contractName.split(".")[1] === CHAIN_EXTENSION || false;
     const keys = isChain ? "{}" : getKeys(contractName);
     try {
       return isChain ? executeChain(getYml(contractName.split(".")[0]), data) : callRestroom(data, keys, getConf(contractName), getContractByContractName(contractName), contractName);
@@ -95,9 +95,9 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     ymlContent: any,
     data: any
   ): Promise<RestroomResult> {
-    console.log("Current block is " + block);
+    console.debug("Current block is " + block);
 
-    const singleContext: BlockContext = { keys: {}, data: {}, next: null, conf: "", output:{}};
+    const singleContext: BlockContext = { keys: null, data: {}, next: null, conf: "", output:{}};
     try {
 
       addKeysToContext(singleContext, ymlContent.blocks[block]);
@@ -105,16 +105,11 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       addConfToContext(singleContext, ymlContent.blocks[block]);
       addNextToContext(singleContext, ymlContent.blocks[block]);
       const zencode = getContractFromPath(block);
-
       const restroomResult: any = await callRestroom(singleContext.data, JSON.stringify(singleContext.keys), singleContext.conf, zencode, block);
       if (restroomResult?.error) {
         return await resolveRestroomResult(restroomResult);
       }
       Object.assign(singleContext.output, restroomResult.result);
-
-      await new Promise(resolve => {
-        setTimeout(resolve, singleContext?.delay || 0)
-      });
 
       if(!singleContext?.next){
         return await resolveRestroomResult({
@@ -134,9 +129,6 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   async function callRestroom(data: string, keys: string, conf:string, zencode:Zencode, contractPath:string): Promise<RestroomResult>{
     
     let restroomResult: RestroomResult = {};
-    if (keys==='{}'){
-      keys = null;
-    }
 
     try {
       await runHook(hook.INIT, {});

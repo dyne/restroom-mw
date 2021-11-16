@@ -7,6 +7,7 @@ blocks:
     keysFile: create-pbkdf-input.keys
   create-keypair.zen:
     next: verify-keypair.zen
+    confFile: create-keypair-configuration.conf
     keysFile: create-keypair-input.keys
   verify-keypair.zen:
     keysFile: verify-keypair-input.keys

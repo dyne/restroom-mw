@@ -2,6 +2,7 @@ import { HTTP_PORT, HTTPS_PORT, HOST } from "@restroom-mw/utils";
 import { ls, nl2br, preserveTabs } from "./utils";
 import { Zencode } from "@restroom-mw/zencode";
 import { OpenAPI } from "./interfaces";
+import { CHAIN_EXTENSION } from "@restroom-mw/utils";
 
 let openapi: OpenAPI = {
   openapi: "3.0.3",
@@ -98,7 +99,7 @@ export const generate = async (rootPath: string) => {
     const isChain = paths[path].type == 'yml' ? true : false;
     const description = isChain ? nl2br(preserveTabs(contract.content)) : nl2br(contract.content);
     const tag = isChain ? '⛓️ chain of contracts' : `🔖 ${contract.tag}`;
-    const exposedPath = isChain ? `${path}.chain` : path;
+    const exposedPath = isChain ? `${path}.${CHAIN_EXTENSION}` : path;
 
     let endpoint = {
       post: {

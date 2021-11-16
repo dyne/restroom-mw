@@ -46,6 +46,7 @@ blocks:
     keysFile: create-pbkdf-input.keys
   create-keypair.zen:
     next: verify-keypair.zen
+    confFile: create-keypair-configuration.conf
     keysFile: create-keypair-input.keys
   verify-keypair.zen:
     keysFile: verify-keypair-input.keys`);
@@ -84,7 +85,7 @@ test("getConf works correctly", (t) => {
   const conf = getConf("contract_keys");
   t.is(conf, "CONF");
   const fakeConf = getConf("non existend contract");
-  t.is(fakeConf, `color=0`);
+  t.is(fakeConf, ``);
 });
 
 test("getContracts works correctly", async (t) => {

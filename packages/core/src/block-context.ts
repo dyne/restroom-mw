@@ -4,5 +4,4 @@ export type BlockContext = {
   next: string;
   conf: string; 
   output: any;
-  delay?: number;
 };

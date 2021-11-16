@@ -1,7 +1,7 @@
 import { Zencode } from "@restroom-mw/zencode";
 import readdirp from "readdirp";
 import fuzzball from "fuzzball";
-import { CUSTOM_404_MESSAGE, ZENCODE_DIR } from "@restroom-mw/utils";
+import { CUSTOM_404_MESSAGE, ZENCODE_DIR, YML_EXTENSION } from "@restroom-mw/utils";
 import { Request, Response } from "express";
 import fs from "fs";
 
@@ -49,7 +49,7 @@ export const getContractFromPath = (path: string) : Zencode => {
  *  @returns {string}
  */
 export const getYml = (ymlName: string) => {
-  return fs.readFileSync(`${ZENCODE_DIR}/${ymlName}.yml`).toString() || null;
+  return fs.readFileSync(`${ZENCODE_DIR}/${ymlName}.${YML_EXTENSION}`).toString() || null;
 };
 
 export const getConf = (contractName: string) => {
@@ -58,7 +58,7 @@ export const getConf = (contractName: string) => {
       fs.readFileSync(`${ZENCODE_DIR}/${contractName}.conf`).toString() || null
     );
   } catch (e) {
-    return "color=0";
+    return "";
   }
 };
 

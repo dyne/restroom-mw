@@ -15,7 +15,7 @@ test("addConfToContext works correctly", (t) => {
   const singleBlockContext = {data: {"inputData":"iwillbechanged", "otherStuff": "other"}};
 
   addConfToContext(singleBlockContext, ymlContent);
-  t.deepEqual(singleBlockContext.conf, "color=0");
+  t.deepEqual(singleBlockContext.conf, "");
 });
 
 test("addConfToContext works with a file", (t) => {
