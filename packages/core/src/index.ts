@@ -23,6 +23,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       sendError(`[EXCEPTION IN REGISTERED HOOK ${hook}]`, e);
     }
   };
+
   /**
    * Centralized api error handling
    * @param {subject} string subject 
@@ -36,15 +37,15 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         res.status(404).send(mes);
       });
     } else{
-    if (!res.headersSent) {
-        res.status(500).json({
-          zenroom_errors: zenroom_errors,
-          result: zenroom_result,
-          exception: message,
-        });
-        if (e) next(e);
+      if (!res.headersSent) {
+          res.status(500).json({
+            zenroom_errors: zenroom_errors,
+            result: zenroom_result,
+            exception: message,
+          });
+          if (e) next(e);
+      }
     }
-   }
   };
 
   /**
