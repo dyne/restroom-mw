@@ -54,10 +54,3 @@ export const CHAIN_EXTENSION = process.env.CHAIN_EXT || "chain";
  *  @type {string}
  */
  export const YML_EXTENSION = process.env.YML_EXT || "yml";
-
- /**
- *  YML extension
- *  @constant
- *  @type {string}
- */
-  export const GLOBAL_MIDDLEWARE_TIMEOUT = parseInt(process.env.MIDDLEWARE_TIMEOUT || "1000", 10);

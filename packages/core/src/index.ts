@@ -7,7 +7,7 @@ import * as yaml from "js-yaml";
 import { RestroomResult } from "./restroom-result";
 import { Zencode } from "@restroom-mw/zencode";
 import { BlockContext } from "./block-context";
-import { CHAIN_EXTENSION, GLOBAL_MIDDLEWARE_TIMEOUT } from "@restroom-mw/utils";
+import { CHAIN_EXTENSION } from "@restroom-mw/utils";
 const functionHooks = initHooks;
 
 export default async (req: Request, res: Response, next: NextFunction) => {
