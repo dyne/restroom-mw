@@ -1,5 +1,4 @@
 import readdirp from "readdirp";
-
 /**
  * Reads the directory and list all the files
  * into an object with the full path
@@ -7,13 +6,14 @@ import readdirp from "readdirp";
  * @returns {object}
  */
 export const ls = async (root: string) => {
-  const contracts: { [key: string]: string } = {};
+  const contracts: { [key: string]: any } = {};
   try {
-    const entries = await readdirp.promise(root, { fileFilter: "*.zen" });
+    const entries = await readdirp.promise(root, { fileFilter: ["*.zen", "*.yml"] });
     entries.map((e) => {
       const { path, fullPath } = e;
       const name = path.split(".")[0];
-      contracts[name] = fullPath;
+      const type = path.split(".")[1];
+      contracts[name] = {fullPath: fullPath, type: type};
     });
   } catch (e) {
     throw e;
@@ -22,3 +22,5 @@ export const ls = async (root: string) => {
 };
 
 export const nl2br = (str: string) => str.replace(/(?:\r\n|\r|\n)/g, "  \n");
+
+export const preserveTabs = (str: string) => str.replace(/ /g,'&nbsp;');

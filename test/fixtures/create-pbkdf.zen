@@ -1,0 +1,17 @@
+Scenario 'ecdh': create the signature of an object
+Given I am 'theBackend'
+Given I have my 'keypair'
+
+# This is the password that will be used for PBKDF
+Given I have a 'string' named 'theBackendPassword'
+
+# Loading the data that the user is entering at the signup. This data will be sent from the client to the server
+Given I have a 'string dictionary' named 'userData'
+
+# The server creates a PBKDF of the 'userData'
+When I create the key derivation of 'userData' with password 'theBackendPassword'
+
+# Here we print the PBKDF
+Then print the 'key derivation'
+
+Then print the 'email' from 'userData' as 'string'

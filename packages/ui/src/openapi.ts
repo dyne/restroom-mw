@@ -1,7 +1,8 @@
 import { HTTP_PORT, HTTPS_PORT, HOST } from "@restroom-mw/utils";
-import { ls, nl2br } from "./utils";
+import { ls, nl2br, preserveTabs } from "./utils";
 import { Zencode } from "@restroom-mw/zencode";
 import { OpenAPI } from "./interfaces";
+import { CHAIN_EXTENSION } from "@restroom-mw/utils";
 
 let openapi: OpenAPI = {
   openapi: "3.0.3",
@@ -40,6 +41,9 @@ To add new endpoints you should add new zencode contracts in the directory.
   ],
   schemes: ["http"],
   paths: {},
+  components:{
+    schemas: {}
+  },
 };
 
 /**
@@ -50,24 +54,6 @@ To add new endpoints you should add new zencode contracts in the directory.
 export const generate = async (rootPath: string) => {
   const paths = await ls(rootPath);
   const mime = ["application/json"];
-  const requestBody = {
-    content: {
-      "application/json": {
-        schema: {
-          properties: {
-            data: {
-              description: "DATA field",
-              type: "object",
-            },
-            keys: {
-              description: "KEYS field",
-              type: "object",
-            },
-          },
-        },
-      },
-    },
-  };
   const responses = {
     200: {
       description: "Successful Response",
@@ -89,21 +75,47 @@ export const generate = async (rootPath: string) => {
 
   openapi.paths = {};
   for (const path in paths) {
-    const contract = Zencode.fromPath(paths[path]);
+
+    const requestBody = {
+      content: {
+        "application/json": {
+          schema: {
+            properties: {
+              data: {
+                description: "DATA field",
+                type: "object",
+              },
+              keys: {
+                description: "KEYS field",
+                type: "object",
+              },
+            },
+          },
+        },
+      },
+    };
+
+    const contract = Zencode.fromPath(paths[path].fullPath);
+    const isChain = paths[path].type == 'yml' ? true : false;
+    const description = isChain ? nl2br(preserveTabs(contract.content)) : nl2br(contract.content);
+    const tag = isChain ? '⛓️ chain of contracts' : `🔖 ${contract.tag}`;
+    const exposedPath = isChain ? `${path}.${CHAIN_EXTENSION}` : path;
+
     let endpoint = {
       post: {
         summary: contract.summary,
-        description: nl2br(contract.content),
-        tags: [`🔖 ${contract.tag}`],
+        description: description,
+        tags: [`${tag}`],
         consumes: mime,
         produces: mime,
-        operationId: `_function_${path}_post`,
+        operationId: `_function_${exposedPath}_post`,
         requestBody,
         responses,
       },
     };
 
-    openapi.paths[`/${path}`] = endpoint;
+    openapi.paths[`/${exposedPath}`] = endpoint;
+
   }
 
   return openapi;
