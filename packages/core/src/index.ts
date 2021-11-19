@@ -107,6 +107,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       addNextToContext(singleContext, ymlContent.blocks[block]);
       const zencode = getContractFromPath(block);
       const restroomResult: any = await callRestroom(singleContext.data, singleContext.keys, singleContext.conf, zencode, block);
+      
       if (restroomResult?.error) {
         return await resolveRestroomResult(restroomResult);
       }
