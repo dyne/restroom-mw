@@ -26,6 +26,7 @@ export function addKeysToContext(singleBlockContext: any, ymlContent:any) {
     Object.keys(keys).forEach((key: string) => {
       singleBlockContext.keys[key] = keys[key];
     });
+    singleBlockContext.keys = JSON.stringify(singleBlockContext.keys);
   }
 }
 

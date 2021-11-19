@@ -56,7 +56,7 @@ test("addKeysToContext works correctly", (t) => {
   t.not(singleBlockContext.keys, {"userChallenges":"iwillbechanged", "username": "iwillbechanged", "key_derivation": "iwillbechanged" });
 });
 
-test("addKeysToContext works correctly if .dkeys not found", (t) => {
+test("addKeysToContext works correctly if keys not found", (t) => {
 
   const singleBlockContext = {keys: {"userChallenges":"iwillbechanged", "username": "iwillbechanged", "key_derivation": "iwillbechanged" }};
 
