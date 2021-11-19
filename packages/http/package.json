@@ -1,7 +1,7 @@
 {
   "name": "@restroom-mw/http",
   "version": "0.9.0",
-  "description": "Database utilities middleware for Restroom",
+  "description": "Http utilities middleware for Restroom",
   "author": "Sebastian Blichfeldt",
   "contributors": [
     "Puria Nafisi Azizi <puria@dyne.org>"
