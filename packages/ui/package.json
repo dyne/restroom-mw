@@ -39,8 +39,8 @@
     "url": "https://github.com/dyne/restroom-wm/issues"
   },
   "dependencies": {
-    "@restroom-mw/utils": "^0.9.0",
-    "@restroom-mw/zencode": "^0.9.0",
+    "@restroom-mw/utils": "next",
+    "@restroom-mw/zencode": "next",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "readdirp": "^3.5.0",
