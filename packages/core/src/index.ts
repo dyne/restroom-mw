@@ -94,7 +94,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     } catch (err){
       return await resolveRestroomResult({
         error: err,
-        errorMessage: `[CHAIN YML EXECUTION ERROR]`
+        errorMessage: `[RESTROOM EXECUTION ERROR]`
       });
     }
   }
