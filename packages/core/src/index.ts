@@ -72,7 +72,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
    * @param {ymlFile} string containing restroom result 
    * @param {data} object data object coming from endpoint 
    */
-  async function executeChain(fileContents: string, data: any): Promise<any> {
+  async function executeChain(fileContents: string, data: any): Promise<RestroomResult> {
     try {
       const ymlContent: any = yaml.load(fileContents);
       const startBlock: string = ymlContent.start;
