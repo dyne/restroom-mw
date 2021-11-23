@@ -73,10 +73,17 @@ export default async (req: Request, res: Response, next: NextFunction) => {
    * @param {data} object data object coming from endpoint 
    */
   async function executeChain(fileContents: string, data: any): Promise<any> {
-    const ymlContent: any = yaml.load(fileContents);
-    const startBlock: string = ymlContent.start;
-  
-    return await evaluateBlock(startBlock, ymlContent, data);
+    try {
+      const ymlContent: any = yaml.load(fileContents);
+      const startBlock: string = ymlContent.start;
+
+      return await evaluateBlock(startBlock, ymlContent, data);
+    } catch (err){
+      return await resolveRestroomResult({
+        error: err,
+        errorMessage: `[CHAIN YML EXECUTION ERROR]`
+      });
+    }
   }
 
   const getRestroomResult = async (contractName:string, data:any) : Promise<RestroomResult> => {
@@ -86,7 +93,8 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       return isChain ? executeChain(getYml(contractName.split(".")[0]), data) : callRestroom(data, keys, getConf(contractName), getContractByContractName(contractName), contractName);
     } catch (err){
       return await resolveRestroomResult({
-        error: err
+        error: err,
+        errorMessage: `[CHAIN YML EXECUTION ERROR]`
       });
     }
   }
