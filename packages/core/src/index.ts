@@ -151,7 +151,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       addConfToContext(singleContext, ymlContent.blocks[block]);
       addNextToContext(singleContext, ymlContent.blocks[block]);
       const zencode = getContractFromPath(block);
-      const restroomResult: any = await callRestroom(
+      const restroomResult: RestroomResult = await callRestroom(
         singleContext.data,
         singleContext.keys,
         singleContext.conf,
