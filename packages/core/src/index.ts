@@ -90,11 +90,21 @@ export default async (req: Request, res: Response, next: NextFunction) => {
    * @param {ymlFile} string containing restroom result
    * @param {data} object data object coming from endpoint
    */
-  async function executeChain(fileContents: string, data: any): Promise<any> {
-    const ymlContent: any = yaml.load(fileContents);
-    const startBlock: string = ymlContent.start;
+  async function executeChain(
+    fileContents: string,
+    data: any
+  ): Promise<RestroomResult> {
+    try {
+      const ymlContent: any = yaml.load(fileContents);
+      const startBlock: string = ymlContent.start;
 
-    return await evaluateBlock(startBlock, ymlContent, data);
+      return await evaluateBlock(startBlock, ymlContent, data);
+    } catch (err) {
+      return await resolveRestroomResult({
+        error: err,
+        errorMessage: `[CHAIN YML EXECUTION ERROR]`,
+      });
+    }
   }
 
   const getRestroomResult = async (
@@ -116,6 +126,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     } catch (err) {
       return await resolveRestroomResult({
         error: err,
+        errorMessage: `[RESTROOM EXECUTION ERROR]`,
       });
     }
   };
@@ -140,7 +151,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       addConfToContext(singleContext, ymlContent.blocks[block]);
       addNextToContext(singleContext, ymlContent.blocks[block]);
       const zencode = getContractFromPath(block);
-      const restroomResult: any = await callRestroom(
+      const restroomResult: RestroomResult = await callRestroom(
         singleContext.data,
         singleContext.keys,
         singleContext.conf,
@@ -245,4 +256,3 @@ export const {
 } = functionHooks;
 
 export { Restroom } from "./restroom";
-
