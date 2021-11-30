@@ -1,0 +1,38 @@
+
+# Always use 'Rule caller restroom-mw' when using Restroom
+Rule caller restroom-mw
+
+Scenario 'ecdh': Create the keypair 
+
+# [R] Restroom-mw statements: state endpoints
+# Given that I have an endpoint named 'timeServer'  
+Given that I have an endpoint named 'outputEndpoint'  
+
+# We need this object to store the output of the timestamp endpoint
+# Given I have a 'number' named 'timestamp'
+
+# [R] Restroom-mw statements: connect to endpoints and store the output
+# Given I connect to 'timeServer' and save the output into 'timestamp'
+
+# Let's create an array of random objects
+When I create the array of '8' random objects of '256' bits
+and I rename the 'array' to 'randomArray'
+
+# Create a string dictionary to format the output 
+# When I create the 'base64 dictionary'
+# and I rename the 'base64 dictionary' to 'outputData'
+
+# Organize the output of the endpoints in the string dictionary
+# When I insert 'timestamp' in 'outputData'
+# When I insert 'randomArray' in 'outputData'
+
+# Informative string
+When I write string 'see the results in https://beeceptor.com/console/dyneorg' in 'outputString'
+
+# Print the output
+Then print all data
+
+# [R] Restroom-mw statements: send the output to an endpoint via a REST call  
+Then pass the output to 'outputEndpoint'
+
+

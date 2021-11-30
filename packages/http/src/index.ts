@@ -52,14 +52,14 @@ export default (req: Request, res: Response, next: NextFunction) => {
         typeof keys === "undefined"
           ? {}
           : keys && typeof keys === "object"
-          ? keys
-          : parse(keys);
+            ? keys
+            : parse(keys);
       dataContent =
         typeof data === "undefined"
           ? {}
           : data && typeof data === "object"
-          ? data
-          : parse(data);
+            ? data
+            : parse(data);
       content = { ...dataContent, ...keysContent };
       contentKeys = Object.keys(content);
 
@@ -93,9 +93,8 @@ export default (req: Request, res: Response, next: NextFunction) => {
             checkForNestedBoolean(response.data);
           data[output.outputName] = response.data;
         } catch (e) {
-          throw new Error(`Error when getting from endpoint "${
-            content[output.urlKey]
-          }":
+          throw new Error(`Error when getting from endpoint "${content[output.urlKey]
+            }":
                   ${e}`);
         }
       }
@@ -120,7 +119,9 @@ export default (req: Request, res: Response, next: NextFunction) => {
         try {
           const url = content[output];
           const r = typeof result === "object" ? result : JSON.parse(result);
-          const response = await axios.post(url, r);
+          if (url && r) {
+            const response = await axios.post(url, r);
+          }
         } catch (e) {
           next(e);
           throw new Error(`[HTTP]
@@ -144,7 +145,7 @@ const runChecks = (
     if (externalSourceKeys.includes(endpoint.urlKey) === false) {
       console.log(
         "FAILED CHECK: endpoint has not been defined in zencode: " +
-          endpoint.urlKey
+        endpoint.urlKey
       );
       throw new Error(`[HTTP]
               Endpoint "${endpoint.urlKey}" has not been defined in zencode, please define it with
@@ -156,7 +157,7 @@ const runChecks = (
       if (contentKeys.includes(endpoint.urlKey) === false) {
         console.log(
           "FAILED CHECK: not defined in keys or files. Throwing error for files: " +
-            endpoint.urlKey
+          endpoint.urlKey
         );
         throw new Error(`[HTTP]
                 Endpoint "${endpoint.urlKey}" has not been defined in keys or data.`);

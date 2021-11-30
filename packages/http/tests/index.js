@@ -282,3 +282,19 @@ test("Check that the middleware throws and exception if duplicate end point decl
   );
   t.is(res.status, 500);
 });
+
+test("Check broken http", async (t) => {
+  const _data = {
+    data: {
+      endpoint: "http://localhost:3020/normaljson"
+    },
+  };
+
+  const app = express();
+  app.use(bodyParser.json());
+  app.use(http);
+  app.use("/*", zencode);
+
+  const res = await request(app).post("/http-test-store-broken")
+  t.is(res.status, 200);
+});
