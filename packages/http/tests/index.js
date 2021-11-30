@@ -295,6 +295,6 @@ test("Check broken http", async (t) => {
   app.use(http);
   app.use("/*", zencode);
 
-  const res = await request(app).post("/http-test-store-broken")
+  const res = await request(app).post("/http-test-store")
   t.is(res.status, 200);
 });
