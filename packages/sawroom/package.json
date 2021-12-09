@@ -43,7 +43,7 @@
     "axios": "^0.21.1"
   },
   "dependencies": {
-    "@dyne/sawroom-client": "^1.8.0",
+    "@dyne/sawroom-client": "^1.8.2",
     "cbor": "^5.1.0"
   }
 }
