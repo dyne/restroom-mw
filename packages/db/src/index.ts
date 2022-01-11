@@ -15,12 +15,20 @@ const ACTIONS = {
   SAVE_VAR: "save the {} into the database {} into the table {}",
 };
 
-const parse = (o: string) => {
-  try {
-    return JSON.parse(o);
-  } catch (e) {
-    throw new Error(`[DATABASE] Error in JSON format "${o}"`);
+const parse = (o: any): object => {
+  if (o) {
+    if (typeof o === "object") {
+      return o;
+    }
+    if (typeof o === "string") {
+      try {
+        return JSON.parse(o);
+      } catch (e) {
+        throw new Error(`[DATABASE] Error in JSON format "${o}"`);
+      }
+    }
   }
+  return {};
 };
 
 interface ObjectLiteral {
@@ -48,9 +56,6 @@ interface QuerySaveVar {
 export default (req: Request, res: Response, next: NextFunction) => {
   try {
     const rr = new Restroom(req, res);
-
-    let keysContent;
-    let dataContent;
     let content: ObjectLiteral = {};
     let contentKeys: string[];
     let dbUriKeys: string[] = [];
@@ -58,19 +63,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
 
     rr.onBefore(async (params) => {
       const { zencode, keys, data } = params;
-      keysContent =
-        typeof keys === "undefined"
-          ? {}
-          : keys && typeof keys === "object"
-          ? keys
-          : parse(keys);
-      dataContent =
-        typeof data === "undefined"
-          ? {}
-          : data && typeof data === "object"
-          ? data
-          : parse(data);
-      content = { ...dataContent, ...keysContent };
+      content = { ...parse(data), ...parse(keys) };
       contentKeys = Object.keys(content);
 
       if (zencode.match(ACTIONS.GET_URI_KEYS)) {

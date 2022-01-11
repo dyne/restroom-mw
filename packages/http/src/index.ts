@@ -9,13 +9,21 @@ const ACTIONS = {
   PASS_OUTPUT: "pass the output to {}",
 };
 
-const parse = (o: string) => {
-  try {
-    return JSON.parse(o);
-  } catch (e) {
-    throw new Error(`[HTTP]
-      Error in JSON format "${o}"`);
+const parse = (o: any): object => {
+  if (o) {
+    if (typeof o === "object") {
+      return o;
+    }
+    if (typeof o === "string") {
+      try {
+        return JSON.parse(o);
+      } catch (e) {
+        throw new Error(`[HTTP]
+          Error in JSON format "${o}"`);
+      }
+    }
   }
+  return {};
 };
 
 interface ObjectLiteral {
@@ -24,14 +32,14 @@ interface ObjectLiteral {
 
 export default (req: Request, res: Response, next: NextFunction) => {
   const rr = new Restroom(req, res);
-  let keysContent;
-  let dataContent;
   let content: ObjectLiteral = {};
   let contentKeys: string[];
   let externalSourceKeys: string[] = [];
 
   rr.onBefore(async (params: { zencode: any; keys: any; data: any }) => {
     let { zencode, keys, data } = params;
+    content = { ...parse(data), ...parse(keys) };
+    contentKeys = Object.keys(content);
 
     if (zencode.match(ACTIONS.EXTERNAL_CONNECTION)) {
       externalSourceKeys = zencode.paramsOf(ACTIONS.EXTERNAL_CONNECTION);
@@ -47,21 +55,6 @@ export default (req: Request, res: Response, next: NextFunction) => {
 
     if (zencode.match(ACTIONS.EXTERNAL_OUTPUT)) {
       const allExternalOutputs = zencode.paramsOf(ACTIONS.EXTERNAL_OUTPUT);
-
-      keysContent =
-        typeof keys === "undefined"
-          ? {}
-          : keys && typeof keys === "object"
-          ? keys
-          : parse(keys);
-      dataContent =
-        typeof data === "undefined"
-          ? {}
-          : data && typeof data === "object"
-          ? data
-          : parse(data);
-      content = { ...dataContent, ...keysContent };
-      contentKeys = Object.keys(content);
 
       if (!externalSourceKeys.length)
         throw new Error(`[HTTP]
@@ -120,7 +113,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
         try {
           const url = content[output];
           const r = typeof result === "object" ? result : JSON.parse(result);
-          if(url && r) {
+          if (url && r) {
             const response = await axios.post(url, r);
           }
         } catch (e) {
