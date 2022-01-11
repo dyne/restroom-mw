@@ -33,6 +33,21 @@ export default (req: Request, res: Response, next: NextFunction) => {
   rr.onBefore(async (params: { zencode: any; keys: any; data: any }) => {
     let { zencode, keys, data } = params;
 
+    keysContent =
+      typeof keys === "undefined"
+        ? {}
+        : keys && typeof keys === "object"
+        ? keys
+        : parse(keys);
+    dataContent =
+      typeof data === "undefined"
+        ? {}
+        : data && typeof data === "object"
+        ? data
+        : parse(data);
+    content = { ...dataContent, ...keysContent };
+    contentKeys = Object.keys(content);
+
     if (zencode.match(ACTIONS.EXTERNAL_CONNECTION)) {
       externalSourceKeys = zencode.paramsOf(ACTIONS.EXTERNAL_CONNECTION);
       //Check for duplicates
@@ -47,21 +62,6 @@ export default (req: Request, res: Response, next: NextFunction) => {
 
     if (zencode.match(ACTIONS.EXTERNAL_OUTPUT)) {
       const allExternalOutputs = zencode.paramsOf(ACTIONS.EXTERNAL_OUTPUT);
-
-      keysContent =
-        typeof keys === "undefined"
-          ? {}
-          : keys && typeof keys === "object"
-          ? keys
-          : parse(keys);
-      dataContent =
-        typeof data === "undefined"
-          ? {}
-          : data && typeof data === "object"
-          ? data
-          : parse(data);
-      content = { ...dataContent, ...keysContent };
-      contentKeys = Object.keys(content);
 
       if (!externalSourceKeys.length)
         throw new Error(`[HTTP]
@@ -120,7 +120,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
         try {
           const url = content[output];
           const r = typeof result === "object" ? result : JSON.parse(result);
-          if(url && r) {
+          if (url && r) {
             const response = await axios.post(url, r);
           }
         } catch (e) {
