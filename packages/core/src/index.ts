@@ -116,7 +116,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     nextStep: string,
     ymlContent: any
   ): Promise<any> {
-    let counter : number = 0;
+    let counter: number = 0;
     const contractNumbers: number = Object.keys(ymlContent?.blocks).length;
 
     while(nextStep){
