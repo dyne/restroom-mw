@@ -96,7 +96,12 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   ): Promise<RestroomResult> {
     try {
       const ymlContent: any = yaml.load(fileContents);
-      const startBlock: string = ymlContent.start;
+      const startBlock: string = ymlContent?.start
+      if(!startBlock){
+        throw new Error(`Yml is incomplete. Start (start:) first level definition is missing!`);
+      }
+
+      detectLoop(startBlock, ymlContent);
 
       return await evaluateBlock(startBlock, ymlContent, data);
     } catch (err) {
@@ -105,6 +110,23 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         errorMessage: `[CHAIN YML EXECUTION ERROR]`,
       });
     }
+  }
+
+  function detectLoop(
+    nextStep: string,
+    ymlContent: any
+  ) {
+    let counter: number = 0;
+    const contractNumbers: number = Object.keys(ymlContent?.blocks).length;
+
+    while(nextStep){
+      counter++;
+      nextStep = ymlContent?.blocks[nextStep]?.next;
+      if(counter>contractNumbers){
+        throw new Error(`Loop detected. Execution is aborted!`);
+      }
+    }
+
   }
 
   const getRestroomResult = async (
