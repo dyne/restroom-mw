@@ -15,3 +15,27 @@ test("Check that the middleware handle wrong identation in yaml", async (t) => {
   );
   t.is(res.status, 500);
 });
+
+test("Check that the middleware handle missing start in yaml", async (t) => {
+  const app = express();
+  app.use("/api/*", core);
+  const res = await request(app).post("/api/missing-start.chain");
+
+  t.true(
+    Object.keys(res.body).includes("exception"),
+    "Yml is incomplete. Start (start:) first level definition is missing!"
+  );
+  t.is(res.status, 500);
+});
+
+test("Check that the middleware detects a loop in yaml", async (t) => {
+  const app = express();
+  app.use("/api/*", core);
+  const res = await request(app).post("/api/detect-loop.chain");
+
+  t.true(
+    Object.keys(res.body).includes("exception"),
+    "Loop detected. Execution is aborted"
+  );
+  t.is(res.status, 500);
+});
