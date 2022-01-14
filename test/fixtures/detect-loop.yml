@@ -1,5 +1,6 @@
 zenchain: 1.0
 name: correct-keypair
+start: create-pbkdf.zen
 blocks:
   create-pbkdf.zen:
     next: create-keypair.zen
