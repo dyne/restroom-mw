@@ -101,7 +101,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         throw new Error(`Yml is incomplete. Start (start:) first level definition is missing!`);
       }
 
-      await detectLoop(startBlock, ymlContent);
+      detectLoop(startBlock, ymlContent);
 
       return await evaluateBlock(startBlock, ymlContent, data);
     } catch (err) {
@@ -112,10 +112,10 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     }
   }
 
-  async function detectLoop(
+  function detectLoop(
     nextStep: string,
     ymlContent: any
-  ): Promise<any> {
+  ) {
     let counter: number = 0;
     const contractNumbers: number = Object.keys(ymlContent?.blocks).length;
 
