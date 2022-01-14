@@ -9,10 +9,7 @@ test("Check that the middleware handle wrong identation in yaml", async (t) => {
   app.use("/api/*", core);
   const res = await request(app).post("/api/bad-identation-chain.chain");
 
-  t.true(
-    Object.keys(res.body).includes("exception"),
-    "CHAIN YML EXECUTION ERROR"
-  );
+  t.true(res.body.exception.includes("bad indentation of a mapping entry"));
   t.is(res.status, 500);
 });
 
@@ -21,10 +18,7 @@ test("Check that the middleware handle missing start in yaml", async (t) => {
   app.use("/api/*", core);
   const res = await request(app).post("/api/missing-start.chain");
 
-  t.true(
-    Object.keys(res.body).includes("exception"),
-    "Yml is incomplete. Start (start:) first level definition is missing!"
-  );
+  t.true(res.body.exception.includes("Yml is incomplete. Start (start:) first level definition is missing!"));
   t.is(res.status, 500);
 });
 
@@ -33,9 +27,6 @@ test("Check that the middleware detects a loop in yaml", async (t) => {
   app.use("/api/*", core);
   const res = await request(app).post("/api/detect-loop.chain");
 
-  t.true(
-    Object.keys(res.body).includes("exception"),
-    "Loop detected. Execution is aborted"
-  );
+  t.true(res.body.exception.includes("Loop detected. Execution is aborted"));
   t.is(res.status, 500);
 });
