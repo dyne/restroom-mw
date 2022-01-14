@@ -29,6 +29,8 @@
     "watch": "tsc -b tsconfig.json -w",
     "build": "tsc -b tsconfig.json",
     "doc": "documentation readme src/** -g -f md -s 'API' --readme-file ../../docs/packages/zencode.md --shallow",
+    "links": "yarn link",
+    "unlinks": "yarn unlink",
     "lint": "eslint .",
     "lint:fix": "eslint --fix --ext .js,.jsx .",
     "test": "nyc ava"

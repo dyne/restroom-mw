@@ -22,6 +22,8 @@
     "doc": "documentation readme src/** -g -f md -s 'API' --readme-file ../../docs/packages/db.md --shallow",
     "watch": "tsc -b tsconfig.json -w",
     "build": "tsc -b tsconfig.json",
+    "unlinks": "yarn unlink",
+    "links": "yarn link",
     "test": "nyc ava"
   },
   "ava": {

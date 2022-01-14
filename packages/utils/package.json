@@ -27,6 +27,8 @@
     "clean": "rimraf dist && rimraf tsconfig.tsbuildinfo",
     "doc": "documentation readme src/** -g -f md -s 'API' --readme-file ../../docs/packages/utils.md --shallow",
     "watch": "tsc -b tsconfig.json -w ",
+    "links": "yarn link",
+    "unlinks": "yarn unlink",
     "build": "tsc -b tsconfig.json",
     "test": "nyc ava"
   },

@@ -21,11 +21,11 @@ app.use("/api/*", zencode);
 
 ## Database Setup
 
-To use MySQL, you first need to format a table, with 4 columns, as in the picture: 
+To use MySQL, you first need to format a table, with 4 columns, as in the picture:
 
 ![](.././images/mysql-db-setup.png)
 
-You can use this code to create the table: 
+You can use this code to create the table:
 
 ```sql
 CREATE TABLE `myTable` (
@@ -38,8 +38,7 @@ CREATE TABLE `myTable` (
 
 ## Zencode examples
 
-The syntax of the actions is [here](https://github.com/dyne/restroom-mw/blob/master/packages/db/src/index.ts#L9-L16). 
-
+The syntax of the actions is [here](https://github.com/dyne/restroom-mw/blob/master/packages/db/src/index.ts#L9-L16).
 
 ### Write data to a MySQL database
 
@@ -104,9 +103,6 @@ With this **keys**:
 	"mysql": "mysql://48Dg7xv6YL:nz6usNgiD1@remotemysql.com:3306/48Dg7xv6YL"
 }
 ```
-
-
-
 
 ## API
 

@@ -8,6 +8,7 @@
   - [Quickstart](/quickstart.md)
   - [Build your own restroom](/build.md)
   - [Write your first middleware](/mw.md)
+  - [Hack it and develop locally](/development.md)
 
 - 🧩 Middlewares
 

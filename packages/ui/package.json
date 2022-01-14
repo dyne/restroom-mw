@@ -32,6 +32,8 @@
     "doc": "documentation readme src/** -g -f md -s 'API' --readme-file ../../docs/packages/ui.md --shallow",
     "build": "tsc -b tsconfig.json",
     "watch": "tsc -b tsconfig.json -w",
+    "links": "yarn link",
+    "unlinks": "yarn unlink",
     "lint": "eslint .",
     "lint:fix": "eslint --fix ."
   },

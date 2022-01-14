@@ -15,12 +15,9 @@ app.use(http);
 app.use("/api/*", zencode);
 ```
 
-
-
 ## Zencode examples
 
-The syntax of the actions is [here](https://github.com/dyne/restroom-mw/blob/master/packages/http/src/index.ts#L6-L10). 
-
+The syntax of the actions is [here](https://github.com/dyne/restroom-mw/blob/master/packages/http/src/index.ts#L6-L10).
 
 ### Read output from an endpoint
 
@@ -117,12 +114,9 @@ With this **keys**:
 }
 ```
 
-
-
 ## Zencode examples
 
-The syntax of the actions is [here](https://github.com/dyne/restroom-mw/blob/master/packages/http/src/index.ts#L6-L10). 
-
+The syntax of the actions is [here](https://github.com/dyne/restroom-mw/blob/master/packages/http/src/index.ts#L6-L10).
 
 ### Read output from an endpoint
 
@@ -218,8 +212,6 @@ With this **keys**:
 	"outputEndpoint": "https://dyneorg.free.beeceptor.com"
 }
 ```
-
-
 
 ## API
 
