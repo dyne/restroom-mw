@@ -27,129 +27,269 @@ app.use("/api/*", core);
 
 #### Table of Contents
 
--   [Restroom](#restroom)
-    -   [Parameters](#parameters)
-    -   [onInit](#oninit)
-        -   [Parameters](#parameters-1)
-    -   [onBefore](#onbefore)
-        -   [Parameters](#parameters-2)
-    -   [onSuccess](#onsuccess)
-        -   [Parameters](#parameters-3)
-    -   [onAfter](#onafter)
-        -   [Parameters](#parameters-4)
-    -   [onError](#onerror)
-        -   [Parameters](#parameters-5)
-    -   [onException](#onexception)
-        -   [Parameters](#parameters-6)
-    -   [onFinish](#onfinish)
-        -   [Parameters](#parameters-7)
+*   [addDataToContext](#adddatatocontext)
+    *   [Parameters](#parameters)
+*   [Restroom](#restroom)
+    *   [Parameters](#parameters-1)
+    *   [onInit](#oninit)
+        *   [Parameters](#parameters-2)
+    *   [onBefore](#onbefore)
+        *   [Parameters](#parameters-3)
+    *   [onSuccess](#onsuccess)
+        *   [Parameters](#parameters-4)
+    *   [onAfter](#onafter)
+        *   [Parameters](#parameters-5)
+    *   [onError](#onerror)
+        *   [Parameters](#parameters-6)
+    *   [onException](#onexception)
+        *   [Parameters](#parameters-7)
+    *   [onFinish](#onfinish)
+        *   [Parameters](#parameters-8)
+*   [addKeysToContext](#addkeystocontext)
+    *   [Parameters](#parameters-9)
+*   [getContractByContractName](#getcontractbycontractname)
+    *   [Parameters](#parameters-10)
+*   [addConfToContext](#addconftocontext)
+    *   [Parameters](#parameters-11)
+*   [getContractFromPath](#getcontractfrompath)
+    *   [Parameters](#parameters-12)
+*   [sendError](#senderror)
+    *   [Parameters](#parameters-13)
+*   [addNextToContext](#addnexttocontext)
+    *   [Parameters](#parameters-14)
+*   [getYml](#getyml)
+    *   [Parameters](#parameters-15)
+*   [buildEndpointResponse](#buildendpointresponse)
+    *   [Parameters](#parameters-16)
+*   [executeChain](#executechain)
+    *   [Parameters](#parameters-17)
 
-### Restroom
+### addDataToContext
 
-[packages/core/src/restroom.ts:13-89](https://github.com/dyne/restroom-mw/blob/e8c83938c64086af2ab5ca85b7c450487b355b1d/packages/core/src/restroom.ts#L13-L89 "Source code on GitHub")
+[packages/core/src/context.ts:8-14](https://github.com/dyne/restroom-mw/blob/465614a027b3d6a5c461a2d3808217f8ede842ec/packages/core/src/context.ts#L8-L14 "Source code on GitHub")
+
+This function is responsible to add data into single block context
 
 #### Parameters
 
--   `req` **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** express req object
--   `res` **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** express res object
+*   `singleBlockContext` **any** 
+*   `data` **any** 
+*   `object` **singleBlockContext** context of a single block
+*   `object` **data** data for the contract
+
+### Restroom
+
+[packages/core/src/restroom.ts:13-89](https://github.com/dyne/restroom-mw/blob/465614a027b3d6a5c461a2d3808217f8ede842ec/packages/core/src/restroom.ts#L13-L89 "Source code on GitHub")
+
+#### Parameters
+
+*   `req` **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** express req object
+*   `res` **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** express res object
 
 **Meta**
 
--   **copyright**: 2020 Dyne.org
-
--   **author**: Puria Nafisi Azizi &lt;puria@dyne.org> @pna
--   **license**: AGPL-3.0-only
+*   **copyright**: 2020 Dyne.org
+*   **author**: Puria Nafisi Azizi \<puria@dyne.org> @pna
+*   **license**: AGPL-3.0-only
 
     Main class that will allow to define promise hooks and
     save \`data\` between different middlewares
 
 #### onInit
 
-[packages/core/src/restroom.ts:32-34](https://github.com/dyne/restroom-mw/blob/e8c83938c64086af2ab5ca85b7c450487b355b1d/packages/core/src/restroom.ts#L32-L34 "Source code on GitHub")
+[packages/core/src/restroom.ts:32-34](https://github.com/dyne/restroom-mw/blob/465614a027b3d6a5c461a2d3808217f8ede842ec/packages/core/src/restroom.ts#L32-L34 "Source code on GitHub")
 
--   **See: [lifecycle](/architecture?id=lifecycle-hooks)
-    **
+*   **See**: [lifecycle](/architecture?id=lifecycle-hooks)
 
 Saves the promise to be executed at the onInit lifecycle step
 
 ##### Parameters
 
--   `promise` **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)** 
+*   `promise` **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)** 
 
 #### onBefore
 
-[packages/core/src/restroom.ts:41-43](https://github.com/dyne/restroom-mw/blob/e8c83938c64086af2ab5ca85b7c450487b355b1d/packages/core/src/restroom.ts#L41-L43 "Source code on GitHub")
+[packages/core/src/restroom.ts:41-43](https://github.com/dyne/restroom-mw/blob/465614a027b3d6a5c461a2d3808217f8ede842ec/packages/core/src/restroom.ts#L41-L43 "Source code on GitHub")
 
--   **See: [lifecycle](/architecture?id=lifecycle-hooks)
-    **
+*   **See**: [lifecycle](/architecture?id=lifecycle-hooks)
 
 Saves the promise to be executed at the onBefore lifecycle step
 
 ##### Parameters
 
--   `promise` **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)** 
+*   `promise` **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)** 
 
 #### onSuccess
 
-[packages/core/src/restroom.ts:50-52](https://github.com/dyne/restroom-mw/blob/e8c83938c64086af2ab5ca85b7c450487b355b1d/packages/core/src/restroom.ts#L50-L52 "Source code on GitHub")
+[packages/core/src/restroom.ts:50-52](https://github.com/dyne/restroom-mw/blob/465614a027b3d6a5c461a2d3808217f8ede842ec/packages/core/src/restroom.ts#L50-L52 "Source code on GitHub")
 
--   **See: [lifecycle](/architecture?id=lifecycle-hooks)
-    **
+*   **See**: [lifecycle](/architecture?id=lifecycle-hooks)
 
 Saves the promise to be executed at the onSuccess lifecycle step
 
 ##### Parameters
 
--   `promise` **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)** 
+*   `promise` **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)** 
 
 #### onAfter
 
-[packages/core/src/restroom.ts:59-61](https://github.com/dyne/restroom-mw/blob/e8c83938c64086af2ab5ca85b7c450487b355b1d/packages/core/src/restroom.ts#L59-L61 "Source code on GitHub")
+[packages/core/src/restroom.ts:59-61](https://github.com/dyne/restroom-mw/blob/465614a027b3d6a5c461a2d3808217f8ede842ec/packages/core/src/restroom.ts#L59-L61 "Source code on GitHub")
 
--   **See: [lifecycle](/architecture?id=lifecycle-hooks)
-    **
+*   **See**: [lifecycle](/architecture?id=lifecycle-hooks)
 
 Saves the promise to be executed at the onAfter lifecycle step
 
 ##### Parameters
 
--   `promise` **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)** 
+*   `promise` **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)** 
 
 #### onError
 
-[packages/core/src/restroom.ts:68-70](https://github.com/dyne/restroom-mw/blob/e8c83938c64086af2ab5ca85b7c450487b355b1d/packages/core/src/restroom.ts#L68-L70 "Source code on GitHub")
+[packages/core/src/restroom.ts:68-70](https://github.com/dyne/restroom-mw/blob/465614a027b3d6a5c461a2d3808217f8ede842ec/packages/core/src/restroom.ts#L68-L70 "Source code on GitHub")
 
--   **See: [lifecycle](/architecture?id=lifecycle-hooks)
-    **
+*   **See**: [lifecycle](/architecture?id=lifecycle-hooks)
 
 Saves the promise to be executed at the onError lifecycle step
 
 ##### Parameters
 
--   `promise` **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)** 
+*   `promise` **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)** 
 
 #### onException
 
-[packages/core/src/restroom.ts:77-79](https://github.com/dyne/restroom-mw/blob/e8c83938c64086af2ab5ca85b7c450487b355b1d/packages/core/src/restroom.ts#L77-L79 "Source code on GitHub")
+[packages/core/src/restroom.ts:77-79](https://github.com/dyne/restroom-mw/blob/465614a027b3d6a5c461a2d3808217f8ede842ec/packages/core/src/restroom.ts#L77-L79 "Source code on GitHub")
 
--   **See: [lifecycle](/architecture?id=lifecycle-hooks)
-    **
+*   **See**: [lifecycle](/architecture?id=lifecycle-hooks)
 
 Saves the promise to be executed at the onException lifecycle step
 
 ##### Parameters
 
--   `promise` **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)** 
+*   `promise` **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)** 
 
 #### onFinish
 
-[packages/core/src/restroom.ts:86-88](https://github.com/dyne/restroom-mw/blob/e8c83938c64086af2ab5ca85b7c450487b355b1d/packages/core/src/restroom.ts#L86-L88 "Source code on GitHub")
+[packages/core/src/restroom.ts:86-88](https://github.com/dyne/restroom-mw/blob/465614a027b3d6a5c461a2d3808217f8ede842ec/packages/core/src/restroom.ts#L86-L88 "Source code on GitHub")
 
--   **See: [lifecycle](/architecture?id=lifecycle-hooks)
-    **
+*   **See**: [lifecycle](/architecture?id=lifecycle-hooks)
 
 Saves the promise to be executed at the onFinish lifecycle step
 
 ##### Parameters
 
--   `promise` **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)** 
+*   `promise` **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)** 
+
+### addKeysToContext
+
+[packages/core/src/context.ts:21-31](https://github.com/dyne/restroom-mw/blob/465614a027b3d6a5c461a2d3808217f8ede842ec/packages/core/src/context.ts#L21-L31 "Source code on GitHub")
+
+This function is responsible to add keys into single block context from selected .keys file
+
+#### Parameters
+
+*   `singleBlockContext` **any** 
+*   `ymlContent` **any** 
+*   `object` **singleBlockContext** context of a single block
+*   `string` **blockName** block name
+
+### getContractByContractName
+
+[packages/core/src/utils.ts:33-35](https://github.com/dyne/restroom-mw/blob/465614a027b3d6a5c461a2d3808217f8ede842ec/packages/core/src/utils.ts#L33-L35 "Source code on GitHub")
+
+Returns zencode from a contract name
+
+#### Parameters
+
+*   `contractName` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+
+Returns **Zencode** 
+
+### addConfToContext
+
+[packages/core/src/context.ts:38-41](https://github.com/dyne/restroom-mw/blob/465614a027b3d6a5c461a2d3808217f8ede842ec/packages/core/src/context.ts#L38-L41 "Source code on GitHub")
+
+This function is responsible to add keys into single block context from selected .keys file
+
+#### Parameters
+
+*   `singleBlockContext` **any** 
+*   `ymlContent` **any** 
+*   `object` **singleBlockContext** context of a single block
+*   `string` **blockName** block name
+
+### getContractFromPath
+
+[packages/core/src/utils.ts:42-44](https://github.com/dyne/restroom-mw/blob/465614a027b3d6a5c461a2d3808217f8ede842ec/packages/core/src/utils.ts#L42-L44 "Source code on GitHub")
+
+Returns zencode from a partial path
+
+#### Parameters
+
+*   `path` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+
+Returns **Zencode** 
+
+### sendError
+
+[packages/core/src/index.ts:45-62](https://github.com/dyne/restroom-mw/blob/465614a027b3d6a5c461a2d3808217f8ede842ec/packages/core/src/index.ts#L45-L62 "Source code on GitHub")
+
+Centralized api error handling
+
+#### Parameters
+
+*   `subject` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+*   `e` **NodeJS.ErrnoException**  (optional, default `null`)
+*   `string` **subject** subject
+
+### addNextToContext
+
+[packages/core/src/context.ts:48-50](https://github.com/dyne/restroom-mw/blob/465614a027b3d6a5c461a2d3808217f8ede842ec/packages/core/src/context.ts#L48-L50 "Source code on GitHub")
+
+This function is responsible to add next into single block context from yaml flow
+
+#### Parameters
+
+*   `singleBlockContext` **any** 
+*   `ymlContent` **any** 
+*   `object` **singleBlockContext** context of a single block
+*   `object` **ymlContent** yaml content
+
+### getYml
+
+[packages/core/src/utils.ts:51-53](https://github.com/dyne/restroom-mw/blob/465614a027b3d6a5c461a2d3808217f8ede842ec/packages/core/src/utils.ts#L51-L53 "Source code on GitHub")
+
+Returns string representing a .yml file
+
+#### Parameters
+
+*   `ymlName` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+
+Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+
+### buildEndpointResponse
+
+[packages/core/src/index.ts:69-78](https://github.com/dyne/restroom-mw/blob/465614a027b3d6a5c461a2d3808217f8ede842ec/packages/core/src/index.ts#L69-L78 "Source code on GitHub")
+
+Centralized api response handling
+
+#### Parameters
+
+*   `restroomResult` **RestroomResult** 
+*   `res` **[Response](https://developer.mozilla.org/docs/Web/Guide/HTML/HTML5)** 
+*   `RestroomResult` **restroomResult** containing restroom result
+*   `Response` **res** endpoint response
+
+### executeChain
+
+[packages/core/src/index.ts:93-108](https://github.com/dyne/restroom-mw/blob/465614a027b3d6a5c461a2d3808217f8ede842ec/packages/core/src/index.ts#L93-L108 "Source code on GitHub")
+
+Function responsible to execute the chain
+
+#### Parameters
+
+*   `fileContents` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+*   `data` **any** 
+*   `string` **ymlFile** containing restroom result
+*   `object` **data** data object coming from endpoint
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<RestroomResult>** 

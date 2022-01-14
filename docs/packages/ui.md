@@ -20,34 +20,33 @@ app.use("/docs/", ui);
 
 #### Table of Contents
 
--   [ls](#ls)
-    -   [Parameters](#parameters)
--   [generate](#generate)
-    -   [Parameters](#parameters-1)
+*   [ls](#ls)
+    *   [Parameters](#parameters)
+*   [generate](#generate)
+    *   [Parameters](#parameters-1)
 
 ### ls
 
-[packages/ui/src/utils.ts:9-22](https://github.com/dyne/restroom-mw/blob/e8c83938c64086af2ab5ca85b7c450487b355b1d/packages/ui/src/utils.ts#L9-L22 "Source code on GitHub")
+[packages/ui/src/utils.ts:8-22](https://github.com/dyne/restroom-mw/blob/465614a027b3d6a5c461a2d3808217f8ede842ec/packages/ui/src/utils.ts#L8-L22 "Source code on GitHub")
 
 Reads the directory and list all the files
 into an object with the full path
 
 #### Parameters
 
--   `root` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
--   `path` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** for where to look at folders
+*   `root` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+*   `path` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** for where to look at folders
 
 Returns **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
 
 ### generate
 
-[packages/ui/src/openapi.ts:50-110](https://github.com/dyne/restroom-mw/blob/e8c83938c64086af2ab5ca85b7c450487b355b1d/packages/ui/src/openapi.ts#L50-L110 "Source code on GitHub")
+[packages/ui/src/openapi.ts:54-122](https://github.com/dyne/restroom-mw/blob/465614a027b3d6a5c461a2d3808217f8ede842ec/packages/ui/src/openapi.ts#L54-L122 "Source code on GitHub")
 
--   **See: [Openapi Specs](http://spec.openapis.org/oas/v3.0.3)
-    **
+*   **See**: [Openapi Specs](http://spec.openapis.org/oas/v3.0.3)
 
 Generates an openapi definition out of the contracts in `ZENCODE_DIR`
 
 #### Parameters
 
--   `rootPath` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** root folder directory to look for the swagger generation
+*   `rootPath` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** root folder directory to look for the swagger generation

@@ -15,11 +15,9 @@ app.use(sawroom);
 app.use("/api/*", zencode);
 ```
 
-
 ## Zencode examples
 
-The syntax of the actions is [here](https://github.com/dyne/restroom-mw/blob/master/packages/sawroom/src/actions.ts#L1-L14). 
-
+The syntax of the actions is [here](https://github.com/dyne/restroom-mw/blob/master/packages/sawroom/src/actions.ts#L1-L14).
 
 ### Store data on Sawroom
 
@@ -59,7 +57,7 @@ With this **keys**:
 }
 ```
 
-You should see an output like this: 
+You should see an output like this:
 
 ```json
 {
@@ -71,7 +69,6 @@ You should see an output like this:
 ```
 
 Where you'll need **MyTag** later to retrieve the data from the blockchain.
-
 
 ### Read data from Sawroom
 
@@ -104,9 +101,6 @@ With this **keys**:
 	"myTag": "c274b55db779741048483f49a65dcf292392afe7515d3b9be17883bede0bf38b2252d1"
 }
 ```
-
-
-
 
 ## API
 

@@ -27,6 +27,8 @@
   "scripts": {
     "clean": "rimraf dist && rimraf tsconfig.tsbuildinfo",
     "doc": "documentation readme src/** -g -f md -s 'API' --readme-file ../../docs/packages/sawroom.md --shallow",
+    "links": "yarn link",
+    "unlinks": "yarn unlink",
     "watch": "tsc -b tsconfig.json -w",
     "build": "tsc -b tsconfig.json"
   },

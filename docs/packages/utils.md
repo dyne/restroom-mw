@@ -5,7 +5,7 @@ By now is composed by some constants that are the general configuration of the s
 
 This constants are loaded with [dotenv](https://github.com/motdotla/dotenv). This means
 that if you want to change them you can either do it by defining ENVIRONMENT VARIABLE or
-by follow the [Twelve-Factor App](http://12factor.net/config) methodology (to separate 
+by follow the [Twelve-Factor App](http://12factor.net/config) methodology (to separate
 configuration in the environment separate from code) to define them in a `.env` file.
 
 ## API
@@ -14,15 +14,17 @@ configuration in the environment separate from code) to define them in a `.env` 
 
 #### Table of Contents
 
--   [HTTP_PORT](#http_port)
--   [HTTPS_PORT](#https_port)
--   [HOST](#host)
--   [ZENCODE_DIR](#zencode_dir)
--   [CUSTOM_404_MESSAGE](#custom_404_message)
+*   [HTTP_PORT](#http_port)
+*   [HTTPS_PORT](#https_port)
+*   [HOST](#host)
+*   [ZENCODE_DIR](#zencode_dir)
+*   [CUSTOM\_404\_MESSAGE](#custom\_404\_message)
+*   [CHAIN_EXTENSION](#chain_extension)
+*   [YML_EXTENSION](#yml_extension)
 
 ### HTTP_PORT
 
-[packages/utils/src/index.ts:12-12](https://github.com/dyne/restroom-mw/blob/e8c83938c64086af2ab5ca85b7c450487b355b1d/packages/utils/src/index.ts#L12-L12 "Source code on GitHub")
+[packages/utils/src/index.ts:12-12](https://github.com/dyne/restroom-mw/blob/465614a027b3d6a5c461a2d3808217f8ede842ec/packages/utils/src/index.ts#L12-L12 "Source code on GitHub")
 
 The port on which the restroom middlewares can refer to listen for
 
@@ -30,7 +32,7 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 ### HTTPS_PORT
 
-[packages/utils/src/index.ts:20-20](https://github.com/dyne/restroom-mw/blob/e8c83938c64086af2ab5ca85b7c450487b355b1d/packages/utils/src/index.ts#L20-L20 "Source code on GitHub")
+[packages/utils/src/index.ts:20-20](https://github.com/dyne/restroom-mw/blob/465614a027b3d6a5c461a2d3808217f8ede842ec/packages/utils/src/index.ts#L20-L20 "Source code on GitHub")
 
 The **secure port** on which the restroom middlewares can refer to listen for
 
@@ -38,7 +40,7 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 ### HOST
 
-[packages/utils/src/index.ts:28-28](https://github.com/dyne/restroom-mw/blob/e8c83938c64086af2ab5ca85b7c450487b355b1d/packages/utils/src/index.ts#L28-L28 "Source code on GitHub")
+[packages/utils/src/index.ts:28-28](https://github.com/dyne/restroom-mw/blob/465614a027b3d6a5c461a2d3808217f8ede842ec/packages/utils/src/index.ts#L28-L28 "Source code on GitHub")
 
 The hostname on which the restroom middleware can refer to listen for
 
@@ -46,16 +48,32 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 ### ZENCODE_DIR
 
-[packages/utils/src/index.ts:35-35](https://github.com/dyne/restroom-mw/blob/e8c83938c64086af2ab5ca85b7c450487b355b1d/packages/utils/src/index.ts#L35-L35 "Source code on GitHub")
+[packages/utils/src/index.ts:35-35](https://github.com/dyne/restroom-mw/blob/465614a027b3d6a5c461a2d3808217f8ede842ec/packages/utils/src/index.ts#L35-L35 "Source code on GitHub")
 
 The absolut path of the directory containing the smart contracts
 
 Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
 
-### CUSTOM_404_MESSAGE
+### CUSTOM\_404\_MESSAGE
 
-[packages/utils/src/index.ts:42-42](https://github.com/dyne/restroom-mw/blob/e8c83938c64086af2ab5ca85b7c450487b355b1d/packages/utils/src/index.ts#L42-L42 "Source code on GitHub")
+[packages/utils/src/index.ts:42-42](https://github.com/dyne/restroom-mw/blob/465614a027b3d6a5c461a2d3808217f8ede842ec/packages/utils/src/index.ts#L42-L42 "Source code on GitHub")
 
 Custom error message to show when hit a non existent contract
+
+Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
+
+### CHAIN_EXTENSION
+
+[packages/utils/src/index.ts:49-49](https://github.com/dyne/restroom-mw/blob/465614a027b3d6a5c461a2d3808217f8ede842ec/packages/utils/src/index.ts#L49-L49 "Source code on GitHub")
+
+Chain extension
+
+Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
+
+### YML_EXTENSION
+
+[packages/utils/src/index.ts:56-56](https://github.com/dyne/restroom-mw/blob/465614a027b3d6a5c461a2d3808217f8ede842ec/packages/utils/src/index.ts#L56-L56 "Source code on GitHub")
+
+YML extension
 
 Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
