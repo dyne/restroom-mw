@@ -2,6 +2,7 @@ import axios from "axios";
 import https from "https";
 import { Restroom } from "@restroom-mw/core";
 import { Request, Response, NextFunction } from "express";
+import { ObjectLiteral } from "@restroom-mw/core/src/types";
 
 const ACTIONS = {
   EXTERNAL_CONNECTION: "have a endpoint named {}",
@@ -9,23 +10,8 @@ const ACTIONS = {
   PASS_OUTPUT: "pass the output to {}",
 };
 
-const parse = (o: string) => {
-  try {
-    return JSON.parse(o);
-  } catch (e) {
-    throw new Error(`[HTTP]
-      Error in JSON format "${o}"`);
-  }
-};
-
-interface ObjectLiteral {
-  [key: string]: any;
-}
-
 export default (req: Request, res: Response, next: NextFunction) => {
   const rr = new Restroom(req, res);
-  let keysContent;
-  let dataContent;
   let content: ObjectLiteral = {};
   let contentKeys: string[];
   let externalSourceKeys: string[] = [];
@@ -33,19 +19,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
   rr.onBefore(async (params: { zencode: any; keys: any; data: any }) => {
     let { zencode, keys, data } = params;
 
-    keysContent =
-      typeof keys === "undefined"
-        ? {}
-        : keys && typeof keys === "object"
-        ? keys
-        : parse(keys);
-    dataContent =
-      typeof data === "undefined"
-        ? {}
-        : data && typeof data === "object"
-        ? data
-        : parse(data);
-    content = { ...dataContent, ...keysContent };
+    content = rr.combineDataKeys(data, keys);
     contentKeys = Object.keys(content);
 
     if (zencode.match(ACTIONS.EXTERNAL_CONNECTION)) {
@@ -93,10 +67,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
             checkForNestedBoolean(response.data);
           data[output.outputName] = response.data;
         } catch (e) {
-          throw new Error(`Error when getting from endpoint "${
-            content[output.urlKey]
-          }":
-                  ${e}`);
+          throw new Error(`Error when getting from endpoint "${content[output.urlKey]}": ${e}`);
         }
       }
     }
@@ -142,11 +113,11 @@ const runChecks = (
   contentKeys: string | any[]
 ) => {
   endpoints.forEach((endpoint: { urlKey: string }) => {
-    //Check that all enpoints (urlKeys) have been defined using statement EXTERNAL_CONNECTION
+    //Check that all endpoints (urlKeys) have been defined using statement EXTERNAL_CONNECTION
     if (externalSourceKeys.includes(endpoint.urlKey) === false) {
       console.log(
         "FAILED CHECK: endpoint has not been defined in zencode: " +
-          endpoint.urlKey
+        endpoint.urlKey
       );
       throw new Error(`[HTTP]
               Endpoint "${endpoint.urlKey}" has not been defined in zencode, please define it with
@@ -158,7 +129,7 @@ const runChecks = (
       if (contentKeys.includes(endpoint.urlKey) === false) {
         console.log(
           "FAILED CHECK: not defined in keys or files. Throwing error for files: " +
-            endpoint.urlKey
+          endpoint.urlKey
         );
         throw new Error(`[HTTP]
                 Endpoint "${endpoint.urlKey}" has not been defined in keys or data.`);

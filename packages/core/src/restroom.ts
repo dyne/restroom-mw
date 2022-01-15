@@ -1,3 +1,5 @@
+import { DK, ObjectLiteral } from "./types";
+
 /**
  *
  * @author Puria Nafisi Azizi <puria@dyne.org> @pna
@@ -85,5 +87,46 @@ export class Restroom {
    */
   onFinish(promise: (params: any) => Promise<void>) {
     this._hook("onFinish", promise);
+  }
+
+  /**
+   * Parse the potential JSON in a safe manner and return it as an object
+   * @param {string} keys
+   * @param {string?} errorMessage
+   * @returns {object}
+   * @throws {Error}
+   * @example
+   * ```
+   * const keys = req.body.keys;
+   * const data = await restroom.(keys);
+   * ```
+   */
+  safeJSONParse(o: DK, errorMessage?: string): object {
+    const notNull = o ?? {};
+    if (typeof notNull === "object") return notNull;
+    try {
+      return JSON.parse(notNull);
+    } catch (err) {
+      throw new Error(errorMessage ?? err)
+    }
+  }
+
+  /**
+   * Combine data and keys parsed as safe JSON objects into a single object
+   * @param {object} data
+   * @param {object} keys
+   * @returns {object}
+   * @example
+   * ```
+   * const data = req.body.data;
+   * const keys = req.body.keys;
+   * const dataKeys = await restroom.combineDataKeys(data, keys);
+   * ```
+   * @see [combineDataKeys](/architecture?id=combine-data-keys)
+   */
+  combineDataKeys(data: DK, keys: DK): ObjectLiteral {
+    const d = this.safeJSONParse(data, "data is not a valid JSON");
+    const k = this.safeJSONParse(keys, "keys is not a valid JSON");
+    return { ...d, ...k };
   }
 }
