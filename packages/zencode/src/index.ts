@@ -8,7 +8,8 @@ const quoted = new RegExp(/'[^']*'/, "g");
 
 const getParams = (sentence: string) => {
   const params = sentence.match(quoted);
-  return params ? params.map((p) => p.replace(/'/g, "")) : null;
+  const cleaned = params ? params.map((p) => p.replace(/'/g, "")) : null;
+  return cleaned && cleaned.length > 1 ? [cleaned] : cleaned;
 };
 
 const removeParams = (sentence: string) => sentence.replace(quoted, "{}");

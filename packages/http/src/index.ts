@@ -3,44 +3,31 @@ import https from "https";
 import { Restroom } from "@restroom-mw/core";
 import { Request, Response, NextFunction } from "express";
 import { ObjectLiteral } from "@restroom-mw/core/src/types";
-
-const ACTIONS = {
-  EXTERNAL_CONNECTION: "have a endpoint named {}",
-  EXTERNAL_OUTPUT: "connect to {} and save the output into {}",
-  PASS_OUTPUT: "pass the output to {}",
-};
+import { Zencode } from "@restroom-mw/zencode";
+import {
+  EXTERNAL_CONNECTION,
+  EXTERNAL_OUTPUT,
+  PASS_OUTPUT
+} from "./actions";
+import { runChecks, checkForNestedBoolean, checkForDuplicates, checkEndpointDefined } from "./validation";
 
 export default (req: Request, res: Response, next: NextFunction) => {
   const rr = new Restroom(req, res);
   let content: ObjectLiteral = {};
-  let contentKeys: string[];
   let externalSourceKeys: string[] = [];
 
-  rr.onBefore(async (params: { zencode: any; keys: any; data: any }) => {
+  rr.onBefore(async (params: { zencode: Zencode; keys: ObjectLiteral; data: ObjectLiteral }) => {
     let { zencode, keys, data } = params;
-
     content = rr.combineDataKeys(data, keys);
-    contentKeys = Object.keys(content);
 
-    if (zencode.match(ACTIONS.EXTERNAL_CONNECTION)) {
-      externalSourceKeys = zencode.paramsOf(ACTIONS.EXTERNAL_CONNECTION);
-      //Check for duplicates
-      const duplicateFound =
-        new Set(externalSourceKeys).size !== externalSourceKeys.length;
-      if (duplicateFound) {
-        throw new Error(`[HTTP]
-          Found a duplicate. Please ensure there are no duplicates
-          when defining endpoints in "${ACTIONS.EXTERNAL_CONNECTION}"`);
-      }
+    if (zencode.match(EXTERNAL_CONNECTION)) {
+      externalSourceKeys = zencode.paramsOf(EXTERNAL_CONNECTION);
+      checkForDuplicates(externalSourceKeys);
     }
 
-    if (zencode.match(ACTIONS.EXTERNAL_OUTPUT)) {
-      const allExternalOutputs = zencode.paramsOf(ACTIONS.EXTERNAL_OUTPUT);
-
-      if (!externalSourceKeys.length)
-        throw new Error(`[HTTP]
-            Endpoints are missing, please define them with the
-            following zencode sentence "${ACTIONS.EXTERNAL_CONNECTION}"`);
+    if (zencode.match(EXTERNAL_OUTPUT)) {
+      const allExternalOutputs = zencode.paramsOf(EXTERNAL_OUTPUT);
+      checkEndpointDefined(externalSourceKeys)
 
       //join the two values in each EXTERNAL_OUTPUT
       let externalOutputs = [];
@@ -52,7 +39,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
       }
 
       // Check that endpoints have been defined in zencode, keys, or data
-      runChecks(externalOutputs, externalSourceKeys, contentKeys);
+      runChecks(externalOutputs, externalSourceKeys, content);
 
       for (const output of externalOutputs) {
         try {
@@ -72,21 +59,21 @@ export default (req: Request, res: Response, next: NextFunction) => {
       }
     }
 
-    if (zencode.match(ACTIONS.PASS_OUTPUT)) {
+    if (zencode.match(PASS_OUTPUT)) {
       // run checks ACTION PASS_OUTPUT endpoints have been defined in zencode, keys, or data
       const allPassOutputs = zencode
-        .paramsOf(ACTIONS.PASS_OUTPUT)
-        .map((urlKey: any) => {
+        .paramsOf(PASS_OUTPUT)
+        .map((urlKey: string) => {
           return { urlKey };
         });
-      runChecks(allPassOutputs, externalSourceKeys, contentKeys);
+      runChecks(allPassOutputs, externalSourceKeys, content);
     }
   });
 
   rr.onSuccess(async (params) => {
     const { result, zencode } = params;
-    if (zencode.match(ACTIONS.PASS_OUTPUT)) {
-      const allPassOutputs = zencode.paramsOf(ACTIONS.PASS_OUTPUT);
+    if (zencode.match(PASS_OUTPUT)) {
+      const allPassOutputs = zencode.paramsOf(PASS_OUTPUT);
       for (const output of allPassOutputs) {
         try {
           const url = content[output];
@@ -107,54 +94,4 @@ export default (req: Request, res: Response, next: NextFunction) => {
   next();
 };
 
-const runChecks = (
-  endpoints: any[],
-  externalSourceKeys: string | any[],
-  contentKeys: string | any[]
-) => {
-  endpoints.forEach((endpoint: { urlKey: string }) => {
-    //Check that all endpoints (urlKeys) have been defined using statement EXTERNAL_CONNECTION
-    if (externalSourceKeys.includes(endpoint.urlKey) === false) {
-      console.log(
-        "FAILED CHECK: endpoint has not been defined in zencode: " +
-        endpoint.urlKey
-      );
-      throw new Error(`[HTTP]
-              Endpoint "${endpoint.urlKey}" has not been defined in zencode, please define it with
-              the following zencode sentence "${ACTIONS.EXTERNAL_CONNECTION}"`);
-    }
 
-    // check that all endpoints (urlKeys) are properties in either data or keys
-    if (contentKeys) {
-      if (contentKeys.includes(endpoint.urlKey) === false) {
-        console.log(
-          "FAILED CHECK: not defined in keys or files. Throwing error for files: " +
-          endpoint.urlKey
-        );
-        throw new Error(`[HTTP]
-                Endpoint "${endpoint.urlKey}" has not been defined in keys or data.`);
-      }
-    }
-  });
-};
-
-const checkForNestedBoolean = (obj: any) => {
-  const res = {};
-  function recurse(obj: { [x: string]: any }, current: string) {
-    for (const key in obj) {
-      let value = obj[key];
-      if (value != undefined) {
-        if (value && typeof value === "object") {
-          recurse(value, key);
-        } else {
-          if (typeof value === "boolean") {
-            throw new Error(`[HTTP]
-                      Boolean values are not permitted. Response JSON has property "${key}" with a boolean value.
-                      Please use, for example, 0 and 1`);
-          }
-        }
-      }
-    }
-  }
-  recurse(obj, null);
-};
