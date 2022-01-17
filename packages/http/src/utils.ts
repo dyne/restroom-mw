@@ -71,4 +71,10 @@ const checkEndpointDefined = (externalSourceKeys: string[]) => {
             following zencode sentence "${EXTERNAL_CONNECTION}"`);
 }
 
-export { checkForNestedBoolean, runChecks, checkForDuplicates, checkEndpointDefined };
+function* chunks(arr: string[], n: number) {
+  for (let i = 0; i < arr.length; i += n) {
+    yield arr.slice(i, i + n);
+  }
+}
+
+export { checkForNestedBoolean, runChecks, checkForDuplicates, checkEndpointDefined, chunks };

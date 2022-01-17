@@ -4,6 +4,12 @@
     "outDir": "./dist",
     "rootDir": "./src"
   },
-  "references": [{ "path": "../core/" }],
+  "references": [{
+    "path": "../core/"
+  }, {
+    "path": "../zencode/"
+  }, {
+    "path": "../utils/"
+  }],
   "exclude": ["node_modules", "dist", "tests"]
 }

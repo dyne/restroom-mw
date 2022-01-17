@@ -92,6 +92,18 @@ test("Check that the middleware works with simple contract with endpoint in keys
   t.is(res.status, 200);
 });
 
+test("Check that the post with data and save to variable works correctly", async (t) => {
+  const app = express();
+  app.use(bodyParser.json());
+  app.use(http);
+  app.use("/*", zencode);
+  const res = await request(app).post("/http-test-post-and-save");
+  t.log(res.data);
+  t.true(Object.keys(res.body).includes("result"));
+  t.true(Object.keys(res.body).includes("dataFromEndpoint"));
+  t.is(res.status, 200);
+});
+
 test("Check that the middleware works with simple contract with endpoint in data", async (t) => {
   const _data = {
     data: {

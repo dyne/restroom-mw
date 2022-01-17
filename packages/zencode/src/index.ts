@@ -9,7 +9,11 @@ const quoted = new RegExp(/'[^']*'/, "g");
 const getParams = (sentence: string) => {
   const params = sentence.match(quoted);
   const cleaned = params ? params.map((p) => p.replace(/'/g, "")) : null;
-  return cleaned && cleaned.length > 1 ? [cleaned] : cleaned;
+
+  if (cleaned && Array.isArray(cleaned)) {
+    return cleaned.length > 1 ? [cleaned] : cleaned;
+  }
+  return null;
 };
 
 const removeParams = (sentence: string) => sentence.replace(quoted, "{}");
@@ -163,7 +167,7 @@ export class Zencode {
       if (parsed.has(lid)) {
         params = parsed.get(lid);
       }
-      params.push(...(getParams(line) || []));
+      params.push(...(getParams(line) ?? []));
       parsed.set(lid, params);
     }
     return parsed;
