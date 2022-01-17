@@ -18,7 +18,11 @@ test("Check that the middleware handle missing start in yaml", async (t) => {
   app.use("/api/*", core);
   const res = await request(app).post("/api/missing-start.chain");
 
-  t.true(res.body.exception.includes("Yml is incomplete. Start (start:) first level definition is missing!"));
+  t.true(
+    res.body.exception.includes(
+      "Yml is incomplete. Start (start:) first level definition is missing!"
+    )
+  );
   t.is(res.status, 500);
 });
 

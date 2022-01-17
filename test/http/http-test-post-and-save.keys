@@ -1,0 +1,7 @@
+{
+  "myDataToPOST": {
+    "id": "01FSKCT2BR8326ZEM6F6C4STWM", "recurseLimit": 2
+  },
+  "endpoint": "http://reflow-demo.dyne.org:4000/api/json/trace"
+}
+

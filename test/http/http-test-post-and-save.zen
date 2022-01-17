@@ -1,0 +1,8 @@
+Rule unknown ignore
+Scenario 'ecdh': Mimmo
+Given I connect to 'endpoint' and pass it the content of 'myDataToPOST' and save the output into 'dataFromEndpoint'
+Given I connect to 'endpoint' and pass it the content of 'myDataToPOST' and save the output into 'result'
+Given I have a 'string dictionary' named 'result'
+Given I have a 'string dictionary' named 'dataFromEndpoint'
+Then print all data
+

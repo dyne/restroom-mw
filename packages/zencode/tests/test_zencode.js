@@ -107,7 +107,7 @@ test("should load contracts by name and path", (t) => {
 });
 
 test("should not broke with keywords in the middle", (t) => {
-  const contract = `Rule unknown ignore 
+  const contract = `Rule unknown ignore
 Scenario 'ecdh': Create the keypair
 Given that I am known as 'Alice'
 Given that I have an endpoint named 'https://jsonplaceholder.typicode.com/todos/1'
@@ -143,3 +143,73 @@ test("should handle correctly duplicated sentences", (t) => {
   t.true(zencode.match(SENTENCES.DEFINE));
   t.deepEqual(["alice", "bob"], zencode.paramsOf(SENTENCES.DEFINE));
 });
+
+// TODO: for when the new zencode parsing will be ready
+// test("should handle correctly duplicated sentences with multiple param in one sentence", (t) => {
+//   const content = `Given I am I
+//   and I am I
+//   and I define 'alice' and love 'bob'
+//   and I define 'bob' and love 'alice'
+//   and I define 'bob' and love 'charlie'`;
+
+//   const SENTENCES = {
+//     I: "am I",
+//     DEFINE: "define {} and love {}",
+//   };
+//   const zencode = new Zencode(content);
+
+//   t.true(zencode.match(SENTENCES.I));
+//   t.true(zencode.match(SENTENCES.DEFINE));
+//   t.deepEqual(
+//     [
+//       ["alice", "bob"],
+//       ["bob", "alice"],
+//       ["bob", "charlie"],
+//     ],
+//     zencode.paramsOf(SENTENCES.DEFINE)
+//   );
+// });
+
+// test("handle multiple params", (t) => {
+//   const content = `
+//   Given nothing
+//   and 'one' for 'two' or 'three'
+//   and '1' for '2' or '3'
+//   `;
+//   const SENTENCES = {
+//     three: "{} for {} or {}",
+//   };
+//   const zencode = new Zencode(content);
+//   t.true(zencode.match(SENTENCES.three));
+//   t.deepEqual(
+//     [
+//       ["one", "two", "three"],
+//       ["1", "2", "3"],
+//     ],
+//     zencode.paramsOf(SENTENCES.three)
+//   );
+// });
+
+// test("handle multiple lines", (t) => {
+//   const content = `
+// Rule unknown ignore
+// Scenario 'ecdh': Post data somewhere
+// Given I connect to 'endpoint' and pass it the content of 'myDataToPOST' and save the output into 'dataFromEndpoint'
+// Given I connect to 'endpoint' and pass it the content of 'myDataToPOST' and save the output into 'result'
+// Given I have a 'string dictionary' named 'myDataToPOST'
+// Then print all data
+//   `;
+//   const SENTENCES = {
+//     connect:
+//       "connect to {} and pass it the content of {} and save the output into {}",
+//   };
+//   const zencode = new Zencode(content);
+//   t.true(zencode.match(SENTENCES.connect));
+//   t.deepEqual(
+//     [
+//       ["endpoint", "myDataToPOST", "dataFromEndpoint"],
+//       ["endpoint", "myDataToPOST", "result"],
+//     ],
+//     zencode.paramsOf(SENTENCES.connect)
+//   );
+// });

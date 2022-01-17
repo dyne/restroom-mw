@@ -92,9 +92,23 @@ test("Check that the middleware works with simple contract with endpoint in keys
   t.is(res.status, 200);
 });
 
+test("Check that the post with data and save to variable works correctly", async (t) => {
+  const app = express();
+  app.use(bodyParser.json());
+  app.use(http);
+  app.use("/*", zencode);
+  const res = await request(app).post("/http-test-post-and-save");
+  t.log(res.data);
+  t.true(Object.keys(res.body).includes("result"));
+  t.true(Object.keys(res.body).includes("dataFromEndpoint"));
+  t.is(res.status, 200);
+});
+
 test("Check that the middleware works with simple contract with endpoint in data", async (t) => {
   const _data = {
-    data: { endpoint: "http://localhost:3020/normaljson" },
+    data: {
+      endpoint: "http://localhost:3020/normaljson",
+    },
   };
 
   const app = express();
@@ -112,9 +126,11 @@ test("Check that the middleware works with simple contract with endpoint in data
   t.is(res.status, 200);
 });
 
-test("Check that the middleware fails with simple contract with enpoint in data responding with boolean in json", async (t) => {
+test("Check that the middleware fails with simple contract with endpoint in data responding with boolean in json", async (t) => {
   const _data = {
-    data: { endpoint: "http://localhost:3020/booleanjson" },
+    data: {
+      endpoint: "http://localhost:3020/booleanjson",
+    },
   };
 
   const app = express();
@@ -132,9 +148,11 @@ test("Check that the middleware fails with simple contract with enpoint in data 
   t.is(res.status, 500);
 });
 
-test("Check that the middleware fails with simple contract when no enpoints are defined in zencode", async (t) => {
+test("Check that the middleware fails with simple contract when no endpoints are defined in zencode", async (t) => {
   const _data = {
-    data: { endpoint: "http://localhost:3020/normaljson" },
+    data: {
+      endpoint: "http://localhost:3020/normaljson",
+    },
   };
 
   const app = express();
@@ -147,14 +165,16 @@ test("Check that the middleware fails with simple contract when no enpoints are 
 
   t.true(
     res.body.exception.includes("Endpoints are missing, please define them"),
-    "Exception should be thrown when no enpoint is defined in zencode"
+    "Exception should be thrown when no endpoint is defined in zencode"
   );
   t.is(res.status, 500);
 });
 
-test("Check that the middleware throws exception in complex contract when one enpoint is not defined in zencode", async (t) => {
+test("Check that the middleware throws exception in complex contract when one endpoint is not defined in zencode", async (t) => {
   const _data = {
-    data: { endpoint: "http://localhost:3020/normaljson" },
+    data: {
+      endpoint: "http://localhost:3020/normaljson",
+    },
   };
 
   const app = express();
@@ -172,7 +192,7 @@ test("Check that the middleware throws exception in complex contract when one en
   t.is(res.status, 500);
 });
 
-test("Check that the middleware throws exception in complex contract when enpoint is not defined in keys or data", async (t) => {
+test("Check that the middleware throws exception in complex contract when endpoint is not defined in keys or data", async (t) => {
   const app = express();
   app.use(bodyParser.json());
   app.use(http);
@@ -186,7 +206,7 @@ test("Check that the middleware throws exception in complex contract when enpoin
   t.is(res.status, 500);
 });
 
-test("Check that the middleware sends the result to enpoint", async (t) => {
+test("Check that the middleware sends the result to endpoint", async (t) => {
   const _data = {
     data: {
       endpoint1: "http://localhost:3020/normaljson",
@@ -254,8 +274,8 @@ test("Check that the middleware fails with faulty json in keys", async (t) => {
   const res = await request(app).post("/http-test-fault-json-keys");
 
   t.true(
-    res.body.exception.includes("Error in JSON format"),
-    "Exception should be thrown if the json format in keys is bad"
+    res.body.exception.includes("Error: keys is not a valid JSON"),
+    res.body.exception
   );
   t.is(res.status, 500);
 });
@@ -286,7 +306,7 @@ test("Check that the middleware throws and exception if duplicate end point decl
 test("Check broken http", async (t) => {
   const _data = {
     data: {
-      endpoint: "http://localhost:3020/normaljson"
+      endpoint: "http://localhost:3020/normaljson",
     },
   };
 
@@ -295,6 +315,6 @@ test("Check broken http", async (t) => {
   app.use(http);
   app.use("/*", zencode);
 
-  const res = await request(app).post("/http-test-store")
+  const res = await request(app).post("/http-test-store");
   t.is(res.status, 200);
 });
