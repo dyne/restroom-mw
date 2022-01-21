@@ -4,14 +4,19 @@ import fuzzball from "fuzzball";
 import { CUSTOM_404_MESSAGE, ZENCODE_DIR, YML_EXTENSION } from "@restroom-mw/utils";
 import { Request, Response } from "express";
 import fs from "fs";
+import * as yaml from 'js-yaml';
 
 export const getKeys = (contractName: string) => {
   try {
-    return (
-      fs.readFileSync(`${ZENCODE_DIR}/${contractName}.keys`).toString() || null
-    );
+    const keysContent = fs.readFileSync(`${ZENCODE_DIR}/${contractName}.keys`, 'utf8');
+    return JSON.stringify(yaml.load(keysContent));
   } catch (e) {
-    return null;
+    try {
+      const keysContent = fs.readFileSync(`${ZENCODE_DIR}/${contractName}.keys`, 'utf8');
+      return JSON.stringify(JSON.parse(keysContent))
+    } catch (e) {
+      return null;
+    }
   }
 };
 
@@ -27,25 +32,25 @@ export const getFile = (fileWithExtension: string) => {
 
 /**
  *  Returns zencode from a contract name
- *  @param contractName 
+ *  @param contractName
  *  @returns {Zencode}
  */
-export const getContractByContractName = (contractName: string) : Zencode => {
+export const getContractByContractName = (contractName: string): Zencode => {
   return Zencode.byName(contractName, ZENCODE_DIR);
 };
 
 /**
  *  Returns zencode from a partial path
- *  @param path 
+ *  @param path
  *  @returns {Zencode}
  */
-export const getContractFromPath = (path: string) : Zencode => {
+export const getContractFromPath = (path: string): Zencode => {
   return Zencode.fromPath(`${ZENCODE_DIR}/${path}`);
 };
 
 /**
  *  Returns string representing a .yml file
- *  @param ymlName 
+ *  @param ymlName
  *  @returns {string}
  */
 export const getYml = (ymlName: string) => {

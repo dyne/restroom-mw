@@ -1,3 +1,2 @@
 {
-	"endpoint": "http://localhost:3020/normaljson",
-}
+	"endpoint": 'http://localhost:3020/normaljson",
