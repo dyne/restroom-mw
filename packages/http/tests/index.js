@@ -274,7 +274,7 @@ test("Check that the middleware fails with faulty json in keys", async (t) => {
   const res = await request(app).post("/http-test-fault-json-keys");
 
   t.true(
-    res.body.exception.includes("Error: keys is not a valid JSON"),
+    res.body.exception.includes('Endpoint "endpoint" has not been defined in keys or data'),
     res.body.exception
   );
   t.is(res.status, 500);

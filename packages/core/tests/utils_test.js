@@ -23,9 +23,14 @@ const {
 
 test("getKeys works correctly", (t) => {
   const keys = getKeys("contract_keys");
-  t.is(keys, "{}\n");
+  t.is(keys, "{}");
   const fakeKeys = getKeys("non existend contract");
   t.is(fakeKeys, null);
+});
+
+test("getKeys works correctly also with yaml", (t) => {
+  const keys = getKeys("contract_yaml_keys");
+  t.is(keys, '{"pippo":2,"some":{"inner":3},"multiline":"hello\\n\\nworld\\n"}');
 });
 
 test("getFile works correctly", (t) => {
@@ -103,6 +108,7 @@ test("getContracts works correctly", async (t) => {
   t.deepEqual(contracts, [
     "/broken",
     "/contract_keys",
+    "/contract_yaml_keys",
     "/create-keypair",
     "/create-pbkdf",
     "/database",

@@ -1,0 +1,9 @@
+pippo: 2
+some:
+  inner: 3
+multiline: >
+  hello
+
+
+  world
+
