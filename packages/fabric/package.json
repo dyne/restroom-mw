@@ -1,0 +1,44 @@
+{
+  "name": "@restroom-mw/fabric",
+  "version": "0.0.1",
+  "description": "Middleware to interact with fabric",
+  "keywords": [
+    "blockchain",
+    "zenroom",
+    "fabric",
+    "api",
+    "nodejs"
+  ],
+  "author": "Alberto Lerda <alberto@dyne.org>",
+  "homepage": "https://dyne.github.io/restroom-mw/",
+  "license": "AGPL-3.0",
+  "main": "dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dyne/restroom-mw.git"
+  },
+  "scripts": {
+    "clean": "rimraf dist && rimraf tsconfig.tsbuildinfo",
+    "doc": "documentation readme src/** -g -f md -s 'API' --readme-file ../../docs/packages/sawroom.md --shallow",
+    "links": "yarn link",
+    "unlinks": "yarn unlink",
+    "watch": "tsc -b tsconfig.json -w",
+    "build": "tsc -b tsconfig.json"
+  },
+  "bugs": {
+    "url": "https://github.com/dyne/restroom-mw/issues"
+  },
+  "ava": {
+    "babel": true
+  },
+  "dependencies": {
+    "@hyperledger/fabric-gateway": "^1.0.0",
+    "@grpc/grpc-js": "^1.5.0"
+  }
+}
