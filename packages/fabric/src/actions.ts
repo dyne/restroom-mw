@@ -1,5 +1,7 @@
-export const FABRIC_ADDRESS = "have a fabric endpoint named {} with tls certificate in {}";
-export const FABRIC_CONNECT = "connect to msp {} with certificate in {} and private key in {}";
-export const FABRIC_CHANNEL = "connect to the channel {}";
-export const FABRIC_CONTRACT = "use the chaincode {}";
-export const FABRIC_SEND_TRANSACTION = "{} the smart contract {}";
+export const ADDRESS = "have a fabric endpoint named {} with tls certificate in {}";
+export const CONNECT = "connect to msp {} with certificate in {} and private key in {}";
+export const CHANNEL = "connect to the channel {}";
+export const CONTRACT = "use the chaincode {}";
+export const SEND_TRANSACTION = "{} the smart contract {}";
+export const QUERY = "ask fabric to evaluate {} and store the output in {}";
+export const SUBMIT = "ask fabric to submit {}";

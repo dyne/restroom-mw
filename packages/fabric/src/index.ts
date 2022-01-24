@@ -10,11 +10,12 @@ import { Client, credentials } from '@grpc/grpc-js';
 import axios from "axios";
 import { NextFunction, Request, Response } from "express";
 import {
-  FABRIC_ADDRESS,
-  FABRIC_CONNECT,
-  FABRIC_CHANNEL,
-  FABRIC_CONTRACT,
-  FABRIC_SEND_TRANSACTION,
+  ADDRESS,
+  CONNECT,
+  CHANNEL,
+  CONTRACT,
+  QUERY,
+  SUBMIT
 } from "./actions";
 import { TextDecoder } from 'util';
 
@@ -53,15 +54,15 @@ export default async (req: Request, res: Response, next: NextFunction) => {
           return acc;
         }, []);
       };
-      if(zencode.match(FABRIC_ADDRESS)) {
-	[fabricAddress, tlsCertificate] = namedParamsOf(FABRIC_ADDRESS);
+      if(zencode.match(ADDRESS)) {
+	[fabricAddress, tlsCertificate] = namedParamsOf(ADDRESS);
 	tlsCertificate = Buffer.from(tlsCertificate, 'utf-8')
 	const tlsCredentials = credentials.createSsl(tlsCertificate);
 	client = new Client(fabricAddress, tlsCredentials, {});
       }
 
-      if(zencode.match(FABRIC_CONNECT)) {
-	const [mspId, certificate, privateKeyPem] = namedParamsOf(FABRIC_CONNECT);
+      if(zencode.match(CONNECT)) {
+	const [mspId, certificate, privateKeyPem] = namedParamsOf(CONNECT);
 	// identity
 	const certificateBuf = Buffer.from(certificate, 'utf-8');
 	const identity: Identity = {mspId: mspId, credentials: certificateBuf};
@@ -90,38 +91,48 @@ export default async (req: Request, res: Response, next: NextFunction) => {
 	});
       }
 
-      if(zencode.match(FABRIC_CHANNEL)) {
-	const [channelName] = namedParamsOf(FABRIC_CHANNEL)
+      if(zencode.match(CHANNEL)) {
+	const [channelName] = namedParamsOf(CHANNEL)
 	network = gateway.getNetwork(channelName);
 	console.log(network.getName());
       }
       
-      if(zencode.match(FABRIC_CONTRACT)) {
-	const [contractName] = namedParamsOf(FABRIC_CONTRACT)
+      if(zencode.match(CONTRACT)) {
+	const [contractName] = namedParamsOf(CONTRACT)
 	contract = network.getContract(contractName);
 	console.log(contract.getChaincodeName());
       }
 
-      if(zencode.match(FABRIC_SEND_TRANSACTION)) {
-	const params = zencode.paramsOf(FABRIC_SEND_TRANSACTION);
+      if(zencode.match(QUERY)) {
+	const params = zencode.paramsOf(QUERY);
 	for (var i = 0; i < params.length; i += 2) {
 	  try {
-	    if(params[i] == 'evaluate') {
-	      const resultBytes = await contract.evaluateTransaction(params[i+1]);
-	      const resultJson = utf8Decoder.decode(resultBytes);
-	      const result = JSON.parse(resultJson);
-	      console.log(result);
-	    } else {
-	      console.log(await contract.submitTransaction(params[i+1]))
-	    }
+	    const functionData = input[params[i]]
+	    const resultBytes = await contract.evaluateTransaction(functionData[0]);
+	    const resultJson = utf8Decoder.decode(resultBytes);
+	    const result = JSON.parse(resultJson);
+	    data[params[i+1]] = result;
 	  } catch(e) {
 	    console.debug(e)
+	    data[params[i+1]] = '';
 	  }
 	}
       }
     });
 
     rr.onSuccess(async (params) => {
+      const { zencode, result } = params;
+      if(zencode.match(SUBMIT)) {
+	const params = zencode.paramsOf(SUBMIT);
+	for (var i = 0; i < params.length; i += 2) {
+	  try {
+	    const functionData = input[params[i]]
+	    await contract.submitTransaction.apply(contract, functionData);
+	  } catch(e) {
+	    console.debug(e)
+	  }
+	}
+      }
       gateway.close()
     });
     next();
