@@ -29,6 +29,27 @@ let contract: Contract = null;
 
 const utf8Decoder = new TextDecoder();
 
+
+// The steps in FabricInterop are all required (in this order...)
+enum FabricInterop {
+  Address = 0,
+  Connect,
+  Channel,
+  Contract
+}
+let current: FabricInterop = FabricInterop.Address;
+
+const validateStep = (requested: FabricInterop) => {
+  if(requested > current) {
+    throw new Error(
+`One step is missing
+1. Set endpoint address
+2. Connect organization
+3. Set channel
+4. Set contract (chaincode)`)
+  }
+}
+
 // Copied from sawroom lib
 export const combineDataKeys = (data: ObjectLiteral, keys: string) => {
   try {
@@ -55,18 +76,20 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         }, []);
       };
       if(zencode.match(ADDRESS)) {
+	validateStep(FabricInterop.Address);
 	[fabricAddress, tlsCertificate] = namedParamsOf(ADDRESS);
 	tlsCertificate = Buffer.from(tlsCertificate, 'utf-8')
 	const tlsCredentials = credentials.createSsl(tlsCertificate);
 	client = new Client(fabricAddress, tlsCredentials, {});
+	current = FabricInterop.Connect;
       }
 
       if(zencode.match(CONNECT)) {
+	validateStep(FabricInterop.Connect);
 	const [mspId, certificate, privateKeyPem] = namedParamsOf(CONNECT);
 	// identity
 	const certificateBuf = Buffer.from(certificate, 'utf-8');
 	const identity: Identity = {mspId: mspId, credentials: certificateBuf};
-	console.log(identity)
 	// signer
 	const privateKey = crypto.createPrivateKey(privateKeyPem);
 	const signer: Signer = signers.newPrivateKeySigner(privateKey);
@@ -89,38 +112,41 @@ export default async (req: Request, res: Response, next: NextFunction) => {
             return { deadline: Date.now() + 60000 }; // 1 minute
           },
 	});
+	current = FabricInterop.Channel;
       }
 
       if(zencode.match(CHANNEL)) {
+	validateStep(FabricInterop.Channel);
 	const [channelName] = namedParamsOf(CHANNEL)
 	network = gateway.getNetwork(channelName);
-	console.log(network.getName());
+	current = FabricInterop.Contract;
       }
       
       if(zencode.match(CONTRACT)) {
+	validateStep(FabricInterop.Contract);
 	const [contractName] = namedParamsOf(CONTRACT)
 	contract = network.getContract(contractName);
-	console.log(contract.getChaincodeName());
       }
 
       if(zencode.match(QUERY)) {
+	validateStep(FabricInterop.Contract);
 	const params = zencode.paramsOf(QUERY);
 	for (var i = 0; i < params.length; i += 2) {
 	  try {
 	    const functionData = input[params[i]]
-	    const resultBytes = await contract.evaluateTransaction(functionData[0]);
+	    const resultBytes = await contract.evaluateTransaction.apply(contract, functionData);
 	    const resultJson = utf8Decoder.decode(resultBytes);
 	    const result = JSON.parse(resultJson);
 	    data[params[i+1]] = result;
 	  } catch(e) {
-	    console.debug(e)
-	    data[params[i+1]] = '';
+	    throw new Error("Could not evaluate transaction")
 	  }
 	}
       }
     });
 
     rr.onSuccess(async (params) => {
+      validateStep(FabricInterop.Contract);
       const { zencode, result } = params;
       if(zencode.match(SUBMIT)) {
 	const params = zencode.paramsOf(SUBMIT);
@@ -129,7 +155,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
 	    const functionData = input[params[i]]
 	    await contract.submitTransaction.apply(contract, functionData);
 	  } catch(e) {
-	    console.debug(e)
+	    throw new Error("Could not submit transaction")
 	  }
 	}
       }
