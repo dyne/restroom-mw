@@ -47,14 +47,6 @@ export const sendToSawroom = async (
   };
 };
 
-export const combineDataKeys = (data: ObjectLiteral, keys: string) => {
-  try {
-    return { ...data, ...JSON.parse(keys) };
-  } catch (e) {
-    throw new Error("Keys or data in wrong format");
-  }
-};
-
 export const getState = async (endpoint: string, batchId: string) => {
   const batch_response = await axios.get(`${endpoint}:8008/batches/${batchId}`);
   const tids = batch_response.data.data.header.transaction_ids;
