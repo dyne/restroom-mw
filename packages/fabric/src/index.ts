@@ -129,7 +129,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       }
 
       if(zencode.match(QUERY)) {
-	validateStep(FabricInterop.Contract);
+	validateStep(FabricInterop.Contract); // The user must have set a contract
 	const params = zencode.paramsOf(QUERY);
 	for (var i = 0; i < params.length; i += 2) {
 	  try {
@@ -146,7 +146,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     });
 
     rr.onSuccess(async (params) => {
-      validateStep(FabricInterop.Contract);
+      validateStep(FabricInterop.Contract); // The user must have set a contract
       const { zencode, result } = params;
       if(zencode.match(SUBMIT)) {
 	const params = zencode.paramsOf(SUBMIT);

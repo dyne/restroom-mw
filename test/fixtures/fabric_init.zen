@@ -1,0 +1,6 @@
+Rule unknown ignore
+Given I have a fabric endpoint named 'endpoint' with tls certificate in 'tls'
+Given I connect to msp 'Org1MSP' with certificate in 'certificate' and private key in 'private_key'
+Given I connect to the channel 'channel'
+Given I use the chaincode 'chaincode'
+Then I ask fabric to submit 'init_function'
