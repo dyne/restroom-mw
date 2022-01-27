@@ -23,26 +23,28 @@ test.serial("Missing step", async (t) => {
   const { app } = t.context;
   var res = await app.post("/fabric_missing_step");
   t.is(res.status, 500, res.text);
+  t.is(typeof res.body.exception, 'string');
+  t.is(res.body.exception.includes("One step is missing"), true);
 });
 
-test.serial("Init ledger, read data and change it", async (t) => {
+test.serial("Init ledger", async (t) => {
   const { app } = t.context;
   var res = await app.post("/fabric_init");
   t.is(res.status, 200, res.text);
+  t.is(res.body.exception, undefined);
+  t.is(res.body.length, 0);
 });
 
 test.serial("Read data and change it", async (t) => {
   const { app } = t.context;
   var res = await app.post("/fabric_read_write");
   t.is(res.status, 200, res.text);
-  res = JSON.parse(res.text)
-  t.is(res.hash,"waS8LuZEWge+Y7k+zsG3cd58iw/o+vNKGS52U+fxeP0=")
+  t.is(res.body.hash,"waS8LuZEWge+Y7k+zsG3cd58iw/o+vNKGS52U+fxeP0=")
 });
 
 test.serial("Read data (again)", async (t) => {
   const { app } = t.context;
   var res = await app.post("/fabric_read_write");
   t.is(res.status, 200, res.text);
-  res = JSON.parse(res.text)
-  t.is(res.hash,"PDHNX7wMa1zl8A9jBqSsEtMqxpPNVZqoEpTl28+odfg=")
+  t.is(res.body.hash,"PDHNX7wMa1zl8A9jBqSsEtMqxpPNVZqoEpTl28+odfg=")
 });
