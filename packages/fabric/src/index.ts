@@ -68,12 +68,12 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       const namedParamsOf = zencodeNamedParamsOf(zencode, input);
 
       if(zencode.match(ADDRESS)) {
-	validateStep(FabricInterop.Address);
-	[fabricAddress, tlsCertificate] = namedParamsOf(ADDRESS);
-	tlsCertificate = Buffer.from(tlsCertificate, 'utf-8')
-	const tlsCredentials = credentials.createSsl(tlsCertificate);
-	client = new Client(fabricAddress, tlsCredentials, {});
-	current = FabricInterop.Connect;
+        validateStep(FabricInterop.Address);
+        [fabricAddress, tlsCertificate] = namedParamsOf(ADDRESS);
+        tlsCertificate = Buffer.from(tlsCertificate, 'utf-8')
+        const tlsCredentials = credentials.createSsl(tlsCertificate);
+        client = new Client(fabricAddress, tlsCredentials, {});
+        current = FabricInterop.Connect;
       }
 
       if(zencode.match(CONNECT)) {
@@ -95,7 +95,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
           endorseOptions,
           submitOptions,
           commitStatusOptions,
-	});
+      });
         current = FabricInterop.Channel;
       }
 
@@ -107,25 +107,25 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       }
       
       if(zencode.match(CONTRACT)) {
-	validateStep(FabricInterop.Contract);
-	const [contractName] = namedParamsOf(CONTRACT)
-	contract = network.getContract(contractName);
+        validateStep(FabricInterop.Contract);
+        const [contractName] = namedParamsOf(CONTRACT)
+        contract = network.getContract(contractName);
       }
 
       if(zencode.match(QUERY)) {
-	validateStep(FabricInterop.Contract); // The user must have set a contract
-	const params = zencode.paramsOf(QUERY);
-	for (var i = 0; i < params.length; i += 2) {
-	  try {
-	    const functionData = input[params[i]]
-	    const resultBytes = await contract.evaluateTransaction.apply(contract, functionData);
-	    const resultJson = UTF8_DECODER.decode(resultBytes);
-	    const result = JSON.parse(resultJson);
-	    data[params[i+1]] = result;
-	  } catch(e) {
-	    throw new Error("Could not evaluate transaction")
-	  }
-	}
+        validateStep(FabricInterop.Contract); // The user must have set a contract
+        const params = zencode.paramsOf(QUERY);
+        for (var i = 0; i < params.length; i += 2) {
+          try {
+            const functionData = input[params[i]]
+            const resultBytes = await contract.evaluateTransaction.apply(contract, functionData);
+            const resultJson = UTF8_DECODER.decode(resultBytes);
+            const result = JSON.parse(resultJson);
+            data[params[i+1]] = result;
+          } catch(e) {
+            throw new Error("Could not evaluate transaction")
+          }
+        }
       }
     });
 
@@ -133,15 +133,15 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       validateStep(FabricInterop.Contract); // The user must have set a contract
       const { zencode } = params;
       if(zencode.match(SUBMIT)) {
-	const params = zencode.paramsOf(SUBMIT);
-	for (var i = 0; i < params.length; i += 2) {
-	  try {
-	    const functionData = input[params[i]]
-	    await contract.submitTransaction.apply(contract, functionData);
-	  } catch(e) {
-	    throw new Error("Could not submit transaction")
-	  }
-	}
+        const params = zencode.paramsOf(SUBMIT);
+        for (var i = 0; i < params.length; i += 2) {
+          try {
+            const functionData = input[params[i]]
+            await contract.submitTransaction.apply(contract, functionData);
+          } catch(e) {
+            throw new Error("Could not submit transaction")
+          }
+        }
       }
       gateway.close()
     });
