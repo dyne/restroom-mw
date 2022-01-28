@@ -4,5 +4,8 @@
     "outDir": "./dist",
     "rootDir": "./src"
   },
+  "references": [{
+    "path": "../zencode/"
+  }],
   "exclude": ["node_modules", "dist", "tests"]
 }

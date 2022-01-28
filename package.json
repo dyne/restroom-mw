@@ -5,6 +5,9 @@
   "workspaces": [
     "packages/*"
   ],
+  "engines": {
+    "node": "^14.15.0 || ^16.13.0"
+  },
   "scripts": {
     "prerelease": "yarn build && yarn doc && git add docs && git commit -m 'docs: 📚️ 📝 Update docs'",
     "release": "npm whoami && lerna publish",
