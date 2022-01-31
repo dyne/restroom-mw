@@ -47,6 +47,19 @@ enum FabricInterop {
 }
 let current: FabricInterop = FabricInterop.Address;
 
+
+const submitAndRetry = async (params: string[], errorMsg: string,
+    fn: (i: number) => Promise<void>) => {
+  for (var i = 0; i < params.length; i += 2) {
+    try {
+      await fn(i);
+    } catch(e) {
+      console.debug(e)
+      throw new Error(errorMsg + ", code: " + e.code)
+    }
+  }
+}
+
 const validateStep = (requested: FabricInterop) => {
   if(requested > current) {
     throw new Error(
@@ -115,17 +128,15 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       if(zencode.match(QUERY)) {
         validateStep(FabricInterop.Contract); // The user must have set a contract
         const params = zencode.paramsOf(QUERY);
-        for (var i = 0; i < params.length; i += 2) {
-          try {
+        await submitAndRetry(params, "Could not ealuate transaction", 
+          async (i: number) => {
             const functionData = input[params[i]]
             const resultBytes = await contract.evaluateTransaction.apply(contract, functionData);
             const resultJson = UTF8_DECODER.decode(resultBytes);
             const result = JSON.parse(resultJson);
             data[params[i+1]] = result;
-          } catch(e) {
-            throw new Error("Could not evaluate transaction")
           }
-        }
+        );
       }
     });
 
@@ -134,14 +145,12 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       const { zencode } = params;
       if(zencode.match(SUBMIT)) {
         const params = zencode.paramsOf(SUBMIT);
-        for (var i = 0; i < params.length; i += 2) {
-          try {
+        await submitAndRetry(params, "Could not submit transaction",
+          async (i: number) => {
             const functionData = input[params[i]]
             await contract.submitTransaction.apply(contract, functionData);
-          } catch(e) {
-            throw new Error("Could not submit transaction")
           }
-        }
+        );
       }
       gateway.close()
     });
