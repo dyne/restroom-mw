@@ -22,6 +22,9 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
+    - uses: supercharge/redis-github-action@1.4.0
+      with:
+        redis-version: 6
     - run: yarn
     - run: yarn add -W zenroom@next
     - run: yarn build

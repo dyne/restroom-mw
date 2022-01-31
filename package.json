@@ -25,14 +25,34 @@
   },
   "turbo": {
     "pipeline": {
-      "build": { "dependsOn": ["^build"] },
-      "watch": { "outputs": [] },
-      "doc": { "outputs": ["docs/**"] },
-      "lint": { "outputs": [] },
-      "lint:fix": { "outputs": [] },
-      "clean": { "outputs": [] },
-      "links": { "outputs": [] },
-      "unlinks": { "outputs": [] }
+      "build": {
+        "dependsOn": [
+          "^build"
+        ]
+      },
+      "watch": {
+        "outputs": []
+      },
+      "doc": {
+        "outputs": [
+          "docs/**"
+        ]
+      },
+      "lint": {
+        "outputs": []
+      },
+      "lint:fix": {
+        "outputs": []
+      },
+      "clean": {
+        "outputs": []
+      },
+      "links": {
+        "outputs": []
+      },
+      "unlinks": {
+        "outputs": []
+      }
     }
   },
   "ava": {
