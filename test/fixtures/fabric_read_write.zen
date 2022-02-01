@@ -1,0 +1,11 @@
+Rule unknown ignore
+
+Given I have a fabric endpoint named 'endpoint' with tls certificate in 'tls'
+Given I connect to msp 'Org1MSP' with certificate in 'certificate' and private key in 'private_key'
+Given I connect to the channel 'channel'
+Given I use the chaincode 'chaincode'
+Given I have a 'string array' named 'query_result'
+Given I ask fabric to evaluate 'read_function' and store the output in 'query_result'
+When I create the hash of 'query_result'
+Then print all data
+Then I ask fabric to submit 'write_function'
