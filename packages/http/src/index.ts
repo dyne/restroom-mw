@@ -1,5 +1,5 @@
 import { Restroom } from "@restroom-mw/core";
-import { ObjectLiteral } from "@restroom-mw/core/src/types";
+import { ObjectLiteral } from "@restroom-mw/types";
 import { Zencode } from "@restroom-mw/zencode";
 import axios from "axios";
 import { NextFunction, Request, Response } from "express";

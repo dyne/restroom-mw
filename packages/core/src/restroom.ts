@@ -1,4 +1,4 @@
-import { DK, ObjectLiteral } from "./types";
+import { DK, ObjectLiteral } from "@restroom-mw/types";
 
 /**
  *

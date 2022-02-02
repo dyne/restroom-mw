@@ -20,7 +20,7 @@ import { NextFunction, Request, Response } from "express";
 import * as yaml from "js-yaml";
 import { RestroomResult } from "./restroom-result";
 import { Zencode } from "@restroom-mw/zencode";
-import { BlockContext } from "./block-context";
+import { BlockContext, ObjectLiteral } from "@restroom-mw/types";
 import { CHAIN_EXTENSION } from "@restroom-mw/utils";
 const functionHooks = initHooks;
 
@@ -97,7 +97,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     try {
       const ymlContent: any = yaml.load(fileContents);
       const startBlock: string = ymlContent?.start
-      if(!startBlock){
+      if (!startBlock) {
         throw new Error(`Yml is incomplete. Start (start:) first level definition is missing!`);
       }
 
@@ -119,10 +119,10 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     let counter: number = 0;
     const contractNumbers: number = Object.keys(ymlContent?.blocks).length;
 
-    while(nextStep){
+    while (nextStep) {
       counter++;
       nextStep = ymlContent?.blocks[nextStep]?.next;
-      if(counter>contractNumbers){
+      if (counter > contractNumbers) {
         throw new Error(`Loop detected. Execution is aborted!`);
       }
     }
@@ -139,12 +139,12 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       return isChain
         ? executeChain(getYml(contractName.split(".")[0]), data)
         : callRestroom(
-            data,
-            keys,
-            getConf(contractName),
-            getContractByContractName(contractName),
-            contractName
-          );
+          data,
+          keys,
+          getConf(contractName),
+          getContractByContractName(contractName),
+          contractName
+        );
     } catch (err) {
       return await resolveRestroomResult({
         error: err,

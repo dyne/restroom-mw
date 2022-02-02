@@ -21,7 +21,7 @@ import {
   getState,
   sendToSawroom,
 } from "./lib";
-
+import { ObjectLiteral } from "@restroom-mw/types";
 import { combineDataKeys, zencodeNamedParamsOf } from '@restroom-mw/utils'
 
 let username;
@@ -131,21 +131,21 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         validateAddress();
         const [value, tag, outputVariable] = zencode.paramsOf(DEPOSIT);
         const res = await deposit(input[tag], value, sawroomAddress);
-        Object.assign(result, { [outputVariable] : res });
+        Object.assign(result, { [outputVariable]: res });
       }
 
       if (zencode.match(WITHDRAW)) {
         validateAddress();
         const [value, tag, outputVariable] = zencode.paramsOf(WITHDRAW);
         const res = await withdraw(input[tag], value, sawroomAddress);
-        Object.assign(result, { [outputVariable] : res });
+        Object.assign(result, { [outputVariable]: res });
       }
 
       if (zencode.match(TRANSFER)) {
         validateAddress();
         const [value, tag, beneficiaryPublicKey, outputVariable] = zencode.paramsOf(TRANSFER);
         const res = await transfer(input[tag], value, input[beneficiaryPublicKey], sawroomAddress);
-        Object.assign(result, { [outputVariable] : res });
+        Object.assign(result, { [outputVariable]: res });
       }
 
     });

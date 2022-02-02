@@ -4,7 +4,13 @@
     "rootDir": "./src",
     "outDir": "./dist"
   },
-  "references": [{ "path": "../zencode/" }, {"path": "../utils/"}],
+  "references": [{
+    "path": "../zencode/"
+  }, {
+    "path": "../utils/"
+  }, {
+    "path": "../types/"
+  }],
 
   "exclude": ["node_modules", "dist", "cypress"]
 }

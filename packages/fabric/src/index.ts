@@ -1,5 +1,5 @@
 import { Restroom } from "@restroom-mw/core";
-import { ObjectLiteral } from "@restroom-mw/core/src/types";
+import { ObjectLiteral } from "@restroom-mw/types";
 import * as crypto from 'crypto';
 
 import {

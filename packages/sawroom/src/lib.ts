@@ -4,6 +4,7 @@ import cbor from "cbor";
 import qs from "qs";
 import url from "url";
 import { EXECUTE } from "./actions";
+import { ObjectLiteral } from "@restroom-mw/types";
 
 export const executeOnSawroom = async (
   sawroomAddress: string,
