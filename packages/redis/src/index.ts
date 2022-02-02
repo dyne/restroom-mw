@@ -1,4 +1,4 @@
-import * as redis from 'redis'
+import * as redis from "redis";
 import { Restroom } from "@restroom-mw/core";
 import { NextFunction, Request, Response } from "express";
 import { Zencode } from "@restroom-mw/zencode";
@@ -8,7 +8,7 @@ import { Zencode } from "@restroom-mw/zencode";
  *
  * **WRITE_WITH_KEY** `write data into redis under the key {}`
  *
- * **READ_WITH_KEY** `read from redis the data under the key {} and save the output into {}";`
+ * **READ** `read from redis the data under the key {} and save the output into {}";`
  *
  * @constant
  * @default
@@ -43,11 +43,11 @@ export default (req: Request, res: Response, next: NextFunction) => {
 
     if (zencode.match(actions.READ)) {
       const [key, outputVariable] = namedParamsOf(actions.READ);
-      data[outputVariable] = await client.get(key);
+      data[outputVariable] = JSON.parse((await client.get(key)) ?? {});
     }
   });
 
-  rr.onSuccess(async (args: { result: any; zencode: any; }) => {
+  rr.onSuccess(async (args: { result: any; zencode: any }) => {
     const { result, zencode } = args;
 
     if (zencode.match(actions.WRITE_WITH_KEY)) {
@@ -60,7 +60,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
     if (client) {
       await client.quit();
     }
-  })
+  });
 
   next();
 };
