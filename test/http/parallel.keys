@@ -1,0 +1,9 @@
+{
+  "data": {
+    title: 'foo',
+    body: 'bar',
+    userId: 1,
+  },
+  "get_url": "https://jsonplaceholder.typicode.com/todos/1",
+  "post_url": "https://jsonplaceholder.typicode.com/posts"
+}

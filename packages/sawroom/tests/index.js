@@ -5,7 +5,6 @@ import supertest from "supertest";
 import axios from "axios";
 import retry from "async-retry";
 
-
 process.env.ZENCODE_DIR = "./test/fixtures";
 const sawroom = require("../dist");
 const zencode = require("../../core");
@@ -19,7 +18,9 @@ test.before(async (t) => {
 });
 
 test.serial("Middleware should read from sawtooth correctly", async (t) => {
-  const { app } = t.context;
+  const {
+    app
+  } = t.context;
   const res = await app.post("/sawroom_read");
   t.is(res.status, 200, res.text);
   const result = res.body.sawroom[0];
@@ -29,7 +30,9 @@ test.serial("Middleware should read from sawtooth correctly", async (t) => {
 });
 
 test.serial("Middleware should execute on sawtooth correctly", async (t) => {
-  const { app } = t.context;
+  const {
+    app
+  } = t.context;
   const res = await app.post("/sawroom_execute");
   t.is(res.status, 200, res.text);
   t.true(Array.isArray(res.body));
@@ -39,20 +42,26 @@ test.serial("Middleware should execute on sawtooth correctly", async (t) => {
 });
 
 test.serial("getToken works correctly", async (t) => {
-  const { app } = t.context;
+  const {
+    app
+  } = t.context;
   const res = await app.post("/sawroom_login");
   t.is(res.status, 200, res.text);
   t.is(res.body.token.length, 173);
 });
 
 test.serial("Setup the context id", async (t) => {
-  const { app } = t.context;
+  const {
+    app
+  } = t.context;
   const res = await app.post("/sawroom_context_id");
   t.is(res.status, 200, res.text);
 });
 
 test.serial("Save data on sawroom works correctly", async (t) => {
-  const { app } = t.context;
+  const {
+    app
+  } = t.context;
   const res = await app.post("/sawroom-save-data");
   const cid1 = "0Uu+Ldk04+JSw9V0TQW2ufZuxe1v3K8jffunxxLLI0o=";
   const cid2 = "LCsmEBZblccKjrWCJi7tvg==";
@@ -66,14 +75,18 @@ test.serial("Save data on sawroom works correctly", async (t) => {
 });
 
 test.serial("Store on rust TP works correctly", async (t) => {
-  const { app } = t.context;
+  const {
+    app
+  } = t.context;
   const res = await app.post("/sawroom_store");
   t.is(res.status, 200, res.text);
   t.is(typeof res.body["my128Tag"], "string");
 });
 
 test.serial("Store OUTPUT on rust TP works correctly", async (t) => {
-  const { app } = t.context;
+  const {
+    app
+  } = t.context;
   const res = await app.post("/sawroom_store_output");
   t.is(res.status, 200, res.text);
   t.log(res.text);
@@ -81,7 +94,9 @@ test.serial("Store OUTPUT on rust TP works correctly", async (t) => {
 });
 
 test.serial("Retrieve on rust TP works correctly", async (t) => {
-  const { app } = t.context;
+  const {
+    app
+  } = t.context;
   const res = await app.post("/sawroom_retrieve");
   t.is(res.status, 200, res.text);
   t.log(res.body);
@@ -91,16 +106,22 @@ test.serial("Retrieve on rust TP works correctly", async (t) => {
 const is_transaction_valid = async (link) => {
   var res = await retry(async () => {
     var batchResult = await axios.get(link);
-    if (batchResult == undefined) throw new Error("Waiting fro batch");
-    if (batchResult.data.data == undefined) throw new Error("Waiting for Data");
+    if (batchResult == undefined) throw new Error(
+    "Waiting fro batch");
+    if (batchResult.data.data == undefined) throw new Error(
+      "Waiting for Data");
     if (batchResult.data.data[0].status == "PENDING") throw new Error;
     return batchResult;
-  }, { retries: 25 });
+  }, {
+    retries: 25
+  });
   return (res.data.data[0].status);
 };
 
 test.serial("Assure that Deposit on wallet TP does not work", async (t) => {
-  const { app } = t.context;
+  const {
+    app
+  } = t.context;
   var res = await app.post("/sawroom_ask_balance");
   const oldBalance = res.body["myBalance"];
   res = await app.post("/sawroom_deposit");
@@ -114,9 +135,10 @@ test.serial("Assure that Deposit on wallet TP does not work", async (t) => {
 });
 
 test.serial("Asking the balance on wallet TP work correctly", async (t) => {
-  const { app } = t.context;
+  const {
+    app
+  } = t.context;
   const res = await app.post("/sawroom_ask_balance");
   t.is(res.status, 200, res.text);
   t.is(typeof res.body["myBalance"], "number");
 });
-

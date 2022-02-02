@@ -1,0 +1,5 @@
+Rule unknown ignore
+Given nothing
+When I execute a POST with 'data' request in parallel to '' and save the output into 'posts'
+When I execute a GET request in parallel to 'get_url' and save the output into 'todo'
+Then print all data
