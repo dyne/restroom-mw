@@ -2,5 +2,13 @@ Rule caller restroom-mw
 Given I have a valid redis connection on 'redis://localhost:6379'
 Given I have a 'string dictionary' named 'redisResult'
 Given I read from redis the data under the key 'myHashkey' and save the output into 'redisResult'
+
+
+When I create the 'string dictionary'
 When I create the random object of '256' bits
-Then print 'redisResult'
+When I insert 'random object' in 'string dictionary'
+When I create the 'string array'
+When I insert 'string dictionary' in 'string array'
+
+Then print the 'string array'
+Then I write all data into redis under the key 'myHashicorpkey'
