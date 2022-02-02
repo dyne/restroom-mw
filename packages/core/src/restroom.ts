@@ -1,4 +1,15 @@
-import { DK, ObjectLiteral } from "@restroom-mw/types";
+import {
+  AfterHooksParams,
+  DK,
+  ErrorHooksParams,
+  ExceptionHooksParams,
+  FinishHooksParams,
+  InitHooksParams,
+  ObjectLiteral,
+  SuccessHooksParams,
+  HooksParams
+} from "@restroom-mw/types";
+import { Request, Response } from "express";
 
 /**
  *
@@ -13,14 +24,14 @@ import { DK, ObjectLiteral } from "@restroom-mw/types";
  * @param {object} res express res object
  */
 export class Restroom {
-  _req: any;
-  _res: any;
-  constructor(req: any, res: any) {
+  _req: Request;
+  _res: Response;
+  constructor(req: Request, res: Response) {
     this._req = req;
     this._res = res;
   }
 
-  _hook(name: string, promise: (params: Promise<void>) => Promise<void>) {
+  _hook(name: string, promise: (params: Promise<HooksParams>) => Promise<void>) {
     let locals = this._res.locals[name] || [];
     locals.push(promise);
     this._res.locals[name] = locals;
@@ -31,7 +42,7 @@ export class Restroom {
    * @see [lifecycle](/architecture?id=lifecycle-hooks)
    * @param {Promise} promise
    */
-  onInit(promise: (params: any) => Promise<void>) {
+  onInit(promise: (params: ObjectLiteral) => Promise<void>) {
     this._hook("onInit", promise);
   }
 
@@ -40,7 +51,7 @@ export class Restroom {
    * @see [lifecycle](/architecture?id=lifecycle-hooks)
    * @param {Promise} promise
    */
-  onBefore(promise: (params: any) => Promise<void>) {
+  onBefore(promise: (params: Promise<InitHooksParams>) => Promise<void>) {
     this._hook("onBefore", promise);
   }
 
@@ -49,7 +60,7 @@ export class Restroom {
    * @see [lifecycle](/architecture?id=lifecycle-hooks)
    * @param {Promise} promise
    */
-  onSuccess(promise: (params: any) => Promise<void>) {
+  onSuccess(promise: (params: Promise<SuccessHooksParams>) => Promise<void>) {
     this._hook("onSuccess", promise);
   }
 
@@ -58,7 +69,7 @@ export class Restroom {
    * @see [lifecycle](/architecture?id=lifecycle-hooks)
    * @param {Promise} promise
    */
-  onAfter(promise: (params: any) => Promise<void>) {
+  onAfter(promise: (params: Promise<AfterHooksParams>) => Promise<void>) {
     this._hook("onAfter", promise);
   }
 
@@ -67,7 +78,7 @@ export class Restroom {
    * @see [lifecycle](/architecture?id=lifecycle-hooks)
    * @param {Promise} promise
    */
-  onError(promise: (params: any) => Promise<void>) {
+  onError(promise: (params: Promise<ErrorHooksParams>) => Promise<void>) {
     this._hook("onError", promise);
   }
 
@@ -76,7 +87,7 @@ export class Restroom {
    * @see [lifecycle](/architecture?id=lifecycle-hooks)
    * @param {Promise} promise
    */
-  onException(promise: (params: any) => Promise<void>) {
+  onException(promise: (params: Promise<ExceptionHooksParams>) => Promise<void>) {
     this._hook("onException", promise);
   }
 
@@ -85,7 +96,7 @@ export class Restroom {
    * @see [lifecycle](/architecture?id=lifecycle-hooks)
    * @param {Promise} promise
    */
-  onFinish(promise: (params: any) => Promise<void>) {
+  onFinish(promise: (params: Promise<FinishHooksParams>) => Promise<void>) {
     this._hook("onFinish", promise);
   }
 

@@ -18,9 +18,9 @@ import {
 } from "./context";
 import { NextFunction, Request, Response } from "express";
 import * as yaml from "js-yaml";
-import { RestroomResult } from "./restroom-result";
+
 import { Zencode } from "@restroom-mw/zencode";
-import { BlockContext, ObjectLiteral } from "@restroom-mw/types";
+import { BlockContext, RestroomResult } from "@restroom-mw/types";
 import { CHAIN_EXTENSION } from "@restroom-mw/utils";
 const functionHooks = initHooks;
 
