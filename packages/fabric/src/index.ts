@@ -1,23 +1,17 @@
+import { Client, credentials } from '@grpc/grpc-js';
+import { connect, Contract, Gateway, Identity, Network, Signer, signers } from '@hyperledger/fabric-gateway';
 import { Restroom } from "@restroom-mw/core";
 import { ObjectLiteral } from "@restroom-mw/types";
+import { combineDataKeys, zencodeNamedParamsOf } from '@restroom-mw/utils';
 import * as crypto from 'crypto';
-
-import {
-  Gateway, connect, Contract, Identity, Signer, signers,
-  Network
-}
-  from '@hyperledger/fabric-gateway';
-import { Client, credentials } from '@grpc/grpc-js';
 import { NextFunction, Request, Response } from "express";
+import { TextDecoder } from 'util';
 import {
-  ADDRESS,
-  CONNECT,
-  CHANNEL,
-  CONTRACT,
+  ADDRESS, CHANNEL, CONNECT, CONTRACT,
   QUERY,
   SUBMIT
 } from "./actions";
-import { UTF8_DECODER, zencodeNamedParamsOf, combineDataKeys } from '@restroom-mw/utils';
+
 
 let fabricAddress: string = null;
 let client: Client = null;
@@ -27,6 +21,7 @@ let gateway: Gateway = null;
 let network: Network = null;
 let contract: Contract = null;
 
+const UTF8_DECODER = new TextDecoder();
 
 const evaluateOptions = () => {
   return { deadline: Date.now() + 5000 }; // 5 seconds

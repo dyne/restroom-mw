@@ -22,7 +22,7 @@ import {
   sendToSawroom,
 } from "./lib";
 import { ObjectLiteral } from "@restroom-mw/types";
-import { combineDataKeys, zencodeNamedParamsOf } from '@restroom-mw/utils'
+import { combineDataKeys, zencodeNamedParamsOf } from '@restroom-mw/utils/src/helpers';
 
 let username;
 let password;
