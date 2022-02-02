@@ -1,3 +1,6 @@
+import { TextDecoder } from 'util';
+import { Zencode } from "@restroom-mw/zencode";
+
 require("dotenv").config();
 
 if (process.env.ZENCODE_DIR === undefined)
@@ -53,4 +56,25 @@ export const CHAIN_EXTENSION = process.env.CHAIN_EXT || "chain";
  *  @constant
  *  @type {string}
  */
- export const YML_EXTENSION = process.env.YML_EXT || "yml";
+export const YML_EXTENSION = process.env.YML_EXT || "yml";
+
+export const UTF8_DECODER = new TextDecoder();
+
+export const combineDataKeys = (data: ObjectLiteral, keys: string) => {
+  try {
+    return { ...data, ...JSON.parse(keys) };
+  } catch (e) {
+    throw new Error("Keys or data in wrong format");
+  }
+};
+
+export const zencodeNamedParamsOf = (zencode: Zencode, input: ObjectLiteral) => 
+  (sid: string): string[] => {
+    if (!zencode.match(sid)) return [];
+    const params = zencode.paramsOf(sid);
+    return params.reduce((acc: string[], p: string) => {
+      acc.push(input[p] || p);
+      return acc;
+    }, []);
+  };
+

@@ -4,6 +4,7 @@ import express from "express";
 import supertest from "supertest";
 import { createClient } from "redis";
 
+
 process.env.ZENCODE_DIR = "./test/redis";
 const redismw = require("../dist");
 const zencode = require("../../core");

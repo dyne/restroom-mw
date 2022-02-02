@@ -17,11 +17,12 @@ import {
 } from "./actions";
 import { store, retrieve, balance, deposit, withdraw, transfer } from "@dyne/sawroom-client";
 import {
-  combineDataKeys,
   executeOnSawroom,
   getState,
   sendToSawroom,
 } from "./lib";
+
+import { combineDataKeys, zencodeNamedParamsOf } from '@restroom-mw/utils'
 
 let username;
 let password;
@@ -37,14 +38,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       let { zencode, keys, data } = params;
       input = combineDataKeys(data, keys);
 
-      const namedParamsOf = (sid: string) => {
-        if (!zencode.match(sid)) return [];
-        const params = zencode.paramsOf(sid);
-        return params.reduce((acc: string[], p: string) => {
-          acc.push(input[p] || p);
-          return acc;
-        }, []);
-      };
+      const namedParamsOf = zencodeNamedParamsOf(zencode, input);
 
       [sawroomAddress] = namedParamsOf(SAWROOM_ADDRESS);
 
