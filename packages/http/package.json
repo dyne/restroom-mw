@@ -32,8 +32,7 @@
     "url": "https://github.com/dyne/restroom-mw/issues"
   },
   "dependencies": {
-    "sequelize": "^5.21.7",
-    "sqlite3": "^5.0.0"
+    "axios": "^0.25.0"
   },
   "gitHead": "1552c3de8d11cb57c3c9cd303722c647623c4eb1"
 }

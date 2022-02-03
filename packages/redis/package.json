@@ -34,7 +34,7 @@
     "url": "https://github.com/puria/restroom-mw/issues"
   },
   "dependencies": {
-    "redis": "^4.0.2"
+    "redis": "^4.0.3"
   },
   "gitHead": "1552c3de8d11cb57c3c9cd303722c647623c4eb1"
 }

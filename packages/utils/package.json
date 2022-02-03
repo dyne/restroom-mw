@@ -39,7 +39,7 @@
     "url": "https://github.com/dyne/restroom-mw/issues"
   },
   "dependencies": {
-    "dotenv": "^15.0.0"
+    "dotenv": "^16.0.0"
   },
   "gitHead": "1552c3de8d11cb57c3c9cd303722c647623c4eb1"
 }
