@@ -34,3 +34,12 @@ test("Check that the middleware detects a loop in yaml", async (t) => {
   t.true(res.body.exception.includes("Loop detected. Execution is aborted"));
   t.is(res.status, 500);
 });
+
+test("Check that the middleware detects two different paths in yml", async (t) => {
+  const app = express();
+  app.use("/api/*", core);
+  const res = await request(app).post("/api/different-paths.chain");
+
+  t.true(res.body.exception.includes("Permission Denied. The paths in the yml cannot be different"));
+  t.is(res.status, 500);
+});
