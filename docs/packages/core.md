@@ -45,28 +45,34 @@ app.use("/api/*", core);
         *   [Parameters](#parameters-7)
     *   [onFinish](#onfinish)
         *   [Parameters](#parameters-8)
+    *   [safeJSONParse](#safejsonparse)
+        *   [Parameters](#parameters-9)
+        *   [Examples](#examples)
+    *   [combineDataKeys](#combinedatakeys)
+        *   [Parameters](#parameters-10)
+        *   [Examples](#examples-1)
 *   [addKeysToContext](#addkeystocontext)
-    *   [Parameters](#parameters-9)
-*   [getContractByContractName](#getcontractbycontractname)
-    *   [Parameters](#parameters-10)
-*   [addConfToContext](#addconftocontext)
     *   [Parameters](#parameters-11)
-*   [getContractFromPath](#getcontractfrompath)
+*   [addConfToContext](#addconftocontext)
     *   [Parameters](#parameters-12)
-*   [sendError](#senderror)
+*   [getContractByContractName](#getcontractbycontractname)
     *   [Parameters](#parameters-13)
-*   [addNextToContext](#addnexttocontext)
+*   [sendError](#senderror)
     *   [Parameters](#parameters-14)
-*   [getYml](#getyml)
+*   [getContractFromPath](#getcontractfrompath)
     *   [Parameters](#parameters-15)
-*   [buildEndpointResponse](#buildendpointresponse)
+*   [addNextToContext](#addnexttocontext)
     *   [Parameters](#parameters-16)
-*   [executeChain](#executechain)
+*   [getYml](#getyml)
     *   [Parameters](#parameters-17)
+*   [buildEndpointResponse](#buildendpointresponse)
+    *   [Parameters](#parameters-18)
+*   [executeChain](#executechain)
+    *   [Parameters](#parameters-19)
 
 ### addDataToContext
 
-[packages/core/src/context.ts:8-14](https://github.com/dyne/restroom-mw/blob/465614a027b3d6a5c461a2d3808217f8ede842ec/packages/core/src/context.ts#L8-L14 "Source code on GitHub")
+[packages/core/src/context.ts:8-14](https://github.com/dyne/restroom-mw/blob/777c308af64bbd0f2be384f2e572301f3e22ca9f/packages/core/src/context.ts#L8-L14 "Source code on GitHub")
 
 This function is responsible to add data into single block context
 
@@ -79,7 +85,7 @@ This function is responsible to add data into single block context
 
 ### Restroom
 
-[packages/core/src/restroom.ts:13-89](https://github.com/dyne/restroom-mw/blob/465614a027b3d6a5c461a2d3808217f8ede842ec/packages/core/src/restroom.ts#L13-L89 "Source code on GitHub")
+[packages/core/src/restroom.ts:15-132](https://github.com/dyne/restroom-mw/blob/777c308af64bbd0f2be384f2e572301f3e22ca9f/packages/core/src/restroom.ts#L15-L132 "Source code on GitHub")
 
 #### Parameters
 
@@ -97,7 +103,7 @@ This function is responsible to add data into single block context
 
 #### onInit
 
-[packages/core/src/restroom.ts:32-34](https://github.com/dyne/restroom-mw/blob/465614a027b3d6a5c461a2d3808217f8ede842ec/packages/core/src/restroom.ts#L32-L34 "Source code on GitHub")
+[packages/core/src/restroom.ts:34-36](https://github.com/dyne/restroom-mw/blob/777c308af64bbd0f2be384f2e572301f3e22ca9f/packages/core/src/restroom.ts#L34-L36 "Source code on GitHub")
 
 *   **See**: [lifecycle](/architecture?id=lifecycle-hooks)
 
@@ -109,7 +115,7 @@ Saves the promise to be executed at the onInit lifecycle step
 
 #### onBefore
 
-[packages/core/src/restroom.ts:41-43](https://github.com/dyne/restroom-mw/blob/465614a027b3d6a5c461a2d3808217f8ede842ec/packages/core/src/restroom.ts#L41-L43 "Source code on GitHub")
+[packages/core/src/restroom.ts:43-45](https://github.com/dyne/restroom-mw/blob/777c308af64bbd0f2be384f2e572301f3e22ca9f/packages/core/src/restroom.ts#L43-L45 "Source code on GitHub")
 
 *   **See**: [lifecycle](/architecture?id=lifecycle-hooks)
 
@@ -121,7 +127,7 @@ Saves the promise to be executed at the onBefore lifecycle step
 
 #### onSuccess
 
-[packages/core/src/restroom.ts:50-52](https://github.com/dyne/restroom-mw/blob/465614a027b3d6a5c461a2d3808217f8ede842ec/packages/core/src/restroom.ts#L50-L52 "Source code on GitHub")
+[packages/core/src/restroom.ts:52-54](https://github.com/dyne/restroom-mw/blob/777c308af64bbd0f2be384f2e572301f3e22ca9f/packages/core/src/restroom.ts#L52-L54 "Source code on GitHub")
 
 *   **See**: [lifecycle](/architecture?id=lifecycle-hooks)
 
@@ -133,7 +139,7 @@ Saves the promise to be executed at the onSuccess lifecycle step
 
 #### onAfter
 
-[packages/core/src/restroom.ts:59-61](https://github.com/dyne/restroom-mw/blob/465614a027b3d6a5c461a2d3808217f8ede842ec/packages/core/src/restroom.ts#L59-L61 "Source code on GitHub")
+[packages/core/src/restroom.ts:61-63](https://github.com/dyne/restroom-mw/blob/777c308af64bbd0f2be384f2e572301f3e22ca9f/packages/core/src/restroom.ts#L61-L63 "Source code on GitHub")
 
 *   **See**: [lifecycle](/architecture?id=lifecycle-hooks)
 
@@ -145,7 +151,7 @@ Saves the promise to be executed at the onAfter lifecycle step
 
 #### onError
 
-[packages/core/src/restroom.ts:68-70](https://github.com/dyne/restroom-mw/blob/465614a027b3d6a5c461a2d3808217f8ede842ec/packages/core/src/restroom.ts#L68-L70 "Source code on GitHub")
+[packages/core/src/restroom.ts:70-72](https://github.com/dyne/restroom-mw/blob/777c308af64bbd0f2be384f2e572301f3e22ca9f/packages/core/src/restroom.ts#L70-L72 "Source code on GitHub")
 
 *   **See**: [lifecycle](/architecture?id=lifecycle-hooks)
 
@@ -157,7 +163,7 @@ Saves the promise to be executed at the onError lifecycle step
 
 #### onException
 
-[packages/core/src/restroom.ts:77-79](https://github.com/dyne/restroom-mw/blob/465614a027b3d6a5c461a2d3808217f8ede842ec/packages/core/src/restroom.ts#L77-L79 "Source code on GitHub")
+[packages/core/src/restroom.ts:79-81](https://github.com/dyne/restroom-mw/blob/777c308af64bbd0f2be384f2e572301f3e22ca9f/packages/core/src/restroom.ts#L79-L81 "Source code on GitHub")
 
 *   **See**: [lifecycle](/architecture?id=lifecycle-hooks)
 
@@ -169,7 +175,7 @@ Saves the promise to be executed at the onException lifecycle step
 
 #### onFinish
 
-[packages/core/src/restroom.ts:86-88](https://github.com/dyne/restroom-mw/blob/465614a027b3d6a5c461a2d3808217f8ede842ec/packages/core/src/restroom.ts#L86-L88 "Source code on GitHub")
+[packages/core/src/restroom.ts:88-90](https://github.com/dyne/restroom-mw/blob/777c308af64bbd0f2be384f2e572301f3e22ca9f/packages/core/src/restroom.ts#L88-L90 "Source code on GitHub")
 
 *   **See**: [lifecycle](/architecture?id=lifecycle-hooks)
 
@@ -179,9 +185,72 @@ Saves the promise to be executed at the onFinish lifecycle step
 
 *   `promise` **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)** 
 
+#### safeJSONParse
+
+[packages/core/src/restroom.ts:104-112](https://github.com/dyne/restroom-mw/blob/777c308af64bbd0f2be384f2e572301f3e22ca9f/packages/core/src/restroom.ts#L104-L112 "Source code on GitHub")
+
+Parse the potential JSON in a safe manner and return it as an object
+
+##### Parameters
+
+*   `o` **DK** 
+*   `errorMessage` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** 
+*   `keys` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+
+##### Examples
+
+````javascript
+```
+const keys = req.body.keys;
+const data = await restroom.(keys);
+```
+````
+
+*   Throws **[Error](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Error)** 
+
+Returns **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+
+#### combineDataKeys
+
+[packages/core/src/restroom.ts:127-131](https://github.com/dyne/restroom-mw/blob/777c308af64bbd0f2be384f2e572301f3e22ca9f/packages/core/src/restroom.ts#L127-L131 "Source code on GitHub")
+
+*   **See**: [combineDataKeys](/architecture?id=combine-data-keys)
+
+Combine data and keys parsed as safe JSON objects into a single object
+
+##### Parameters
+
+*   `data` **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+*   `keys` **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+
+##### Examples
+
+````javascript
+```
+const data = req.body.data;
+const keys = req.body.keys;
+const dataKeys = await restroom.combineDataKeys(data, keys);
+```
+````
+
+Returns **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+
 ### addKeysToContext
 
-[packages/core/src/context.ts:21-31](https://github.com/dyne/restroom-mw/blob/465614a027b3d6a5c461a2d3808217f8ede842ec/packages/core/src/context.ts#L21-L31 "Source code on GitHub")
+[packages/core/src/context.ts:21-31](https://github.com/dyne/restroom-mw/blob/777c308af64bbd0f2be384f2e572301f3e22ca9f/packages/core/src/context.ts#L21-L31 "Source code on GitHub")
+
+This function is responsible to add keys into single block context from selected .keys file
+
+#### Parameters
+
+*   `singleBlockContext` **any** 
+*   `ymlContent` **any** 
+*   `object` **singleBlockContext** context of a single block
+*   `string` **blockName** block name
+
+### addConfToContext
+
+[packages/core/src/context.ts:38-41](https://github.com/dyne/restroom-mw/blob/777c308af64bbd0f2be384f2e572301f3e22ca9f/packages/core/src/context.ts#L38-L41 "Source code on GitHub")
 
 This function is responsible to add keys into single block context from selected .keys file
 
@@ -194,7 +263,7 @@ This function is responsible to add keys into single block context from selected
 
 ### getContractByContractName
 
-[packages/core/src/utils.ts:33-35](https://github.com/dyne/restroom-mw/blob/465614a027b3d6a5c461a2d3808217f8ede842ec/packages/core/src/utils.ts#L33-L35 "Source code on GitHub")
+[packages/core/src/utils.ts:38-40](https://github.com/dyne/restroom-mw/blob/777c308af64bbd0f2be384f2e572301f3e22ca9f/packages/core/src/utils.ts#L38-L40 "Source code on GitHub")
 
 Returns zencode from a contract name
 
@@ -204,34 +273,9 @@ Returns zencode from a contract name
 
 Returns **Zencode** 
 
-### addConfToContext
-
-[packages/core/src/context.ts:38-41](https://github.com/dyne/restroom-mw/blob/465614a027b3d6a5c461a2d3808217f8ede842ec/packages/core/src/context.ts#L38-L41 "Source code on GitHub")
-
-This function is responsible to add keys into single block context from selected .keys file
-
-#### Parameters
-
-*   `singleBlockContext` **any** 
-*   `ymlContent` **any** 
-*   `object` **singleBlockContext** context of a single block
-*   `string` **blockName** block name
-
-### getContractFromPath
-
-[packages/core/src/utils.ts:42-44](https://github.com/dyne/restroom-mw/blob/465614a027b3d6a5c461a2d3808217f8ede842ec/packages/core/src/utils.ts#L42-L44 "Source code on GitHub")
-
-Returns zencode from a partial path
-
-#### Parameters
-
-*   `path` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
-
-Returns **Zencode** 
-
 ### sendError
 
-[packages/core/src/index.ts:45-62](https://github.com/dyne/restroom-mw/blob/465614a027b3d6a5c461a2d3808217f8ede842ec/packages/core/src/index.ts#L45-L62 "Source code on GitHub")
+[packages/core/src/index.ts:45-62](https://github.com/dyne/restroom-mw/blob/777c308af64bbd0f2be384f2e572301f3e22ca9f/packages/core/src/index.ts#L45-L62 "Source code on GitHub")
 
 Centralized api error handling
 
@@ -241,9 +285,21 @@ Centralized api error handling
 *   `e` **NodeJS.ErrnoException**  (optional, default `null`)
 *   `string` **subject** subject
 
+### getContractFromPath
+
+[packages/core/src/utils.ts:47-49](https://github.com/dyne/restroom-mw/blob/777c308af64bbd0f2be384f2e572301f3e22ca9f/packages/core/src/utils.ts#L47-L49 "Source code on GitHub")
+
+Returns zencode from a partial path
+
+#### Parameters
+
+*   `path` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+
+Returns **Zencode** 
+
 ### addNextToContext
 
-[packages/core/src/context.ts:48-50](https://github.com/dyne/restroom-mw/blob/465614a027b3d6a5c461a2d3808217f8ede842ec/packages/core/src/context.ts#L48-L50 "Source code on GitHub")
+[packages/core/src/context.ts:48-50](https://github.com/dyne/restroom-mw/blob/777c308af64bbd0f2be384f2e572301f3e22ca9f/packages/core/src/context.ts#L48-L50 "Source code on GitHub")
 
 This function is responsible to add next into single block context from yaml flow
 
@@ -256,7 +312,7 @@ This function is responsible to add next into single block context from yaml flo
 
 ### getYml
 
-[packages/core/src/utils.ts:51-53](https://github.com/dyne/restroom-mw/blob/465614a027b3d6a5c461a2d3808217f8ede842ec/packages/core/src/utils.ts#L51-L53 "Source code on GitHub")
+[packages/core/src/utils.ts:56-58](https://github.com/dyne/restroom-mw/blob/777c308af64bbd0f2be384f2e572301f3e22ca9f/packages/core/src/utils.ts#L56-L58 "Source code on GitHub")
 
 Returns string representing a .yml file
 
@@ -268,7 +324,7 @@ Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 
 ### buildEndpointResponse
 
-[packages/core/src/index.ts:69-78](https://github.com/dyne/restroom-mw/blob/465614a027b3d6a5c461a2d3808217f8ede842ec/packages/core/src/index.ts#L69-L78 "Source code on GitHub")
+[packages/core/src/index.ts:69-78](https://github.com/dyne/restroom-mw/blob/777c308af64bbd0f2be384f2e572301f3e22ca9f/packages/core/src/index.ts#L69-L78 "Source code on GitHub")
 
 Centralized api response handling
 
@@ -281,7 +337,7 @@ Centralized api response handling
 
 ### executeChain
 
-[packages/core/src/index.ts:93-108](https://github.com/dyne/restroom-mw/blob/465614a027b3d6a5c461a2d3808217f8ede842ec/packages/core/src/index.ts#L93-L108 "Source code on GitHub")
+[packages/core/src/index.ts:93-114](https://github.com/dyne/restroom-mw/blob/777c308af64bbd0f2be384f2e572301f3e22ca9f/packages/core/src/index.ts#L93-L114 "Source code on GitHub")
 
 Function responsible to execute the chain
 
