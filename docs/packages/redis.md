@@ -27,10 +27,10 @@ app.use("/api/*", zencode);
 
 ### actions
 
-[packages/redis/src/index.js:14-18](https://github.com/dyne/restroom-mw/blob/465614a027b3d6a5c461a2d3808217f8ede842ec/packages/redis/src/index.js#L14-L18 "Source code on GitHub")
+[packages/redis/src/index.ts:16-20](https://github.com/dyne/restroom-mw/blob/777c308af64bbd0f2be384f2e572301f3e22ca9f/packages/redis/src/index.ts#L16-L20 "Source code on GitHub")
 
-**CONNECT** `I have a valid redis connection on {}`
+**CONNECT** `have a redis connection on {}`
 
-**WRITE** `write all data as a hash into redis`
+**WRITE_WITH_KEY** `write data into redis under the key {}`
 
-**WRITE_WITH_KEY** `write all data into redis under the key {}`
+**READ** `read from redis the data under the key {} and save the output into {}";`
