@@ -23,7 +23,7 @@ export const getKeys = (contractName: string) => {
 export const getFile = (fileWithExtension: string) => {
   try {
     return (
-      fs.readFileSync(`${ZENCODE_DIR}/${fileWithExtension}`).toString() || null
+      fs.readFileSync(`${ZENCODE_DIR}/${fileWithExtension}`, 'utf8').toString() || null
     );
   } catch (e) {
     return null;
