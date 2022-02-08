@@ -1,0 +1,36 @@
+{
+  "name": "@restroom-mw/timestamp",
+  "version": "0.9.0",
+  "description": "timestamp middleware for restroom",
+  "author": "Puria Nafisi Azizi <puria@dyne.org>",
+  "homepage": "https://dyne.github.io/restroom-mw/",
+  "license": "AGPL-3.0",
+  "main": "dist/index.js",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dyne/restroom-mw.git"
+  },
+  "scripts": {
+    "clean": "rimraf dist && rimraf tsconfig.tsbuildinfo",
+    "doc": "documentation readme src/** -g -f md -s 'API' --readme-file ../../docs/packages/timestamp.md --shallow",
+    "watch": "tsc -b tsconfig.json -w",
+    "build": "tsc -b tsconfig.json",
+    "links": "yarn link",
+    "unlinks": "yarn unlink",
+    "test": "ava"
+  },
+  "ava": {
+    "babel": true
+  },
+  "bugs": {
+    "url": "https://github.com/dyne/restroom-mw/issues"
+  }
+}
