@@ -134,20 +134,24 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     ymlContent: any
   ) {
     let allFolders: string[] = [];
-    Object.keys(ymlContent?.blocks)
+    if (ymlContent?.blocks) {
+      Object.keys(ymlContent?.blocks)
       .forEach(path=>{
         if (path.includes("/")){
           let folder = path.substring(0, path.lastIndexOf("/"));
           allFolders.push(folder);
         }
-        Object.keys(ymlContent?.blocks[path]).forEach(prop=>{
-          let value = ymlContent?.blocks[path][prop];
-          if (typeof value === 'string' && value.includes("/")){
-            let folder = value.substring(0, value.lastIndexOf("/"));
-            allFolders.push(folder);
-          }
-        });
+        if (ymlContent?.blocks[path]){
+          Object.keys(ymlContent?.blocks[path]).forEach(prop=>{
+            let value = ymlContent?.blocks[path][prop];
+            if (typeof value === 'string' && value.includes("/")){
+              let folder = value.substring(0, value.lastIndexOf("/"));
+              allFolders.push(folder);
+            }
+          });
+        }
       });
+    }
     if (allFolders.length > 1 && !allFolders.every((val, i, arr) => val === arr[0])){
       throw new Error(`Permission Denied. The paths in the yml cannot be different`);
     }
