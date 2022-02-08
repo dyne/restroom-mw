@@ -1,5 +1,7 @@
 Rule unknown ignore
-Given nothing
-When I execute a POST with 'data' request in parallel to '' and save the output into 'posts'
-When I execute a GET request in parallel to 'get_url' and save the output into 'todo'
-Then print all data
+Given I have a 'string dictionary' named 'timestamps'
+When I execute parallel GET to 'get_url' and save the result named 'one' within the object 'timestamps'
+When I execute parallel GET to 'get_url' and save the result named 'two' within the object 'timestamps'
+When I execute parallel GET to 'get_url' and save the result named 'three' within the object 'timestamps'
+When I execute parallel GET to 'get_url' and save the result named 'four' within the object 'timestamps'
+Then print the 'timestamps'

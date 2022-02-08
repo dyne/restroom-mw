@@ -1,7 +1,6 @@
 import bodyParser from "body-parser";
 import express from "express";
 import supertest, { SuperTest, Test } from "supertest";
-import axios from "axios";
 import anyTest, { TestFn } from "ava";
 
 const test = anyTest as TestFn<{ app: SuperTest<Test> }>;
@@ -22,14 +21,12 @@ test.serial("http executes parallel requests", async (t) => {
   const { app } = t.context;
   const res = await app.post("/parallel");
   t.is(res.status, 200);
-  const result = res.body;
-  t.is(result.posts, {
-    id: 101,
-    title: "foo",
-    body: "bar",
-    userId: 1,
-  });
-  t.true(result.includes("posts"));
-  t.true(result.includes("todo"));
-  t.is(result.todo.userId, 1);
+  const result = res.body.timestamps;
+  t.true(result.hasOwnProperty("one"));
+  t.true(result.hasOwnProperty("two"));
+  t.true(result.hasOwnProperty("three"));
+  t.true(result.hasOwnProperty("four"));
+  t.is(result.one, result.two);
+  t.is(result.three, result.four);
+  t.is(result.one, result.three);
 });
