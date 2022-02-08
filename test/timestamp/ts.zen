@@ -1,3 +1,4 @@
-Given nothing
+Rule unknown ignore
+Given I have a 'string' named 'myTimestamp'
 When I fetch the local timestamp and store it into 'myTimestamp'
-Then print all data
+Then print 'myTimestamp'

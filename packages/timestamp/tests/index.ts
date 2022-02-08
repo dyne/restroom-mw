@@ -6,21 +6,24 @@ import anyTest, { TestFn } from "ava";
 const test = anyTest as TestFn<{ app: SuperTest<Test> }>;
 
 process.env.ZENCODE_DIR = "./test/timestamp";
-const timestampmw = require("../src/index");
+const timestamp = require("../src/index");
 const zencode = require("../../core/src/index");
 
 test.before(async (t) => {
   const app = express();
   app.use(bodyParser.json());
-  app.use(timestampmw.default);
+  app.use(timestamp.default);
   app.use("/*", zencode.default);
   t.context = { app: supertest(app) };
 });
 
 test.serial("Middleware should write on timestamp correctly", async (t) => {
   const { app } = t.context;
+  const now = new Date().getTime();
   const res = await app.post("/ts");
   t.is(res.status, 200, res.text);
-  const result = res.body;
-  t.is("date", JSON.stringify(result));
+  const result = res.body.myTimestamp;
+  t.true(typeof result === "string");
+  t.is(result.length, 13);
+  t.true(Math.abs(Number(result) - now) < 100);
 });
