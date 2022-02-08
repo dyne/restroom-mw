@@ -5,7 +5,6 @@ import supertest from "supertest";
 import axios from "axios";
 import retry from "async-retry";
 
-
 process.env.ZENCODE_DIR = "./test/fixtures";
 const fabric = require("../dist");
 const zencode = require("../../core");
@@ -17,7 +16,6 @@ test.before(async (t) => {
   app.use("/*", zencode.default);
   t.context.app = supertest(app);
 });
-
 
 test.serial("Missing step", async (t) => {
   const { app } = t.context;

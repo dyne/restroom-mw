@@ -40,6 +40,10 @@ test("Check that the middleware detects two different paths in yml", async (t) =
   app.use("/api/*", core);
   const res = await request(app).post("/api/different-paths.chain");
 
-  t.true(res.body.exception.includes("Permission Denied. The paths in the yml cannot be different"));
+  t.true(
+    res.body.exception.includes(
+      "Permission Denied. The paths in the yml cannot be different"
+    )
+  );
   t.is(res.status, 500);
 });

@@ -30,7 +30,10 @@ test("getKeys works correctly", (t) => {
 
 test("getKeys works correctly also with yaml", (t) => {
   const keys = getKeys("contract_yaml_keys");
-  t.is(keys, '{"pippo":2,"some":{"inner":3},"multiline":"hello\\n\\nworld\\n"}');
+  t.is(
+    keys,
+    '{"pippo":2,"some":{"inner":3},"multiline":"hello\\n\\nworld\\n"}'
+  );
 });
 
 test("getFile works correctly", (t) => {
