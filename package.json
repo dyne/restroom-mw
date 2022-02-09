@@ -87,6 +87,7 @@
   "devDependencies": {
     "@babel/core": "^7.12.16",
     "@babel/plugin-transform-runtime": "^7.12.15",
+    "@types/sinon": "^10.0.11",
     "@types/swagger-ui-express": "^4.1.2",
     "ava": "^4.0.1",
     "babel-watch": "^7.4.0",
