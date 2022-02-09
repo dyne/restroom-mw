@@ -48,3 +48,12 @@ export function addKeysToContext(singleBlockContext: any, ymlContent:any) {
  export function addNextToContext(singleBlockContext: any, ymlContent:any) {
   singleBlockContext.next = ymlContent?.next;
 }
+
+/**
+ * This function is responsible to add zenFile into single block context from yaml flow
+ * @param {singleBlockContext} object context of a single block
+ * @param {ymlContent} object yaml content
+ */
+ export function addZenFileToContext(singleBlockContext: any, ymlContent:any) {
+  singleBlockContext.zenFile = ymlContent?.zenFile;
+}
