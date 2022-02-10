@@ -26,7 +26,7 @@ test.serial("http executes parallel requests", async (t) => {
   t.true(result.hasOwnProperty("two"));
   t.true(result.hasOwnProperty("three"));
   t.true(result.hasOwnProperty("four"));
-  t.true(Math.abs(Number(result.one) - Number(result.two)) < 3);
-  t.true(Math.abs(Number(result.three) - Number(result.four)) < 3);
-  t.true(Math.abs(Number(result.one) - Number(result.three)) < 3);
+  t.true(Math.abs(Number(result.one) - Number(result.two)) < 30);
+  t.true(Math.abs(Number(result.three) - Number(result.four)) < 30);
+  t.true(Math.abs(Number(result.one) - Number(result.three)) < 30);
 });
