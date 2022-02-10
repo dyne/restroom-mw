@@ -116,6 +116,7 @@ test("getContracts works correctly", async (t) => {
     "/create-pbkdf",
     "/database",
     "/database_table",
+    "/empty",
     "/execute_and_save",
     "/execute_with_data",
     "/fabric_init",
