@@ -52,7 +52,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
       }
 
       if (zencode.match(PARALLEL_POST)) {
-        for (const [d, url, i, o] of chunks(zencode.paramsOf(PARALLEL_POST), 4)) {
+        for (const [d, url, i, o] of chunks( zencode.paramsOf(PARALLEL_POST), 4)) {
           parallel_promises.push(axios.post(content[url], content[d]));
           parallel_params.push({
             output: o,
@@ -71,7 +71,6 @@ export default (req: Request, res: Response, next: NextFunction) => {
           data[output][index] = r.data;
         })
       }
-
 
       if (zencode.match(POST_AND_SAVE_TO_VARIABLE)) {
         for (const [url, postData, variable] of chunks(
@@ -121,7 +120,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
             data[output.outputName] = response.data;
           } catch (e) {
             throw new Error(
-              `Error when getting from endpoint "${content[output.urlKey]
+              `Error when getting from endpoint "${ content[output.urlKey]
               }": ${e}`
             );
           }
