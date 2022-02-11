@@ -15,6 +15,7 @@ import {
   addDataToContext,
   addNextToContext,
   addConfToContext,
+  addZenFileToContext,
 } from "./context";
 import { NextFunction, Request, Response } from "express";
 import * as yaml from "js-yaml";
@@ -137,10 +138,6 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     if (ymlContent?.blocks) {
       Object.keys(ymlContent?.blocks)
       .forEach(path=>{
-        if (path.includes("/")){
-          let folder = path.substring(0, path.lastIndexOf("/"));
-          allFolders.push(folder);
-        }
         if (ymlContent?.blocks[path]){
           Object.keys(ymlContent?.blocks[path]).forEach(prop=>{
             let value = ymlContent?.blocks[path][prop];
@@ -194,19 +191,26 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       next: null,
       conf: "",
       output: {},
+      zenFile: null
     };
     try {
       addKeysToContext(singleContext, ymlContent.blocks[block]);
       addDataToContext(singleContext, data);
       addConfToContext(singleContext, ymlContent.blocks[block]);
       addNextToContext(singleContext, ymlContent.blocks[block]);
-      const zencode = getContractFromPath(block);
+      addZenFileToContext(singleContext, ymlContent.blocks[block]);
+
+      if(!singleContext.zenFile){
+        throw new Error(`Zen file is missing for block id: ${block}`);
+      }
+
+      const zencode = getContractFromPath(singleContext.zenFile);
       const restroomResult: RestroomResult = await callRestroom(
         singleContext.data,
         singleContext.keys,
         singleContext.conf,
         zencode,
-        block
+        singleContext.zenFile
       );
 
       if (restroomResult?.error) {

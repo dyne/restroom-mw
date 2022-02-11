@@ -35,6 +35,24 @@ test("Check that the middleware detects a loop in yaml", async (t) => {
   t.is(res.status, 500);
 });
 
+test("Check that the middleware detects when zenfile is missing into contract block", async (t) => {
+  const app = express();
+  app.use("/api/*", core);
+  const res = await request(app).post("/api/missing-zenfile.chain");
+
+  t.true(res.body.exception.includes("Zen file is missing for block id"));
+  t.is(res.status, 500);
+});
+
+test("Check that the middleware detects a duplicated mapping key in yaml blocks", async (t) => {
+  const app = express();
+  app.use("/api/*", core);
+  const res = await request(app).post("/api/duplicated-mapping-key.chain");
+
+  t.true(res.body.exception.includes("YAMLException: duplicated mapping key"));
+  t.is(res.status, 500);
+});
+
 test("Check that the middleware detects two different paths in yml", async (t) => {
   const app = express();
   app.use("/api/*", core);

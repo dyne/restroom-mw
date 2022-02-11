@@ -1,17 +1,16 @@
 zenchain: 1.0
 name: correct-keypair
-start: create-pbkdf.zen
+start: id-0
 blocks:
-  create-pbkdf.zen:
+  id-0:
     zenFile: create-pbkdf.zen
-    next: create-keypair.zen
+    next: id-1
     keysFile: create-pbkdf-input.keys
-  create-keypair.zen:
+  id-1:
     zenFile: create-keypair.zen
-    next: verify-keypair.zen
+    next: id-2
     confFile: create-keypair-configuration.conf
     keysFile: create-keypair-input.keys
-  verify-keypair.zen:
+  id-0:
     zenFile: verify-keypair.zen
     keysFile: verify-keypair-input.keys
-    next: create-pbkdf.zen
