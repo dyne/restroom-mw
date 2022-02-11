@@ -23,6 +23,6 @@ app.use("/api/*", zencode);
 
 ### actions
 
-[packages/timestamp/src/index.ts:10-12](https://github.com/dyne/restroom-mw/blob/2328b3a38de42790bc8f9bde42557c45ad477573/packages/timestamp/src/index.ts#L10-L12 "Source code on GitHub")
+[packages/timestamp/src/index.ts:10-12](https://github.com/dyne/restroom-mw/blob/a553eb043d4c3d8adea61cbc6a099acb41f49f57/packages/timestamp/src/index.ts#L10-L12 "Source code on GitHub")
 
 **TIMESTAMP** `fetch the local timestamp and store it into {}`
