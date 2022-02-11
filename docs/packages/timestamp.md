@@ -5,7 +5,7 @@
 ```js
 import express from "express";
 import zencode from "@restroom-mw/core";
-import db from "@restroom-mw/timestamp";
+import timestamp from "@restroom-mw/timestamp";
 
 const app = express();
 
