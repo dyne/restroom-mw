@@ -26,38 +26,6 @@
     "serve": "babel-watch test/fixtures/server.js",
     "doc": "turbo run doc"
   },
-  "turbo": {
-    "pipeline": {
-      "build": {
-        "dependsOn": [
-          "^build"
-        ]
-      },
-      "watch": {
-        "outputs": []
-      },
-      "doc": {
-        "outputs": [
-          "docs/**"
-        ]
-      },
-      "lint": {
-        "outputs": []
-      },
-      "lint:fix": {
-        "outputs": []
-      },
-      "clean": {
-        "outputs": []
-      },
-      "links": {
-        "outputs": []
-      },
-      "unlinks": {
-        "outputs": []
-      }
-    }
-  },
   "ava": {
     "failFast": true,
     "verbose": true,
@@ -119,5 +87,6 @@
   "dependencies": {
     "@babel/preset-env": "^7.12.16",
     "@dyne/sawroom-client": "^1.9.0"
-  }
+  },
+  "packageManager": "yarn@1.22.10"
 }
