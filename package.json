@@ -26,38 +26,6 @@
     "serve": "babel-watch test/fixtures/server.js",
     "doc": "turbo run doc"
   },
-  "turbo": {
-    "pipeline": {
-      "build": {
-        "dependsOn": [
-          "^build"
-        ]
-      },
-      "watch": {
-        "outputs": []
-      },
-      "doc": {
-        "outputs": [
-          "docs/**"
-        ]
-      },
-      "lint": {
-        "outputs": []
-      },
-      "lint:fix": {
-        "outputs": []
-      },
-      "clean": {
-        "outputs": []
-      },
-      "links": {
-        "outputs": []
-      },
-      "unlinks": {
-        "outputs": []
-      }
-    }
-  },
   "ava": {
     "failFast": true,
     "verbose": true,
