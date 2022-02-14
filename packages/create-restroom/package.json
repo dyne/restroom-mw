@@ -1,0 +1,40 @@
+{
+  "name": "create-restroom",
+  "version": "0.1.0",
+  "description": "Create a restroom-mw powered app with one command",
+  "author": "Puria Nafisi Azizi <puria@dyne.org>",
+  "license": "MIT",
+  "bin": {
+    "create-restroom": "./dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "prebuild": "rimraf ./dist/ && yarn --json workspaces info | jq '.data' | node scripts/save-mws.js",
+    "postbuild": "yarn global add file:/Users/puria/src/github.com/dyne/restroom-mw/packages/create-restroom",
+    "dev": "ncc build ./index.ts -w -o dist/",
+    "build": "ncc build ./index.ts -o dist/"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/commander": "^2.12.2",
+    "@types/cross-spawn": "^6.0.2",
+    "@types/inquirer": "^8.2.0",
+    "@types/mustache": "^4.1.2",
+    "@types/prompts": "^2.0.14",
+    "@types/rimraf": "3.0.2",
+    "@types/validate-npm-package-name": "^3.0.3",
+    "@vercel/ncc": "^0.33.2",
+    "boxen": "^6.2.1",
+    "chalk": "^5.0.0",
+    "commander": "9.0.0",
+    "cross-spawn": "^7.0.3",
+    "execa": "^6.0.0",
+    "mustache": "^4.2.0",
+    "ora": "^6.0.1",
+    "prompts": "^2.4.2",
+    "rimraf": "^3.0.2",
+    "validate-npm-package-name": "^3.0.0"
+  }
+}
