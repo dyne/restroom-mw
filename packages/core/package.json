@@ -45,9 +45,6 @@
     "js-yaml": "^4.1.0"
   },
   "gitHead": "1552c3de8d11cb57c3c9cd303722c647623c4eb1",
-  "peerDependencies": {
-    "zenroom": "next"
-  },
   "devDependencies": {
     "@types/js-yaml": "^4.0.3"
   }

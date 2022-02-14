@@ -2,9 +2,10 @@
   "private": true,
   "name": "restroom-mw",
   "repository": "https://github.com/dyne/restroom-mw",
-  "workspaces": [
-    "packages/*"
-  ],
+  "workspaces": {
+    "packages": ["packages/*"],
+    "nohoist": ["packages/create-restroom"]
+  },
   "engines": {
     "node": "^14.15.0 || ^16.13.0"
   },
