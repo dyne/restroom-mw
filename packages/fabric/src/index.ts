@@ -165,9 +165,9 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     });
 
     rr.onSuccess(async (params) => {
-      validateStep(FabricInterop.Contract); // The user must have set a contract
       const { zencode } = params;
       if (zencode.match(SUBMIT)) {
+        validateStep(FabricInterop.Contract); // The user must have set a contract
         const params = zencode.paramsOf(SUBMIT);
         await submitAndRetry(params, "Could not submit transaction",
           async (i: number) => {
@@ -176,7 +176,8 @@ export default async (req: Request, res: Response, next: NextFunction) => {
           }
         );
       }
-      gateway.close()
+      if(gateway)
+        gateway.close()
     });
     next();
   } catch (e) {

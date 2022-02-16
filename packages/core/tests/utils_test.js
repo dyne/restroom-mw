@@ -124,6 +124,7 @@ test("getContracts works correctly", async (t) => {
     "/execute_with_data",
     "/fabric_init",
     "/fabric_missing_step",
+    "/fabric_no_step",
     "/fabric_read_write",
     "/http-output",
     "/http-test",

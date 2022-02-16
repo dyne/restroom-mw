@@ -17,6 +17,12 @@ test.before(async (t) => {
   t.context.app = supertest(app);
 });
 
+test.serial("Include fabric middleware but do not use fabric statements", async (t) => {
+  const { app } = t.context;
+  var res = await app.post("/fabric_no_step");
+  t.is(res.status, 200, res.text);
+});
+
 test("Missing step", async (t) => {
   const { app } = t.context;
   var res = await app.post("/fabric_missing_step");
