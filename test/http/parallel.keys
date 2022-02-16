@@ -4,6 +4,6 @@
     body: 'bar',
     userId: 1,
   },
-  "get_url": "http://showcase.api.linx.twenty57.net/UnixTime/tounix?date=now",
+  "get_url": "http://apiroom.net:3312",
   "post_url": "https://jsonplaceholder.typicode.com/posts"
 }
