@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.10.0](https://github.com/dyne/restroom-mw/compare/v0.9.2...v0.10.0) (2022-02-16)
+
+
+### Bug Fixes
+
+* **core:** 📦 update zenroom and zencode dep to edge ([#61](https://github.com/dyne/restroom-mw/issues/61)) ([71b1ffe](https://github.com/dyne/restroom-mw/commit/71b1ffe640dbca546d85968afcc015a271e3f6e8))
+* **http:** 🐛  Fix http post on endpoints ([#48](https://github.com/dyne/restroom-mw/issues/48)) ([3432ea9](https://github.com/dyne/restroom-mw/commit/3432ea95d25aec96f308cbde4674091de0b9fdd6)), closes [#47](https://github.com/dyne/restroom-mw/issues/47)
+* **http:** 🐞 Fixed http send to ([#70](https://github.com/dyne/restroom-mw/issues/70)) ([a9239e6](https://github.com/dyne/restroom-mw/commit/a9239e64a887c2e41765490e114b200ff7d16f58))
+* **http:** check broken url before making the call ([#65](https://github.com/dyne/restroom-mw/issues/65)) ([380ea74](https://github.com/dyne/restroom-mw/commit/380ea741446ee0a76192a95bb2b96f31ef6484fe))
+* null object keys or values for yaml chain ([#90](https://github.com/dyne/restroom-mw/issues/90)) ([62175ce](https://github.com/dyne/restroom-mw/commit/62175ceff0dc6bf17cce7908177301ea6746bfc6))
+* **redis:** Unmarshal string on retrieve from redis ([#84](https://github.com/dyne/restroom-mw/issues/84)) ([2b8285e](https://github.com/dyne/restroom-mw/commit/2b8285e3885d1a0df4d11909f59dab7ff514f669))
+
+
+### Features
+
+* ✨ read yaml or json in keys files ([#77](https://github.com/dyne/restroom-mw/issues/77)) ([63a04dc](https://github.com/dyne/restroom-mw/commit/63a04dc9d638fd20f656ad839d091826e26b519a))
+* First implementation of the CLI restroom generator ([#99](https://github.com/dyne/restroom-mw/issues/99)) ([cf01853](https://github.com/dyne/restroom-mw/commit/cf01853d0ffdb171aaec34140217d95963fbd936))
+* **http:** ✨  POST capabilities to the HTTP module ([#76](https://github.com/dyne/restroom-mw/issues/76)) ([046fc98](https://github.com/dyne/restroom-mw/commit/046fc98f0bf049c85ec59a4727349247d583cdb4)), closes [#75](https://github.com/dyne/restroom-mw/issues/75)
+* paraller http ([#88](https://github.com/dyne/restroom-mw/issues/88)) ([b6d4524](https://github.com/dyne/restroom-mw/commit/b6d452486139e588ed3d6347627428168cd513b5)), closes [#79](https://github.com/dyne/restroom-mw/issues/79)
+
+
+
+
+
 # [0.9.0](https://github.com/dyne/restroom-mw/compare/v0.8.1...v0.9.0) (2020-12-08)
 
 

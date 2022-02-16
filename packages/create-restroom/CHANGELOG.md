@@ -8,10 +8,4 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Features
 
-* shiny Timestamp mw package ([#89](https://github.com/dyne/restroom-mw/issues/89)) ([7d95235](https://github.com/dyne/restroom-mw/commit/7d952353fd830e92b05e83dfe5ee7cb734946559)), closes [#86](https://github.com/dyne/restroom-mw/issues/86)
-
-
-
-
-
-# Change Log
+* First implementation of the CLI restroom generator ([#99](https://github.com/dyne/restroom-mw/issues/99)) ([cf01853](https://github.com/dyne/restroom-mw/commit/cf01853d0ffdb171aaec34140217d95963fbd936))

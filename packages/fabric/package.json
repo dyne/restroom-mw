@@ -1,6 +1,6 @@
 {
   "name": "@restroom-mw/fabric",
-  "version": "0.0.1",
+  "version": "0.10.0",
   "description": "Middleware to interact with fabric",
   "keywords": [
     "blockchain",

@@ -2,7 +2,7 @@
   "packages": [
     "packages/*"
   ],
-  "version": "0.9.2",
+  "version": "0.10.0",
   "useWorkspaces": true,
   "npmClient": "yarn",
   "command": {
@@ -11,7 +11,9 @@
     },
     "publish": {
       "npmClient": "npm",
-      "allowBranch": ["master"],
+      "allowBranch": [
+        "master"
+      ],
       "registry": "https://registry.npmjs.org/",
       "access": "public",
       "conventionalCommits": true

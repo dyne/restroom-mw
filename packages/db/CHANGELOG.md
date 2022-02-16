@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.10.0](https://github.com/puria/restroom-mw/compare/v0.9.2...v0.10.0) (2022-02-16)
+
+
+### Bug Fixes
+
+* **db:** 🐛  Fix the database write on tables ([b2a14e4](https://github.com/puria/restroom-mw/commit/b2a14e4e614518e078a7db66bd32653dd1f66498)), closes [#45](https://github.com/puria/restroom-mw/issues/45)
+* null object keys or values for yaml chain ([#90](https://github.com/puria/restroom-mw/issues/90)) ([62175ce](https://github.com/puria/restroom-mw/commit/62175ceff0dc6bf17cce7908177301ea6746bfc6))
+
+
+
+
+
 # [0.9.0](https://github.com/puria/restroom-mw/compare/v0.8.1...v0.9.0) (2020-12-08)
 
 

@@ -3,6 +3,47 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.10.0](https://github.com/dyne/restroom-mw/compare/v0.9.2...v0.10.0) (2022-02-16)
+
+
+### Bug Fixes
+
+* 🐛 tests update keys as it's being passed and rewritten ([#59](https://github.com/dyne/restroom-mw/issues/59)) ([52a91e7](https://github.com/dyne/restroom-mw/commit/52a91e7072b1a35f101d3aa8071e0d821dfb7fdc))
+* Added check for the path in chains ([#87](https://github.com/dyne/restroom-mw/issues/87)) ([f7dd201](https://github.com/dyne/restroom-mw/commit/f7dd20129be2833f0877bf68a10d704d47f5a73e))
+* **chain:** Prevent and handle infinte loop in chain execution ([#73](https://github.com/dyne/restroom-mw/issues/73)) ([61a5f06](https://github.com/dyne/restroom-mw/commit/61a5f06917d489fc8929d5d9f8cfc4586b1b96c3)), closes [#72](https://github.com/dyne/restroom-mw/issues/72)
+* **core:** 📦 update zenroom and zencode dep to edge ([#61](https://github.com/dyne/restroom-mw/issues/61)) ([71b1ffe](https://github.com/dyne/restroom-mw/commit/71b1ffe640dbca546d85968afcc015a271e3f6e8))
+* **db:** 🐛  Fix the database write on tables ([b2a14e4](https://github.com/dyne/restroom-mw/commit/b2a14e4e614518e078a7db66bd32653dd1f66498)), closes [#45](https://github.com/dyne/restroom-mw/issues/45)
+* **http:** 🐛  Fix http post on endpoints ([#48](https://github.com/dyne/restroom-mw/issues/48)) ([3432ea9](https://github.com/dyne/restroom-mw/commit/3432ea95d25aec96f308cbde4674091de0b9fdd6)), closes [#47](https://github.com/dyne/restroom-mw/issues/47)
+* **http:** 🐞 Fixed http send to ([#70](https://github.com/dyne/restroom-mw/issues/70)) ([a9239e6](https://github.com/dyne/restroom-mw/commit/a9239e64a887c2e41765490e114b200ff7d16f58))
+* **http:** check broken url before making the call ([#65](https://github.com/dyne/restroom-mw/issues/65)) ([380ea74](https://github.com/dyne/restroom-mw/commit/380ea741446ee0a76192a95bb2b96f31ef6484fe))
+* null object keys or values for yaml chain ([#90](https://github.com/dyne/restroom-mw/issues/90)) ([62175ce](https://github.com/dyne/restroom-mw/commit/62175ceff0dc6bf17cce7908177301ea6746bfc6))
+* **redis:** Unmarshal string on retrieve from redis ([#84](https://github.com/dyne/restroom-mw/issues/84)) ([2b8285e](https://github.com/dyne/restroom-mw/commit/2b8285e3885d1a0df4d11909f59dab7ff514f669))
+* **sawroom:** ⬆️  Missing dependency ([5ac993a](https://github.com/dyne/restroom-mw/commit/5ac993a41dac906560998ea999820cbbfeb07e69))
+* **sawroom:** 🐛  Missing borc ([92200e6](https://github.com/dyne/restroom-mw/commit/92200e6eb7761f2ac3c1d75de861b70a89975539))
+* **sawroom:** 🐛  Prevent double parse, since is done in @dyne/sawroom-client ([dccef52](https://github.com/dyne/restroom-mw/commit/dccef52c37657276bad1d805af336c8169ee4467))
+* Use ids as contract map keys for chains avoiding execution loops ([#91](https://github.com/dyne/restroom-mw/issues/91)) ([f274a5a](https://github.com/dyne/restroom-mw/commit/f274a5a7b3987ea06eedcdf64a9d81453a7f6f9d))
+
+
+### Features
+
+* ✨ Allow execution of .chain (⛓ flow of contracts)  ([#56](https://github.com/dyne/restroom-mw/issues/56)) ([eeb52ee](https://github.com/dyne/restroom-mw/commit/eeb52eed5724dd8455a33d60d71c62d461cbd81f))
+* ✨ read yaml or json in keys files ([#77](https://github.com/dyne/restroom-mw/issues/77)) ([63a04dc](https://github.com/dyne/restroom-mw/commit/63a04dc9d638fd20f656ad839d091826e26b519a))
+* 📢   Enhance message error on chain contracts ([#63](https://github.com/dyne/restroom-mw/issues/63)) ([7772fb4](https://github.com/dyne/restroom-mw/commit/7772fb48499375f2d4c3e6385d73e3f96929f728))
+* **fabric:** ⛓ Fabric middleware ([#78](https://github.com/dyne/restroom-mw/issues/78)) ([76038c5](https://github.com/dyne/restroom-mw/commit/76038c51d0d49e4bb6db966292a00b1d2ac44a4a))
+* First implementation of the CLI restroom generator ([#99](https://github.com/dyne/restroom-mw/issues/99)) ([cf01853](https://github.com/dyne/restroom-mw/commit/cf01853d0ffdb171aaec34140217d95963fbd936))
+* **http:** ✨  POST capabilities to the HTTP module ([#76](https://github.com/dyne/restroom-mw/issues/76)) ([046fc98](https://github.com/dyne/restroom-mw/commit/046fc98f0bf049c85ec59a4727349247d583cdb4)), closes [#75](https://github.com/dyne/restroom-mw/issues/75)
+* paraller http ([#88](https://github.com/dyne/restroom-mw/issues/88)) ([b6d4524](https://github.com/dyne/restroom-mw/commit/b6d452486139e588ed3d6347627428168cd513b5)), closes [#79](https://github.com/dyne/restroom-mw/issues/79)
+* **sawroom:** ✨  Allow to save the whole zencode execution output directly on Sawroom ([1bc602d](https://github.com/dyne/restroom-mw/commit/1bc602d083e2a99c76ecf3b4dec64c95f06f515f)), closes [#41](https://github.com/dyne/restroom-mw/issues/41)
+* **sawroom:** ✨  Implement the RETREVE action from sawroom ([762231c](https://github.com/dyne/restroom-mw/commit/762231c899a5a48fa321fec71c632e78cdf10828))
+* **sawroom:** ✨  Write on the sawroom with the new shiny storage-tp ([01ee0d7](https://github.com/dyne/restroom-mw/commit/01ee0d7325bd1fb5a1a3879b118d24dbdabdd0ed))
+* **sawroom:** ✨ Add support for wallet in sawroom ([#53](https://github.com/dyne/restroom-mw/issues/53)) ([461de54](https://github.com/dyne/restroom-mw/commit/461de54cdaa60bc6ceeca8a9b25f568fca952b5b))
+* shiny Timestamp mw package ([#89](https://github.com/dyne/restroom-mw/issues/89)) ([7d95235](https://github.com/dyne/restroom-mw/commit/7d952353fd830e92b05e83dfe5ee7cb734946559)), closes [#86](https://github.com/dyne/restroom-mw/issues/86)
+* Updated Sawroom Wallet statements ([#55](https://github.com/dyne/restroom-mw/issues/55)) ([da957ae](https://github.com/dyne/restroom-mw/commit/da957aebf46d2eb01c39f4d55bfef2c7c10ae8be))
+
+
+
+
+
 ## [0.9.2](https://github.com/dyne/restroom-mw/compare/v0.9.1...v0.9.2) (2020-12-15)
 
 
