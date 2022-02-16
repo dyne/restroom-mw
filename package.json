@@ -2,9 +2,14 @@
   "private": true,
   "name": "restroom-mw",
   "repository": "https://github.com/dyne/restroom-mw",
-  "workspaces": [
-    "packages/*"
-  ],
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ],
+    "nohoist": [
+      "packages/create-restroom"
+    ]
+  },
   "engines": {
     "node": "^14.15.0 || ^16.13.0"
   },
@@ -53,12 +58,13 @@
     }
   },
   "devDependencies": {
-    "@babel/core": "^7.12.16",
+    "@babel/core": "^7.17.4",
     "@babel/plugin-transform-runtime": "^7.12.15",
     "@types/sinon": "^10.0.11",
     "@types/swagger-ui-express": "^4.1.2",
     "ava": "^4.0.1",
     "babel-watch": "^7.4.0",
+    "body-parser": "^1.19.2",
     "c8": "^7.6.0",
     "cbor": "^8.1.0",
     "devmoji": "^2.1.13",
@@ -86,7 +92,8 @@
   },
   "dependencies": {
     "@babel/preset-env": "^7.12.16",
-    "@dyne/sawroom-client": "^1.9.0"
+    "@dyne/sawroom-client": "^1.9.0",
+    "express": "^4.17.2"
   },
   "packageManager": "yarn@1.22.10"
 }

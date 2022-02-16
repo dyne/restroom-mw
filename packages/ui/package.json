@@ -41,11 +41,6 @@
     "url": "https://github.com/dyne/restroom-wm/issues"
   },
   "dependencies": {
-    "@restroom-mw/utils": "next",
-    "@restroom-mw/zencode": "next",
-    "dotenv": "^16.0.0",
-    "express": "^4.17.1",
-    "readdirp": "^3.5.0",
     "swagger-ui-express": "^4.1.5"
   },
   "gitHead": "1552c3de8d11cb57c3c9cd303722c647623c4eb1"
