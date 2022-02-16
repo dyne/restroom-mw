@@ -1,4 +1,6 @@
-Rule unknown ignore
+# This api will fail because we have not passed all the inforamtions that restroom
+# requires to connect to fabric
+Rule caller restroom-mw
 Given I have a fabric endpoint named 'endpoint' with tls certificate in 'tls'
 Given I connect to the channel 'channel'
 Given I use the chaincode 'chaincode'

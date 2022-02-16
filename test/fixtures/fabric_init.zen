@@ -1,6 +1,24 @@
-Rule unknown ignore
+# This script calls the function 'InitLedger' from the chaincode 'basic' in the channel 'mychannel'
+# that creates some mock data
+
+# In the initial statements, the RPC connection is estabilished and the queries are done
+# In the last line, function that modify the blockchain are executed
+
+# NOTE: this whole script is managed by Restroom-mw, Zenroom does nothing here
+
+Rule caller restroom-mw
+# Set the address of the endpoint as the tls certificate
 Given I have a fabric endpoint named 'endpoint' with tls certificate in 'tls'
+# More parameter to estabilish the connection (they are given in the config files of fabric)
 Given I connect to msp 'Org1MSP' with certificate in 'certificate' and private key in 'private_key'
+# Smart contract are deployed on channels (which are identified by a name)
 Given I connect to the channel 'channel'
+# Chaincode are the name of the smart contract in fabric, here we specify which smart
+# we want to interact with (at the moment we can use only one smart contract per script)
 Given I use the chaincode 'chaincode'
+
+
+
+
+# After the execution of zenroom we call a smart contract which modifies the blockchain
 Then I ask fabric to submit 'init_function'

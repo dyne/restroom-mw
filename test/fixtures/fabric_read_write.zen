@@ -1,11 +1,48 @@
-Rule unknown ignore
+# This script queries and returns the data previously written on Fabric using
+# the script 'fabric_init', that you can find among these examples
 
+# How to see it in action:
+# 1. Run 'fabric_init' script to create some mock data
+# 2. Run 'fabric_read_write' and see the result (note: the owner of asset1 is 'Tomoko')
+# 3. Run 'fabric_read_write' agai, the owner is now 'newOwner'
+
+# What happended?
+# The 'fabric_init' script has written some data on Fabric. We can read it in the
+# 'fabric_read_write' (all queries are done at the beginning), print it out 
+# and at the end we are submitting a transaction (that modifies the blockchain). As we run this
+# curent api again, the modified data is returned and shown (in the the change is applied again
+# but it doesn't change the data)
+
+# NOTE: running the script may take some 10 seconds or more
+
+Rule caller restroom-mw
+# In the first statement we set parameters for the Fabric network, that we know from the config of Fabric
 Given I have a fabric endpoint named 'endpoint' with tls certificate in 'tls'
+
+# this statement connects to the Fabric network, using the parameters set above
 Given I connect to msp 'Org1MSP' with certificate in 'certificate' and private key in 'private_key'
+
+# 'Chaincode' smart contract are deployed on channel
 Given I connect to the channel 'channel'
+
+# Hwere we set the smart contract we want to interact with (only one per script)
 Given I use the chaincode 'chaincode'
-Given I have a 'string array' named 'query_result'
+
+
+# Here we send a query to fabric
 Given I ask fabric to evaluate 'read_function' and store the output in 'query_result'
+
+# Here we instruct Zenroom that we're loading a 'string array', which is the  output of the
+# statements we executed above
+Given I have a 'string array' named 'query_result'
+
+# Do some computation with the data read from fabric
 When I create the hash of 'query_result'
+
+
+# Here we are printing out all the data: the next statement takes as input, whatever
+# output that Zenroom is producing. You can select what you want to have printed out.
 Then print all data
+
+# This statement modifies the blockchain by calling a function of the smart contract
 Then I ask fabric to submit 'write_function'
