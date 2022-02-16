@@ -11,7 +11,8 @@
     "dist"
   ],
   "scripts": {
-    "prebuild": "rimraf ./dist/ && yarn --json workspaces info | jq '.data' | node scripts/save-mws.js",
+    "clean": "rimraf dist && rimraf tsconfig.tsbuildinfo",
+    "prebuild": "yarn --json workspaces info | jq '.data' | node scripts/save-mws.js",
     "local:install": "yarn global add file:/home/src/github.com/dyne/restroom-mw/packages/create-restroom",
     "dev": "ncc build ./index.ts -w -o dist/",
     "build": "ncc build ./index.ts -o dist/"
