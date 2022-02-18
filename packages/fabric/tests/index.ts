@@ -23,21 +23,22 @@ test.serial("Include fabric middleware but do not use fabric statements", async 
   t.is(res.status, 200, res.text);
 });
 
-test("Read stored data", async (t) => {
+test.serial("Read stored data", async (t) => {
   const { app } = t.context;
   var res = await app.post("/fabric_retrieve");
   t.is(res.status, 200, res.text);
-  t.is(res.body.hash, "Jmy2dTTA5QknOz+QL5HiH3iWI4eOuj2W9a6HkKdgdsI=");
+  t.is(res.body.hash1, "Jmy2dTTA5QknOz+QL5HiH3iWI4eOuj2W9a6HkKdgdsI=");
+  t.is(res.body.hash2, "3a6Zqk9T0AAlxjqq8SZ/f7s+G5vf8VrGojqmDtXqgx4=");
 });
 
-test("Store data", async (t) => {
+test.serial("Store data", async (t) => {
   const { app } = t.context;
   var res = await app.post("/fabric_store");
   t.is(res.status, 200, res.text);
-  t.is(typeof res.body.hash, "string");
+  t.is(typeof res.body.myTag, "string");
 });
 
-test("Missing step", async (t) => {
+test.serial("Missing step", async (t) => {
   const { app } = t.context;
   var res = await app.post("/fabric_missing_step");
   t.is(res.status, 500, res.text);
@@ -45,7 +46,7 @@ test("Missing step", async (t) => {
   t.is(res.body.exception.includes("One step is missing"), true);
 });
 
-test("Init ledger, read&write and re-read", async (t) => {
+test.serial("Init ledger, read&write and re-read", async (t) => {
   const { app } = t.context;
   var res = await app.post("/fabric_init");
   t.is(res.status, 200, res.text);
