@@ -6,7 +6,7 @@ import {
   Gateway, connect, Contract, Identity, Signer, signers,
   Network
 }
-  from '@hyperledger/fabric-gateway';
+from '@hyperledger/fabric-gateway';
 import { Client, credentials } from '@grpc/grpc-js';
 import { NextFunction, Request, Response } from "express";
 import {
@@ -15,7 +15,9 @@ import {
   CHANNEL,
   CONTRACT,
   QUERY,
-  SUBMIT
+  SUBMIT,
+  STORE,
+  RETRIEVE,
 } from "./actions";
 import { UTF8_DECODER, zencodeNamedParamsOf, combineDataKeys } from '@restroom-mw/utils';
 
@@ -43,9 +45,9 @@ const commitStatusOptions = () => {
 // The steps in FabricInterop are all required (in this order...)
 enum FabricInterop {
   Address = 0,
-  Connect,
-  Channel,
-  Contract
+    Connect,
+    Channel,
+    Contract
 }
 let current: FabricInterop = FabricInterop.Address;
 
@@ -54,35 +56,35 @@ const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 const NUM_RETRY = 3;
 /**
  * @param params list of parameters in the zencode
- *   (length 2*n, 2 parameter for each statement)
  * @param errorMsg string which is shown in case of error
+ * @param num_params_statement Number of parameter per statement
  * @param fn what to do for each
  *
  * Implements retry logic ( see https://stackoverflow.com/a/45347452 )
  */
-const submitAndRetry = async (params: string[], errorMsg: string,
+const submitAndRetry = async (params: string[], errorMsg: string, num_params_statement: number,
   fn: (i: number) => Promise<void>) => {
-  for (var i = 0; i < params.length; i += 2) {
-    var count = 0;
-    var done = false;
-    var errCode = 0;
-    while (count < NUM_RETRY && !done) {
-      try {
-        await fn(i);
-        done = true;
-      } catch (e) {
-        errCode = e.code;
-        // Wait random time
-        await sleep(Math.random() * 10000 + 2000);
+    for (var i = 0; i < params.length; i += num_params_statement) {
+      var count = 0;
+      var done = false;
+      var errCode = 0;
+      while (count < NUM_RETRY && !done) {
+        try {
+          await fn(i);
+          done = true;
+        } catch (e) {
+          errCode = e.code;
+          // Wait random time
+          await sleep(Math.random() * 10000 + 2000);
+        }
+        count++;
       }
-      count++;
-    }
-    if (count == NUM_RETRY) {
-      // NUM_RETRY error in the execution, this call failed
-      throw new Error(errorMsg + ", code: " + errCode)
+      if (count == NUM_RETRY) {
+        // NUM_RETRY error in the execution, this call failed
+        throw new Error(errorMsg + ", code: " + errCode)
+      }
     }
   }
-}
 
 const validateStep = (requested: FabricInterop) => {
   if (requested > current) {
@@ -152,7 +154,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       if (zencode.match(QUERY)) {
         validateStep(FabricInterop.Contract); // The user must have set a contract
         const params = zencode.paramsOf(QUERY);
-        await submitAndRetry(params, "Could not ealuate transaction",
+        await submitAndRetry(params, "Could not ealuate transaction", 2,
           async (i: number) => {
             const functionData = input[params[i]]
             const resultBytes = await contract.evaluateTransaction.apply(contract, functionData);
@@ -162,21 +164,61 @@ export default async (req: Request, res: Response, next: NextFunction) => {
           }
         );
       }
+      if (zencode.match(RETRIEVE)) {
+        validateStep(FabricInterop.Contract);
+        const params = zencode.paramsOf(RETRIEVE);
+        await submitAndRetry(params, "Could not retrieve data (maybe it doesn't exist)", 3,
+          async (i: number) => {
+            const storage = params[i];
+            const tag = input[params[i + 1]];
+            const dataName = params[i + 2];
+            if (storage == 'fabric') {
+              // Build function call
+              const functionData = ["Retrieve", tag]
+              const resultBytes = await contract.evaluateTransaction.apply(contract, functionData);
+              const resultJson = UTF8_DECODER.decode(resultBytes);
+              const currentResult = JSON.parse(resultJson);
+              data[dataName] = currentResult;
+            }
+          }
+        );
+      }
+
     });
 
     rr.onSuccess(async (params) => {
-      const { zencode } = params;
+      const { zencode, result } = params;
       if (zencode.match(SUBMIT)) {
         validateStep(FabricInterop.Contract); // The user must have set a contract
         const params = zencode.paramsOf(SUBMIT);
-        await submitAndRetry(params, "Could not submit transaction",
+        await submitAndRetry(params, "Could not submit transaction", 2,
           async (i: number) => {
             const functionData = input[params[i]]
             await contract.submitTransaction.apply(contract, functionData);
           }
         );
       }
-      if(gateway)
+      if (zencode.match(STORE)) {
+        validateStep(FabricInterop.Contract);
+        const params = zencode.paramsOf(STORE);
+        await submitAndRetry(params, "Could not submit transaction", 3,
+          async (i: number) => {
+            const storage = params[i];
+            const data = result[params[i + 1]];
+            const tag = params[i + 2];
+            if (storage == 'fabric') {
+              const dataJson = JSON.stringify(data)
+
+              // Build function call
+              const functionData = ["Store", dataJson]
+              const resultBytes = await contract.submitTransaction.apply(contract, functionData);
+              const currentResult = UTF8_DECODER.decode(resultBytes);
+              result[tag] = currentResult
+            }
+          }
+        );
+      }
+      if (gateway)
         gateway.close()
     });
     next();
