@@ -23,6 +23,20 @@ test.serial("Include fabric middleware but do not use fabric statements", async 
   t.is(res.status, 200, res.text);
 });
 
+test("Read stored data", async (t) => {
+  const { app } = t.context;
+  var res = await app.post("/fabric_retrieve");
+  t.is(res.status, 200, res.text);
+  t.is(res.body.hash, "Jmy2dTTA5QknOz+QL5HiH3iWI4eOuj2W9a6HkKdgdsI=");
+});
+
+test("Store data", async (t) => {
+  const { app } = t.context;
+  var res = await app.post("/fabric_store");
+  t.is(res.status, 200, res.text);
+  t.is(typeof res.body.hash, "string");
+});
+
 test("Missing step", async (t) => {
   const { app } = t.context;
   var res = await app.post("/fabric_missing_step");

@@ -126,6 +126,8 @@ test("getContracts works correctly", async (t) => {
     "/fabric_missing_step",
     "/fabric_no_step",
     "/fabric_read_write",
+    "/fabric_retrieve",
+    "/fabric_store",
     "/http-output",
     "/http-test",
     "/keygen",

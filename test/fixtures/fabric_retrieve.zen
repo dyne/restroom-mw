@@ -1,0 +1,12 @@
+Rule unknown ignore
+
+Given I have a fabric endpoint named 'endpoint' with tls certificate in 'tls'
+Given I connect to msp 'Org1MSP' with certificate in 'certificate' and private key in 'private_key'
+Given I connect to the channel 'channel'
+Given I use the chaincode 'chaincode'
+
+Given I have a 'base64 array' named 'array'
+Given I read from 'fabric' the data in tag 'myTag' and save the output into 'array'
+When I create the hash of 'array'
+
+Then print data
