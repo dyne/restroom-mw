@@ -14,7 +14,7 @@ import { mws_deps } from "./helpers/mws";
 import { template } from "./templates/restroom";
 
 
-export async function create({ appPath, mws, debug = false }: { appPath: string, mws: (string | undefined)[] | null, debug: boolean }): Promise<void> {
+export async function create({ appPath, mws, debug = false, zencodeDir = 'contracts' }: { appPath: string, mws: (string | undefined)[] | null, debug: boolean, zencodeDir: string }): Promise<void> {
   const root = path.resolve(appPath);
   if (!(await isWriteable(path.dirname(root)))) {
     console.error(
@@ -33,7 +33,10 @@ export async function create({ appPath, mws, debug = false }: { appPath: string,
   if (!isFolderEmpty(root, appName)) {
     process.exit(1);
   }
-  await makeDir(path.join(root, "contracts"));
+
+  const normalizedZenDir = zencodeDir == 'contracts' ? zencodeDir : path.join(path.dirname(root), zencodeDir);
+  if (zencodeDir == normalizedZenDir)
+    await makeDir(path.join(root, zencodeDir));
 
   const originalDirectory = process.cwd();
   const displayedCommand = "yarn";
@@ -48,7 +51,7 @@ in ${chalk.green(root)}.`);
     version: "0.1.0",
     private: true,
     scripts: {
-      start: "ZENCODE_DIR=./contracts node restroom.mjs",
+      start: `ZENCODE_DIR=${normalizedZenDir} node restroom.mjs`,
     },
   };
 
@@ -72,6 +75,7 @@ in ${chalk.green(root)}.`);
     "@restroom-mw/zencode@next",
     "@restroom-mw/utils@next",
     "express",
+    "dotenv",
     ...middleware_deps,
     ...deps_of_deps,
   ];
@@ -90,7 +94,7 @@ in ${chalk.green(root)}.`);
     }
     await install(root, dependencies, false, true);
   } else {
-    await oraPromise(install(root, dependencies), "📦 Installing dependencies");
+    await oraPromise(install(root, dependencies), "📦 Installing dependencies can take a while...");
   }
   if (debug) {
     for (const dependency of devDependencies) {

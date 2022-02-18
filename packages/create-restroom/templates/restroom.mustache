@@ -28,6 +28,8 @@ import ui from "@restroom-mw/ui";
 
 import http from "http";
 import morgan from "morgan"
+import dotenv from "dotenv";
+dotenv.config();
 
 const HTTP_PORT = parseInt(process.env.HTTP_PORT || "3000", 10);
 const HOST = process.env.HOST || "0.0.0.0";

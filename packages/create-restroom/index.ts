@@ -20,6 +20,8 @@ const program = new Command(packageJson.name)
   .action((name) => {
     projectPath = name
   }).option('-d, --debug', 'Enable debug mode')
+  .option('-z, --zencode-dir <path>', 'Define a zencode directory', 'contracts')
+  .option('-a, --all', 'Install all middlewares')
 
 for (const mw of mws) {
   program.addOption(new Option(`--${mw}`, `Install @restroom-mw/${mw} middleware`))
@@ -91,13 +93,20 @@ async function run(): Promise<void> {
 
   const options = program.opts();
   const to_install = mws.map(m => {
-    if (options[camelize(m)] === true) return m;
+    if (options['all']) {
+      if (options[camelize(m)] !== false) {
+        return m;
+      }
+    } else {
+      if (options[camelize(m)]) return m;
+    }
   }).filter(x => !!x);
 
   await create({
     appPath: resolvedProjectPath,
     mws: to_install.length ? to_install : null,
-    debug: program.opts().debug
+    debug: options.debug,
+    zencodeDir: options.zencodeDir,
   })
 }
 
