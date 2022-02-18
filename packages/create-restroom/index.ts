@@ -20,6 +20,7 @@ const program = new Command(packageJson.name)
   .action((name) => {
     projectPath = name
   }).option('-d, --debug', 'Enable debug mode')
+  .option('-z, --zencode-dir <path>', 'Define a zencode directory', 'contracts')
   .option('-a, --all', 'Install all middlewares')
 
 for (const mw of mws) {
@@ -104,7 +105,8 @@ async function run(): Promise<void> {
   await create({
     appPath: resolvedProjectPath,
     mws: to_install.length ? to_install : null,
-    debug: program.opts().debug
+    debug: options.debug,
+    zencodeDir: options.zencodeDir,
   })
 }
 
