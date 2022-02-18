@@ -154,7 +154,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       if (zencode.match(QUERY)) {
         validateStep(FabricInterop.Contract); // The user must have set a contract
         const params = zencode.paramsOf(QUERY);
-        await submitAndRetry(params, "Could not ealuate transaction", 2,
+        await submitAndRetry(params, "Could not evaluate transaction", 2,
           async (i: number) => {
             const functionData = input[params[i]]
             const resultBytes = await contract.evaluateTransaction.apply(contract, functionData);
