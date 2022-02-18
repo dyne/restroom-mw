@@ -90,7 +90,7 @@ in ${chalk.green(root)}.`);
     }
     await install(root, dependencies, false, true);
   } else {
-    await oraPromise(install(root, dependencies), "📦 Installing dependencies");
+    await oraPromise(install(root, dependencies), "📦 Installing dependencies can take a while...");
   }
   if (debug) {
     for (const dependency of devDependencies) {

@@ -7,7 +7,7 @@ export function install(root: string, dependencies: string[] | null, devDependen
     let command: string = 'yarnpkg'
 
     if (dependencies && dependencies.length) {
-      args = ['add'] //, '--exact']
+      args = ['add', '--exact']
       args.push('--cwd', root)
       if (devDependencies) args.push('--dev')
       args.push(...dependencies)
