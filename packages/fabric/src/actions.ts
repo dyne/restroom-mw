@@ -5,3 +5,5 @@ export const CONTRACT = "use the chaincode {}";
 export const SEND_TRANSACTION = "{} the smart contract {}";
 export const QUERY = "ask fabric to evaluate {} and store the output in {}";
 export const SUBMIT = "ask fabric to submit {}";
+export const STORE = "ask {} to store the data named {} into the tag {}";
+export const RETRIEVE = "read from {} the data in tag {} and save the output into {}";
