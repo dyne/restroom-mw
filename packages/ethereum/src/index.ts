@@ -92,7 +92,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
           const tag = input[params[i + 1]];
           const variable = params[i + 2];
           if(storage == 'ethereum') {
-            const receipt = await web3.eth.getTransactionReceipt(tag)
+            const receipt = await web3.eth.getTransactionReceipt("0x" + tag)
             if(receipt.status) {
               const dataABI = receipt.logs[0].data;
               const dataJSON = web3.eth.abi.decodeParameters(["string"], dataABI)[0];
@@ -127,7 +127,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
             const signedTx = await web3.eth.accounts.signTransaction(tx, account.privateKey);
             const receipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
             if(receipt.status) {
-              result[tag] = receipt.transactionHash;
+              result[tag] = receipt.transactionHash.substring(2); // Remove 0x
             } else {
               console.log(receipt);
               throw new Error("Transaction failed");

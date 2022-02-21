@@ -120,6 +120,8 @@ test("getContracts works correctly", async (t) => {
     "/database",
     "/database_table",
     "/empty",
+    "/ethereum_retrieve",
+    "/ethereum_store",
     "/execute_and_save",
     "/execute_with_data",
     "/fabric_init",
