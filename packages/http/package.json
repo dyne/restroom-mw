@@ -1,6 +1,6 @@
 {
   "name": "@restroom-mw/http",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "description": "Http utilities middleware for Restroom",
   "author": "Sebastian Blichfeldt",
   "contributors": [
