@@ -147,6 +147,7 @@ test("getContracts works correctly", async (t) => {
     "/sawroom_store",
     "/sawroom_store_output",
     "/single-random",
+    "/unzip_directory",
     "/verify-keypair",
   ]);
 });
