@@ -3,10 +3,11 @@ import request from "supertest";
 import express from "express";
 import bodyParser from "body-parser";
 import fs from 'fs';
+import supertest, { SuperTest, Test } from "supertest";
 
 process.env.ZENCODE_DIR = "./test/fixtures";
-const zencode = require("../../core").default;
-const files = require("../src/index").default;
+const zencode = require("../../core");
+const files = require("../src/index");
 
 test.before(async (t) => {
   const app = express();
