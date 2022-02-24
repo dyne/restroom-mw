@@ -1,6 +1,6 @@
 {
   "name": "@restroom-mw/db",
-  "version": "0.12.1",
+  "version": "0.12.2",
   "description": "Database utilities middleware for Restroom",
   "author": "Puria Nafisi Azizi <puria@dyne.org>",
   "homepage": "https://dyne.github.io/restroom-mw/",
