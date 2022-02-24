@@ -4,12 +4,15 @@ import { Zencode } from "@restroom-mw/zencode";
 import axios from "axios";
 import { NextFunction, Request, Response } from "express";
 import fs from 'fs'
-import https from "https";
-import {
-  DOWNLOAD,
-} from "./actions";
-import yauzl from 'yauzl';
 import extract from 'extract-zip';
+
+/**
+ * `download the 'myUrl' and extract it into 'myFolder'`
+ *
+ * Download a zip file located at the url `myUrl` and extract it at the path 
+ * `myFolder` on the server.
+ */
+import { DOWNLOAD } from "./actions";
 
 export default (req: Request, res: Response, next: NextFunction) => {
   const rr = new Restroom(req, res);
