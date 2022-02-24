@@ -24,3 +24,22 @@ test("Download zip and extract", async (t) => {
   const files = fs.readdirSync('/tmp/extract/here/the/directory');
   t.is(files.length, 3);
 });
+
+test("Do not specify url", async (t) => {
+  const { app } = t.context;
+  var res = await app.post("/files_no_url");
+  t.is(res.status, 500, res.text);
+});
+
+test("Do not specify destination", async (t) => {
+  const { app } = t.context;
+  var res = await app.post("/files_no_dest");
+  t.is(res.status, 500, res.text);
+});
+
+test("Url doesn't exist", async (t) => {
+  const { app } = t.context;
+  var res = await app.post("/files_url_do_not_exist");
+  t.is(res.status, 500, res.text);
+});
+
