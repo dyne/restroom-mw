@@ -1,6 +1,6 @@
 {
   "name": "create-restroom",
-  "version": "0.12.0",
+  "version": "0.12.1",
   "description": "Create a restroom-mw powered app with one command",
   "author": "Puria Nafisi Azizi <puria@dyne.org>",
   "license": "MIT",
