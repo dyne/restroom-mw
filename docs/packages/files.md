@@ -10,9 +10,9 @@
 
 ### DOWNLOAD
 
-[packages/files/src/index.ts:15-15](https://github.com/albertolerda/restroom-mw/blob/2e3d0baa04a5caeaf6c001e52ae22a24f3b3ee4a/packages/files/src/index.ts#L15-L15 "Source code on GitHub")
+[packages/files/src/index.ts:16-16](https://github.com/dyne/restroom-mw/blob/089cc4dcc808a9010a9655cf585ce8da80dd394f/packages/files/src/index.ts#L16-L16 "Source code on GitHub")
 
 `download the 'myUrl' and extract it into 'myFolder'`
 
-Download a zip file located at the url `myUrl` at the path `myFolder`
-on the server.
+Download a zip file located at the url `myUrl` and extract it at the path
+`myFolder` on the server.
