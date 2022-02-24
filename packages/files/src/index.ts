@@ -5,6 +5,7 @@ import axios from "axios";
 import { NextFunction, Request, Response } from "express";
 import fs from 'fs'
 import extract from 'extract-zip';
+import path from 'path';
 
 /**
  * `download the 'myUrl' and extract it into 'myFolder'`
@@ -16,7 +17,6 @@ import { DOWNLOAD } from "./actions";
 
 export default (req: Request, res: Response, next: NextFunction) => {
   const rr = new Restroom(req, res);
-  let content: ObjectLiteral = {};
 
   rr.onSuccess(async (params) => {
     const { result, zencode } = params;
@@ -26,23 +26,25 @@ export default (req: Request, res: Response, next: NextFunction) => {
         const file = result[allPassOutputs[i]]
         const folder = result[allPassOutputs[i+1]]
 
-        if (file) {
+        if (file && folder) {
           try {
+            const absoluteFolder = path.resolve(folder);
             const response = await axios.get(file, {
               responseType: 'arraybuffer'
             }); 
             const tempdir = fs.mkdtempSync("/tmp/restroom");
             const tempfile = tempdir + "/downloaded";
             fs.writeFileSync(tempfile, response.data);
-            await extract(tempfile, { dir: folder });
+            await extract(tempfile, { dir: absoluteFolder });
             fs.unlinkSync(tempfile);
             fs.rmdirSync(tempdir);
           } catch (e) {
             next(e);
-            throw new Error(`[FILES]
-                    Error sending the result to "${file}":
-                    ${e}`);
+            throw new Error(`[FILES] Error sending the result to "${file}": ${e}`);
           }
+        }
+        else { 
+          throw new Error(`[FILES] url or destination folder not defined`);
         }
       }
     }
