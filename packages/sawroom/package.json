@@ -47,5 +47,6 @@
   "dependencies": {
     "@dyne/sawroom-client": "^1.9.0",
     "cbor": "^8.1.0"
-  }
+  },
+  "gitHead": "86c48a8d85a239a32fbbace5df14c10b8d942168"
 }

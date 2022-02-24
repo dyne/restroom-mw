@@ -42,5 +42,6 @@
   "dependencies": {
     "@grpc/grpc-js": "^1.5.0",
     "@hyperledger/fabric-gateway": "^1.0.1"
-  }
+  },
+  "gitHead": "86c48a8d85a239a32fbbace5df14c10b8d942168"
 }
