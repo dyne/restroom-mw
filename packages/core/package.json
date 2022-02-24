@@ -44,7 +44,7 @@
     "fuzzball": "^2.1.2",
     "js-yaml": "^4.1.0"
   },
-  "gitHead": "86c48a8d85a239a32fbbace5df14c10b8d942168",
+  "gitHead": "5015ad3c33829d0690ed914900c45f0576b70aee",
   "devDependencies": {
     "@types/js-yaml": "^4.0.3"
   }
