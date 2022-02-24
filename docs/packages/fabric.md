@@ -24,11 +24,11 @@ app.use("/api/*", zencode);
 
 ### submitAndRetry
 
-[packages/fabric/src/index.ts:63-85](https://github.com/dyne/restroom-mw/blob/456b806d045ceca04a4718c897be01a29b657cbb/packages/fabric/src/index.ts#L63-L85 "Source code on GitHub")
+[packages/fabric/src/index.ts:65-87](https://github.com/dyne/restroom-mw/blob/ccdad63f7ba1f6ca701cd71154fcece03f949b38/packages/fabric/src/index.ts#L65-L87 "Source code on GitHub")
 
 #### Parameters
 
 *   `params` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)<[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>** list of parameters in the zencode
-    (length 2\*n, 2 parameter for each statement)
 *   `errorMsg` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** string which is shown in case of error
+*   `num_params_statement` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** Number of parameter per statement
 *   `fn` **function (i: [number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)): [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<void>** what to do for eachImplements retry logic ( see <https://stackoverflow.com/a/45347452> )
