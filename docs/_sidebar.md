@@ -18,6 +18,7 @@
   - [@restroom-mw/redis](/packages/redis.md)
   - [@restroom-mw/http](/packages/http.md)
   - [@restroom-mw/fabric](/packages/fabric.md)
+  - [@restroom-mw/files](/packages/files.md)
   - [@restroom-mw/sawroom](/packages/sawroom.md)
   - [@restroom-mw/timestamp](/packages/timestamp.md)
 
