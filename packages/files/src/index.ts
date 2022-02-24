@@ -11,20 +11,9 @@ import {
 import yauzl from 'yauzl';
 import extract from 'extract-zip';
 
-const TEMP_FILE = '/tmp/temp-zip-file-downloaded-from-restroom';
-
 export default (req: Request, res: Response, next: NextFunction) => {
   const rr = new Restroom(req, res);
   let content: ObjectLiteral = {};
-
-  rr.onBefore(
-    async (params: {
-      zencode: Zencode;
-      keys: ObjectLiteral;
-      data: ObjectLiteral;
-    }) => {
-    }
-  );
 
   rr.onSuccess(async (params) => {
     const { result, zencode } = params;
@@ -39,9 +28,12 @@ export default (req: Request, res: Response, next: NextFunction) => {
             const response = await axios.get(file, {
               responseType: 'arraybuffer'
             }); 
-            fs.writeFileSync(TEMP_FILE, response.data);
-            await extract(TEMP_FILE, { dir: folder });
-            fs.unlinkSync(TEMP_FILE);
+            const tempdir = fs.mkdtempSync("/tmp/restroom");
+            const tempfile = tempdir + "/downloaded";
+            fs.writeFileSync(tempfile, response.data);
+            await extract(tempfile, { dir: folder });
+            fs.unlinkSync(tempfile);
+            fs.rmdirSync(tempdir);
           } catch (e) {
             next(e);
             throw new Error(`[FILES]
