@@ -7,11 +7,18 @@ import {
   SET_SK,
   STORE,
   RETRIEVE,
+  ERC20_0,
+  ERC20_0_NAMED,
 } from "./actions";
 import { zencodeNamedParamsOf } from '@restroom-mw/utils';
 import Web3 from 'web3'
 import { Account } from 'web3-core/types'
-import * as STORE_ABI from './store_abi.json'
+// import * as STORE_ABI from './store_abi.json'
+// import * as ERC20_ABI from './erc20_abi.json'
+
+const STORE_ABI = require('./store_abi.json');
+const ERC20_ABI = require('./erc20_abi.json');
+
 const GAS_LIMIT = 100000
 const STORE_ADDRESS = "0xf0562148463aD4D3A8aB59222E2e390332Fc4a0d"
 let web3: Web3 = null;
@@ -33,6 +40,32 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       const { zencode, keys, data } = params;
       input = rr.combineDataKeys(data, keys);
       const namedParamsOf = zencodeNamedParamsOf(zencode, input);
+
+      const call_erc20_0 = async (command: string, contractAddress: string,
+                            variableName: string) => {
+        if(!web3.utils.isAddress(contractAddress)) {
+          throw new Error(`Not an ethereum address ${contractAddress}`);
+        }
+        const erc20 = new web3.eth.Contract(ERC20_ABI, contractAddress);
+
+        const fz = (() => {
+          switch(command) {
+            case "name": return erc20.methods.name;
+            case "symbol": return erc20.methods.symbol;
+            case "total supply": return erc20.methods.totalSupply;
+            default: return null;
+          }
+        })();
+
+        if(!fz) {
+          throw new Error(`Unknown function name ${command}`);
+        }
+
+        const result = await fz().call();
+
+
+        data[variableName] = result;
+      }
 
       if(zencode.match(CONNECT)) {
         const [ endpoint ] = namedParamsOf(CONNECT)
@@ -63,6 +96,27 @@ export default async (req: Request, res: Response, next: NextFunction) => {
               throw new Error("Failed transaction");
             }
           }
+        }
+      }
+
+      if(zencode.match(ERC20_0_NAMED)) {
+        validateWeb3();
+        const params = zencode.paramsOf(ERC20_0_NAMED);
+        for(var i = 0; i < params.length; i += 3) {
+          const command = params[i];
+          const contractAddress = input[params[i+1]] || params[i+1];
+          const variableName = params[i+2];
+          await call_erc20_0(command, contractAddress, variableName);
+        }
+      }
+
+      if(zencode.match(ERC20_0)) {
+        validateWeb3();
+        const params = zencode.paramsOf(ERC20_0);
+        for(var i = 0; i < params.length; i += 2) {
+          const command = params[i];
+          const contractAddress = input[params[i+1]] || params[i+1];
+          await call_erc20_0(command, contractAddress, command.replace(" ", "_"));
         }
       }
     });
