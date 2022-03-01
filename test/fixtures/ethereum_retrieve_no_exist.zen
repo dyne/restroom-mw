@@ -1,0 +1,8 @@
+Rule unknown ignore 
+Given nothing
+Given I have a ethereum endpoint named 'fabchain'
+Given I have a 'base64 array' named 'myArray'
+Given I read from 'ethereum' the data in tag 'myTag' and save the output into 'myArray'
+When I create the hash of 'myArray'
+When I rename the 'hash' to 'myHash'
+Then print data

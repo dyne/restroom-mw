@@ -165,7 +165,6 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         );
       }
       if (zencode.match(RETRIEVE)) {
-        validateStep(FabricInterop.Contract);
         const params = zencode.paramsOf(RETRIEVE);
         await submitAndRetry(params, "Could not retrieve data (maybe it doesn't exist)", 3,
           async (i: number) => {
@@ -173,6 +172,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
             const tag = input[params[i + 1]];
             const dataName = params[i + 2];
             if (storage == 'fabric') {
+              validateStep(FabricInterop.Contract);
               // Build function call
               const functionData = ["Retrieve", tag]
               const resultBytes = await contract.evaluateTransaction.apply(contract, functionData);
@@ -199,7 +199,6 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         );
       }
       if (zencode.match(STORE)) {
-        validateStep(FabricInterop.Contract);
         const params = zencode.paramsOf(STORE);
         await submitAndRetry(params, "Could not submit transaction", 3,
           async (i: number) => {
@@ -207,6 +206,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
             const data = result[params[i + 1]];
             const tag = params[i + 2];
             if (storage == 'fabric') {
+              validateStep(FabricInterop.Contract);
               const dataJson = JSON.stringify(data)
 
               // Build function call

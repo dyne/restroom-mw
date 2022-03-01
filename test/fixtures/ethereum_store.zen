@@ -1,0 +1,10 @@
+Rule unknown ignore 
+Given nothing
+When I have a ethereum endpoint named 'fabchain'
+When I use the ethereum private key 'sk'
+When I create the array of '10' random objects
+When I rename the 'array' to 'myarray'
+When I create the array of '10' random objects
+Then print data
+Then I ask 'ethereum' to store the data named 'myarray' into the tag 'myTag'
+Then I ask 'ethereum' to store the data named 'array' into the tag 'anotherTag'

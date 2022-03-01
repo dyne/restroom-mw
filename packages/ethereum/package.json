@@ -1,0 +1,45 @@
+{
+  "name": "@restroom-mw/ethereum",
+  "version": "0.10.0",
+  "description": "Middleware to interact with ethereum",
+  "keywords": [
+    "blockchain",
+    "zenroom",
+    "ethereum",
+    "api",
+    "nodejs"
+  ],
+  "author": "Alberto Lerda <alberto@dyne.org>",
+  "homepage": "https://dyne.github.io/restroom-mw/",
+  "license": "AGPL-3.0",
+  "main": "dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dyne/restroom-mw.git"
+  },
+  "scripts": {
+    "clean": "rimraf dist && rimraf tsconfig.tsbuildinfo",
+    "doc": "documentation readme src/** -g -f md -s 'API' --readme-file ../../docs/packages/ethereum.md --shallow",
+    "links": "yarn link",
+    "unlinks": "yarn unlink",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix --ext .js,.jsx .",
+    "watch": "tsc -b tsconfig.json -w",
+    "build": "tsc -b tsconfig.json"
+  },
+  "bugs": {
+    "url": "https://github.com/dyne/restroom-mw/issues"
+  },
+  "ava": {
+    "babel": true
+  },
+  "dependencies": {
+    "web3": "1.7.0"
+  }
+}
