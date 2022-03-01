@@ -43,3 +43,11 @@ test("Url doesn't exist", async (t) => {
   t.is(res.status, 500, res.text);
 });
 
+test("Save result to file", async (t) => {
+  const { app } = t.context;
+  fs.unlinkSync("/tmp/myBeautifulFile.json")
+  var res = await app.post("/files_save_result");
+  t.is(res.status, 200, res.text);
+  t.is(typeof fs.statSync("/tmp/myBeautifulFile.json", { throwIfNoEntry: false }), 'object')
+});
+

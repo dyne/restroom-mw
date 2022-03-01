@@ -14,6 +14,7 @@ import path from 'path';
  * `myFolder` on the server.
  */
 import { DOWNLOAD } from "./actions";
+import { STORE_RESULT } from "./actions";
 
 export default (req: Request, res: Response, next: NextFunction) => {
   const rr = new Restroom(req, res);
@@ -45,6 +46,28 @@ export default (req: Request, res: Response, next: NextFunction) => {
         }
         else { 
           throw new Error(`[FILES] url or destination folder not defined`);
+        }
+      }
+    }
+    if (zencode.match(STORE_RESULT)) {
+      const allPassOutputs = zencode.paramsOf(STORE_RESULT);
+      console.log(allPassOutputs);
+      for (let i = 0; i < allPassOutputs.length; i += 2) {
+        const variable = result[allPassOutputs[i]]
+        const folder = result[allPassOutputs[i+1]]
+
+        if (variable && folder) {
+          const variableJson = JSON.stringify(variable)
+          try {
+            const absoluteFolder = path.resolve(folder);
+            fs.writeFileSync(absoluteFolder, variableJson);
+          } catch (e) {
+            next(e);
+            throw new Error(`[FILES] Error saving the result to "${folder}": ${e}`);
+          }
+        }
+        else {
+          throw new Error(`[FILES] variable or destination folder not defined`);
         }
       }
     }
