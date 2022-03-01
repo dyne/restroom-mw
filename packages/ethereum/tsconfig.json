@@ -8,5 +8,8 @@
   "references": [{
     "path": "../core/"
   }],
-  "exclude": ["node_modules", "dist", "tests"]
+  "exclude": ["node_modules", "dist", "tests"],
+  "include": [
+    "src/store_abi.json"
+  ]
 }
