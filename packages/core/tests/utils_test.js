@@ -130,6 +130,7 @@ test("getContracts works correctly", async (t) => {
     "/fabric_store",
     "/files_no_dest",
     "/files_no_url",
+    "/files_save_result",
     "/files_url_do_not_exist",
     "/http-output",
     "/http-test",
