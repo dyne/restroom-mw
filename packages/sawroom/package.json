@@ -1,6 +1,6 @@
 {
   "name": "@restroom-mw/sawroom",
-  "version": "0.11.0",
+  "version": "0.12.2",
   "description": "\"Sawroom.dyne.org middleware to interact with sawtooth",
   "keywords": [
     "blockchain",
@@ -47,5 +47,6 @@
   "dependencies": {
     "@dyne/sawroom-client": "^1.9.0",
     "cbor": "^8.1.0"
-  }
+  },
+  "gitHead": "5015ad3c33829d0690ed914900c45f0576b70aee"
 }

@@ -1,6 +1,6 @@
 {
   "name": "@restroom-mw/files",
-  "version": "0.11.0",
+  "version": "0.12.2",
   "description": "Utilities middleware to work with files for Restroom",
   "author": "Alberto Lerda <alberto@dyne.org>",
   "homepage": "https://dyne.github.io/restroom-mw/",
@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "axios": "^0.26.0",
-    "extract-zip" :"2.0.1"
-  }
+    "extract-zip": "2.0.1"
+  },
+  "gitHead": "5015ad3c33829d0690ed914900c45f0576b70aee"
 }

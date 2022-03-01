@@ -1,6 +1,6 @@
 {
   "name": "@restroom-mw/utils",
-  "version": "0.11.0",
+  "version": "0.12.2",
   "author": "Puria Nafisi Azizi <puria@dyne.org>",
   "homepage": "https://dyne.github.io/restroom-mw/",
   "description": "Restroom middleware utilities",
@@ -41,5 +41,5 @@
   "dependencies": {
     "dotenv": "^16.0.0"
   },
-  "gitHead": "1552c3de8d11cb57c3c9cd303722c647623c4eb1"
+  "gitHead": "5015ad3c33829d0690ed914900c45f0576b70aee"
 }

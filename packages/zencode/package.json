@@ -1,6 +1,6 @@
 {
   "name": "@restroom-mw/zencode",
-  "version": "0.11.0",
+  "version": "0.12.2",
   "description": "Zencode utilities for Restroom",
   "keywords": [
     "restroom",
@@ -41,5 +41,5 @@
   "bugs": {
     "url": "https://github.com/dyne/restroom-mw/issues"
   },
-  "gitHead": "1552c3de8d11cb57c3c9cd303722c647623c4eb1"
+  "gitHead": "5015ad3c33829d0690ed914900c45f0576b70aee"
 }

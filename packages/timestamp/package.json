@@ -1,6 +1,6 @@
 {
   "name": "@restroom-mw/timestamp",
-  "version": "0.11.0",
+  "version": "0.12.2",
   "description": "timestamp middleware for restroom",
   "author": "Puria Nafisi Azizi <puria@dyne.org>",
   "homepage": "https://dyne.github.io/restroom-mw/",
@@ -32,5 +32,6 @@
   },
   "bugs": {
     "url": "https://github.com/dyne/restroom-mw/issues"
-  }
+  },
+  "gitHead": "5015ad3c33829d0690ed914900c45f0576b70aee"
 }
