@@ -28,10 +28,17 @@ test("Store a zenroom object", async (t) => {
   t.is(res.body.anotherTag.length, 64);
 });
 
-test("Retrieve a zenroom object", async (t) => {
+test.serial("Retrieve a zenroom object", async (t) => {
   const { app } = t.context;
   var res = await app.post("/ethereum_retrieve");
   t.is(res.status, 200, res.text);
-  t.is(res.body.myHash, "wIJBPxYwsawLFLdQl7uCj+maqMd/wGsT4h7NcyuI580=");
-  t.is(res.body.anotherHash, "IBlr1RYYtjWc7Nj8EGIUrCfJSHd+8OrVvN5pc6LylsI=");
+  t.is(res.body.myHash, "iMCavOPn8+cmbCsSZVuVsbVvk09WTWrkclzLo7dSLDY=");
+  t.is(res.body.anotherHash, "hIl5DWmqtse2mTApSmHwdGGI8WHbK2Dn9lwrRFbkXUM=");
 });
+
+test.serial("Retrieve object that doesn't exist", async (t) => {
+  const { app } = t.context;
+  var res = await app.post("/ethereum_retrieve_no_exist");
+  t.is(res.status, 500, res.text);
+});
+

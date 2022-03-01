@@ -13,7 +13,7 @@ import Web3 from 'web3'
 import { Account } from 'web3-core/types'
 //import * as STORE_ABI from './store_abi.json'
 const GAS_LIMIT = 100000
-const STORE_ADDRESS = "0x85b759C15A712406dC46CA47F49fc18796dc0e95"
+const STORE_ADDRESS = "0xf0562148463aD4D3A8aB59222E2e390332Fc4a0d"
 const STORE_ABI = JSON.parse(`[
   {
     "inputs": [

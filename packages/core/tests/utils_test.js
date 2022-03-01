@@ -121,6 +121,7 @@ test("getContracts works correctly", async (t) => {
     "/database_table",
     "/empty",
     "/ethereum_retrieve",
+    "/ethereum_retrieve_no_exist",
     "/ethereum_store",
     "/execute_and_save",
     "/execute_with_data",
