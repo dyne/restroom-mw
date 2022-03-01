@@ -14,6 +14,13 @@ import path from 'path';
  * `myFolder` on the server.
  */
 import { DOWNLOAD } from "./actions";
+/**
+ * `store 'myVariable' in the file 'myFolder'`
+ *
+ * Store the content of the variable `myVariable` in the filesystem at the path
+ * `myFolder` on the server
+ */
+
 import { STORE_RESULT } from "./actions";
 
 export default (req: Request, res: Response, next: NextFunction) => {
