@@ -45,9 +45,18 @@ test("Url doesn't exist", async (t) => {
 
 test("Save result to file", async (t) => {
   const { app } = t.context;
-  fs.unlinkSync("/tmp/myBeautifulFile.json")
+
+  // Delete file if it already exist (this way I know if the next step creates it again)
+  if(fs.statSync("./tmp/saveresult/myBeautifulFile.json", { throwIfNoEntry: false })) {
+    fs.unlinkSync("./tmp/saveresult/myBeautifulFile.json");
+  }
   var res = await app.post("/files_save_result");
   t.is(res.status, 200, res.text);
-  t.is(typeof fs.statSync("/tmp/myBeautifulFile.json", { throwIfNoEntry: false }), 'object')
+  t.is(typeof fs.statSync("./tmp/saveresult/myBeautifulFile.json", { throwIfNoEntry: false }), 'object')
+
+  // Save again and overwrite
+  var res = await app.post("/files_save_result");
+  t.is(res.status, 200, res.text);
+  t.is(typeof fs.statSync("./tmp/saveresult/myBeautifulFile.json", { throwIfNoEntry: false }), 'object')
 });
 

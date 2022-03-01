@@ -58,19 +58,22 @@ export default (req: Request, res: Response, next: NextFunction) => {
     }
     if (zencode.match(STORE_RESULT)) {
       const allPassOutputs = zencode.paramsOf(STORE_RESULT);
-      console.log(allPassOutputs);
       for (let i = 0; i < allPassOutputs.length; i += 2) {
         const variable = result[allPassOutputs[i]]
-        const folder = result[allPassOutputs[i+1]]
+        const file = result[allPassOutputs[i+1]]
 
-        if (variable && folder) {
+        if (variable && file) {
           const variableJson = JSON.stringify(variable)
           try {
-            const absoluteFolder = path.resolve(folder);
-            fs.writeFileSync(absoluteFolder, variableJson);
+            const absoluteFile = path.resolve(file);
+
+            const absoluteFolder = path.dirname(absoluteFile);
+            fs.mkdirSync(absoluteFolder, { recursive: true });
+
+            fs.writeFileSync(absoluteFile, variableJson);
           } catch (e) {
             next(e);
-            throw new Error(`[FILES] Error saving the result to "${folder}": ${e}`);
+            throw new Error(`[FILES] Error saving the result to "${file}": ${e}`);
           }
         }
         else {
