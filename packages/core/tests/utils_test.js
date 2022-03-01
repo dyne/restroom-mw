@@ -130,6 +130,10 @@ test("getContracts works correctly", async (t) => {
     "/fabric_read_write",
     "/fabric_retrieve",
     "/fabric_store",
+    "/files_no_dest",
+    "/files_no_url",
+    "/files_save_result",
+    "/files_url_do_not_exist",
     "/http-output",
     "/http-test",
     "/keygen",
@@ -149,6 +153,7 @@ test("getContracts works correctly", async (t) => {
     "/sawroom_store",
     "/sawroom_store_output",
     "/single-random",
+    "/unzip_directory",
     "/verify-keypair",
   ]);
 });

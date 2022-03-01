@@ -1,15 +1,9 @@
 {
-  "name": "@restroom-mw/utils",
+  "name": "@restroom-mw/files",
   "version": "0.12.2",
-  "author": "Puria Nafisi Azizi <puria@dyne.org>",
+  "description": "Utilities middleware to work with files for Restroom",
+  "author": "Alberto Lerda <alberto@dyne.org>",
   "homepage": "https://dyne.github.io/restroom-mw/",
-  "description": "Restroom middleware utilities",
-  "keywords": [
-    "restroom",
-    "zenroom",
-    "zencode",
-    "tools"
-  ],
   "license": "AGPL-3.0",
   "main": "dist/index.js",
   "files": [
@@ -25,21 +19,18 @@
   },
   "scripts": {
     "clean": "rimraf dist && rimraf tsconfig.tsbuildinfo",
-    "doc": "documentation readme src/** -g -f md -s 'API' --readme-file ../../docs/packages/utils.md --shallow",
-    "watch": "tsc -b tsconfig.json -w ",
+    "doc": "documentation readme src/** -g -f md -s 'API' --readme-file ../../docs/packages/files.md --shallow",
     "links": "yarn link",
     "unlinks": "yarn unlink",
-    "build": "tsc -b tsconfig.json",
-    "test": "nyc ava"
-  },
-  "ava": {
-    "babel": true
+    "watch": "tsc -b tsconfig.json -w",
+    "build": "tsc -b tsconfig.json"
   },
   "bugs": {
     "url": "https://github.com/dyne/restroom-mw/issues"
   },
   "dependencies": {
-    "dotenv": "^16.0.0"
+    "axios": "^0.26.0",
+    "extract-zip": "2.0.1"
   },
   "gitHead": "5015ad3c33829d0690ed914900c45f0576b70aee"
 }

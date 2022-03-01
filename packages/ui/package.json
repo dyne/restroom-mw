@@ -1,7 +1,7 @@
 {
   "name": "@restroom-mw/ui",
   "description": "The swagger-ui middleware to extend Restroom",
-  "version": "0.11.0",
+  "version": "0.12.2",
   "keywords": [
     "zenroom",
     "rest",
@@ -43,5 +43,5 @@
   "dependencies": {
     "swagger-ui-express": "^4.1.5"
   },
-  "gitHead": "1552c3de8d11cb57c3c9cd303722c647623c4eb1"
+  "gitHead": "5015ad3c33829d0690ed914900c45f0576b70aee"
 }

@@ -26,5 +26,11 @@ packages build withing the `restroom-mw` source code folder.
 NB. Whan you change some code, remember to run `yarn build` in the restoroom-mw
 root folder. But you don't have to `link` it again.
 
-Happy hacking!
+# 🖺 Improve documentation
 
+The simplest way to improve the documentation is inside the code, you can always put a Javadoc-like comment and run the command `yarn doc` to generate the documentation. For an example, look at the redis and the files package in the `src/index.ts` file.
+
+To look at the documentation locally you can serve it with `npx docsify-cli serve docs/`
+
+
+Happy hacking!
