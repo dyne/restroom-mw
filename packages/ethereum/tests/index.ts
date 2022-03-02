@@ -17,7 +17,7 @@ test.before(async (t) => {
   t.context.app = supertest(app);
 });
 
-/*test("Store a zenroom object", async (t) => {
+test("Store a zenroom object", async (t) => {
   const { app } = t.context;
   var res = await app.post("/ethereum_store");
   t.is(res.status, 200, res.text);
@@ -40,7 +40,7 @@ test.serial("Retrieve object that doesn't exist", async (t) => {
   var res = await app.post("/ethereum_retrieve_no_exist");
   t.is(res.status, 500, res.text);
 });
-*/
+
 
 test("Call ERC20 methods", async (t) => {
   const { app } = t.context;

@@ -18,11 +18,13 @@ import { Account } from 'web3-core/types'
 // import * as STORE_ABI from './store_abi.json'
 // import * as ERC20_ABI from './erc20_abi.json'
 
+require("dotenv").config();
+
 const STORE_ABI = require('./store_abi.json');
 const ERC20_ABI = require('./erc20_abi.json');
 
-const GAS_LIMIT = 100000
-const STORE_ADDRESS = "0xf0562148463aD4D3A8aB59222E2e390332Fc4a0d"
+const GAS_LIMIT = process.env.GAS_LIMIT || 100000;
+const STORE_ADDRESS = process.env.STORE_ADDRESS || "0xf0562148463aD4D3A8aB59222E2e390332Fc4a0d";
 let web3: Web3 = null;
 let account: Account  = null;
 let input: ObjectLiteral = null;
