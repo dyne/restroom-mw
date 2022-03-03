@@ -44,6 +44,15 @@ test("Check that the middleware detects when zenfile is missing into contract bl
   t.is(res.status, 500);
 });
 
+test("Check that the middleware provide context when debug is on", async (t) => {
+  const app = express();
+  app.use("/api/*", core);
+  const res = await request(app).post("/api/missing-zenfile-debug-on.chain");
+
+  t.is(res.body.context.debugEnabled, true);
+  t.is(res.status, 500);
+});
+
 test("Check that the middleware detects a duplicated mapping key in yaml blocks", async (t) => {
   const app = express();
   app.use("/api/*", core);

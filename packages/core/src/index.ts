@@ -87,6 +87,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         const output: any = {};
         Object.assign(output, restroomResult?.result);
         output.context = restroomResult?.context;
+        console.log(output);
         res.status(restroomResult.status).json(output);
       } else {
         res.status(restroomResult.status).json(restroomResult?.result);
