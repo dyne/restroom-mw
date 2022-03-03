@@ -1,5 +1,4 @@
 zenchain: 1.0
-debug: on
 name: correct-keypair
 start: create-pbkdf.zen
 blocks:
