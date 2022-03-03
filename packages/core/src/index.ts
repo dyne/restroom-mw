@@ -87,7 +87,6 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         const output: any = {};
         Object.assign(output, restroomResult?.result);
         output.context = restroomResult?.context;
-        console.log(output);
         res.status(restroomResult.status).json(output);
       } else {
         res.status(restroomResult.status).json(restroomResult?.result);
@@ -120,7 +119,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     try {
       const ymlContent: any = yaml.load(fileContents);
       const startBlock: string = ymlContent?.start;
-      globalContext.debugEnabled = ymlContent?.debug === 'on' ? true : false;
+      globalContext.debugEnabled = ymlContent?.mode === 'debug' ? true : false;
 
       if(!startBlock){
         throw new Error(`Yml is incomplete. Start (start:) first level definition is missing!`);
