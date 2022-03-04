@@ -30,6 +30,7 @@ let gateway: Gateway = null;
 let network: Network = null;
 let contract: Contract = null;
 
+const BLOCKCHAIN = "fabric"
 
 const evaluateOptions = () => {
   return { deadline: Date.now() + 5000 }; // 5 seconds
@@ -172,7 +173,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
             const storage = params[i];
             const tag = input[params[i + 1]];
             const dataName = params[i + 2];
-            if (storage.toLowerCase() == 'fabric') {
+            if (storage.toLowerCase() == BLOCKCHAIN) {
               validateStep(FabricInterop.Contract);
               // Build function call
               const functionData = ["Retrieve", tag]
@@ -207,7 +208,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
             const storage = params[i];
             const data = result[params[i + 1]];
             const tag = params[i + 2];
-            if (storage.toLowerCase() == 'fabric') {
+            if (storage.toLowerCase() == BLOCKCHAIN) {
               validateStep(FabricInterop.Contract);
               const dataJson = JSON.stringify(data);
               const dataUrl64 = base64url.encode(dataJson);
