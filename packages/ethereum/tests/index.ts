@@ -25,14 +25,15 @@ test("Store a zenroom object", async (t) => {
   t.is(res.body.myTag.length, 64);
   t.is(typeof res.body.anotherTag, "string");
   t.is(res.body.anotherTag.length, 64);
+  console.log(`{ 'myTab': ${res.body.myTag}, 'anotherTag': ${res.body.anotherTag} }`)
 });
 
 test.serial("Retrieve a zenroom object", async (t) => {
   const { app } = t.context;
   var res = await app.post("/ethereum_retrieve");
   t.is(res.status, 200, res.text);
-  t.is(res.body.myHash, "iMCavOPn8+cmbCsSZVuVsbVvk09WTWrkclzLo7dSLDY=");
-  t.is(res.body.anotherHash, "hIl5DWmqtse2mTApSmHwdGGI8WHbK2Dn9lwrRFbkXUM=");
+  t.is(res.body.myHash, "YLjN72y4Rzwi5nkEbeIKXhoLoxTOqM54gwNxQQhr8rE=");
+  t.is(res.body.anotherHash, "1ylMt6FGLQBJU0zDpDVgzP5OW5nfV0N0ouXhNK5GhO8=");
 });
 
 test.serial("Retrieve object that doesn't exist", async (t) => {

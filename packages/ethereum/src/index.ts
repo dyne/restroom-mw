@@ -13,8 +13,9 @@ import {
   ERC20_1_NAMED,
 } from "./actions";
 import { zencodeNamedParamsOf } from '@restroom-mw/utils';
-import Web3 from 'web3'
-import { Account } from 'web3-core/types'
+import Web3 from 'web3';
+import { Account } from 'web3-core/types';
+import base64url from 'base64url';
 // import * as STORE_ABI from './store_abi.json'
 // import * as ERC20_ABI from './erc20_abi.json'
 
@@ -23,7 +24,7 @@ require("dotenv").config();
 const STORE_ABI = require('./store_abi.json');
 const ERC20_ABI = require('./erc20_abi.json');
 
-const GAS_LIMIT = process.env.GAS_LIMIT || 100000;
+const GAS_LIMIT = process.env.GAS_LIMIT || 1000000;
 const STORE_ADDRESS = process.env.STORE_ADDRESS || "0xf0562148463aD4D3A8aB59222E2e390332Fc4a0d";
 let web3: Web3 = null;
 let account: Account  = null;
@@ -95,7 +96,8 @@ export default async (req: Request, res: Response, next: NextFunction) => {
             const receipt = await web3.eth.getTransactionReceipt("0x" + tag)
             if(receipt.status) {
               const dataABI = receipt.logs[0].data;
-              const dataJSON = web3.eth.abi.decodeParameters(["string"], dataABI)[0];
+              const dataUrl64 = web3.eth.abi.decodeParameters(["string"], dataABI)[0];
+              const dataJSON = base64url.decode(dataUrl64)
               const currentData = JSON.parse(dataJSON);
               data[variable] = currentData;
             } else {
@@ -161,8 +163,9 @@ export default async (req: Request, res: Response, next: NextFunction) => {
           const data = result[params[i + 1]];
           const tag = params[i + 2];
           if(storage == 'ethereum') {
-            const dataJson = JSON.stringify(data);
-            const dataABI = storeContract.methods.store(dataJson).encodeABI();
+            const dataJSON = JSON.stringify(data);
+            const dataUrl64 = base64url.encode(dataJSON)
+            const dataABI = storeContract.methods.store(dataUrl64).encodeABI();
             const tx = {
               to: STORE_ADDRESS,
               data: dataABI,
