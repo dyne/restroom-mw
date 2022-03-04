@@ -15,10 +15,11 @@
   - [@restroom-mw/core](/packages/core.md)
   - [@restroom-mw/ui](/packages/ui.md)
   - [@restroom-mw/db](/packages/db.md)
-  - [@restroom-mw/redis](/packages/redis.md)
   - [@restroom-mw/http](/packages/http.md)
+  - [@restroom-mw/ethereum](/packages/ethereum.md)
   - [@restroom-mw/fabric](/packages/fabric.md)
   - [@restroom-mw/files](/packages/files.md)
+  - [@restroom-mw/redis](/packages/redis.md)
   - [@restroom-mw/sawroom](/packages/sawroom.md)
   - [@restroom-mw/timestamp](/packages/timestamp.md)
 

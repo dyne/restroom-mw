@@ -7,12 +7,22 @@
 #### Table of Contents
 
 *   [DOWNLOAD](#download)
+*   [STORE_RESULT](#store_result)
 
 ### DOWNLOAD
 
-[packages/files/src/index.ts:16-16](https://github.com/dyne/restroom-mw/blob/089cc4dcc808a9010a9655cf585ce8da80dd394f/packages/files/src/index.ts#L16-L16 "Source code on GitHub")
+[packages/files/src/index.ts:16-16](https://github.com/dyne/restroom-mw/blob/d4e769cd5a81cacf3db515f0ee271b1d4dd298e0/packages/files/src/index.ts#L16-L16 "Source code on GitHub")
 
 `download the 'myUrl' and extract it into 'myFolder'`
 
 Download a zip file located at the url `myUrl` and extract it at the path
 `myFolder` on the server.
+
+### STORE_RESULT
+
+[packages/files/src/index.ts:24-24](https://github.com/dyne/restroom-mw/blob/d4e769cd5a81cacf3db515f0ee271b1d4dd298e0/packages/files/src/index.ts#L24-L24 "Source code on GitHub")
+
+`store 'myVariable' in the file 'myFolder'`
+
+Store the content of the variable `myVariable` in the filesystem at the path
+`myFolder` on the server
