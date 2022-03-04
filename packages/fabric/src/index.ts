@@ -20,6 +20,7 @@ import {
   RETRIEVE,
 } from "./actions";
 import { UTF8_DECODER, zencodeNamedParamsOf, combineDataKeys } from '@restroom-mw/utils';
+import base64url from 'base64url';
 
 let fabricAddress: string = null;
 let client: Client = null;
@@ -29,6 +30,7 @@ let gateway: Gateway = null;
 let network: Network = null;
 let contract: Contract = null;
 
+const BLOCKCHAIN = "fabric"
 
 const evaluateOptions = () => {
   return { deadline: Date.now() + 5000 }; // 5 seconds
@@ -171,12 +173,13 @@ export default async (req: Request, res: Response, next: NextFunction) => {
             const storage = params[i];
             const tag = input[params[i + 1]];
             const dataName = params[i + 2];
-            if (storage == 'fabric') {
+            if (storage.toLowerCase() == BLOCKCHAIN) {
               validateStep(FabricInterop.Contract);
               // Build function call
               const functionData = ["Retrieve", tag]
               const resultBytes = await contract.evaluateTransaction.apply(contract, functionData);
-              const resultJson = UTF8_DECODER.decode(resultBytes);
+              const resultUrl64 = UTF8_DECODER.decode(resultBytes);
+              const resultJson = base64url.decode(resultUrl64);
               const currentResult = JSON.parse(resultJson);
               data[dataName] = currentResult;
             }
@@ -205,12 +208,13 @@ export default async (req: Request, res: Response, next: NextFunction) => {
             const storage = params[i];
             const data = result[params[i + 1]];
             const tag = params[i + 2];
-            if (storage == 'fabric') {
+            if (storage.toLowerCase() == BLOCKCHAIN) {
               validateStep(FabricInterop.Contract);
-              const dataJson = JSON.stringify(data)
+              const dataJson = JSON.stringify(data);
+              const dataUrl64 = base64url.encode(dataJson);
 
               // Build function call
-              const functionData = ["Store", dataJson]
+              const functionData = ["Store", dataUrl64]
               const resultBytes = await contract.submitTransaction.apply(contract, functionData);
               const currentResult = UTF8_DECODER.decode(resultBytes);
               result[tag] = currentResult
