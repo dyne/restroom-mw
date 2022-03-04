@@ -27,8 +27,8 @@ test.serial("Read stored data", async (t) => {
   const { app } = t.context;
   var res = await app.post("/fabric_retrieve");
   t.is(res.status, 200, res.text);
-  t.is(res.body.hash1, "Jmy2dTTA5QknOz+QL5HiH3iWI4eOuj2W9a6HkKdgdsI=");
-  t.is(res.body.hash2, "3a6Zqk9T0AAlxjqq8SZ/f7s+G5vf8VrGojqmDtXqgx4=");
+  t.is(res.body.hash1, "YF8PGoaiaGQxIWROwpJxlUXNXx+FWyQgjM4BsMozER8=");
+  t.is(res.body.hash2, "5Nn7QdfYc4n3VgBKIe4bPba+yaW1nmGyifAB2vTzdCA=");
 });
 
 test.serial("Store data", async (t) => {
