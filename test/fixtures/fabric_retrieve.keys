@@ -40,5 +40,5 @@ certificate: |+
   -----END CERTIFICATE-----
 chaincode: "store"
 channel: "mychannel"
-myTag: "9262a9e039b823a521cb9b7538f91895c1e2193bacd541050a7ca034ad6a326e"
-myTag2: "604c74bcdfc0a08d93495f1748f3b6fa0427e7b86c1ddae1ac0710db44235bf8"
+myTag: "072643283563ec55e211de8209c115a9877248060ecebdc5af9ffd4698e52e7c"
+myTag2: "4f01288bb91f41e3e5f6ab0d2ab4fdbc6a6102de4b0e37aa4ab49a164a3931c8"

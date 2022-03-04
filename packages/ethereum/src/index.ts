@@ -92,7 +92,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
           const storage = params[i];
           const tag = input[params[i + 1]];
           const variable = params[i + 2];
-          if(storage == 'ethereum') {
+          if(storage.toLowerCase() == 'ethereum') {
             const receipt = await web3.eth.getTransactionReceipt("0x" + tag)
             if(receipt.status) {
               const dataABI = receipt.logs[0].data;
@@ -162,7 +162,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
           const storage = params[i];
           const data = result[params[i + 1]];
           const tag = params[i + 2];
-          if(storage == 'ethereum') {
+          if(storage.toLowerCase() == 'ethereum') {
             const dataJSON = JSON.stringify(data);
             const dataUrl64 = base64url.encode(dataJSON)
             const dataABI = storeContract.methods.store(dataUrl64).encodeABI();
