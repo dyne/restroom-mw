@@ -14,6 +14,44 @@ export function addDataToContext(singleBlockContext: any, data:any) {
 }
 
 /**
+ * This function is responsible to create a global context used for debug purposes 
+ */
+ export function createGlobalContext() {
+  const globalContext: any = {
+    debugEnabled: false
+  };
+  return globalContext;
+}
+
+/**
+ * This function is responsible to create a global context with debugEnabled mode 
+ */
+ export function enableDebugInGlobalContext() {
+  const globalContext: any = {
+    debugEnabled: true
+  };
+  return globalContext;
+}
+
+/**
+ * This function is responsible to create a global context used for debug purposes 
+ * @param {singleBlockContext} object context of a single block
+ * @param {globalContext} object previous global context
+ */
+ export function updateGlobalContext(singleBlockContext: any, globalContext:any) {
+  let updatedGlobalContext: any = {};
+  const block: string = singleBlockContext.currentBlock;
+  updatedGlobalContext.debugEnabled = globalContext.debugEnabled;
+  updatedGlobalContext.currentBlock = block;
+  updatedGlobalContext[block] = {};
+  updatedGlobalContext[block].keys = singleBlockContext.keys ? singleBlockContext.keys : undefined;
+  updatedGlobalContext[block].data = singleBlockContext.data ? singleBlockContext.data : undefined;
+  updatedGlobalContext[block].output = singleBlockContext.output ? singleBlockContext.output : undefined;
+  return updatedGlobalContext;
+}
+
+
+/**
  * This function is responsible to add keys into single block context from selected .keys file
  * @param {singleBlockContext} object context of a single block
  * @param {blockName} string block name

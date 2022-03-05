@@ -16,6 +16,9 @@ import {
   addNextToContext,
   addConfToContext,
   addZenFileToContext,
+  createGlobalContext,
+  updateGlobalContext,
+  enableDebugInGlobalContext
 } from "./context";
 import { NextFunction, Request, Response } from "express";
 import * as yaml from "js-yaml";
@@ -119,7 +122,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     try {
       const ymlContent: any = yaml.load(fileContents);
       const startBlock: string = ymlContent?.start;
-      globalContext.debugEnabled = ymlContent?.mode === 'debug' ? true : false;
+      globalContext = ymlContent?.mode === 'debug' ? enableDebugInGlobalContext() : globalContext;
 
       if(!startBlock){
         throw new Error(`Yml is incomplete. Start (start:) first level definition is missing!`);
@@ -183,9 +186,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   ): Promise<RestroomResult> => {
     const isChain = contractName.split(".")[1] === CHAIN_EXTENSION || false;
     const keys = isChain ? "{}" : getKeys(contractName);
-    const globalContext: any = {
-      debugEnabled: false
-    };
+    const globalContext = createGlobalContext();
     try {
       return isChain
         ? executeChain(getYml(contractName.split(".")[0]), data, globalContext)
@@ -210,7 +211,6 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     data: any,
     globalContext: any
   ): Promise<RestroomResult> {
-    console.debug("Current block is " + block);
 
     const singleContext: BlockContext = {
       keys: null,
@@ -218,7 +218,8 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       next: null,
       conf: "",
       output: {},
-      zenFile: null
+      zenFile: null,
+      currentBlock: block
     };
     try {
       addKeysToContext(singleContext, ymlContent.blocks[block]);
@@ -226,9 +227,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       addConfToContext(singleContext, ymlContent.blocks[block]);
       addNextToContext(singleContext, ymlContent.blocks[block]);
       addZenFileToContext(singleContext, ymlContent.blocks[block]);
-      globalContext[block] = {};
-      globalContext[block].keys = singleContext?.keys;
-      globalContext[block].data = singleContext?.data;
+      globalContext = updateGlobalContext(singleContext, globalContext);
 
       if(!singleContext.zenFile){
         throw new Error(`Zen file is missing for block id: ${block}`);
@@ -247,7 +246,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         return await resolveRestroomResult(restroomResult, globalContext);
       }
       Object.assign(singleContext.output, restroomResult.result);
-      globalContext[block].output = singleContext?.output;
+      globalContext = updateGlobalContext(singleContext, globalContext);
 
       if (!singleContext?.next) {
         return await resolveRestroomResult({
