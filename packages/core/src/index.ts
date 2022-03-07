@@ -16,6 +16,9 @@ import {
   addNextToContext,
   addConfToContext,
   addZenFileToContext,
+  createGlobalContext,
+  updateGlobalContext,
+  enableDebugInGlobalContext
 } from "./context";
 import { NextFunction, Request, Response } from "express";
 import * as yaml from "js-yaml";
@@ -34,7 +37,10 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     try {
       return getHooks(hook, res, args);
     } catch (e) {
-      sendError(`[EXCEPTION IN REGISTERED HOOK ${hook}]`, e);
+      sendError({
+        error: e,
+        errorMessage: `[EXCEPTION IN REGISTERED HOOK ${hook}]`,
+      });
     }
   };
 
@@ -43,20 +49,26 @@ export default async (req: Request, res: Response, next: NextFunction) => {
    * @param {subject} string subject
    * @param {e} NodeJS.ErrnoException error
    */
-  const sendError = (subject: string, e: NodeJS.ErrnoException = null) => {
+  const sendError = (restroomResult: any) => {
+    const subject: string = restroomResult?.errorMessage;
+    const e: NodeJS.ErrnoException = restroomResult?.error;
     const exception = e ? e.stack || e.message : "";
     const message = subject + "\n\n\n" + exception;
-    if (e.code === "ENOENT") {
+    if (e?.code === "ENOENT") {
       getMessage(req).then((mes) => {
         res.status(404).send(mes);
       });
     } else {
       if (!res.headersSent) {
-        res.status(500).json({
+        const errorOutput : any = {
           zenroom_errors: zenroom_errors,
           result: zenroom_result,
           exception: message,
-        });
+        }
+        if(restroomResult?.context?.debugEnabled){
+          errorOutput.context = restroomResult?.context;
+        }
+        res.status(500).json(errorOutput);
         if (e) next(e);
       }
     }
@@ -72,16 +84,27 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     res: Response
   ) => {
     if (restroomResult?.error) {
-      sendError(restroomResult.errorMessage, restroomResult.error);
+      sendError(restroomResult);
     } else {
-      res.status(restroomResult.status).json(restroomResult?.result);
+      if(restroomResult?.context?.debugEnabled){
+        const output: any = {};
+        Object.assign(output, restroomResult?.result);
+        output.context = restroomResult?.context;
+        res.status(restroomResult.status).json(output);
+      } else {
+        res.status(restroomResult.status).json(restroomResult?.result);
+      }
     }
   };
 
   async function resolveRestroomResult(
-    restroomResult: RestroomResult
+    restroomResult: RestroomResult,
+    globalContext: any
   ): Promise<RestroomResult> {
     return new Promise((resolve) => {
+      if (globalContext?.debugEnabled){
+        restroomResult.context = globalContext;
+      }
       resolve(restroomResult);
     });
   }
@@ -93,11 +116,14 @@ export default async (req: Request, res: Response, next: NextFunction) => {
    */
   async function executeChain(
     fileContents: string,
-    data: any
+    data: any,
+    globalContext: any
   ): Promise<RestroomResult> {
     try {
       const ymlContent: any = yaml.load(fileContents);
-      const startBlock: string = ymlContent?.start
+      const startBlock: string = ymlContent?.start;
+      globalContext = ymlContent?.mode === 'debug' ? enableDebugInGlobalContext() : globalContext;
+
       if(!startBlock){
         throw new Error(`Yml is incomplete. Start (start:) first level definition is missing!`);
       }
@@ -105,12 +131,12 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       detectLoop(startBlock, ymlContent);
       checkAlwaysSamePathInYml(ymlContent);
 
-      return await evaluateBlock(startBlock, ymlContent, data);
+      return await evaluateBlock(startBlock, ymlContent, data, globalContext);
     } catch (err) {
       return await resolveRestroomResult({
         error: err,
         errorMessage: `[CHAIN YML EXECUTION ERROR]`,
-      });
+      }, globalContext);
     }
   }
 
@@ -160,9 +186,10 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   ): Promise<RestroomResult> => {
     const isChain = contractName.split(".")[1] === CHAIN_EXTENSION || false;
     const keys = isChain ? "{}" : getKeys(contractName);
+    const globalContext = createGlobalContext();
     try {
       return isChain
-        ? executeChain(getYml(contractName.split(".")[0]), data)
+        ? executeChain(getYml(contractName.split(".")[0]), data, globalContext)
         : callRestroom(
             data,
             keys,
@@ -174,16 +201,16 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       return await resolveRestroomResult({
         error: err,
         errorMessage: `[RESTROOM EXECUTION ERROR]`,
-      });
+      }, globalContext);
     }
   };
 
   async function evaluateBlock(
     block: string,
     ymlContent: any,
-    data: any
+    data: any,
+    globalContext: any
   ): Promise<RestroomResult> {
-    console.debug("Current block is " + block);
 
     const singleContext: BlockContext = {
       keys: null,
@@ -191,7 +218,8 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       next: null,
       conf: "",
       output: {},
-      zenFile: null
+      zenFile: null,
+      currentBlock: block
     };
     try {
       addKeysToContext(singleContext, ymlContent.blocks[block]);
@@ -199,6 +227,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       addConfToContext(singleContext, ymlContent.blocks[block]);
       addNextToContext(singleContext, ymlContent.blocks[block]);
       addZenFileToContext(singleContext, ymlContent.blocks[block]);
+      globalContext = updateGlobalContext(singleContext, globalContext);
 
       if(!singleContext.zenFile){
         throw new Error(`Zen file is missing for block id: ${block}`);
@@ -214,26 +243,28 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       );
 
       if (restroomResult?.error) {
-        return await resolveRestroomResult(restroomResult);
+        return await resolveRestroomResult(restroomResult, globalContext);
       }
       Object.assign(singleContext.output, restroomResult.result);
+      globalContext = updateGlobalContext(singleContext, globalContext);
 
       if (!singleContext?.next) {
         return await resolveRestroomResult({
           result: singleContext?.output,
           status: 200,
-        });
+        }, globalContext);
       }
     } catch (err) {
       return await resolveRestroomResult({
         error: err,
         errorMessage: `[CHAIN EXECUTION ERROR FOR CONTRACT ${block}]`,
-      });
+      }, globalContext);
     }
     return await evaluateBlock(
       singleContext.next,
       ymlContent,
-      singleContext.output
+      singleContext.output,
+      globalContext
     );
   }
 
