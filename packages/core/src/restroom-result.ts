@@ -1,6 +1,7 @@
 export type RestroomResult = {
-  result?: unknown;
+  result?: any;
   status?: number;
   error?: Error;
   errorMessage?: string;
+  context?:any;
 };

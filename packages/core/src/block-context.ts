@@ -5,4 +5,5 @@ export type BlockContext = {
   conf: string; 
   output: any;
   zenFile: string;
+  currentBlock: string;
 };
