@@ -18,7 +18,8 @@ import {
   addZenFileToContext,
   createGlobalContext,
   updateGlobalContext,
-  enableDebugInGlobalContext
+  enableDebugInGlobalContext,
+  updateGlobalContextOutput
 } from "./context";
 import { NextFunction, Request, Response } from "express";
 import * as yaml from "js-yaml";
@@ -205,6 +206,38 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     }
   };
 
+  async function evaluateInternalBlock(
+    block: string,
+    ymlContent: any,
+    data: any,
+    globalContext: any,
+    singleContext: any
+  ): Promise<any> {
+
+    addKeysToContext(singleContext, ymlContent.blocks[block]);
+    addDataToContext(singleContext, data);
+    addConfToContext(singleContext, ymlContent.blocks[block]);
+    addNextToContext(singleContext, ymlContent.blocks[block]);
+    addZenFileToContext(singleContext, ymlContent.blocks[block]);
+    globalContext = updateGlobalContext(singleContext, globalContext);
+
+    if(!singleContext.zenFile){
+      throw new Error(`Zen file is missing for block id: ${block}`);
+    }
+
+    const zencode = getContractFromPath(singleContext.zenFile);
+    const restroomResult: RestroomResult = await callRestroom(
+      singleContext.data,
+      singleContext.keys,
+      singleContext.conf,
+      zencode,
+      singleContext.zenFile
+    );
+    Object.assign(singleContext.output, restroomResult.result);
+    globalContext = updateGlobalContext(singleContext, globalContext);
+    return {restroomResult: restroomResult, singleContext: singleContext, globalContext: globalContext};
+  }
+
   async function evaluateBlock(
     block: string,
     ymlContent: any,
@@ -221,50 +254,57 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       zenFile: null,
       currentBlock: block
     };
+
+    let internalResult: any = {};
+    let output: any;
     try {
-      addKeysToContext(singleContext, ymlContent.blocks[block]);
-      addDataToContext(singleContext, data);
-      addConfToContext(singleContext, ymlContent.blocks[block]);
-      addNextToContext(singleContext, ymlContent.blocks[block]);
-      addZenFileToContext(singleContext, ymlContent.blocks[block]);
-      globalContext = updateGlobalContext(singleContext, globalContext);
+      if(ymlContent.blocks[block].forEach){
+        const forEachObjectName = ymlContent.blocks[block].forEach;
+        const forEachIndex = ymlContent.blocks[block].index;
+  
+        const forEachObject = data[forEachObjectName];
+        const forEachResult: any = {};
+        const forEachResultAsArray: any = {};
+        forEachResult[forEachObjectName] = {};
+        forEachResultAsArray[forEachObjectName] = [];
 
-      if(!singleContext.zenFile){
-        throw new Error(`Zen file is missing for block id: ${block}`);
+        if (typeof forEachObject === 'object' || Array.isArray(forEachObject)){
+          for(let index in Object.keys(forEachObject)){
+            const name = Array.isArray(forEachObject) ? index : Object.keys(forEachObject)[index];
+            data[forEachIndex] = forEachObject[name];
+            internalResult = await evaluateInternalBlock(block, ymlContent, data, globalContext, singleContext);
+            forEachResult[forEachObjectName][name] = internalResult?.restroomResult.result;
+            forEachResultAsArray[forEachObjectName].push(internalResult?.restroomResult.result);
+          }
+          output = Array.isArray(forEachObject) ? forEachResultAsArray : forEachResult;
+        } else {
+          throw new Error(`For each is not an iterable object`);
+        }
+      } else {
+        internalResult = await evaluateInternalBlock(block, ymlContent, data, globalContext, singleContext);
+        output = internalResult.singleContext.output
       }
-
-      const zencode = getContractFromPath(singleContext.zenFile);
-      const restroomResult: RestroomResult = await callRestroom(
-        singleContext.data,
-        singleContext.keys,
-        singleContext.conf,
-        zencode,
-        singleContext.zenFile
-      );
-
-      if (restroomResult?.error) {
-        return await resolveRestroomResult(restroomResult, globalContext);
+      globalContext = updateGlobalContextOutput(internalResult.singleContext, internalResult.globalContext, output);
+      if (internalResult.restroomResult?.error) {
+        return await resolveRestroomResult(internalResult.restroomResult, internalResult.globalContext);
       }
-      Object.assign(singleContext.output, restroomResult.result);
-      globalContext = updateGlobalContext(singleContext, globalContext);
-
-      if (!singleContext?.next) {
+      if (!internalResult.singleContext?.next) {
         return await resolveRestroomResult({
-          result: singleContext?.output,
+          result: output,
           status: 200,
-        }, globalContext);
+        }, internalResult.globalContext);
       }
     } catch (err) {
       return await resolveRestroomResult({
         error: err,
         errorMessage: `[CHAIN EXECUTION ERROR FOR CONTRACT ${block}]`,
-      }, globalContext);
+      }, internalResult.globalContext);
     }
     return await evaluateBlock(
-      singleContext.next,
+      internalResult.singleContext.next,
       ymlContent,
-      singleContext.output,
-      globalContext
+      output,
+      internalResult.globalContext
     );
   }
 
