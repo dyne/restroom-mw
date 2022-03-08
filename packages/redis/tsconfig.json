@@ -8,6 +8,8 @@
     "path": "../core/"
   }, {
     "path": "../zencode/"
+  }, {
+    "path": "../types"
   }],
   "exclude": ["node_modules", "dist", "tests"]
 }

@@ -1,4 +1,4 @@
-import { ObjectLiteral } from "@restroom-mw/core/src/types";
+import { ObjectLiteral } from "@restroom-mw/types";
 import { EXTERNAL_CONNECTION } from "./actions";
 
 const checkForNestedBoolean = (obj: any) => {
