@@ -1,6 +1,7 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
 import { Restroom } from "@restroom-mw/core";
 import { Request, Response, NextFunction } from "express";
+import { ObjectLiteral } from "@restroom-mw/types";
 
 class Result extends Model {
   public result: string;
