@@ -1,6 +1,4 @@
 import { Restroom } from "@restroom-mw/core";
-import { ObjectLiteral } from "@restroom-mw/core/src/types";
-import { Zencode } from "@restroom-mw/zencode";
 import axios from "axios";
 import { NextFunction, Request, Response } from "express";
 import fs from 'fs'
@@ -10,7 +8,7 @@ import path from 'path';
 /**
  * `download the 'myUrl' and extract it into 'myFolder'`
  *
- * Download a zip file located at the url `myUrl` and extract it at the path 
+ * Download a zip file located at the url `myUrl` and extract it at the path
  * `myFolder` on the server.
  */
 import { DOWNLOAD } from "./actions";
@@ -32,14 +30,14 @@ export default (req: Request, res: Response, next: NextFunction) => {
       const allPassOutputs = zencode.paramsOf(DOWNLOAD);
       for (let i = 0; i < allPassOutputs.length; i += 2) {
         const file = result[allPassOutputs[i]]
-        const folder = result[allPassOutputs[i+1]]
+        const folder = result[allPassOutputs[i + 1]]
 
         if (file && folder) {
           try {
             const absoluteFolder = path.resolve(folder);
             const response = await axios.get(file, {
               responseType: 'arraybuffer'
-            }); 
+            });
             const tempdir = fs.mkdtempSync("/tmp/restroom");
             const tempfile = tempdir + "/downloaded";
             fs.writeFileSync(tempfile, response.data);
@@ -51,7 +49,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
             throw new Error(`[FILES] Error sending the result to "${file}": ${e}`);
           }
         }
-        else { 
+        else {
           throw new Error(`[FILES] url or destination folder not defined`);
         }
       }
@@ -60,7 +58,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
       const allPassOutputs = zencode.paramsOf(STORE_RESULT);
       for (let i = 0; i < allPassOutputs.length; i += 2) {
         const variable = result[allPassOutputs[i]]
-        const file = result[allPassOutputs[i+1]]
+        const file = result[allPassOutputs[i + 1]]
 
         if (variable && file) {
           const variableJson = JSON.stringify(variable)

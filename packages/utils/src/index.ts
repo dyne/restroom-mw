@@ -1,5 +1,6 @@
-import { TextDecoder } from 'util';
+import { TextDecoder } from "util";
 import { Zencode } from "@restroom-mw/zencode";
+import { ObjectLiteral } from "@restroom-mw/types";
 
 require("dotenv").config();
 
@@ -68,7 +69,8 @@ export const combineDataKeys = (data: ObjectLiteral, keys: string) => {
   }
 };
 
-export const zencodeNamedParamsOf = (zencode: Zencode, input: ObjectLiteral) => 
+export const zencodeNamedParamsOf =
+  (zencode: Zencode, input: ObjectLiteral) =>
   (sid: string): string[] => {
     if (!zencode.match(sid)) return [];
     const params = zencode.paramsOf(sid);
@@ -77,4 +79,3 @@ export const zencodeNamedParamsOf = (zencode: Zencode, input: ObjectLiteral) =>
       return acc;
     }, []);
   };
-

@@ -1,12 +1,12 @@
 import { getFile } from "./utils";
 
 /**
- * This function is responsible to add data into single block context 
+ * This function is responsible to add data into single block context
  * @param {singleBlockContext} object context of a single block
  * @param {data} object data for the contract
  */
-export function addDataToContext(singleBlockContext: any, data:any) {
-  if(data){
+export function addDataToContext(singleBlockContext: any, data: any) {
+  if (data) {
     Object.keys(data).forEach((key: string) => {
       singleBlockContext.data[key] = data[key];
     });
@@ -56,9 +56,9 @@ export function addDataToContext(singleBlockContext: any, data:any) {
  * @param {singleBlockContext} object context of a single block
  * @param {blockName} string block name
  */
-export function addKeysToContext(singleBlockContext: any, ymlContent:any) {
+export function addKeysToContext(singleBlockContext: any, ymlContent: any) {
   const extractedKeys = getFile(ymlContent?.keysFile) || null;
-  if(extractedKeys){
+  if (extractedKeys) {
     const keys = JSON.parse(extractedKeys);
     singleBlockContext.keys = {};
     Object.keys(keys).forEach((key: string) => {
@@ -73,7 +73,7 @@ export function addKeysToContext(singleBlockContext: any, ymlContent:any) {
  * @param {singleBlockContext} object context of a single block
  * @param {blockName} string block name
  */
- export function addConfToContext(singleBlockContext: any, ymlContent:any) {
+export function addConfToContext(singleBlockContext: any, ymlContent: any) {
   const conf = getFile(ymlContent?.confFile) || "";
   singleBlockContext.conf = conf;
 }
@@ -83,7 +83,7 @@ export function addKeysToContext(singleBlockContext: any, ymlContent:any) {
  * @param {singleBlockContext} object context of a single block
  * @param {ymlContent} object yaml content
  */
- export function addNextToContext(singleBlockContext: any, ymlContent:any) {
+export function addNextToContext(singleBlockContext: any, ymlContent: any) {
   singleBlockContext.next = ymlContent?.next;
 }
 
@@ -92,6 +92,6 @@ export function addKeysToContext(singleBlockContext: any, ymlContent:any) {
  * @param {singleBlockContext} object context of a single block
  * @param {ymlContent} object yaml content
  */
- export function addZenFileToContext(singleBlockContext: any, ymlContent:any) {
+export function addZenFileToContext(singleBlockContext: any, ymlContent: any) {
   singleBlockContext.zenFile = ymlContent?.zenFile;
 }

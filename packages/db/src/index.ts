@@ -23,10 +23,6 @@ const parse = (o: string) => {
   }
 };
 
-interface ObjectLiteral {
-  [key: string]: any;
-}
-
 interface QueryGetRecord {
   id: string;
   table: string;
@@ -62,14 +58,14 @@ export default (req: Request, res: Response, next: NextFunction) => {
         typeof keys === "undefined"
           ? {}
           : keys && typeof keys === "object"
-          ? keys
-          : parse(keys);
+            ? keys
+            : parse(keys);
       dataContent =
         typeof data === "undefined"
           ? {}
           : data && typeof data === "object"
-          ? data
-          : parse(data);
+            ? data
+            : parse(data);
       content = { ...dataContent, ...keysContent };
       contentKeys = Object.keys(content);
 
