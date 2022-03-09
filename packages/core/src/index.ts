@@ -382,7 +382,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         data: data,
         globalContext: globalContext,
         ymlContent: ymlContent
-      })
+      });
       result = blockResult.lastInstanceResult;
       output = blockResult.output;
       globalContext = updateGlobalContextOutput(result.singleContext, result.globalContext, output);
