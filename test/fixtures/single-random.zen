@@ -1,4 +1,4 @@
-Rule unknown ignore
+rule check version 1.0.0
 
 Scenario simple: Generate a random password
 
