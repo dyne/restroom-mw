@@ -1,10 +1,1 @@
-rule check version 1.0.0
-
-Scenario simple: Generate a random password
-
-Given nothing
-
-When I create the random object of '128' bits
-When I rename the 'random_object' to 'myRandom'
-
-Then print the 'myRandom'
+../../docs/links/random.zen
