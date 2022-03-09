@@ -208,7 +208,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
    * @param {data} any input data object
    * @returns {RestroomResult} Returns the restroom result.
    */
-  const restroomDispatcher = async (
+  const restroomDispatch = async (
     contractName: string,
     data: any
   ): Promise<RestroomResult> => {
@@ -476,7 +476,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   let data = getData(req, res);
 
   res.set("x-powered-by", "RESTroom by Dyne.org");
-  buildEndpointResponse(await restroomDispatcher(contractName, data), res);
+  buildEndpointResponse(await restroomDispatch(contractName, data), res);
 };
 
 function checkStartBlock(startBlock: string, ymlContent:any) {
