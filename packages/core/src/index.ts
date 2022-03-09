@@ -8,6 +8,9 @@ import {
   getYml,
   getContractByContractName,
   getContractFromPath,
+  isForEachPresent,
+  isErrorResult,
+  isChainLastBlock,
 } from "./utils";
 import { zencode_exec } from "zenroom";
 import {
@@ -30,6 +33,7 @@ import { BlockContext } from "./block-context";
 import { CHAIN_EXTENSION } from "@restroom-mw/utils";
 import { BlockInput } from "./block-input";
 import { RestroomInput } from "./restroom-input";
+import { validateForEach, validateIfIterable, validateNextBlock, validateStartBlock, validateZenFile } from "./validations";
 const functionHooks = initHooks;
 
 const DEBUG_MODE = 'debug';
@@ -296,7 +300,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     forEachResult[forEachObjectName] = {};
     forEachResultAsArray[forEachObjectName] = [];
 
-    isForEachValid(forEachObject, forEachObjectName, block);
+    validateForEach(forEachObject, forEachObjectName, block);
     validateIfIterable(forEachObject, forEachObjectName, block);
     for(let index in Object.keys(forEachObject)){
       const name = Array.isArray(forEachObject) ? index : Object.keys(forEachObject)[index];
@@ -479,49 +483,6 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   buildEndpointResponse(await restroomDispatch(contractName, data), res);
 };
 
-function validateStartBlock(startBlock: string, ymlContent:any) {
-  if (!startBlock) {
-    throw new Error(`Yml is incomplete. Start (start:) first level definition is missing!`);
-  }
-  if(!ymlContent.blocks[startBlock]){
-    throw new Error(`Please check your yml. Start (start:) is pointing nowhere!`);
-  }
-}
-
-function validateNextBlock(nextBlock: string, currentBlock:string, ymlContent:any){
-  if(!ymlContent.blocks[nextBlock]){
-    throw new Error(`Please check your yml. Next (next:) is pointing nowhere for current block ${currentBlock}!`);
-  }
-}
-
-function isChainLastBlock(internalResult: SingleInstanceOutput) {
-  return !internalResult.singleContext?.next;
-}
-
-function isErrorResult(internalResult: SingleInstanceOutput) {
-  return internalResult.restroomResult?.error;
-}
-
-function isForEachPresent(ymlContent: any, block: string) {
-  return ymlContent.blocks[block].forEach;
-}
-
-function isForEachValid(forEachObject: any, forEachObjectName:string, block:string) {
-  if(!forEachObject){
-   throw new Error(`For each object with name:${forEachObjectName} defined for the block: ${block} is null or undefined`);
-  }
-}
-
-function isObject(item:any){
-  return typeof item === 'object';
-}
-
-function validateIfIterable(forEachObject: any, forEachObjectName:string, block:string) {
-   if(!isObject(forEachObject) && !Array.isArray(forEachObject)){
-    throw new Error(`For each object with name:${forEachObjectName} defined for the block: ${block} is not an iterable object`);
-   }
-}
-
 function initializeSingleContext(block:string):BlockContext{
   return {
     keys: null,
@@ -534,11 +495,6 @@ function initializeSingleContext(block:string):BlockContext{
   };
 }
 
-function validateZenFile(singleContext: any, block: string) {
-  if (!singleContext.zenFile) {
-    throw new Error(`Zen file is missing for block id: ${block}`);
-  }
-}
 export const {
   onInit,
   onBefore,
