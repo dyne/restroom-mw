@@ -296,7 +296,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     forEachResult[forEachObjectName] = {};
     forEachResultAsArray[forEachObjectName] = [];
 
-    checkIfPresent(forEachObject, forEachObjectName, block);
+    isForEachValid(forEachObject, forEachObjectName, block);
     checkIfIterable(forEachObject, forEachObjectName, block);
     for(let index in Object.keys(forEachObject)){
       const name = Array.isArray(forEachObject) ? index : Object.keys(forEachObject)[index];
@@ -332,7 +332,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     let internalResult: SingleInstanceOutput = {};
     let output: any;
 
-    if(forEachIsPresent(ymlContent, block)){
+    if(isForEachPresent(ymlContent, block)){
       const multipleInstancesResult = await evaluateMultipleInstances({
         block: block,
         ymlContent: ymlContent,
@@ -389,7 +389,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       if (isErrorResult(result)) {
         return await resolveRestroomResult(result.restroomResult, result.globalContext);
       }
-      if (ifChainLastBlock(result)) {
+      if (isChainLastBlock(result)) {
         return await resolveRestroomResult({
           result: output,
           status: 200,
@@ -494,7 +494,7 @@ function checkNextBlock(nextBlock: string, currentBlock:string, ymlContent:any){
   }
 }
 
-function ifChainLastBlock(internalResult: SingleInstanceOutput) {
+function isChainLastBlock(internalResult: SingleInstanceOutput) {
   return !internalResult.singleContext?.next;
 }
 
@@ -502,11 +502,11 @@ function isErrorResult(internalResult: SingleInstanceOutput) {
   return internalResult.restroomResult?.error;
 }
 
-function forEachIsPresent(ymlContent: any, block: string) {
+function isForEachPresent(ymlContent: any, block: string) {
   return ymlContent.blocks[block].forEach;
 }
 
-function checkIfPresent(forEachObject: any, forEachObjectName:string, block:string) {
+function isForEachValid(forEachObject: any, forEachObjectName:string, block:string) {
   if(!forEachObject){
    throw new Error(`For each object with name:${forEachObjectName} defined for the block: ${block} is null or undefined`);
   }
