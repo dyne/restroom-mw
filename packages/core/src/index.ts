@@ -386,7 +386,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       result = blockResult.lastInstanceResult;
       output = blockResult.output;
       globalContext = updateGlobalContextOutput(result.singleContext, result.globalContext, output);
-      if (ifErrorResult(result)) {
+      if (isErrorResult(result)) {
         return await resolveRestroomResult(result.restroomResult, result.globalContext);
       }
       if (ifChainLastBlock(result)) {
@@ -498,7 +498,7 @@ function ifChainLastBlock(internalResult: SingleInstanceOutput) {
   return !internalResult.singleContext?.next;
 }
 
-function ifErrorResult(internalResult: SingleInstanceOutput) {
+function isErrorResult(internalResult: SingleInstanceOutput) {
   return internalResult.restroomResult?.error;
 }
 
