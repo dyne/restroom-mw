@@ -63,9 +63,9 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   const sendError = (restroomResult: any) => {
     const subject: string = restroomResult?.errorMessage;
     const e: NodeJS.ErrnoException = restroomResult?.error;
-    let exception = e ? e.stack || e.message : "";
-    exception = !exception ? " Please check zenroom error logs": exception;
-    const message = subject + "\n\n\n" + exception;
+    const exception = e ? e.stack || e.message : "";
+    const exceptionMessage = !exception ? " Please check zenroom error logs": exception;
+    const message = subject + "\n\n\n" + exceptionMessage;
     if (e?.code === "ENOENT") {
       getMessage(req).then((mes) => {
         res.status(404).send(mes);
