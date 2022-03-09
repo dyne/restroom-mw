@@ -15,6 +15,7 @@ export function addDataToContext(singleBlockContext: any, data:any) {
 
 /**
  * This function is responsible to create a global context used for debug purposes 
+ * @returns {globalContext} Returns a fresh created global context
  */
  export function createGlobalContext() {
   const globalContext: any = {
@@ -25,8 +26,9 @@ export function addDataToContext(singleBlockContext: any, data:any) {
 
 /**
  * This function is responsible to create a global context with debugEnabled mode 
+ * @returns {globalContext} Returns a fresh created global context with debugEnabled true
  */
- export function enableDebugInGlobalContext() {
+ export function createDebugEnabledGlobalContext() {
   const globalContext: any = {
     debugEnabled: true
   };
@@ -34,9 +36,10 @@ export function addDataToContext(singleBlockContext: any, data:any) {
 }
 
 /**
- * This function is responsible to create a global context used for debug purposes 
+ * This function is responsible to update global context used for debug purposes 
  * @param {singleBlockContext} object context of a single block
  * @param {globalContext} object previous global context
+ * @returns {globalContext} Returns updated global context
  */
  export function updateGlobalContext(singleBlockContext: any, globalContext:any) {
   const block: string = singleBlockContext.currentBlock;
@@ -48,9 +51,10 @@ export function addDataToContext(singleBlockContext: any, data:any) {
 }
 
 /**
- * This function is responsible to create a global context used for debug purposes 
+ * This function is responsible to update a global context output used for debug purposes 
  * @param {singleBlockContext} object context of a single block
  * @param {globalContext} object previous global context
+ * @returns {globalContext} Returns updated global context output
  */
  export function updateGlobalContextOutput(singleBlockContext: any, globalContext:any, output:any) {
   const block: string = singleBlockContext.currentBlock;
