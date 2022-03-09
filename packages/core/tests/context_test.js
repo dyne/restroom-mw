@@ -213,12 +213,13 @@ test("updateGlobalContextOutput works correctly with output", (t) => {
     currentBlock: "id-0"
   };
 
-  updateGlobalContextOutput(singleBlockContext, globalContext, "true")
+  updateGlobalContextOutput("id-0", globalContext, {res:"true"})
+  console.log(globalContext);
   t.deepEqual(globalContext, {
     currentBlock: "id-0",
     debugEnabled: false,
     "id-0": {
-      output: "true"
+      output: {res:"true"}
     }
   });
 });
