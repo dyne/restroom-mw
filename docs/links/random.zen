@@ -1,8 +1,8 @@
-Rule unknown ignore
+rule check version 1.0.0
 
 Scenario simple: Generate a random password
 
-Given that I have a 'string' named 'password' inside 'user'
+Given nothing
 
 When I create the random object of '128' bits
 When I rename the 'random_object' to 'myRandom'
