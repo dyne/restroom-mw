@@ -325,7 +325,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   ): Promise<BlockOutput> {
     const ymlContent = input.ymlContent;
     const block = input.block;
-    const globalContext = input.globalContext
+    const globalContext = input.globalContext;
     const singleContext = input.singleContext;
     const data = input.data;
 
