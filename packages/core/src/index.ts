@@ -24,11 +24,20 @@ import {
 import { NextFunction, Request, Response } from "express";
 import * as yaml from "js-yaml";
 import { RestroomResult } from "./restroom-result";
+import { BlockOutput } from "./block-output";
+import { SingleInstanceOutput } from "./single-instance-output"
 import { Zencode } from "@restroom-mw/zencode";
 import { BlockContext } from "./block-context";
 import { CHAIN_EXTENSION } from "@restroom-mw/utils";
+import { BlockInput } from "./block-input";
 const functionHooks = initHooks;
 
+const DEBUG_MODE = 'debug';
+const STRING = 'string';
+const BACKSLASH = "/";
+const DOT = ".";
+const EMPTY_OBJECT_STRING = "{}";
+const EMPTY_STRING = "";
 export default async (req: Request, res: Response, next: NextFunction) => {
   if (req.url === "/favicon.ico") {
     return;
@@ -123,16 +132,18 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     try {
       const ymlContent: any = yaml.load(fileContents);
       const startBlock: string = ymlContent?.start;
-      globalContext = ymlContent?.mode === 'debug' ? enableDebugInGlobalContext() : globalContext;
+      globalContext = ymlContent?.mode === DEBUG_MODE ? enableDebugInGlobalContext() : globalContext;
 
-      if(!startBlock){
-        throw new Error(`Yml is incomplete. Start (start:) first level definition is missing!`);
-      }
-
+      checkStartBlock(startBlock);
       detectLoop(startBlock, ymlContent);
       checkAlwaysSamePathInYml(ymlContent);
 
-      return await evaluateBlock(startBlock, ymlContent, data, globalContext);
+      return await evaluateBlock({
+        block: startBlock, 
+        ymlContent: ymlContent, 
+        data: data, 
+        globalContext: globalContext}
+      );
     } catch (err) {
       return await resolveRestroomResult({
         error: err,
@@ -155,7 +166,6 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         throw new Error(`Loop detected. Execution is aborted!`);
       }
     }
-
   }
 
   function checkAlwaysSamePathInYml(
@@ -168,8 +178,8 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         if (ymlContent?.blocks[path]){
           Object.keys(ymlContent?.blocks[path]).forEach(prop=>{
             let value = ymlContent?.blocks[path][prop];
-            if (typeof value === 'string' && value.includes("/")){
-              let folder = value.substring(0, value.lastIndexOf("/"));
+            if (typeof value === STRING && value.includes(BACKSLASH)){
+              let folder = value.substring(0, value.lastIndexOf(BACKSLASH));
               allFolders.push(folder);
             }
           });
@@ -185,12 +195,12 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     contractName: string,
     data: any
   ): Promise<RestroomResult> => {
-    const isChain = contractName.split(".")[1] === CHAIN_EXTENSION || false;
-    const keys = isChain ? "{}" : getKeys(contractName);
+    const isChain = contractName.split(DOT)[1] === CHAIN_EXTENSION || false;
+    const keys = isChain ? EMPTY_OBJECT_STRING : getKeys(contractName);
     const globalContext = createGlobalContext();
     try {
       return isChain
-        ? executeChain(getYml(contractName.split(".")[0]), data, globalContext)
+        ? executeChain(getYml(contractName.split(DOT)[0]), data, globalContext)
         : callRestroom(
             data,
             keys,
@@ -206,13 +216,15 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     }
   };
 
-  async function evaluateInternalBlock(
-    block: string,
-    ymlContent: any,
-    data: any,
-    globalContext: any,
-    singleContext: any
-  ): Promise<any> {
+  async function evaluateSingleInstance(
+    input: BlockInput
+  ): Promise<SingleInstanceOutput> {
+
+    const singleContext = input.singleContext;
+    const block = input.block;
+    const ymlContent = input.ymlContent;
+    let globalContext = input.globalContext;
+    const data = input.data;
 
     addKeysToContext(singleContext, ymlContent.blocks[block]);
     addDataToContext(singleContext, data);
@@ -221,9 +233,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     addZenFileToContext(singleContext, ymlContent.blocks[block]);
     globalContext = updateGlobalContext(singleContext, globalContext);
 
-    if(!singleContext.zenFile){
-      throw new Error(`Zen file is missing for block id: ${block}`);
-    }
+    validateZenFile(singleContext, block);
 
     const zencode = getContractFromPath(singleContext.zenFile);
     const restroomResult: RestroomResult = await callRestroom(
@@ -238,74 +248,127 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     return {restroomResult: restroomResult, singleContext: singleContext, globalContext: globalContext};
   }
 
+  async function evaluateMultipleInstances(
+      input: BlockInput
+  ): Promise<BlockOutput> {
+
+    const singleContext = input.singleContext;
+    const block = input.block;
+    const ymlContent = input.ymlContent;
+    const data = input.data;
+    let globalContext = input.globalContext;
+
+    let internalResult: SingleInstanceOutput = {};
+    let output: any;
+    const forEachObjectName = ymlContent.blocks[block].forEach;
+    const forEachIndex = ymlContent.blocks[block].index;
+
+    const forEachObject = data[forEachObjectName];
+    const forEachResult: any = {};
+    const forEachResultAsArray: any = {};
+    forEachResult[forEachObjectName] = {};
+    forEachResultAsArray[forEachObjectName] = [];
+
+    checkIfIterable(forEachObject, forEachObjectName, block);
+    for(let index in Object.keys(forEachObject)){
+      const name = Array.isArray(forEachObject) ? index : Object.keys(forEachObject)[index];
+      data[forEachIndex] = forEachObject[name];
+      internalResult = await evaluateSingleInstance({
+        block: block,
+        ymlContent: ymlContent,
+        data: data,
+        globalContext: globalContext,
+        singleContext: singleContext
+      });
+      forEachResult[forEachObjectName][name] = internalResult?.restroomResult.result;
+      forEachResultAsArray[forEachObjectName].push(internalResult?.restroomResult.result);
+    }
+    output = Array.isArray(forEachObject) ? forEachResultAsArray : forEachResult;
+    return {output: output, lastInstanceResult:internalResult};
+  }
+
+  async function evaluateBlockResult(
+    input: BlockInput
+  ): Promise<BlockOutput> {
+    const ymlContent = input.ymlContent;
+    const block = input.block;
+    const globalContext = input.globalContext
+    const singleContext = input.singleContext;
+    const data = input.data;
+
+    let internalResult: SingleInstanceOutput = {};
+    let output: any;
+
+    if(forEachIsPresent(ymlContent, block)){
+      const multipleInstancesResult = await evaluateMultipleInstances({
+        block: block,
+        ymlContent: ymlContent,
+        data: data,
+        globalContext: globalContext,
+        singleContext: singleContext
+      });
+      internalResult = multipleInstancesResult.lastInstanceResult;
+      output = multipleInstancesResult.output;
+    } else {
+      internalResult = await evaluateSingleInstance({
+        block: block,
+        ymlContent: ymlContent,
+        data: data,
+        globalContext: globalContext,
+        singleContext: singleContext
+      });
+      output = internalResult.singleContext.output
+    }
+    return {
+      lastInstanceResult: internalResult,
+      output: output
+    };
+  }
+
   async function evaluateBlock(
-    block: string,
-    ymlContent: any,
-    data: any,
-    globalContext: any
+    input: BlockInput
   ): Promise<RestroomResult> {
 
-    const singleContext: BlockContext = {
-      keys: null,
-      data: {},
-      next: null,
-      conf: "",
-      output: {},
-      zenFile: null,
-      currentBlock: block
-    };
-
-    let internalResult: any = {};
+    const block = input.block;
+    let globalContext = input.globalContext;
+    const ymlContent = input.ymlContent;
+    const data = input.data;
+    const singleContext: BlockContext = initializeSingleContext(block);
+    let result: SingleInstanceOutput = {};
     let output: any;
+    
     try {
-      if(ymlContent.blocks[block].forEach){
-        const forEachObjectName = ymlContent.blocks[block].forEach;
-        const forEachIndex = ymlContent.blocks[block].index;
-  
-        const forEachObject = data[forEachObjectName];
-        const forEachResult: any = {};
-        const forEachResultAsArray: any = {};
-        forEachResult[forEachObjectName] = {};
-        forEachResultAsArray[forEachObjectName] = [];
-
-        if (typeof forEachObject === 'object' || Array.isArray(forEachObject)){
-          for(let index in Object.keys(forEachObject)){
-            const name = Array.isArray(forEachObject) ? index : Object.keys(forEachObject)[index];
-            data[forEachIndex] = forEachObject[name];
-            internalResult = await evaluateInternalBlock(block, ymlContent, data, globalContext, singleContext);
-            forEachResult[forEachObjectName][name] = internalResult?.restroomResult.result;
-            forEachResultAsArray[forEachObjectName].push(internalResult?.restroomResult.result);
-          }
-          output = Array.isArray(forEachObject) ? forEachResultAsArray : forEachResult;
-        } else {
-          throw new Error(`For each is not an iterable object`);
-        }
-      } else {
-        internalResult = await evaluateInternalBlock(block, ymlContent, data, globalContext, singleContext);
-        output = internalResult.singleContext.output
+      const blockResult: BlockOutput = await evaluateBlockResult({
+        singleContext: singleContext,
+        block: block,
+        data: data,
+        globalContext: globalContext,
+        ymlContent: ymlContent
+      })
+      result = blockResult.lastInstanceResult;
+      output = blockResult.output;
+      globalContext = updateGlobalContextOutput(result.singleContext, result.globalContext, output);
+      if (ifErrorResult(result)) {
+        return await resolveRestroomResult(result.restroomResult, result.globalContext);
       }
-      globalContext = updateGlobalContextOutput(internalResult.singleContext, internalResult.globalContext, output);
-      if (internalResult.restroomResult?.error) {
-        return await resolveRestroomResult(internalResult.restroomResult, internalResult.globalContext);
-      }
-      if (!internalResult.singleContext?.next) {
+      if (ifChainLastBlock(result)) {
         return await resolveRestroomResult({
           result: output,
           status: 200,
-        }, internalResult.globalContext);
+        }, result.globalContext);
       }
     } catch (err) {
       return await resolveRestroomResult({
         error: err,
         errorMessage: `[CHAIN EXECUTION ERROR FOR CONTRACT ${block}]`,
-      }, internalResult.globalContext);
+      }, globalContext);
     }
-    return await evaluateBlock(
-      internalResult.singleContext.next,
-      ymlContent,
-      output,
-      internalResult.globalContext
-    );
+    return await evaluateBlock({
+      block: result.singleContext.next,
+      ymlContent: ymlContent,
+      data: output,
+      globalContext: result.globalContext
+    });
   }
 
   async function callRestroom(
@@ -370,6 +433,47 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   buildEndpointResponse(await getRestroomResult(contractName, data), res);
 };
 
+function checkStartBlock(startBlock: string) {
+  if (!startBlock) {
+    throw new Error(`Yml is incomplete. Start (start:) first level definition is missing!`);
+  }
+}
+
+function ifChainLastBlock(internalResult: SingleInstanceOutput) {
+  return !internalResult.singleContext?.next;
+}
+
+function ifErrorResult(internalResult: SingleInstanceOutput) {
+  return internalResult.restroomResult?.error;
+}
+
+function forEachIsPresent(ymlContent: any, block: string) {
+  return ymlContent.blocks[block].forEach;
+}
+
+function checkIfIterable(forEachObject: any, forEachObjectName:string, block:string) {
+   if(typeof forEachObject !== 'object' || !Array.isArray(forEachObject)){
+    throw new Error(`For each object with name:${forEachObjectName} defined for the block: ${block} is not an iterable object`);
+   }
+}
+
+function initializeSingleContext(block:string):BlockContext{
+  return {
+    keys: null,
+    data: {},
+    next: null,
+    conf: EMPTY_STRING,
+    output: {},
+    zenFile: null,
+    currentBlock: block
+  };
+}
+
+function validateZenFile(singleContext: any, block: string) {
+  if (!singleContext.zenFile) {
+    throw new Error(`Zen file is missing for block id: ${block}`);
+  }
+}
 export const {
   onInit,
   onBefore,
@@ -381,3 +485,4 @@ export const {
 } = functionHooks;
 
 export { Restroom } from "./restroom";
+
