@@ -34,7 +34,7 @@ const functionHooks = initHooks;
 
 const DEBUG_MODE = 'debug';
 const STRING = 'string';
-const BACKSLASH = "/";
+const SLASH = "/";
 const DOT = ".";
 const EMPTY_OBJECT_STRING = "{}";
 const EMPTY_STRING = "";
@@ -189,8 +189,8 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         if (ymlContent?.blocks[path]){
           Object.keys(ymlContent?.blocks[path]).forEach(prop=>{
             let value = ymlContent?.blocks[path][prop];
-            if (typeof value === STRING && value.includes(BACKSLASH)){
-              let folder = value.substring(0, value.lastIndexOf(BACKSLASH));
+            if (typeof value === STRING && value.includes(SLASH)){
+              let folder = value.substring(0, value.lastIndexOf(SLASH));
               allFolders.push(folder);
             }
           });
