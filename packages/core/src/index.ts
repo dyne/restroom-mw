@@ -30,6 +30,7 @@ import { Zencode } from "@restroom-mw/zencode";
 import { BlockContext } from "./block-context";
 import { CHAIN_EXTENSION } from "@restroom-mw/utils";
 import { BlockInput } from "./block-input";
+import { RestroomInput } from "./restroom-input";
 const functionHooks = initHooks;
 
 const DEBUG_MODE = 'debug';
@@ -139,7 +140,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       detectLoop(startBlock, ymlContent);
       checkAlwaysSamePathInYml(ymlContent);
 
-      return await evaluateBlock({
+      return await handleBlockResult({
         block: startBlock, 
         ymlContent: ymlContent, 
         data: data, 
@@ -153,6 +154,11 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     }
   }
 
+  /**
+   * Function responsible to detect if the chain has an infinite loop
+   * @param {nextStep} string containing next step to follow in the chain
+   * @param {ymlContent} object yml object
+   */
   function detectLoop(
     nextStep: string,
     ymlContent: any
@@ -169,6 +175,10 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     }
   }
 
+  /**
+   * Function responsible to check if paths in the yml containing same folder
+   * @param {ymlContent} object yml object
+   */
   function checkAlwaysSamePathInYml(
     ymlContent: any
   ) {
@@ -192,7 +202,13 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     }
   }
 
-  const getRestroomResult = async (
+  /**
+   * Function responsible to dispatch chain or single contract restroom call
+   * @param {contractName} string name of the contract
+   * @param {data} any input data object
+   * @returns {RestroomResult} Returns the restroom result.
+   */
+  const restroomEntryPoint = async (
     contractName: string,
     data: any
   ): Promise<RestroomResult> => {
@@ -202,13 +218,13 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     try {
       return isChain
         ? executeChain(getYml(contractName.split(DOT)[0]), data, globalContext)
-        : callRestroom(
-            data,
-            keys,
-            getConf(contractName),
-            getContractByContractName(contractName),
-            contractName
-          );
+        : callRestroom({
+            data: data,
+            keys: keys,
+            conf: getConf(contractName),
+            zencode: getContractByContractName(contractName),
+            contractPath: contractName
+        });
     } catch (err) {
       return await resolveRestroomResult({
         error: err,
@@ -217,6 +233,11 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     }
   };
 
+  /**
+   * Function responsible to evaluate a single block instance
+   * @param {input} BlockInput input object for the block
+   * @returns {SingleInstanceOutput} Returns the output of this single instance of the block.
+   */
   async function evaluateSingleInstance(
     input: BlockInput
   ): Promise<SingleInstanceOutput> {
@@ -237,18 +258,23 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     validateZenFile(singleContext, block);
 
     const zencode = getContractFromPath(singleContext.zenFile);
-    const restroomResult: RestroomResult = await callRestroom(
-      singleContext.data,
-      singleContext.keys,
-      singleContext.conf,
-      zencode,
-      singleContext.zenFile
-    );
+    const restroomResult: RestroomResult = await callRestroom({
+      data: singleContext.data,
+      keys: singleContext.keys,
+      conf: singleContext.conf,
+      zencode: zencode,
+      contractPath: singleContext.zenFile
+    });
     Object.assign(singleContext.output, restroomResult.result);
     globalContext = updateGlobalContext(singleContext, globalContext);
     return {restroomResult: restroomResult, singleContext: singleContext, globalContext: globalContext};
   }
 
+  /**
+   * Function responsible to evaluate for each of all instances in the block
+   * @param {input} BlockInput input object for the block
+   * @returns {BlockOutput} Returns the combined output of all instances of the block.
+   */
   async function evaluateMultipleInstances(
       input: BlockInput
   ): Promise<BlockOutput> {
@@ -288,6 +314,11 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     return {output: output, lastInstanceResult:internalResult};
   }
 
+  /**
+   * Function responsible to evaluate the block result
+   * @param {input} BlockInput input object for the block
+   * @returns {BlockOutput} Returns the block result
+   */
   async function evaluateBlockResult(
     input: BlockInput
   ): Promise<BlockOutput> {
@@ -326,7 +357,12 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     };
   }
 
-  async function evaluateBlock(
+  /**
+   * Function responsible to handle the block result
+   * @param {input} BlockInput input object for the block
+   * @returns {RestroomResult} Returns the restroom result for this block
+   */
+  async function handleBlockResult(
     input: BlockInput
   ): Promise<RestroomResult> {
 
@@ -364,7 +400,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         errorMessage: `[CHAIN EXECUTION ERROR FOR CONTRACT ${block}]`,
       }, globalContext);
     }
-    return await evaluateBlock({
+    return await handleBlockResult({
       block: result.singleContext.next,
       ymlContent: ymlContent,
       data: output,
@@ -372,14 +408,21 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     });
   }
 
+  /**
+   * Function responsible to call restroom
+   * @param {input} RestroomInput input object for restroom call
+   * @returns {RestroomResult} Returns the restroom result
+   */
   async function callRestroom(
-    data: string,
-    keys: string,
-    conf: string,
-    zencode: Zencode,
-    contractPath: string
+    input: RestroomInput
   ): Promise<RestroomResult> {
     let restroomResult: RestroomResult = {};
+
+    const data = input.data;
+    const keys = input.keys;
+    const conf = input.conf;
+    const zencode = input.zencode;
+    const contractPath = input.contractPath;
 
     try {
       await runHook(hook.INIT, {});
@@ -431,7 +474,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   let data = getData(req, res);
 
   res.set("x-powered-by", "RESTroom by Dyne.org");
-  buildEndpointResponse(await getRestroomResult(contractName, data), res);
+  buildEndpointResponse(await restroomEntryPoint(contractName, data), res);
 };
 
 function checkStartBlock(startBlock: string) {
