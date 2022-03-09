@@ -38,6 +38,7 @@ const BACKSLASH = "/";
 const DOT = ".";
 const EMPTY_OBJECT_STRING = "{}";
 const EMPTY_STRING = "";
+
 export default async (req: Request, res: Response, next: NextFunction) => {
   if (req.url === "/favicon.ico") {
     return;
