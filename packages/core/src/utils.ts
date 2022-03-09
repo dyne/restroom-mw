@@ -7,6 +7,9 @@ import fs from "fs";
 import * as yaml from 'js-yaml';
 import { SingleInstanceOutput } from "./single-instance-output";
 
+const STRING = 'string';
+const OBJECT = 'object';
+
 export const getKeys = (contractName: string) => {
   try {
     const keysContent = fs.readFileSync(`${ZENCODE_DIR}/${contractName}.keys`, 'utf8');
@@ -134,5 +137,9 @@ export const isForEachPresent = (ymlContent: any, block: string) => {
 }
 
 export const isObject = (item:any) => {
-  return typeof item === 'object';
+  return typeof item === OBJECT;
+}
+
+export const isString = (item:unknown) => {
+  return typeof item === STRING;
 }
