@@ -63,7 +63,8 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   const sendError = (restroomResult: any) => {
     const subject: string = restroomResult?.errorMessage;
     const e: NodeJS.ErrnoException = restroomResult?.error;
-    const exception = e ? e.stack || e.message : "";
+    let exception = e ? e.stack || e.message : "";
+    exception = !exception ? " Please check zenroom error logs": exception;
     const message = subject + "\n\n\n" + exception;
     if (e?.code === "ENOENT") {
       getMessage(req).then((mes) => {
@@ -135,7 +136,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       const startBlock: string = ymlContent?.start;
       globalContext = ymlContent?.mode === DEBUG_MODE ? createDebugEnabledGlobalContext() : globalContext;
 
-      checkStartBlock(startBlock);
+      checkStartBlock(startBlock, ymlContent);
       detectLoop(startBlock, ymlContent);
       checkAlwaysSamePathInYml(ymlContent);
 
@@ -295,6 +296,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     forEachResult[forEachObjectName] = {};
     forEachResultAsArray[forEachObjectName] = [];
 
+    checkIfPresent(forEachObject, forEachObjectName, block);
     checkIfIterable(forEachObject, forEachObjectName, block);
     for(let index in Object.keys(forEachObject)){
       const name = Array.isArray(forEachObject) ? index : Object.keys(forEachObject)[index];
@@ -399,6 +401,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         errorMessage: `[CHAIN EXECUTION ERROR FOR CONTRACT ${block}]`,
       }, globalContext);
     }
+    checkNextBlock(result.singleContext.next, result.globalContext.currentBlock, ymlContent)
     return await handleBlockResult({
       block: result.singleContext.next,
       ymlContent: ymlContent,
@@ -476,9 +479,18 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   buildEndpointResponse(await restroomEntryPoint(contractName, data), res);
 };
 
-function checkStartBlock(startBlock: string) {
+function checkStartBlock(startBlock: string, ymlContent:any) {
   if (!startBlock) {
     throw new Error(`Yml is incomplete. Start (start:) first level definition is missing!`);
+  }
+  if(!ymlContent.blocks[startBlock]){
+    throw new Error(`Please check your yml. Start (start:) is pointing nowhere!`);
+  }
+}
+
+function checkNextBlock(nextBlock: string, currentBlock:string, ymlContent:any){
+  if(!ymlContent.blocks[nextBlock]){
+    throw new Error(`Please check your yml. Next (next:) is pointing nowhere for current block ${currentBlock}!`);
   }
 }
 
@@ -494,8 +506,18 @@ function forEachIsPresent(ymlContent: any, block: string) {
   return ymlContent.blocks[block].forEach;
 }
 
+function checkIfPresent(forEachObject: any, forEachObjectName:string, block:string) {
+  if(!forEachObject){
+   throw new Error(`For each object with name:${forEachObjectName} defined for the block: ${block} is null or undefined`);
+  }
+}
+
+function isObject(item:any){
+  return typeof item === 'object';
+}
+
 function checkIfIterable(forEachObject: any, forEachObjectName:string, block:string) {
-   if(typeof forEachObject !== 'object' || !Array.isArray(forEachObject)){
+   if(!isObject(forEachObject) && !Array.isArray(forEachObject)){
     throw new Error(`For each object with name:${forEachObjectName} defined for the block: ${block} is not an iterable object`);
    }
 }
