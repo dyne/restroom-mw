@@ -18,7 +18,7 @@ import {
   addZenFileToContext,
   createGlobalContext,
   updateGlobalContext,
-  enableDebugInGlobalContext,
+  createDebugEnabledGlobalContext,
   updateGlobalContextOutput
 } from "./context";
 import { NextFunction, Request, Response } from "express";
@@ -26,7 +26,6 @@ import * as yaml from "js-yaml";
 import { RestroomResult } from "./restroom-result";
 import { BlockOutput } from "./block-output";
 import { SingleInstanceOutput } from "./single-instance-output"
-import { Zencode } from "@restroom-mw/zencode";
 import { BlockContext } from "./block-context";
 import { CHAIN_EXTENSION } from "@restroom-mw/utils";
 import { BlockInput } from "./block-input";
@@ -134,7 +133,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     try {
       const ymlContent: any = yaml.load(fileContents);
       const startBlock: string = ymlContent?.start;
-      globalContext = ymlContent?.mode === DEBUG_MODE ? enableDebugInGlobalContext() : globalContext;
+      globalContext = ymlContent?.mode === DEBUG_MODE ? createDebugEnabledGlobalContext() : globalContext;
 
       checkStartBlock(startBlock);
       detectLoop(startBlock, ymlContent);
