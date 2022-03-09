@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 import { isObject, isString } from "./utils";
 const SLASH = "/";
+=======
+import { isObject } from "./utils";
+>>>>>>> f00d768 (refactoring)
 
 export const validateStartBlock = (startBlock: string, ymlContent:any) => {
   if (!startBlock) {
@@ -16,7 +20,11 @@ export const validateNextBlock = (nextBlock: string, currentBlock:string, ymlCon
   }
 }
 
+<<<<<<< HEAD
 export const validateIterable = (forEachObject: any, forEachObjectName:string, block:string) => {
+=======
+export const validateIfIterable = (forEachObject: any, forEachObjectName:string, block:string) => {
+>>>>>>> f00d768 (refactoring)
   if(!isObject(forEachObject) && !Array.isArray(forEachObject)){
    throw new Error(`For each object with name:${forEachObjectName} defined for the block: ${block} is not an iterable object`);
   }
@@ -32,6 +40,7 @@ export const validateZenFile = (singleContext: any, block: string) => {
   if (!singleContext.zenFile) {
     throw new Error(`Zen file is missing for block id: ${block}`);
   }
+<<<<<<< HEAD
 }
 
 /**
@@ -74,4 +83,6 @@ export const validateNoLoopInChain = (nextStep: string, ymlContent: any) => {
       throw new Error(`Loop detected in chain. Execution is aborted!`);
     }
   }
+=======
+>>>>>>> f00d768 (refactoring)
 }

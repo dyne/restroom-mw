@@ -6,9 +6,12 @@ import { Request, Response } from "express";
 import fs from "fs";
 import * as yaml from 'js-yaml';
 import { SingleInstanceOutput } from "./single-instance-output";
+<<<<<<< HEAD
 
 const STRING = 'string';
 const OBJECT = 'object';
+=======
+>>>>>>> f00d768 (refactoring)
 
 export const getKeys = (contractName: string) => {
   try {
