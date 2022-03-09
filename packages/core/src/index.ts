@@ -136,7 +136,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       const startBlock: string = ymlContent?.start;
       globalContext = ymlContent?.mode === DEBUG_MODE ? createDebugEnabledGlobalContext() : globalContext;
 
-      checkStartBlock(startBlock, ymlContent);
+      validateStartBlock(startBlock, ymlContent);
       detectLoop(startBlock, ymlContent);
       checkAlwaysSamePathInYml(ymlContent);
 
@@ -297,7 +297,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     forEachResultAsArray[forEachObjectName] = [];
 
     isForEachValid(forEachObject, forEachObjectName, block);
-    checkIfIterable(forEachObject, forEachObjectName, block);
+    validateIfIterable(forEachObject, forEachObjectName, block);
     for(let index in Object.keys(forEachObject)){
       const name = Array.isArray(forEachObject) ? index : Object.keys(forEachObject)[index];
       data[forEachIndex] = forEachObject[name];
@@ -401,7 +401,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         errorMessage: `[CHAIN EXECUTION ERROR FOR CONTRACT ${block}]`,
       }, globalContext);
     }
-    checkNextBlock(result.singleContext.next, result.globalContext.currentBlock, ymlContent)
+    validateNextBlock(result.singleContext.next, result.globalContext.currentBlock, ymlContent)
     return await handleBlockResult({
       block: result.singleContext.next,
       ymlContent: ymlContent,
@@ -479,7 +479,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   buildEndpointResponse(await restroomDispatch(contractName, data), res);
 };
 
-function checkStartBlock(startBlock: string, ymlContent:any) {
+function validateStartBlock(startBlock: string, ymlContent:any) {
   if (!startBlock) {
     throw new Error(`Yml is incomplete. Start (start:) first level definition is missing!`);
   }
@@ -488,7 +488,7 @@ function checkStartBlock(startBlock: string, ymlContent:any) {
   }
 }
 
-function checkNextBlock(nextBlock: string, currentBlock:string, ymlContent:any){
+function validateNextBlock(nextBlock: string, currentBlock:string, ymlContent:any){
   if(!ymlContent.blocks[nextBlock]){
     throw new Error(`Please check your yml. Next (next:) is pointing nowhere for current block ${currentBlock}!`);
   }
@@ -516,7 +516,7 @@ function isObject(item:any){
   return typeof item === 'object';
 }
 
-function checkIfIterable(forEachObject: any, forEachObjectName:string, block:string) {
+function validateIfIterable(forEachObject: any, forEachObjectName:string, block:string) {
    if(!isObject(forEachObject) && !Array.isArray(forEachObject)){
     throw new Error(`For each object with name:${forEachObjectName} defined for the block: ${block} is not an iterable object`);
    }
