@@ -32,7 +32,7 @@ test("Check that the middleware detects a loop in yaml", async (t) => {
   app.use("/api/*", core);
   const res = await request(app).post("/api/detect-loop.chain");
 
-  t.true(res.body.exception.includes("Loop detected. Execution is aborted"));
+  t.true(res.body.exception.includes("Loop detected in chain. Execution is aborted"));
   t.is(res.status, 500);
 });
 

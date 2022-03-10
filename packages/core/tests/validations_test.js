@@ -4,9 +4,11 @@ process.env.ZENCODE_DIR = "./test/fixtures";
 const {
   validateStartBlock,
   validateNextBlock,
-  validateIfIterable,
+  validateIterable,
   validateForEach,
-  validateZenFile
+  validateZenFile,
+  validatePathsInYml,  
+  validateNoLoopInChain,
 } = require("../dist/validations");
 
 test("validateStartBlock works correctly if startBlock is null", (t) => {
@@ -51,14 +53,14 @@ test("validateNextBlock works correctly if nextBlock is not present", (t) => {
   t.is(error.message, 'Please check your yml. Next (next:) is pointing nowhere for current block currentBlock!');
 });
 
-test("validateIfIterable works correctly if forEachObject is not iterable", (t) => {
+test("validateIterable works correctly if forEachObject is not iterable", (t) => {
 
   const forEachObject = 18;
   const forEachObjectName = 'myList';
   const block = 'currentBlock';
 
   const error = t.throws(() => {
-    validateIfIterable(forEachObject, forEachObjectName, block);
+    validateIterable(forEachObject, forEachObjectName, block);
   });
 
   t.is(error.message, 'For each object with name:myList defined for the block: currentBlock is not an iterable object');
@@ -103,3 +105,47 @@ test("validateZenFile works correctly if forEachObject is undefined", (t) => {
 
   t.is(error.message, 'Zen file is missing for block id: currentBlock');
 });
+
+test("validatePathsInYml works correctly if different paths are present", (t) => {
+
+  const ymlContent = {
+    blocks:{
+      "id-0":{
+        zenFile: "path1/to/file.zen"
+      },
+      "id-1":{
+        zenFile: "path2/to/file.zen"
+      },
+    }
+  }
+
+  const error = t.throws(() => {
+    validatePathsInYml(ymlContent);
+  });
+
+  t.is(error.message, 'Permission Denied. The paths in the yml cannot be different');
+});
+
+test("validateNoLoopInChain works correctly if a loop is present", (t) => {
+
+  const ymlContent = {
+    start: "id-0",
+    blocks:{
+      "id-0":{
+        zenFile: "path1/to/file.zen",
+        next: "id-1"
+      },
+      "id-1":{
+        zenFile: "path2/to/file.zen",
+        next: "id-0"
+      },
+    }
+  }
+
+  const error = t.throws(() => {
+    validateNoLoopInChain(ymlContent.start, ymlContent);
+  });
+
+  t.is(error.message, 'Loop detected in chain. Execution is aborted!');
+});
+

@@ -11,7 +11,6 @@ import {
   isForEachPresent,
   isErrorResult,
   isChainLastBlock,
-  isString,
 } from "./utils";
 import { zencode_exec } from "zenroom";
 import {
@@ -23,7 +22,7 @@ import {
   createGlobalContext,
   updateGlobalContext,
   createDebugEnabledGlobalContext,
-  updateGlobalContextOutput
+  updateGlobalContextOutput,
 } from "./context";
 import { NextFunction, Request, Response } from "express";
 import * as yaml from "js-yaml";
@@ -34,11 +33,17 @@ import { BlockContext } from "./block-context";
 import { CHAIN_EXTENSION } from "@restroom-mw/utils";
 import { BlockInput } from "./block-input";
 import { RestroomInput } from "./restroom-input";
-import { validateForEach, validateIfIterable, validateNextBlock, validateStartBlock, validateZenFile } from "./validations";
+import { validateForEach, 
+  validateIterable, 
+  validateNextBlock, 
+  validateStartBlock, 
+  validateZenFile,
+  validatePathsInYml,  
+  validateNoLoopInChain,
+} from "./validations";
 const functionHooks = initHooks;
 
 const DEBUG_MODE = 'debug';
-const SLASH = "/";
 const DOT = ".";
 const EMPTY_OBJECT_STRING = "{}";
 const EMPTY_STRING = "";
@@ -142,8 +147,8 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       globalContext = ymlContent?.mode === DEBUG_MODE ? createDebugEnabledGlobalContext() : globalContext;
 
       validateStartBlock(startBlock, ymlContent);
-      detectLoop(startBlock, ymlContent);
-      checkAlwaysSamePathInYml(ymlContent);
+      validateNoLoopInChain(startBlock, ymlContent);
+      validatePathsInYml(ymlContent);
 
       return await handleBlockResult({
         block: startBlock, 
@@ -156,54 +161,6 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         error: err,
         errorMessage: `[CHAIN YML EXECUTION ERROR]`,
       }, globalContext);
-    }
-  }
-
-  /**
-   * Function responsible to detect if the chain has an infinite loop
-   * @param {nextStep} string containing next step to follow in the chain
-   * @param {ymlContent} object yml object
-   */
-  function detectLoop(
-    nextStep: string,
-    ymlContent: any
-  ) {
-    let counter: number = 0;
-    const contractNumbers: number = Object.keys(ymlContent?.blocks).length;
-
-    while(nextStep){
-      counter++;
-      nextStep = ymlContent?.blocks[nextStep]?.next;
-      if(counter>contractNumbers){
-        throw new Error(`Loop detected. Execution is aborted!`);
-      }
-    }
-  }
-
-  /**
-   * Function responsible to check if paths in the yml containing same folder
-   * @param {ymlContent} object yml object
-   */
-  function checkAlwaysSamePathInYml(
-    ymlContent: any
-  ) {
-    let allFolders: string[] = [];
-    if (ymlContent?.blocks) {
-      Object.keys(ymlContent?.blocks)
-      .forEach(path=>{
-        if (ymlContent?.blocks[path]){
-          Object.keys(ymlContent?.blocks[path]).forEach(prop=>{
-            let value = ymlContent?.blocks[path][prop];
-            if (isString(value) && value.includes(SLASH)){
-              let folder = value.substring(0, value.lastIndexOf(SLASH));
-              allFolders.push(folder);
-            }
-          });
-        }
-      });
-    }
-    if (allFolders.length > 1 && !allFolders.every((val, i, arr) => val === arr[0])){
-      throw new Error(`Permission Denied. The paths in the yml cannot be different`);
     }
   }
 
@@ -302,7 +259,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     forEachResultAsArray[forEachObjectName] = [];
 
     validateForEach(forEachObject, forEachObjectName, block);
-    validateIfIterable(forEachObject, forEachObjectName, block);
+    validateIterable(forEachObject, forEachObjectName, block);
     for(let index in Object.keys(forEachObject)){
       const name = Array.isArray(forEachObject) ? index : Object.keys(forEachObject)[index];
       data[forEachIndex] = forEachObject[name];
