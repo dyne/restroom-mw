@@ -42,6 +42,7 @@ const SLASH = "/";
 const DOT = ".";
 const EMPTY_OBJECT_STRING = "{}";
 const EMPTY_STRING = "";
+const FOREACH_INDEX_DEFAULT_VALUE = "myTempElement";
 
 export default async (req: Request, res: Response, next: NextFunction) => {
   if (req.url === "/favicon.ico") {
@@ -292,7 +293,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     let internalResult: SingleInstanceOutput = {};
     let output: any;
     const forEachObjectName = ymlContent.blocks[block].forEach;
-    const forEachIndex = ymlContent.blocks[block].index;
+    const forEachIndex = ymlContent.blocks[block].index ? ymlContent.blocks[block].index : FOREACH_INDEX_DEFAULT_VALUE;
 
     const forEachObject = data[forEachObjectName];
     const forEachResult: any = {};
