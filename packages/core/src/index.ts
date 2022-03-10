@@ -41,6 +41,7 @@ import { validateForEach,
   validatePathsInYml,  
   validateNoLoopInChain,
 } from "./validations";
+import { ChainInput } from "./chain-input";
 const functionHooks = initHooks;
 
 const DEBUG_MODE = 'debug';
@@ -137,12 +138,12 @@ export default async (req: Request, res: Response, next: NextFunction) => {
    * @param {data} object data object coming from endpoint
    */
   async function executeChain(
-    fileContents: string,
-    data: any,
-    globalContext: any
+    input: ChainInput,
   ): Promise<RestroomResult> {
+    let globalContext = input.globalContext;
+    const data = input.data;
     try {
-      const ymlContent: any = yaml.load(fileContents);
+      const ymlContent: any = yaml.load(input.ymlContent);
       const startBlock: string = ymlContent?.start;
       globalContext = ymlContent?.mode === DEBUG_MODE ? createDebugEnabledGlobalContext() : globalContext;
 
@@ -179,7 +180,11 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     const globalContext = createGlobalContext();
     try {
       return isChain
-        ? executeChain(getYml(contractName.split(DOT)[0]), data, globalContext)
+        ? executeChain({
+          ymlContent: getYml(contractName.split(DOT)[0]), 
+          data, 
+          globalContext
+        })
         : callRestroom({
             data: data,
             keys: keys,
