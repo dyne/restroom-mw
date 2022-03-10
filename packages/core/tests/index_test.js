@@ -294,7 +294,7 @@ test("Check that the middleware is stopping if one of the next in yml points now
   t.is(res.status, 500);
 });
 
-test("Check that the middleware is able to execute for each chain with for each input list with debug mode on", async (t) => {
+test("Check that the middleware is able to execute for each chain with for each input list of objects with debug mode on", async (t) => {
   const _data = { 
     data: {
       "myUsers": [{
