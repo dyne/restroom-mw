@@ -207,32 +207,6 @@ test("Check that the middleware is able to execute for each chain with for each 
 
 });
 
-test("Check that the middleware is not able to execute for each chain if one of the object in the list is not a string with debug mode on", async (t) => {
-  const _data = { 
-    data: {
-      "myUsers": ["Pippo", "Topolino", "Pluto", 21]
-    }, 
-    keys: {} 
-  };
-  
-  const app = express();
-  app.use(bodyParser.json());
-  app.use("/api/*", core);
-
-  const res = await request(app)
-    .post("/api/gpp-sawroom-sample-foreach-input-list-debug.chain")
-    .send(_data)
-
-    t.true(
-      res.body.zenroom_errors.logs.includes(
-        "Invalid conversion for number object"
-      )
-    );
-    t.is(res.body.context.debugEnabled, true);
-    t.is(res.status, 500);
-
-});
-
 test("Check that the middleware is able to execute for each chain with for each input as a map", async (t) => {
   const _data = { 
     data: {
@@ -318,4 +292,41 @@ test("Check that the middleware is stopping if one of the next in yml points now
     )
   );
   t.is(res.status, 500);
+});
+
+test("Check that the middleware is able to execute for each chain with for each input list with debug mode on", async (t) => {
+  const _data = { 
+    data: {
+      "myUsers": [{
+        "currentUser": "Pippo",
+        "password": "p1pp0"
+      },{
+        "currentUser": "Topolino",
+        "password": "t0p0l1n0"
+      },{
+        "currentUser": "Pluto",
+        "password": "plut0"
+      }, {
+        "currentUser": "Paperino",
+        "password": "p4p3r1n0"
+      }]
+    }, 
+    keys: {} 
+  };
+  
+  const app = express();
+  app.use(bodyParser.json());
+  app.use("/api/*", core);
+
+  const res = await request(app)
+    .post("/api/gpp-sawroom-sample-foreach-debug.chain")
+    .send(_data)
+
+    t.is(res.body.myUsers[0].password, "p1pp0");
+    t.is(res.body.myUsers[1].password, "t0p0l1n0");
+    t.is(res.body.myUsers[2].password, "plut0");
+    t.is(res.body.myUsers[3].password, "p4p3r1n0");
+    t.is(res.body.context.debugEnabled, true);
+    t.is(res.status, 200);
+
 });
