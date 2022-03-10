@@ -4,11 +4,17 @@ process.env.ZENCODE_DIR = "./test/fixtures";
 const {
   validateStartBlock,
   validateNextBlock,
+<<<<<<< HEAD
   validateIterable,
   validateForEach,
   validateZenFile,
   validatePathsInYml,  
   validateNoLoopInChain,
+=======
+  validateIfIterable,
+  validateForEach,
+  validateZenFile
+>>>>>>> ef21e30 (added tests for validations)
 } = require("../dist/validations");
 
 test("validateStartBlock works correctly if startBlock is null", (t) => {
@@ -53,14 +59,22 @@ test("validateNextBlock works correctly if nextBlock is not present", (t) => {
   t.is(error.message, 'Please check your yml. Next (next:) is pointing nowhere for current block currentBlock!');
 });
 
+<<<<<<< HEAD
 test("validateIterable works correctly if forEachObject is not iterable", (t) => {
+=======
+test("validateIfIterable works correctly if forEachObject is not iterable", (t) => {
+>>>>>>> ef21e30 (added tests for validations)
 
   const forEachObject = 18;
   const forEachObjectName = 'myList';
   const block = 'currentBlock';
 
   const error = t.throws(() => {
+<<<<<<< HEAD
     validateIterable(forEachObject, forEachObjectName, block);
+=======
+    validateIfIterable(forEachObject, forEachObjectName, block);
+>>>>>>> ef21e30 (added tests for validations)
   });
 
   t.is(error.message, 'For each object with name:myList defined for the block: currentBlock is not an iterable object');
@@ -104,6 +118,7 @@ test("validateZenFile works correctly if forEachObject is undefined", (t) => {
   });
 
   t.is(error.message, 'Zen file is missing for block id: currentBlock');
+<<<<<<< HEAD
 });
 
 test("validatePathsInYml works correctly if different paths are present", (t) => {
@@ -149,3 +164,6 @@ test("validateNoLoopInChain works correctly if a loop is present", (t) => {
   t.is(error.message, 'Loop detected in chain. Execution is aborted!');
 });
 
+=======
+});
+>>>>>>> ef21e30 (added tests for validations)
