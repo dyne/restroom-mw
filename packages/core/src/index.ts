@@ -67,7 +67,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   const sendError = (restroomResult: any) => {
     const subject: string = restroomResult?.errorMessage;
     const e: NodeJS.ErrnoException = restroomResult?.error;
-    const exception = e ? e.stack || e.message : "";
+    const exception = e ? e.stack || e.message : EMPTY_STRING;
     const exceptionMessage = !exception ? " Please check zenroom_errors logs": exception;
     const message = subject + "\n\n\n" + exceptionMessage;
     if (e?.code === "ENOENT") {
@@ -475,7 +475,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   }
 
   let zenroom_result: string, json: string, zenroom_errors: string;
-  zenroom_result = zenroom_errors = json = "";
+  zenroom_result = zenroom_errors = json = EMPTY_STRING;
   const contractName = req.params["0"];
   let data = getData(req, res);
 
