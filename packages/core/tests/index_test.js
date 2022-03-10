@@ -151,7 +151,7 @@ test("Check that the middleware is not able to execute for each chain if one of 
 
     t.true(
       res.body.zenroom_errors.logs.includes(
-        "Invalid conversion for number object"
+        "Cannot take object: expected 'string' but found 'number'"
       )
     );
     t.is(res.status, 500);
