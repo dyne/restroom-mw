@@ -15,4 +15,3 @@ coverage
 tsconfig.tsbuildinfo
 packages/create-restroom/helpers/mws.ts
 tmp/
-test/.DS_Store
