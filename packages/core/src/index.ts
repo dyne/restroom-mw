@@ -220,10 +220,9 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     addConfToContext(singleContext, ymlContent.blocks[block]);
     addNextToContext(singleContext, ymlContent.blocks[block]);
     addZenFileToContext(singleContext, ymlContent.blocks[block]);
-    globalContext = updateGlobalContext(singleContext, globalContext);
+    updateGlobalContext(singleContext, globalContext);
 
     validateZenFile(singleContext, block);
-
     const zencode = getContractFromPath(singleContext.zenFile);
     const restroomResult: RestroomResult = await callRestroom({
       data: singleContext.data,
@@ -233,7 +232,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       contractPath: singleContext.zenFile
     });
     Object.assign(singleContext.output, restroomResult.result);
-    globalContext = updateGlobalContext(singleContext, globalContext);
+    updateGlobalContext(singleContext, globalContext);
     return {restroomResult: restroomResult, singleContext: singleContext, globalContext: globalContext};
   }
 
@@ -258,10 +257,12 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     const forEachIndex = ymlContent.blocks[block].index ? ymlContent.blocks[block].index : FOREACH_INDEX_DEFAULT_VALUE;
 
     const forEachObject = data[forEachObjectName];
-    const forEachResult: any = {};
-    const forEachResultAsArray: any = {};
-    forEachResult[forEachObjectName] = {};
-    forEachResultAsArray[forEachObjectName] = [];
+    const forEachResult: any = {
+      [forEachObjectName]: {}
+    };
+    const forEachResultAsArray: any = {
+      [forEachObjectName]: []
+    };
 
     validateForEach(forEachObject, forEachObjectName, block);
     validateIterable(forEachObject, forEachObjectName, block);

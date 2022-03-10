@@ -115,7 +115,7 @@ test("updateGlobalContext works correctly with empty keys and data", (t) => {
     currentBlock: "id-0"
   };
 
-  globalContext = updateGlobalContext(singleBlockContext, globalContext)
+  updateGlobalContext(singleBlockContext, globalContext)
   t.deepEqual(globalContext, {
     debugEnabled: false,
     currentBlock: "id-0",
@@ -137,7 +137,7 @@ test("updateGlobalContext works correctly with empty keys", (t) => {
     }
   };
 
-  globalContext = updateGlobalContext(singleBlockContext, globalContext)
+  updateGlobalContext(singleBlockContext, globalContext)
   t.deepEqual(globalContext, {
     debugEnabled: false,
     currentBlock: "id-0",
@@ -161,7 +161,7 @@ test("updateGlobalContext works correctly with empty data", (t) => {
     }
   };
 
-  globalContext = updateGlobalContext(singleBlockContext, globalContext)
+  updateGlobalContext(singleBlockContext, globalContext)
   t.deepEqual(globalContext, {
     debugEnabled: false,
     currentBlock: "id-0",
@@ -188,7 +188,7 @@ test("updateGlobalContext works correctly with data and keys", (t) => {
     }
   };
 
-  globalContext = updateGlobalContext(singleBlockContext, globalContext)
+  updateGlobalContext(singleBlockContext, globalContext)
   t.deepEqual(globalContext, {
     debugEnabled: false,
     currentBlock: "id-0",
@@ -213,7 +213,7 @@ test("updateGlobalContextOutput works correctly with output", (t) => {
     currentBlock: "id-0"
   };
 
-  globalContext = updateGlobalContextOutput(singleBlockContext, globalContext, "true")
+  updateGlobalContextOutput(singleBlockContext, globalContext, "true")
   t.deepEqual(globalContext, {
     currentBlock: "id-0",
     debugEnabled: false,

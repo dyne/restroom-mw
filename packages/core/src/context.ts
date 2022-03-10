@@ -47,7 +47,6 @@ export function addDataToContext(singleBlockContext: any, data:any) {
   globalContext[block] = {};
   globalContext[block].keys = singleBlockContext.keys ? singleBlockContext.keys : undefined;
   globalContext[block].data = singleBlockContext.data ? singleBlockContext.data : undefined;
-  return globalContext;
 }
 
 /**
@@ -59,7 +58,6 @@ export function addDataToContext(singleBlockContext: any, data:any) {
  export function updateGlobalContextOutput(singleBlockContext: any, globalContext:any, output:any) {
   const block: string = singleBlockContext.currentBlock;
   globalContext[block].output = output;
-  return globalContext;
 }
 
 /**
