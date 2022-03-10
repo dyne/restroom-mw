@@ -1,0 +1,42 @@
+{
+  "name": "@restroom-mw/types",
+  "version": "0.12.2",
+  "description": "Common Restroom types and interfaces definition",
+  "keywords": [
+    "restroom",
+    "zenroom",
+    "zencode",
+    "tools"
+  ],
+  "author": "Puria Nafisi Azizi <puria@dyne.org>",
+  "homepage": "https://dyne.github.io/restroom-mw/",
+  "license": "AGPL-3.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "src",
+    "dist"
+  ],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org//"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dyne/restroom-mw.git"
+  },
+  "scripts": {
+    "clean": "rimraf dist && rimraf tsconfig.tsbuildinfo",
+    "watch": "tsc -b tsconfig.json -w",
+    "build": "tsc -b tsconfig.json",
+    "doc": "documentation readme src/** -g -f md -s 'API' --readme-file ../../docs/packages/zencode.md --shallow",
+    "links": "yarn link",
+    "unlinks": "yarn unlink",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix --ext .js,.jsx .",
+    "test": "nyc ava"
+  },
+  "bugs": {
+    "url": "https://github.com/dyne/restroom-mw/issues"
+  },
+  "gitHead": "5015ad3c33829d0690ed914900c45f0576b70aee"
+}

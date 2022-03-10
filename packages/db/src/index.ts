@@ -1,6 +1,7 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
 import { Restroom } from "@restroom-mw/core";
 import { Request, Response, NextFunction } from "express";
+import { ObjectLiteral } from "@restroom-mw/types";
 
 class Result extends Model {
   public result: string;
@@ -22,10 +23,6 @@ const parse = (o: string) => {
     throw new Error(`[DATABASE] Error in JSON format "${o}"`);
   }
 };
-
-interface ObjectLiteral {
-  [key: string]: any;
-}
 
 interface QueryGetRecord {
   id: string;
@@ -62,14 +59,14 @@ export default (req: Request, res: Response, next: NextFunction) => {
         typeof keys === "undefined"
           ? {}
           : keys && typeof keys === "object"
-          ? keys
-          : parse(keys);
+            ? keys
+            : parse(keys);
       dataContent =
         typeof data === "undefined"
           ? {}
           : data && typeof data === "object"
-          ? data
-          : parse(data);
+            ? data
+            : parse(data);
       content = { ...dataContent, ...keysContent };
       contentKeys = Object.keys(content);
 
