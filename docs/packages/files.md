@@ -11,7 +11,7 @@
 
 ### DOWNLOAD
 
-[packages/files/src/index.ts:16-16](https://github.com/dyne/restroom-mw/blob/d4e769cd5a81cacf3db515f0ee271b1d4dd298e0/packages/files/src/index.ts#L16-L16 "Source code on GitHub")
+[packages/files/src/index.ts:14-14](https://github.com/dyne/restroom-mw/blob/83c467361ce29fa1de5bfc7d84fbdf08b1d0962a/packages/files/src/index.ts#L14-L14 "Source code on GitHub")
 
 `download the 'myUrl' and extract it into 'myFolder'`
 
@@ -20,7 +20,7 @@ Download a zip file located at the url `myUrl` and extract it at the path
 
 ### STORE_RESULT
 
-[packages/files/src/index.ts:24-24](https://github.com/dyne/restroom-mw/blob/d4e769cd5a81cacf3db515f0ee271b1d4dd298e0/packages/files/src/index.ts#L24-L24 "Source code on GitHub")
+[packages/files/src/index.ts:22-22](https://github.com/dyne/restroom-mw/blob/83c467361ce29fa1de5bfc7d84fbdf08b1d0962a/packages/files/src/index.ts#L22-L22 "Source code on GitHub")
 
 `store 'myVariable' in the file 'myFolder'`
 
