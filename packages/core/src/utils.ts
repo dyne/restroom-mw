@@ -5,6 +5,10 @@ import { CUSTOM_404_MESSAGE, ZENCODE_DIR, YML_EXTENSION } from "@restroom-mw/uti
 import { Request, Response } from "express";
 import fs from "fs";
 import * as yaml from 'js-yaml';
+import { SingleInstanceOutput } from "./single-instance-output";
+
+const STRING = 'string';
+const OBJECT = 'object';
 
 export const getKeys = (contractName: string) => {
   try {
@@ -119,3 +123,23 @@ export const getMessage = async (req: Request) => {
 export const getData = (req: Request, res: Response) => {
   return res.locals?.zenroom_data || req.body?.data || {};
 };
+
+export const isChainLastBlock = (internalResult: SingleInstanceOutput) => {
+  return !internalResult.singleContext?.next;
+}
+
+export const isErrorResult = (internalResult: SingleInstanceOutput) => {
+  return internalResult.restroomResult?.error;
+}
+
+export const isForEachPresent = (ymlContent: any, block: string) => {
+  return ymlContent.blocks[block].forEach;
+}
+
+export const isObject = (item:any) => {
+  return typeof item === OBJECT;
+}
+
+export const isString = (item:unknown) => {
+  return typeof item === STRING;
+}
