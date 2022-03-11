@@ -1,0 +1,21 @@
+zenchain: 1.0
+name: sawroom-blockchain
+start: single-random-foreach.zen
+mode: debug
+blocks:
+  single-random-foreach.zen:
+    forEach: myUsers
+    index: user
+    zenFile: single-random-foreach.zen
+    next: sawroom-store-secret-message-foreach.zen
+  sawroom-store-secret-message-foreach.zen:
+    forEach: myUsers
+    index: user
+    zenFile: sawroom-store-secret-message-foreach.zen
+    keysFile: sawroom-store-secret-message-input-foreach.keys
+    next: sawroom-read-secret-message-foreach.zen
+  sawroom-read-secret-message-foreach.zen:
+    forEach: myUsers
+    index: user
+    zenFile: sawroom-read-secret-message-foreach.zen
+    keysFile: sawroom-read-secret-message-input-foreach.keys

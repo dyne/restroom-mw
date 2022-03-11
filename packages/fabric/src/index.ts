@@ -1,12 +1,11 @@
 import { Restroom } from "@restroom-mw/core";
-import { ObjectLiteral } from "@restroom-mw/core/src/types";
 import * as crypto from 'crypto';
 
 import {
   Gateway, connect, Contract, Identity, Signer, signers,
   Network
 }
-from '@hyperledger/fabric-gateway';
+  from '@hyperledger/fabric-gateway';
 import { Client, credentials } from '@grpc/grpc-js';
 import { NextFunction, Request, Response } from "express";
 import {
@@ -21,6 +20,7 @@ import {
 } from "./actions";
 import { UTF8_DECODER, zencodeNamedParamsOf, combineDataKeys } from '@restroom-mw/utils';
 import base64url from 'base64url';
+import { ObjectLiteral } from "@restroom-mw/types";
 
 let fabricAddress: string = null;
 let client: Client = null;
@@ -47,9 +47,9 @@ const commitStatusOptions = () => {
 // The steps in FabricInterop are all required (in this order...)
 enum FabricInterop {
   Address = 0,
-    Connect,
-    Channel,
-    Contract
+  Connect,
+  Channel,
+  Contract
 }
 let current: FabricInterop = FabricInterop.Address;
 
@@ -66,27 +66,27 @@ const NUM_RETRY = 3;
  */
 const submitAndRetry = async (params: string[], errorMsg: string, num_params_statement: number,
   fn: (i: number) => Promise<void>) => {
-    for (var i = 0; i < params.length; i += num_params_statement) {
-      var count = 0;
-      var done = false;
-      var errCode = 0;
-      while (count < NUM_RETRY && !done) {
-        try {
-          await fn(i);
-          done = true;
-        } catch (e) {
-          errCode = e.code;
-          // Wait random time
-          await sleep(Math.random() * 10000 + 2000);
-        }
-        count++;
+  for (var i = 0; i < params.length; i += num_params_statement) {
+    var count = 0;
+    var done = false;
+    var errCode = 0;
+    while (count < NUM_RETRY && !done) {
+      try {
+        await fn(i);
+        done = true;
+      } catch (e) {
+        errCode = e.code;
+        // Wait random time
+        await sleep(Math.random() * 10000 + 2000);
       }
-      if (count == NUM_RETRY) {
-        // NUM_RETRY error in the execution, this call failed
-        throw new Error(errorMsg + ", code: " + errCode)
-      }
+      count++;
+    }
+    if (count == NUM_RETRY) {
+      // NUM_RETRY error in the execution, this call failed
+      throw new Error(errorMsg + ", code: " + errCode)
     }
   }
+}
 
 const validateStep = (requested: FabricInterop) => {
   if (requested > current) {
