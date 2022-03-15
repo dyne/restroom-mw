@@ -24,7 +24,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
   const rr = new Restroom(req, res);
   let content: ObjectLiteral = {};
   let externalSourceKeys: string[] = [];
-  let parallel_params: { output: string, index: string }[] = [];
+  let parallel_params: { output: string; index: string }[] = [];
   let parallel_promises: Promise<any>[] = [];
 
   rr.onBefore(
@@ -46,13 +46,16 @@ export default (req: Request, res: Response, next: NextFunction) => {
           parallel_promises.push(axios.get(content[url]));
           parallel_params.push({
             output: o,
-            index: i
+            index: i,
           });
         }
       }
 
       if (zencode.match(PARALLEL_POST)) {
-        for (const [d, url, i, o] of chunks(zencode.paramsOf(PARALLEL_POST), 4)) {
+        for (const [d, url, i, o] of chunks(
+          zencode.paramsOf(PARALLEL_POST),
+          4
+        )) {
           parallel_promises.push(axios.post(content[url], content[d]));
           parallel_params.push({
             output: o,
@@ -69,7 +72,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
             data[output] = {};
           }
           data[output][index] = r.data;
-        })
+        });
       }
 
       if (zencode.match(POST_AND_SAVE_TO_VARIABLE)) {
@@ -84,7 +87,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
             data[variable] = r.data;
           } catch (e) {
             throw new Error(
-              `[HTTP] Error when getting from endpoint "${content[url]}": ${e}`
+              `[HTTP] Error when get from endpoint "${content[url]}": ${e}`
             );
           }
         }
@@ -120,7 +123,8 @@ export default (req: Request, res: Response, next: NextFunction) => {
             data[output.outputName] = response.data;
           } catch (e) {
             throw new Error(
-              `Error when getting from endpoint "${content[output.urlKey]
+              `Error when getting from endpoint "${
+                content[output.urlKey]
               }": ${e}`
             );
           }
