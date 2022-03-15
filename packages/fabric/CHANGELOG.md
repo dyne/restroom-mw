@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.13.0](https://github.com/dyne/restroom-mw/compare/v0.12.2...v0.13.0) (2022-03-15)
+
+
+### Features
+
+* **ethereum:** Ethereum middleware all-in restroom (no Zenroom yet) ([#120](https://github.com/dyne/restroom-mw/issues/120)) ([5648bb4](https://github.com/dyne/restroom-mw/commit/5648bb420bf59075923878017163e2ea4a94cc53))
+* Save data on ethereum and fabric encoded with base64url ([#124](https://github.com/dyne/restroom-mw/issues/124)) ([080c675](https://github.com/dyne/restroom-mw/commit/080c6758c249b8a2da898648941bfa5b02826964)), closes [#110](https://github.com/dyne/restroom-mw/issues/110)
+
+
+
+
+
 ## [0.12.2](https://github.com/dyne/restroom-mw/compare/v0.12.1...v0.12.2) (2022-02-24)
 
 **Note:** Version bump only for package @restroom-mw/fabric

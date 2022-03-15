@@ -1,6 +1,6 @@
 {
   "name": "@restroom-mw/files",
-  "version": "0.12.2",
+  "version": "0.13.0",
   "description": "Utilities middleware to work with files for Restroom",
   "author": "Alberto Lerda <alberto@dyne.org>",
   "homepage": "https://dyne.github.io/restroom-mw/",

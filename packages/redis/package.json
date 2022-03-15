@@ -1,6 +1,6 @@
 {
   "name": "@restroom-mw/redis",
-  "version": "0.12.2",
+  "version": "0.13.0",
   "description": "Redis middleware for restroom",
   "author": "Puria Nafisi Azizi <puria@dyne.org>",
   "homepage": "https://dyne.github.io/restroom-mw/",

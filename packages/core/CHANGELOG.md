@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.13.0](https://github.com/dyne/restroom-mw/compare/v0.12.2...v0.13.0) (2022-03-15)
+
+
+### Features
+
+* Add cycling loop ability per step in chains ([#128](https://github.com/dyne/restroom-mw/issues/128)) ([83c4673](https://github.com/dyne/restroom-mw/commit/83c467361ce29fa1de5bfc7d84fbdf08b1d0962a))
+* **core:** Extend debug response for chain contracts ([#123](https://github.com/dyne/restroom-mw/issues/123)) ([a04c1fa](https://github.com/dyne/restroom-mw/commit/a04c1fa1442f0d4b80cebacf4a33aafe1df12738))
+* **ethereum:** Ethereum middleware all-in restroom (no Zenroom yet) ([#120](https://github.com/dyne/restroom-mw/issues/120)) ([5648bb4](https://github.com/dyne/restroom-mw/commit/5648bb420bf59075923878017163e2ea4a94cc53))
+* **ethereum:** Read ERC20 informations ([#122](https://github.com/dyne/restroom-mw/issues/122)) ([d4e769c](https://github.com/dyne/restroom-mw/commit/d4e769cd5a81cacf3db515f0ee271b1d4dd298e0))
+* **files:** 💾  Statement to store result of zenroom and its docs ([#119](https://github.com/dyne/restroom-mw/issues/119)) ([78d63fb](https://github.com/dyne/restroom-mw/commit/78d63fb2f435a50d0ccd8f2555e7d84b01ed724e))
+
+
+
+
+
 ## [0.12.2](https://github.com/dyne/restroom-mw/compare/v0.12.1...v0.12.2) (2022-02-24)
 
 **Note:** Version bump only for package @restroom-mw/core
