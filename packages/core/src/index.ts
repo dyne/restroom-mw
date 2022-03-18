@@ -277,7 +277,8 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         globalContext: globalContext,
         singleContext: singleContext
       });
-      const resultToAdd = internalResult?.restroomResult.result[forEachIndex] ? 
+      const resultToAdd = internalResult?.restroomResult.result && 
+        internalResult?.restroomResult.result[forEachIndex] ? 
         internalResult?.restroomResult.result[forEachIndex] : 
         internalResult?.restroomResult.result;
       forEachResult[forEachObjectName][name] = resultToAdd;
