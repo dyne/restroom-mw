@@ -1,0 +1,7 @@
+zenchain: 1.0
+start: id_0
+blocks:
+  id_0:
+    forEach: input
+    index: temp1
+    zenFile: hash-test.zen

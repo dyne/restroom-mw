@@ -294,3 +294,91 @@ test("Check that the middleware is removing index middle property in for each", 
     t.is(res.status, 200);
 
 });
+
+test("Check that the middleware is handling if index is not filled for each", async (t) => {
+  const _data = { 
+    data: {
+      input:{
+      1:{
+        "announce":"/api/consensusroom-announce",
+        "baseUrl":"http://194.195.240.46:3300",
+        "get-6-timestamps":"/api/consensusroom-get-6-timestamps",
+        "myTimestamp":"1647427748545",
+        "public_key":"BGiQeHz55rNc/k/iy7wLzR1jNcq/MOy8IyS6NBZ0kY3Z4sExlyFXcILcdmWDJZp8FyrILOC6eukLkRNt7Q5tzWU=",
+        "timestampAPI":"/api/consensusroom-get-timestamp",
+        "uid":"194.195.240.46",
+        "updateAPI":"/api/consensusroom-update",
+        "version":"1"
+      },
+      2:{
+        "announce":"/api/consensusroom-announce",
+        "baseUrl":"http://50.116.61.250:3300",
+        "get-6-timestamps":"/api/consensusroom-get-6-timestamps",
+        "myTimestamp":"1647427748658",
+        "public_key":"BGiQeHz55rNc/k/iy7wLzR1jNcq/MOy8IyS6NBZ0kY3Z4sExlyFXcILcdmWDJZp8FyrILOC6eukLkRNt7Q5tzWU=",
+        "timestampAPI":"/api/consensusroom-get-timestamp",
+        "uid":"50.116.61.250",
+        "updateAPI":"/api/consensusroom-update",
+        "version":"1"
+      },
+      3:{
+        "announce":"/api/consensusroom-announce",
+        "baseUrl":"http://194.195.123.140:3300",
+        "get-6-timestamps":"/api/consensusroom-get-6-timestamps",
+        "myTimestamp":"1647427748939",
+        "public_key":"BGiQeHz55rNc/k/iy7wLzR1jNcq/MOy8IyS6NBZ0kY3Z4sExlyFXcILcdmWDJZp8FyrILOC6eukLkRNt7Q5tzWU=",
+        "timestampAPI":"/api/consensusroom-get-timestamp",
+        "uid":"194.195.123.140",
+        "updateAPI":"/api/consensusroom-update",
+        "version":"1"
+      },
+      4:{
+        "announce":"/api/consensusroom-announce",
+        "baseUrl":"http://45.33.44.32:3300",
+        "get-6-timestamps":"/api/consensusroom-get-6-timestamps",
+        "myTimestamp":"1647427748756",
+        "public_key":"BGiQeHz55rNc/k/iy7wLzR1jNcq/MOy8IyS6NBZ0kY3Z4sExlyFXcILcdmWDJZp8FyrILOC6eukLkRNt7Q5tzWU=",
+        "timestampAPI":"/api/consensusroom-get-timestamp",
+        "uid":"45.33.44.32",
+        "updateAPI":"/api/consensusroom-update",
+        "version":"1"
+      },
+      5:{
+        "announce":"/api/consensusroom-announce",
+        "baseUrl":"http://172.105.105.137:3300",
+        "get-6-timestamps":"/api/consensusroom-get-6-timestamps",
+        "myTimestamp":"1647427748663",
+        "public_key":"BGiQeHz55rNc/k/iy7wLzR1jNcq/MOy8IyS6NBZ0kY3Z4sExlyFXcILcdmWDJZp8FyrILOC6eukLkRNt7Q5tzWU=",
+        "timestampAPI":"/api/consensusroom-get-timestamp",
+        "uid":"172.105.105.137",
+        "updateAPI":"/api/consensusroom-update",
+        "version":"1"
+      },
+      6:{
+        "announce":"/api/consensusroom-announce",
+        "baseUrl":"http://172.105.33.141:3300",
+        "get-6-timestamps":"/api/consensusroom-get-6-timestamps",
+        "myTimestamp":"1647427748727",
+        "public_key":"BGiQeHz55rNc/k/iy7wLzR1jNcq/MOy8IyS6NBZ0kY3Z4sExlyFXcILcdmWDJZp8FyrILOC6eukLkRNt7Q5tzWU=",
+        "timestampAPI":"/api/consensusroom-get-timestamp",
+        "uid":"172.105.33.141",
+        "updateAPI":"/api/consensusroom-update",
+        "version":"1"
+      }
+     }
+    }, 
+    keys: {} 
+  };
+  
+  const app = express();
+  app.use(bodyParser.json());
+  app.use("/api/*", core);
+
+  const res = await request(app)
+    .post("/api/consensusroom-test-foreach-temp1.chain")
+    .send(_data)
+    
+    t.true(res.body.zenroom_errors.logs.includes("Cannot find 'temp' anywhere"));
+    t.is(res.status, 500);
+
+});
