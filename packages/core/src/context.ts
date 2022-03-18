@@ -53,9 +53,9 @@ export function addDataToContext(singleBlockContext: any, data: any) {
  * @param {singleBlockContext} object context of a single block
  * @param {globalContext} object previous global context
  */
- export function updateGlobalContextOutput(singleBlockContext: any, globalContext:any, output:any) {
-  const block: string = singleBlockContext.currentBlock;
-  globalContext[block].output = output;
+ export function updateGlobalContextOutput(currentBlock:string, globalContext:any, output:any) {
+  globalContext[currentBlock].output = {};
+  Object.assign(globalContext[currentBlock].output, output);
 }
 
 /**

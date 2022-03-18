@@ -231,8 +231,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       zencode: zencode,
       contractPath: singleContext.zenFile
     });
-    Object.assign(singleContext.output, restroomResult.result);
-    updateGlobalContext(singleContext, globalContext);
+
     return {restroomResult: restroomResult, singleContext: singleContext, globalContext: globalContext};
   }
 
@@ -254,7 +253,9 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     let internalResult: SingleInstanceOutput = {};
     let output: any;
     const forEachObjectName = ymlContent.blocks[block].forEach;
-    const forEachIndex = ymlContent.blocks[block].index ? ymlContent.blocks[block].index : FOREACH_INDEX_DEFAULT_VALUE;
+    const forEachIndex = ymlContent.blocks[block].index ? 
+      ymlContent.blocks[block].index : 
+      FOREACH_INDEX_DEFAULT_VALUE;
 
     const forEachObject = data[forEachObjectName];
     const forEachResult: any = {
@@ -276,8 +277,11 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         globalContext: globalContext,
         singleContext: singleContext
       });
-      forEachResult[forEachObjectName][name] = internalResult?.restroomResult.result;
-      forEachResultAsArray[forEachObjectName].push(internalResult?.restroomResult.result);
+      const resultToAdd = internalResult?.restroomResult.result[forEachIndex] ? 
+        internalResult?.restroomResult.result[forEachIndex] : 
+        internalResult?.restroomResult.result;
+      forEachResult[forEachObjectName][name] = resultToAdd;
+      forEachResultAsArray[forEachObjectName].push(resultToAdd);
     }
     output = Array.isArray(forEachObject) ? forEachResultAsArray : forEachResult;
     return {output: output, lastInstanceResult:internalResult};
@@ -318,7 +322,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         globalContext: globalContext,
         singleContext: singleContext
       });
-      output = internalResult.singleContext.output
+      output = internalResult.restroomResult.result;
     }
     return {
       lastInstanceResult: internalResult,
@@ -353,7 +357,8 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       });
       result = blockResult.lastInstanceResult;
       output = blockResult.output;
-      globalContext = updateGlobalContextOutput(result.singleContext, result.globalContext, output);
+      updateGlobalContextOutput(block, result.globalContext, output);
+
       if (isErrorResult(result)) {
         return await resolveRestroomResult(result.restroomResult, result.globalContext);
       }
@@ -369,7 +374,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         errorMessage: `[CHAIN EXECUTION ERROR FOR CONTRACT ${block}]`,
       }, globalContext);
     }
-    validateNextBlock(result.singleContext.next, result.globalContext.currentBlock, ymlContent)
+    validateNextBlock(result.singleContext.next, result.globalContext.currentBlock, ymlContent);
     return await handleBlockResult({
       block: result.singleContext.next,
       ymlContent: ymlContent,
