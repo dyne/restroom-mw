@@ -85,128 +85,6 @@ test("Check that the middleware detects two different paths in yml", async (t) =
   t.is(res.status, 500);
 });
 
-test("Check that the middleware is not able to execute for each chain if object is null or undefined", async (t) => {
-  const _data = { 
-    data: {}, 
-    keys: {} 
-  };
-  
-  const app = express();
-  app.use(bodyParser.json());
-  app.use("/api/*", core);
-
-  const res = await request(app)
-    .post("/api/gpp-sawroom-sample-foreach-input-list.chain")
-    .send(_data)
-
-    t.true(
-      res.body.exception.includes(
-        "is null or undefined"
-      )
-    );
-    t.is(res.status, 500);
-
-});
-
-test("Check that the middleware is not able to execute for each chain if object is not iterable", async (t) => {
-  const _data = { 
-    data: {
-      "myUsers": 21
-    }, 
-    keys: {} 
-  };
-  
-  const app = express();
-  app.use(bodyParser.json());
-  app.use("/api/*", core);
-
-  const res = await request(app)
-    .post("/api/gpp-sawroom-sample-foreach-input-list.chain")
-    .send(_data)
-
-    t.true(
-      res.body.exception.includes(
-        "is not an iterable object"
-      )
-    );
-    t.is(res.status, 500);
-
-});
-
-test("Check that the middleware is not able to execute for each chain if one of the object in the list is not a string", async (t) => {
-  const _data = { 
-    data: {
-      "myUsers": ["Pippo", "Topolino", "Pluto", 21]
-    }, 
-    keys: {} 
-  };
-  
-  const app = express();
-  app.use(bodyParser.json());
-  app.use("/api/*", core);
-
-  const res = await request(app)
-    .post("/api/gpp-sawroom-sample-foreach-input-list.chain")
-    .send(_data)
-
-    t.true(
-      res.body.zenroom_errors.logs.includes(
-        "Cannot take object: expected 'string' but found 'number'"
-      )
-    );
-    t.is(res.status, 500);
-
-});
-
-test("Check that the middleware is able to execute for each chain with for each input as a list", async (t) => {
-  const _data = { 
-    data: {
-      "myUsers": ["Pippo", "Topolino", "Pluto", "Paperino"]
-    }, 
-    keys: {} 
-  };
-  
-  const app = express();
-  app.use(bodyParser.json());
-  app.use("/api/*", core);
-
-  const res = await request(app)
-    .post("/api/gpp-sawroom-sample-foreach-input-list.chain")
-    .send(_data)
-
-    t.is(res.body.myUsers[0].password, "Pippo");
-    t.is(res.body.myUsers[1].password, "Topolino");
-    t.is(res.body.myUsers[2].password, "Pluto");
-    t.is(res.body.myUsers[3].password, "Paperino");
-    t.is(res.status, 200);
-
-});
-
-test("Check that the middleware is able to execute for each chain with for each input as a list with debug mode on", async (t) => {
-  const _data = { 
-    data: {
-      "myUsers": ["Pippo", "Topolino", "Pluto", "Paperino"]
-    }, 
-    keys: {} 
-  };
-  
-  const app = express();
-  app.use(bodyParser.json());
-  app.use("/api/*", core);
-
-  const res = await request(app)
-    .post("/api/gpp-sawroom-sample-foreach-input-list-debug.chain")
-    .send(_data)
-
-    t.is(res.body.myUsers[0].password, "Pippo");
-    t.is(res.body.myUsers[1].password, "Topolino");
-    t.is(res.body.myUsers[2].password, "Pluto");
-    t.is(res.body.myUsers[3].password, "Paperino");
-    t.is(res.body.context.debugEnabled, true);
-    t.is(res.status, 200);
-
-});
-
 test("Check that the middleware is able to execute for each chain with for each input as a map", async (t) => {
   const _data = { 
     data: {
@@ -227,7 +105,6 @@ test("Check that the middleware is able to execute for each chain with for each 
   const res = await request(app)
     .post("/api/gpp-sawroom-sample-foreach.chain")
     .send(_data)
-
 
     t.is(res.body.myUsers.Pippo.password, "p1pp0");
     t.is(res.body.myUsers.Topolino.password, "t0p0l1n0");
@@ -258,8 +135,7 @@ test("Check that the middleware is able to execute for each chain with for each 
     .post("/api/gpp-sawroom-sample-foreach-debug.chain")
     .send(_data)
 
-
-    t.is(res.body.myUsers.Pippo.password, "p1pp0");
+    t.is(res.body.myUsers['Pippo'].password, "p1pp0");
     t.is(res.body.myUsers.Topolino.password, "t0p0l1n0");
     t.is(res.body.myUsers.Pluto.password, "plut0");
     t.is(res.body.myUsers.Paperino.password, "p4p3r1n0");
@@ -327,6 +203,94 @@ test("Check that the middleware is able to execute for each chain with for each 
     t.is(res.body.myUsers[2].password, "plut0");
     t.is(res.body.myUsers[3].password, "p4p3r1n0");
     t.is(res.body.context.debugEnabled, true);
+    t.is(res.status, 200);
+
+});
+
+test("Check that the middleware is removing index middle property in for each", async (t) => {
+  const _data = { 
+    data: {
+      input:{
+      1:{
+        "announce":"/api/consensusroom-announce",
+        "baseUrl":"http://194.195.240.46:3300",
+        "get-6-timestamps":"/api/consensusroom-get-6-timestamps",
+        "myTimestamp":"1647427748545",
+        "public_key":"BGiQeHz55rNc/k/iy7wLzR1jNcq/MOy8IyS6NBZ0kY3Z4sExlyFXcILcdmWDJZp8FyrILOC6eukLkRNt7Q5tzWU=",
+        "timestampAPI":"/api/consensusroom-get-timestamp",
+        "uid":"194.195.240.46",
+        "updateAPI":"/api/consensusroom-update",
+        "version":"1"
+      },
+      2:{
+        "announce":"/api/consensusroom-announce",
+        "baseUrl":"http://50.116.61.250:3300",
+        "get-6-timestamps":"/api/consensusroom-get-6-timestamps",
+        "myTimestamp":"1647427748658",
+        "public_key":"BGiQeHz55rNc/k/iy7wLzR1jNcq/MOy8IyS6NBZ0kY3Z4sExlyFXcILcdmWDJZp8FyrILOC6eukLkRNt7Q5tzWU=",
+        "timestampAPI":"/api/consensusroom-get-timestamp",
+        "uid":"50.116.61.250",
+        "updateAPI":"/api/consensusroom-update",
+        "version":"1"
+      },
+      3:{
+        "announce":"/api/consensusroom-announce",
+        "baseUrl":"http://194.195.123.140:3300",
+        "get-6-timestamps":"/api/consensusroom-get-6-timestamps",
+        "myTimestamp":"1647427748939",
+        "public_key":"BGiQeHz55rNc/k/iy7wLzR1jNcq/MOy8IyS6NBZ0kY3Z4sExlyFXcILcdmWDJZp8FyrILOC6eukLkRNt7Q5tzWU=",
+        "timestampAPI":"/api/consensusroom-get-timestamp",
+        "uid":"194.195.123.140",
+        "updateAPI":"/api/consensusroom-update",
+        "version":"1"
+      },
+      4:{
+        "announce":"/api/consensusroom-announce",
+        "baseUrl":"http://45.33.44.32:3300",
+        "get-6-timestamps":"/api/consensusroom-get-6-timestamps",
+        "myTimestamp":"1647427748756",
+        "public_key":"BGiQeHz55rNc/k/iy7wLzR1jNcq/MOy8IyS6NBZ0kY3Z4sExlyFXcILcdmWDJZp8FyrILOC6eukLkRNt7Q5tzWU=",
+        "timestampAPI":"/api/consensusroom-get-timestamp",
+        "uid":"45.33.44.32",
+        "updateAPI":"/api/consensusroom-update",
+        "version":"1"
+      },
+      5:{
+        "announce":"/api/consensusroom-announce",
+        "baseUrl":"http://172.105.105.137:3300",
+        "get-6-timestamps":"/api/consensusroom-get-6-timestamps",
+        "myTimestamp":"1647427748663",
+        "public_key":"BGiQeHz55rNc/k/iy7wLzR1jNcq/MOy8IyS6NBZ0kY3Z4sExlyFXcILcdmWDJZp8FyrILOC6eukLkRNt7Q5tzWU=",
+        "timestampAPI":"/api/consensusroom-get-timestamp",
+        "uid":"172.105.105.137",
+        "updateAPI":"/api/consensusroom-update",
+        "version":"1"
+      },
+      6:{
+        "announce":"/api/consensusroom-announce",
+        "baseUrl":"http://172.105.33.141:3300",
+        "get-6-timestamps":"/api/consensusroom-get-6-timestamps",
+        "myTimestamp":"1647427748727",
+        "public_key":"BGiQeHz55rNc/k/iy7wLzR1jNcq/MOy8IyS6NBZ0kY3Z4sExlyFXcILcdmWDJZp8FyrILOC6eukLkRNt7Q5tzWU=",
+        "timestampAPI":"/api/consensusroom-get-timestamp",
+        "uid":"172.105.33.141",
+        "updateAPI":"/api/consensusroom-update",
+        "version":"1"
+      }
+     }
+    }, 
+    keys: {} 
+  };
+  
+  const app = express();
+  app.use(bodyParser.json());
+  app.use("/api/*", core);
+
+  const res = await request(app)
+    .post("/api/consensusroom-test-foreach.chain")
+    .send(_data)
+
+    t.is(res.body.temp, undefined);
     t.is(res.status, 200);
 
 });

@@ -148,4 +148,3 @@ test("validateNoLoopInChain works correctly if a loop is present", (t) => {
 
   t.is(error.message, 'Loop detected in chain. Execution is aborted!');
 });
-

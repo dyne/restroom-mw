@@ -14,4 +14,4 @@ coverage
 /.gtm/
 tsconfig.tsbuildinfo
 packages/create-restroom/helpers/mws.ts
-tmp/saveresult/
+tmp/

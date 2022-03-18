@@ -1,0 +1,4 @@
+Given I have a 'string dictionary' named 'temp'
+When I create the hash of 'temp'
+When I insert 'hash' in 'temp'
+Then print the 'temp'
