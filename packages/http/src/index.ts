@@ -8,6 +8,7 @@ import {
   EXTERNAL_CONNECTION,
   EXTERNAL_OUTPUT,
   PARALLEL_GET,
+  PARALLEL_GET_ARRAY,
   PARALLEL_POST,
   PASS_OUTPUT,
   POST_AND_SAVE_TO_VARIABLE,
@@ -24,7 +25,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
   const rr = new Restroom(req, res);
   let content: ObjectLiteral = {};
   let externalSourceKeys: string[] = [];
-  let parallel_params: { output: string; index: string }[] = [];
+  let parallel_params: { output: string; index: [string , number]}[] = [];
   let parallel_promises: Promise<any>[] = [];
 
   rr.onBefore(
@@ -41,12 +42,23 @@ export default (req: Request, res: Response, next: NextFunction) => {
         checkForDuplicates(externalSourceKeys);
       }
 
-      if (zencode.match(PARALLEL_GET)) {
+      if (zencode.match(PARALLEL_GET_ARRAY)) {
+        for (const [urlsName, i, o] of chunks(zencode.paramsOf(PARALLEL_GET_ARRAY), 3)) {
+          const urls = content[urlsName]
+          for(let j = 0; j < urls.length; j++) {
+            parallel_promises.push(axios.get(urls[j]));
+            parallel_params.push({
+              output: o,
+              index: [i, j],
+            });
+          }
+        }
+      } else if (zencode.match(PARALLEL_GET)) {
         for (const [url, i, o] of chunks(zencode.paramsOf(PARALLEL_GET), 3)) {
           parallel_promises.push(axios.get(content[url]));
           parallel_params.push({
             output: o,
-            index: i,
+            index: [i, -1],
           });
         }
       }
@@ -59,7 +71,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
           parallel_promises.push(axios.post(content[url], content[d]));
           parallel_params.push({
             output: o,
-            index: i,
+            index: [i, -1],
           });
         }
       }
@@ -71,7 +83,13 @@ export default (req: Request, res: Response, next: NextFunction) => {
           if (!data.hasOwnProperty(output)) {
             data[output] = {};
           }
-          data[output][index] = r.data;
+          if(index[1] < 0) {
+            data[output][index[1]] = r.data;
+          } else {
+            if(!data[output][index[0]])
+              data[output][index[0]] = []
+            data[output][index[0]][index[1]] = r.data
+          }
         });
       }
 
