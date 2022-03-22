@@ -84,7 +84,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
             data[output] = {};
           }
           if(index[1] < 0) {
-            data[output][index[1]] = r.data;
+            data[output][index[0]] = r.data;
           } else {
             if(!data[output][index[0]])
               data[output][index[0]] = []
