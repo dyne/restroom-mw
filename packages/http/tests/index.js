@@ -323,13 +323,21 @@ test(
     t.is(res.status, 500);
   });
 
-test("Check broken http", async (t) => {
-  const _data = {
-    data: {
-      endpoint: "http://localhost:3020/normaljson",
-    },
-  };
+test("Parallel get for arrays", async (t) => {
+  const app = express();
+  app.use(bodyParser.json());
+  app.use(http);
+  app.use("/*", zencode);
 
+  const res = await request(app).post("/http-get-array");
+  t.is(res.status, 200);
+  t.true(
+    Object.keys(res.body).includes("myObject"),
+    'could not find "myObject " in response'
+  );
+});
+
+test("Check broken http", async (t) => {
   const app = express();
   app.use(bodyParser.json());
   app.use(http);
