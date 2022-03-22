@@ -17,7 +17,7 @@ test.before(async (t) => {
   t.context.app = supertest(app);
 });
 
-test.skip("Store a zenroom object", async (t) => {
+test("Store a zenroom object", async (t) => {
   const { app } = t.context;
   var res = await app.post("/ethereum_store");
   t.is(res.status, 200, res.text);
@@ -28,7 +28,7 @@ test.skip("Store a zenroom object", async (t) => {
   console.log(`{ 'myTab': ${res.body.myTag}, 'anotherTag': ${res.body.anotherTag} }`)
 });
 
-test.serial.skip("Retrieve a zenroom object", async (t) => {
+test.serial("Retrieve a zenroom object", async (t) => {
   const { app } = t.context;
   var res = await app.post("/ethereum_retrieve");
   t.is(res.status, 200, res.text);
@@ -36,14 +36,14 @@ test.serial.skip("Retrieve a zenroom object", async (t) => {
   t.is(res.body.anotherHash, "1ylMt6FGLQBJU0zDpDVgzP5OW5nfV0N0ouXhNK5GhO8=");
 });
 
-test.serial.skip("Retrieve object that doesn't exist", async (t) => {
+test.serial("Retrieve object that doesn't exist", async (t) => {
   const { app } = t.context;
   var res = await app.post("/ethereum_retrieve_no_exist");
   t.is(res.status, 500, res.text);
 });
 
 
-test.skip("Call ERC20 methods", async (t) => {
+test("Call ERC20 methods", async (t) => {
   const { app } = t.context;
   var res = await app.post("/ethereum_erc20");
   t.is(res.status, 200, res.text);
