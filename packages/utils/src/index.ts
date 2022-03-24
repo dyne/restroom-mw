@@ -64,7 +64,7 @@ export const YML_EXTENSION = process.env.YML_EXT || "yml";
  *  @constant
  *  @type {string}
  */
-export const FILES_DIR = process.env.FILES_DIR || "/";
+export const FILES_DIR = process.env.FILES_DIR;
 
 export const UTF8_DECODER = new TextDecoder();
 
