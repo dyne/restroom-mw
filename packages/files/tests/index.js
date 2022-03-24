@@ -22,7 +22,7 @@ test("Download zip and extract", async (t) => {
   const { app } = t.context;
   var res = await app.post("/unzip_directory");
   t.is(res.status, 200, res.text);
-  const files = fs.readdirSync('/tmp/extract/here/the/directory');
+  const files = fs.readdirSync('./tmp/extract/here/the/directory');
   t.is(files.length, 3);
 });
 
