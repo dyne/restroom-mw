@@ -59,6 +59,13 @@ export const CHAIN_EXTENSION = process.env.CHAIN_EXT || "chain";
  */
 export const YML_EXTENSION = process.env.YML_EXT || "yml";
 
+/**
+ *  Base dir to store data for the user
+ *  @constant
+ *  @type {string}
+ */
+export const FILES_DIR = process.env.FILES_DIR || "/";
+
 export const UTF8_DECODER = new TextDecoder();
 
 export const combineDataKeys = (data: ObjectLiteral, keys: string) => {
