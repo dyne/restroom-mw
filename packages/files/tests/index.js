@@ -6,6 +6,7 @@ import fs from 'fs';
 import supertest, { SuperTest, Test } from "supertest";
 
 process.env.ZENCODE_DIR = "./test/fixtures";
+process.env.FILES_DIR = ".";
 const zencode = require("../../core");
 const files = require("../src/index");
 

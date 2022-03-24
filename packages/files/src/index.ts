@@ -47,7 +47,6 @@ export default (req: Request, res: Response, next: NextFunction) => {
         if (file && folder) {
           try {
             const absoluteFolder = path.resolve(FILES_DIR + "/" + folder);
-
             validatePath(absoluteFolder);
 
             const response = await axios.get(file, {
