@@ -1,4 +1,5 @@
 import { Restroom } from "@restroom-mw/core";
+import { FILES_DIR } from "@restroom-mw/utils";
 import axios from "axios";
 import { NextFunction, Request, Response } from "express";
 import fs from 'fs'
@@ -21,6 +22,17 @@ import { DOWNLOAD } from "./actions";
 
 import { STORE_RESULT } from "./actions";
 
+// save path must be subdirs of FILES_DIR
+const validatePath = (p: string) => {
+  if(FILES_DIR != "/") {
+    const relative = path.relative(FILES_DIR, p);
+    const isSubdir = relative && !relative.startsWith('..') && !path.isAbsolute(relative);
+    if(!isSubdir) {
+      throw new Error(`Result path outside ${FILES_DIR}`)
+    }
+  }
+}
+
 export default (req: Request, res: Response, next: NextFunction) => {
   const rr = new Restroom(req, res);
 
@@ -34,7 +46,9 @@ export default (req: Request, res: Response, next: NextFunction) => {
 
         if (file && folder) {
           try {
-            const absoluteFolder = path.resolve(folder);
+            const absoluteFolder = path.resolve(FILES_DIR + "/" + folder);
+            validatePath(absoluteFolder);
+
             const response = await axios.get(file, {
               responseType: 'arraybuffer'
             });
@@ -63,7 +77,8 @@ export default (req: Request, res: Response, next: NextFunction) => {
         if (variable && file) {
           const variableJson = JSON.stringify(variable)
           try {
-            const absoluteFile = path.resolve(file);
+            const absoluteFile = path.resolve(FILES_DIR + "/" + file);
+            validatePath(absoluteFile);
 
             const absoluteFolder = path.dirname(absoluteFile);
             fs.mkdirSync(absoluteFolder, { recursive: true });

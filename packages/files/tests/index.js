@@ -6,6 +6,7 @@ import fs from 'fs';
 import supertest, { SuperTest, Test } from "supertest";
 
 process.env.ZENCODE_DIR = "./test/fixtures";
+process.env.FILES_DIR = ".";
 const zencode = require("../../core");
 const files = require("../src/index");
 
@@ -21,7 +22,7 @@ test("Download zip and extract", async (t) => {
   const { app } = t.context;
   var res = await app.post("/unzip_directory");
   t.is(res.status, 200, res.text);
-  const files = fs.readdirSync('/tmp/extract/here/the/directory');
+  const files = fs.readdirSync('./tmp/extract/here/the/directory');
   t.is(files.length, 3);
 });
 
