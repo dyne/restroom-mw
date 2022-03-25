@@ -24,11 +24,16 @@ import { STORE_RESULT } from "./actions";
 
 // save path must be subdirs of FILES_DIR
 const validatePath = (p: string) => {
-  if(FILES_DIR != "/") {
-    const relative = path.relative(FILES_DIR, p);
-    const isSubdir = relative && !relative.startsWith('..') && !path.isAbsolute(relative);
-    if(!isSubdir) {
-      throw new Error(`Result path outside ${FILES_DIR}`)
+  if(!FILES_DIR) { 
+    throw new Error(`FILES_DIR is not defined`); 
+  } 
+  else { 
+    if(FILES_DIR != "/") {
+      const relative = path.relative(FILES_DIR, p);
+      const isSubdir = relative && !relative.startsWith('..') && !path.isAbsolute(relative);
+      if(!isSubdir) {
+        throw new Error(`Result path outside ${FILES_DIR}`)
+      }
     }
   }
 }
