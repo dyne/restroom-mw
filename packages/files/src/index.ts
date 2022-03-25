@@ -5,7 +5,7 @@ import {NextFunction, Request, Response} from "express";
 import fs from 'fs'
 import extract from 'extract-zip';
 import path from 'path';
-import { ObjectLiteral } from "@restroom-mw/types";
+import {ObjectLiteral} from "@restroom-mw/types";
 
 /**
  * `download the 'myUrl' and extract it into 'myFolder'`
