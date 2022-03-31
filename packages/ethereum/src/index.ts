@@ -89,12 +89,6 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       }
 
       if(zencode.match(RETRIEVE)) {
-        validateWeb3();
-        const gasPrice = await web3.eth.getGasPrice();
-        data['gas_price'] = gasPrice.toString();
-      }
-
-      if(zencode.match(RETRIEVE)) {
         const params = zencode.paramsOf(RETRIEVE);
         for (var i = 0; i < params.length; i += 2) {
           const tag = input[params[i]];
