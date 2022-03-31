@@ -3,7 +3,7 @@
   "my_address": "28c44EeA27c304bE7416a220515A823E29a0Fb83",
   "fabchain": "http://test.fabchain.net:8545",
   "gas limit": "100000",
-  "gas price": "10000000000",
+  "gas price": "1000000000",
   "gwei value": "0",
   "storage_contract": "E54c7b475644fBd918cfeDC57b1C9179939921E6",
   "data": "Nel mezzo del cammin di nostra vita\nmi ritrovai per una selva oscura,\nché la diritta via era smarrita."

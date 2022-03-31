@@ -89,22 +89,19 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       }
 
       if(zencode.match(RETRIEVE)) {
+        validateWeb3();
         const params = zencode.paramsOf(RETRIEVE);
-        for (var i = 0; i < params.length; i += 3) {
-          const storage = params[i];
-          const tag = input[params[i + 1]];
-          const variable = params[i + 2];
-          if(storage.toLowerCase() == BLOCKCHAIN) {
-            validateWeb3();
-            const receipt = await web3.eth.getTransactionReceipt("0x" + tag)
-            if(receipt.status) {
-              const dataABI = receipt.logs[0].data;
-              const resultBytes = web3.eth.abi.decodeParameters(["bytes"], dataABI)[0];
-              const currentData = UTF8_DECODER.decode(Buffer.from(resultBytes.substring(2), 'hex'));
-              data[variable] = currentData;
-            } else {
-              throw new Error("Failed transaction");
-            }
+        for (var i = 0; i < params.length; i += 2) {
+          const tag = input[params[i]];
+          const variable = params[i + 1];
+          const receipt = await web3.eth.getTransactionReceipt("0x" + tag)
+          if(receipt.status) {
+            const dataRead = receipt.logs[0].data.slice(2);
+            //const resultBytes = web3.eth.abi.decodeParameters(["bytes"], dataABI)[0];
+            //const currentData = UTF8_DECODER.decode(Buffer.from(resultBytes.substring(2), 'hex'));
+            data[variable] = dataRead;
+          } else {
+            throw new Error("Failed transaction");
           }
         }
       }

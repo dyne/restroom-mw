@@ -17,7 +17,7 @@ test.before(async (t) => {
   t.context.app = supertest(app);
 });
 
-test("Store a zenroom object", async (t) => {
+test.serial("Store a zenroom object", async (t) => {
   const { app } = t.context;
   var res = await app.post("/ethereum_store");
   t.is(res.status, 200, res.text);
