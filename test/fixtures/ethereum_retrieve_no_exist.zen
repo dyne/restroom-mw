@@ -1,8 +1,9 @@
 Rule unknown ignore 
-Given nothing
+Scenario ethereum
 Given I have a ethereum endpoint named 'fabchain'
-Given I have a 'base64 array' named 'myArray'
-Given I read from 'ethereum' the data in tag 'myTag' and save the output into 'myArray'
-When I create the hash of 'myArray'
-When I rename the 'hash' to 'myHash'
+Given I have a 'hex' named 'poem bytes'
+Given I read the ethereum bytes with hash 'myTag' and save the output into 'poem_bytes'
+When I create the string from the ethereum bytes named 'poem bytes'
+When I rename the 'string' to 'poem'
+
 Then print data
