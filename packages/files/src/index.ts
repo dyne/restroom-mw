@@ -5,6 +5,7 @@ import {NextFunction, Request, Response} from "express";
 import fs from 'fs'
 import extract from 'extract-zip';
 import path from 'path';
+import {ObjectLiteral} from "@restroom-mw/types";
 
 /**
  * `download the 'myUrl' and extract it into 'myFolder'`
@@ -21,6 +22,9 @@ import {DOWNLOAD} from "./actions";
  */
 
 import {STORE_RESULT} from "./actions";
+
+
+let input: ObjectLiteral = {};
 
 // save path must be subdirs of FILES_DIR
 const validatePath = (p: string) => {
@@ -39,35 +43,43 @@ const validatePath = (p: string) => {
 export default (req: Request, res: Response, next: NextFunction) => {
   const rr = new Restroom(req, res);
 
+
+  rr.onBefore(async (params) => {
+    const { zencode, keys, data } = params;
+    input = rr.combineDataKeys(data, keys);
+  });
+
   rr.onSuccess(async (params) => {
     const {result, zencode} = params;
     if (zencode.match(DOWNLOAD)) {
       const allPassOutputs = zencode.paramsOf(DOWNLOAD);
       for (let i = 0; i < allPassOutputs.length; i += 2) {
         const file = result[allPassOutputs[i]]
-        const folder = result[allPassOutputs[i + 1]]
+        const folder = input[allPassOutputs[i + 1]];
 
-        if (file && folder) {
-          try {
-            const absoluteFolder = path.resolve(FILES_DIR + "/" + folder);
-            validatePath(absoluteFolder);
-
-            const response = await axios.get(file, {
-              responseType: 'arraybuffer'
-            });
-            const tempdir = fs.mkdtempSync("/tmp/restroom");
-            const tempfile = tempdir + "/downloaded";
-            fs.writeFileSync(tempfile, response.data);
-            await extract(tempfile, {dir: absoluteFolder});
-            fs.unlinkSync(tempfile);
-            fs.rmdirSync(tempdir);
-          } catch (e) {
-            next(e);
-            throw new Error(`[FILES] Error sending the result to "${file}": ${e}`);
-          }
+        if(!file) {
+          throw new Error(`[FILES] url not defined`);
         }
-        else {
-          throw new Error(`[FILES] url or destination folder not defined`);
+        if(!folder) {
+          throw new Error(`[FILES] destination folder not defined ${Object.keys(input)}`);
+        }
+
+        try {
+          const absoluteFolder = path.resolve(FILES_DIR + "/" + folder);
+          validatePath(absoluteFolder);
+
+          const response = await axios.get(file, {
+            responseType: 'arraybuffer'
+          });
+          const tempdir = fs.mkdtempSync("/tmp/restroom");
+          const tempfile = tempdir + "/downloaded";
+          fs.writeFileSync(tempfile, response.data);
+          await extract(tempfile, { dir: absoluteFolder });
+          fs.unlinkSync(tempfile);
+          fs.rmdirSync(tempdir);
+        } catch (e) {
+          next(e);
+          throw new Error(`[FILES] Error sending the result to "${file}": ${e}`);
         }
       }
     }
@@ -75,25 +87,27 @@ export default (req: Request, res: Response, next: NextFunction) => {
       const allPassOutputs = zencode.paramsOf(STORE_RESULT);
       for (let i = 0; i < allPassOutputs.length; i += 2) {
         const variable = result[allPassOutputs[i]]
-        const file = result[allPassOutputs[i + 1]]
+        const file = input[allPassOutputs[i + 1]]
 
-        if (variable && file) {
-          const variableJson = JSON.stringify(variable)
-          try {
-            const absoluteFile = path.resolve(FILES_DIR + "/" + file);
-            validatePath(absoluteFile);
-
-            const absoluteFolder = path.dirname(absoluteFile);
-            fs.mkdirSync(absoluteFolder, {recursive: true});
-
-            fs.writeFileSync(absoluteFile, variableJson);
-          } catch (e) {
-            next(e);
-            throw new Error(`[FILES] Error saving the result to "${file}": ${e}`);
-          }
+        if(!variable) {
+          throw new Error(`[FILES] variable not defined`);
         }
-        else {
-          throw new Error(`[FILES] variable or destination folder not defined`);
+        if(!file) {
+          throw new Error(`[FILES] destination file not defined`);
+        }
+
+        const variableJson = JSON.stringify(variable)
+        try {
+          const absoluteFile = path.resolve(FILES_DIR + "/" + file);
+          validatePath(absoluteFile);
+
+          const absoluteFolder = path.dirname(absoluteFile);
+          fs.mkdirSync(absoluteFolder, { recursive: true });
+
+          fs.writeFileSync(absoluteFile, variableJson);
+        } catch (e) {
+          next(e);
+          throw new Error(`[FILES] Error saving the result to "${file}": ${e}`);
         }
       }
     }

@@ -18,7 +18,7 @@ test.before(async (t) => {
   t.context.app = supertest(app);
 });
 
-test("Download zip and extract", async (t) => {
+test.serial("Download zip and extract", async (t) => {
   const { app } = t.context;
   var res = await app.post("/unzip_directory");
   t.is(res.status, 200, res.text);
@@ -26,25 +26,25 @@ test("Download zip and extract", async (t) => {
   t.is(files.length, 3);
 });
 
-test("Do not specify url", async (t) => {
+test.serial("Do not specify url", async (t) => {
   const { app } = t.context;
   var res = await app.post("/files_no_url");
   t.is(res.status, 500, res.text);
 });
 
-test("Do not specify destination", async (t) => {
+test.serial("Do not specify destination", async (t) => {
   const { app } = t.context;
   var res = await app.post("/files_no_dest");
   t.is(res.status, 500, res.text);
 });
 
-test("Url doesn't exist", async (t) => {
+test.serial("Url doesn't exist", async (t) => {
   const { app } = t.context;
   var res = await app.post("/files_url_do_not_exist");
   t.is(res.status, 500, res.text);
 });
 
-test("Save result to file", async (t) => {
+test.serial("Save result to file", async (t) => {
   const { app } = t.context;
 
   // Delete file if it already exist (this way I know if the next step creates it again)
