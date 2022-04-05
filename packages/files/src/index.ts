@@ -1,5 +1,4 @@
 import {Restroom} from "@restroom-mw/core";
-import {FILES_DIR} from "@restroom-mw/utils";
 import axios from "axios";
 import {NextFunction, Request, Response} from "express";
 import fs from 'fs'
@@ -8,6 +7,7 @@ import extract from 'extract-zip';
 import path from 'path';
 import {ObjectLiteral} from "@restroom-mw/types";
 
+require("dotenv").config();
 /**
  * `download the 'myUrl' and extract it into 'myFolder'`
  *
@@ -24,6 +24,13 @@ import {DOWNLOAD} from "./actions";
 
 import {STORE_RESULT} from "./actions";
 
+
+/**
+ *  Base dir to store data for the user
+ *  @constant
+ *  @type {string}
+ */
+export const FILES_DIR = process.env.FILES_DIR;
 
 let input: ObjectLiteral = {};
 
