@@ -1,12 +1,13 @@
 import {Restroom} from "@restroom-mw/core";
-import {FILES_DIR} from "@restroom-mw/utils";
 import axios from "axios";
 import {NextFunction, Request, Response} from "express";
 import fs from 'fs'
+import os from 'os'
 import extract from 'extract-zip';
 import path from 'path';
 import {ObjectLiteral} from "@restroom-mw/types";
 
+require("dotenv").config();
 /**
  * `download the 'myUrl' and extract it into 'myFolder'`
  *
@@ -23,6 +24,13 @@ import {DOWNLOAD} from "./actions";
 
 import {STORE_RESULT} from "./actions";
 
+
+/**
+ *  Base dir to store data for the user
+ *  @constant
+ *  @type {string}
+ */
+export const FILES_DIR = process.env.FILES_DIR;
 
 let input: ObjectLiteral = {};
 
@@ -65,14 +73,14 @@ export default (req: Request, res: Response, next: NextFunction) => {
         }
 
         try {
-          const absoluteFolder = path.resolve(FILES_DIR + "/" + folder);
+          const absoluteFolder = path.resolve(path.join(FILES_DIR, folder));
           validatePath(absoluteFolder);
 
           const response = await axios.get(file, {
             responseType: 'arraybuffer'
           });
-          const tempdir = fs.mkdtempSync("/tmp/restroom");
-          const tempfile = tempdir + "/downloaded";
+          const tempdir = fs.mkdtempSync(path.join(os.tmpdir(), 'restroom-'));
+          const tempfile = path.join(tempdir, "downloaded");
           fs.writeFileSync(tempfile, response.data);
           await extract(tempfile, { dir: absoluteFolder });
           fs.unlinkSync(tempfile);
@@ -98,7 +106,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
 
         const variableJson = JSON.stringify(variable)
         try {
-          const absoluteFile = path.resolve(FILES_DIR + "/" + file);
+          const absoluteFile = path.resolve(path.join(FILES_DIR, file));
           validatePath(absoluteFile);
 
           const absoluteFolder = path.dirname(absoluteFile);

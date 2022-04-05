@@ -89,88 +89,94 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       }
 
       if(zencode.match(RETRIEVE)) {
-        const params = zencode.paramsOf(RETRIEVE);
-        for (var i = 0; i < params.length; i += 2) {
-          const tag = input[params[i]];
-          const variable = params[i + 1];
+        const chkParams = zencode.chunkedParamsOf(RETRIEVE, 2);
+        for (const params of chkParams) {
+          const tag = input[params[0]];
+          const variable = params[1];
           const receipt = await web3.eth.getTransactionReceipt("0x" + tag)
-          if(receipt.status) {
-            const dataRead = receipt.logs[0].data.slice(2);
-            //const resultBytes = web3.eth.abi.decodeParameters(["bytes"], dataABI)[0];
-            //const currentData = UTF8_DECODER.decode(Buffer.from(resultBytes.substring(2), 'hex'));
-            data[variable] = dataRead;
-          } else {
+          if(!receipt) {
+            throw new Error("Transaction id doesn't exist")
+          }
+          if(!receipt.status) {
             throw new Error("Failed transaction");
+          }
+          try {
+            const dataRead = receipt.logs[0].data.slice(2);
+            data[variable] = dataRead;
+          } catch(e) {
+            throw new Error("Empty transaction")
           }
         }
       }
 
       if(zencode.match(ERC20_0_NAMED)) {
         validateWeb3();
-        const params = zencode.paramsOf(ERC20_0_NAMED);
-        for(var i = 0; i < params.length; i += 3) {
-          const command = params[i];
-          const contractAddress = input[params[i+1]] || params[i+1];
-          const variableName = params[i+2];
+        const chkParams = zencode.chunkedParamsOf(ERC20_0_NAMED, 3);
+        for(const params of chkParams) {
+          const command = params[0];
+          const contractAddress = input[params[1]] || params[1];
+          const variableName = params[2];
           await call_erc20(command, contractAddress, variableName, []);
         }
       }
 
       if(zencode.match(ERC20_0)) {
         validateWeb3();
-        const params = zencode.paramsOf(ERC20_0);
-        for(var i = 0; i < params.length; i += 2) {
-          const command = params[i];
-          const contractAddress = input[params[i+1]] || params[i+1];
+        const chkParams = zencode.chunkedParamsOf(ERC20_0, 2);
+        for(const params of chkParams) {
+          const command = params[0];
+          const contractAddress = input[params[1]] || params[1];
           await call_erc20(command, contractAddress, command.replace(" ", "_"), []);
         }
       }
 
       if(zencode.match(ERC20_1)) {
         validateWeb3();
-        const params = zencode.paramsOf(ERC20_1);
-        for(var i = 0; i < params.length; i += 3) {
-          const command = params[i];
-          const arg = input[params[i+1]] || params[i+1];
-          const contractAddress = input[params[i+2]] || params[i+2];
-          await call_erc20(command, contractAddress, command.replace(" ", "_"), [ arg ]);
+        const chkParams = zencode.chunkedParamsOf(ERC20_1, 3);
+        for(const params of chkParams) {
+          const command = params[0];
+          const arg = input[params[1]] || params[1];
+          const contractAddress = input[params[2]] || params[2];
+          await call_erc20(command, contractAddress, command.replace(" ", "_"),
+                           [ '0x' + arg ]);
         }
       }
 
       if(zencode.match(ERC20_1_NAMED)) {
         validateWeb3();
-        const params = zencode.paramsOf(ERC20_1_NAMED);
-        for(var i = 0; i < params.length; i += 4) {
-          const command = params[i];
-          const arg = input[params[i+1]] || params[i+1];
-          const contractAddress = input[params[i+2]] || params[i+2];
-          const variableName = params[i+3];
-          await call_erc20(command, contractAddress, variableName, [ arg ]);
+        const chkParams = zencode.chunkedParamsOf(ERC20_1_NAMED, 4);
+        for(const params of chkParams) {
+          const command = params[0];
+          const arg = input[params[1]] || params[1];
+          const contractAddress = input[params[2]] || params[2];
+          const variableName = params[3];
+          await call_erc20(command, contractAddress, variableName,
+                           [ '0x' + arg ]);
         }
       }
 
       if(zencode.match(READ_HEAD)) {
-        const params = zencode.paramsOf(READ_HEAD);
-        for(var i = 0; i < params.length; i += 4) {
-          const storage = params[i];
-          const variableName = params[i+1];
+        const chkParams = zencode.chunkedParamsOf(READ_HEAD, 2);
+        for(const params of chkParams) {
+          const storage = params[0];
+          const variableName = params[1];
           if(storage.toLowerCase() == BLOCKCHAIN) {
-            validateWeb3();
             const result = await web3.eth.getBlock("latest");
-            data[variableName] = result.hash;
+            data[variableName] = result.hash.slice(2);
           }
         }
       }
       if(zencode.match(READ_PREVIOUS)) {
-        const params = zencode.paramsOf(READ_PREVIOUS);
-        for(var i = 0; i < params.length; i += 4) {
-          const storage = params[i];
-          const blockHash = input[params[i+1]] || params[i+1];
-          const variableName = params[i+2];
+        const chkParams = zencode.chunkedParamsOf(READ_PREVIOUS, 3);
+        for(const params of chkParams) {
+          const storage = params[0];
+          const blockHash = input[params[1]] || data[params[1]]
+                            || params[1];
+          const variableName = params[2];
           if(storage.toLowerCase() == BLOCKCHAIN) {
             validateWeb3();
-            const result = await web3.eth.getBlock(blockHash);
-            data[variableName] = result.parentHash;
+            const result = await web3.eth.getBlock('0x' + blockHash);
+            data[variableName] = result.parentHash.slice(2);
           }
         }
       }
@@ -180,10 +186,10 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       const { zencode, result } = params;
       if(zencode.match(BROADCAST)) {
         validateWeb3();
-        const params = zencode.paramsOf(BROADCAST);
-        for (var i = 0; i < params.length; i += 3) {
-          const rawtx = result[params[i]];
-          const tag = params[i + 1];
+        const chkParams = zencode.chunkedParamsOf(BROADCAST, 2);
+        for(const params of chkParams) {
+          const rawtx = result[params[0]];
+          const tag = params[1];
           if(rawtx && tag) {
             const receipt = await web3.eth.sendSignedTransaction('0x' + rawtx);
             if(receipt.status) {
