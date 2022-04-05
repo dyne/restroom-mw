@@ -17,7 +17,7 @@ test.before(async (t) => {
   t.context.app = supertest(app);
 });
 
-test("Store a zenroom object", async (t) => {
+test.serial("Store a zenroom object", async (t) => {
   const { app } = t.context;
   var res = await app.post("/ethereum_store");
   t.is(res.status, 200, res.text);
@@ -26,7 +26,7 @@ test("Store a zenroom object", async (t) => {
   console.log(`{ 'txid': ${res.body.txid} }`)
 });
 
-test("Retrieve a zenroom object", async (t) => {
+test.serial("Retrieve a zenroom object", async (t) => {
   const poem = "Nel mezzo del cammin di nostra vita\nmi ritrovai per una selva oscura,\nché la diritta via era smarrita."
   const { app } = t.context;
   var res = await app.post("/ethereum_retrieve");
@@ -34,14 +34,14 @@ test("Retrieve a zenroom object", async (t) => {
   t.is(res.body.poem, poem);
 });
 
-test("Retrieve object that doesn't exist", async (t) => {
+test.serial("Retrieve object that doesn't exist", async (t) => {
   const { app } = t.context;
   var res = await app.post("/ethereum_retrieve_no_exist");
   t.is(res.status, 500, res.text);
 });
 
 
-test("Call ERC20 methods", async (t) => {
+test.serial("Call ERC20 methods", async (t) => {
   const { app } = t.context;
   var res = await app.post("/ethereum_erc20");
   t.is(res.status, 200, res.text);

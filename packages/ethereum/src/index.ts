@@ -94,13 +94,17 @@ export default async (req: Request, res: Response, next: NextFunction) => {
           const tag = input[params[i]];
           const variable = params[i + 1];
           const receipt = await web3.eth.getTransactionReceipt("0x" + tag)
-          if(receipt.status) {
-            const dataRead = receipt.logs[0].data.slice(2);
-            //const resultBytes = web3.eth.abi.decodeParameters(["bytes"], dataABI)[0];
-            //const currentData = UTF8_DECODER.decode(Buffer.from(resultBytes.substring(2), 'hex'));
-            data[variable] = dataRead;
-          } else {
+          if(!receipt) {
+            throw new Error("Transaction id doesn't exist")
+          }
+          if(!receipt.status) {
             throw new Error("Failed transaction");
+          }
+          try {
+            const dataRead = receipt.logs[0].data.slice(2);
+            data[variable] = dataRead;
+          } catch(e) {
+            throw new Error("Empty transaction")
           }
         }
       }
@@ -133,7 +137,8 @@ export default async (req: Request, res: Response, next: NextFunction) => {
           const command = params[i];
           const arg = input[params[i+1]] || params[i+1];
           const contractAddress = input[params[i+2]] || params[i+2];
-          await call_erc20(command, contractAddress, command.replace(" ", "_"), [ arg ]);
+          await call_erc20(command, contractAddress, command.replace(" ", "_"),
+                           [ '0x' + arg ]);
         }
       }
 
@@ -145,7 +150,8 @@ export default async (req: Request, res: Response, next: NextFunction) => {
           const arg = input[params[i+1]] || params[i+1];
           const contractAddress = input[params[i+2]] || params[i+2];
           const variableName = params[i+3];
-          await call_erc20(command, contractAddress, variableName, [ arg ]);
+          await call_erc20(command, contractAddress, variableName,
+                           [ '0x' + arg ]);
         }
       }
 
