@@ -56,3 +56,14 @@ test.serial("Call ERC20 methods", async (t) => {
   t.is(res.body.total_supply, "42");
   t.is(res.body.balance, "0");
 });
+
+test.serial("Read head and previous", async (t) => {
+  const { app } = t.context;
+  var res = await app.post("/ethereum_blocks");
+  t.is(res.status, 200, res.text);
+  t.is(typeof res.body.my_hash, "string")
+  t.is(res.body.my_hash.length, 64)
+  t.is(typeof res.body.previous_hash, "string")
+  t.is(res.body.previous_hash.length, 64)
+  t.is(res.body.previous_old_hash, "702c9943ec7c335cc3e65ed6ef58be1f7bd59b09d92953148f099433faa2a850")
+});

@@ -1,5 +1,11 @@
 import fs from "fs";
 
+// from https://github.com/30-seconds/30-seconds-of-code/blob/master/snippets/chunk.md
+export const chunk = <T> (arr: Array<T>, size: number) =>
+  Array.from({ length: Math.ceil(arr.length / size) }, (_, i) =>
+    arr.slice(i * size, i * size + size)
+  );
+
 interface DescriptionParser {
   (words: string[]): string;
 }
@@ -194,6 +200,19 @@ export class Zencode {
     return this.parse().get(sentenceId);
   }
 
+  /**
+   * Return the parameters for a given sentenceId chunked in group
+   * of given size
+   * @param {string} sentenceId
+   * @param {number} chunkSize
+   * @returns {Array<Array<string>>}
+   */
+  chunkedParamsOf(sentenceId: string, chunkSize: number) {
+    const params = this.paramsOf(sentenceId);
+    if(params.length % chunkSize != 0)
+      throw new Error("Wrong number of arguments")
+    return chunk(params, chunkSize);
+  }
   /**
    * Create a {@link Zencode} instance from the full path of the contract
    * @param {string} path
