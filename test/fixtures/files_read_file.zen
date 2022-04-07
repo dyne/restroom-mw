@@ -1,0 +1,6 @@
+Rule unknown ignore
+Given I have a 'string' named 'name'
+Given I have a 'string' named 'var'
+Given I read the content of 'packages/files/package.json'
+Given I read the content of 'package.json'
+Then print data
