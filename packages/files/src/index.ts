@@ -24,6 +24,8 @@ import {DOWNLOAD} from "./actions";
 
 import {STORE_RESULT} from "./actions";
 
+import {READ} from "./actions";
+
 
 /**
  *  Base dir to store data for the user
@@ -54,6 +56,20 @@ export default (req: Request, res: Response, next: NextFunction) => {
 
   rr.onBefore(async (params) => {
     const { zencode, keys, data } = params;
+
+    if (zencode.match(READ)) {
+      const params = zencode.paramsOf(READ);
+      for(const file of params) {
+        validatePath(file);
+        const absoluteFile = path.join(FILES_DIR, file)
+        try {
+          const content = fs.readFileSync(absoluteFile, 'utf8')
+          Object.assign(data, JSON.parse(content))
+        } catch(e) {
+          throw new Error(`[FILES] error while reading the file ${absoluteFile}`);
+        }
+      }
+    }
     input = rr.combineDataKeys(data, keys);
   });
 

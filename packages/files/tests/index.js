@@ -61,3 +61,13 @@ test.serial("Save result to file", async (t) => {
   t.is(typeof fs.statSync("./tmp/saveresult/myBeautifulFile.json", { throwIfNoEntry: false }), 'object')
 });
 
+test.serial("Read data from file", async (t) => {
+  const { app } = t.context;
+
+  // Delete file if it already exist (this way I know if the next step creates it again)
+  var res = await app.post("/files_read_file");
+  t.is(res.status, 200, res.text);
+  t.is(res.body.name, "restroom-mw");
+  t.is(res.body['var'], "here since the beginning");
+});
+
