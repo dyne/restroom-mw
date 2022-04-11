@@ -65,5 +65,5 @@ test.serial("Read head and previous", async (t) => {
   t.is(res.body.my_hash.length, 64)
   t.is(typeof res.body.previous_hash, "string")
   t.is(res.body.previous_hash.length, 64)
-  t.is(res.body.previous_old_hash, "702c9943ec7c335cc3e65ed6ef58be1f7bd59b09d92953148f099433faa2a850")
+  t.is(res.body.previous_old_hash, "7e67c68fb68a9c17a7666dd4264137df35ae3d8cfff7b3352d08d10348f7cce2")
 });
