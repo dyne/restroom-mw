@@ -1,7 +1,6 @@
 import * as redis from "redis";
 import { Restroom } from "@restroom-mw/core";
 import { NextFunction, Request, Response } from "express";
-import { Zencode } from "@restroom-mw/zencode";
 
 /**
  * **CONNECT** `have a redis connection on {}`
@@ -21,7 +20,8 @@ const actions = {
 
 export default (req: Request, res: Response, next: NextFunction) => {
   const rr = new Restroom(req, res);
-  let client: any;
+  let client: any = null;
+  let getRedisClient: () => any;
 
   rr.onBefore(async (params: any) => {
     let { zencode, data } = params;
@@ -37,11 +37,20 @@ export default (req: Request, res: Response, next: NextFunction) => {
 
     if (zencode.match(actions.CONNECT)) {
       const [url] = zencode.paramsOf(actions.CONNECT);
-      client = await redis.createClient(url);
-      await client.connect();
+      getRedisClient = (() => {
+        const getRedisClientFromUrl = async () => {
+          if (client === null) {
+            client = await redis.createClient(url);
+            await client.connect();
+          }
+          return client;
+        }
+        return getRedisClientFromUrl;
+      })()
     }
 
     if (zencode.match(actions.READ)) {
+      client = client || await getRedisClient();
       const [key, outputVariable] = namedParamsOf(actions.READ);
       data[outputVariable] = JSON.parse((await client.get(key)) ?? {});
     }
@@ -51,14 +60,9 @@ export default (req: Request, res: Response, next: NextFunction) => {
     const { result, zencode } = args;
 
     if (zencode.match(actions.WRITE_WITH_KEY)) {
+      client = client || await getRedisClient();
       const [key] = zencode.paramsOf(actions.WRITE_WITH_KEY);
       await client.set(key, JSON.stringify(result));
-    }
-  });
-
-  rr.onFinish(async (params: any) => {
-    if (client) {
-      await client.quit();
     }
   });
 
