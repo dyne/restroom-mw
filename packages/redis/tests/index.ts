@@ -1,23 +1,25 @@
-import test from "ava";
+import { RedisClientType } from "@node-redis/client";
+import anyTest, { TestFn } from "ava";
 import bodyParser from "body-parser";
 import express from "express";
-import supertest from "supertest";
 import { createClient } from "redis";
+import supertest, { SuperTest, Test } from "supertest";
+
+const test = anyTest as TestFn<{ app: SuperTest<Test>, c: RedisClientType }>;
 
 
 process.env.ZENCODE_DIR = "./test/redis";
-const redismw = require("../dist");
-const zencode = require("../../core");
+const redismw = require("../src/index");
+const zencode = require("../../core/src/index");
 
 test.before(async (t) => {
-  const c = createClient();
+  const c: RedisClientType = createClient();
   await c.connect();
   const app = express();
   app.use(bodyParser.json());
   app.use(redismw.default);
   app.use("/*", zencode.default);
-  t.context.app = supertest(app);
-  t.context.c = c;
+  t.context = { app: supertest(app), c };
 });
 
 test.serial("Middleware should write on redis correctly", async (t) => {

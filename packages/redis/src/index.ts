@@ -1,6 +1,7 @@
 import * as redis from "redis";
 import { Restroom } from "@restroom-mw/core";
 import { NextFunction, Request, Response } from "express";
+import { zencodeNamedParamsOf } from "@restroom-mw/utils";
 
 /**
  * **CONNECT** `have a redis connection on {}`
@@ -25,15 +26,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
 
   rr.onBefore(async (params: any) => {
     let { zencode, data } = params;
-
-    const namedParamsOf = (sid: string) => {
-      if (!zencode.match(sid)) return [];
-      const params = zencode.paramsOf(sid);
-      return params.reduce((acc: string[], p: string) => {
-        acc.push(data[p] || p);
-        return acc;
-      }, []);
-    };
+    const namedParamsOf = zencodeNamedParamsOf(zencode, data);
 
     if (zencode.match(actions.CONNECT)) {
       const [url] = zencode.paramsOf(actions.CONNECT);
