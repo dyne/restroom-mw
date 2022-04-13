@@ -1,6 +1,6 @@
 Scenario 'ecdh': create the signature of an object
 Given I am 'theBackend'
-Given I have my 'keypair'
+Given I have my 'keyring'
 
 # This is the password that will be used for PBKDF
 Given I have a 'string' named 'theBackendPassword'
