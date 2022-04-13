@@ -1,21 +1,22 @@
-import test from "ava";
-import request from "supertest";
-import express from "express";
+import anyTest, { TestFn } from "ava";
 import bodyParser from "body-parser";
+import express from "express";
 import fs from 'fs';
 import supertest, { SuperTest, Test } from "supertest";
 
+const test = anyTest as TestFn<{ app: SuperTest<Test> }>;
+
 process.env.ZENCODE_DIR = "./test/fixtures";
 process.env.FILES_DIR = ".";
-const zencode = require("../../core");
 const files = require("../src/index");
+const zencode = require("../../core/src/index");
 
 test.before(async (t) => {
   const app = express();
   app.use(bodyParser.json());
   app.use(files.default);
   app.use("/*", zencode.default);
-  t.context.app = supertest(app);
+  t.context = { app: supertest(app) };
 });
 
 test.serial("Download zip and extract", async (t) => {
@@ -48,7 +49,7 @@ test.serial("Save result to file", async (t) => {
   const { app } = t.context;
 
   // Delete file if it already exist (this way I know if the next step creates it again)
-  if(fs.statSync("./tmp/saveresult/myBeautifulFile.json", { throwIfNoEntry: false })) {
+  if (fs.statSync("./tmp/saveresult/myBeautifulFile.json", { throwIfNoEntry: false })) {
     fs.unlinkSync("./tmp/saveresult/myBeautifulFile.json");
   }
   var res = await app.post("/files_save_result");
