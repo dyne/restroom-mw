@@ -337,6 +337,18 @@ test("Parallel get for arrays", async (t) => {
   );
 });
 
+test("Parallel post for arrays", async (t) => {
+  const app = express();
+  app.use(bodyParser.json());
+  app.use(http);
+  app.use("/*", zencode);
+
+  const res = await request(app).post("/http-post-array");
+  t.is(res.status, 200);
+  t.is(res.body.results.length, 3)
+  t.is(res.body.allResults.results.length, 3)
+});
+
 test("Check broken http", async (t) => {
   const app = express();
   app.use(bodyParser.json());
