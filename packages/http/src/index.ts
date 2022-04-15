@@ -10,6 +10,8 @@ import {
   PARALLEL_GET,
   PARALLEL_GET_ARRAY,
   PARALLEL_POST,
+  PARALLEL_POST_ARRAY_WITHIN,
+  PARALLEL_POST_ARRAY,
   PASS_OUTPUT,
   POST_AND_SAVE_TO_VARIABLE,
 } from "./actions";
@@ -53,13 +55,41 @@ export default (req: Request, res: Response, next: NextFunction) => {
             });
           }
         }
-      } else if (zencode.match(PARALLEL_GET)) {
+      }
+
+      if (zencode.match(PARALLEL_GET)) {
         for (const [url, i, o] of chunks(zencode.paramsOf(PARALLEL_GET), 3)) {
           parallel_promises.push(axios.get(content[url]));
           parallel_params.push({
             output: o,
             index: [i, -1],
           });
+        }
+      }
+
+      if (zencode.match(PARALLEL_POST_ARRAY_WITHIN)) {
+        for (const [d, urlsName, i, o] of chunks(zencode.paramsOf(PARALLEL_POST_ARRAY_WITHIN), 4)) {
+          const urls = content[urlsName]
+          for(let j = 0; j < urls.length; j++) {
+            parallel_promises.push(axios.post(urls[j], content[d]));
+            parallel_params.push({
+              output: o,
+              index: [i, j],
+            });
+          }
+        }
+      }
+
+      if (zencode.match(PARALLEL_POST_ARRAY)) {
+        for (const [d, urlsName, i] of chunks(zencode.paramsOf(PARALLEL_POST_ARRAY), 3)) {
+          const urls = content[urlsName]
+          for(let j = 0; j < urls.length; j++) {
+            parallel_promises.push(axios.post(urls[j], content[d]));
+            parallel_params.push({
+              output: null,
+              index: [i, j],
+            });
+          }
         }
       }
 
@@ -80,15 +110,16 @@ export default (req: Request, res: Response, next: NextFunction) => {
         const parallel_results = await axios.all(parallel_promises);
         parallel_results.map((r, i) => {
           const { output, index } = parallel_params[i];
-          if (!data.hasOwnProperty(output)) {
+          if (output && !data.hasOwnProperty(output)) {
             data[output] = {};
           }
+          const outputData = output ? data[output] : data;
           if(index[1] < 0) {
-            data[output][index[0]] = r.data;
+            outputData[index[0]] = r.data;
           } else {
-            if(!data[output][index[0]])
-              data[output][index[0]] = []
-            data[output][index[0]][index[1]] = r.data
+            if(!outputData[index[0]])
+              outputData[index[0]] = []
+            outputData[index[0]][index[1]] = r.data
           }
         });
       }

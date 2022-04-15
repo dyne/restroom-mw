@@ -1,0 +1,21 @@
+{
+  "endpoints": [
+    "http://zenswarm.zenroom.org:29299/api/consensusroom-update",
+    "http://zenswarm.zenroom.org:28154/api/consensusroom-update",
+    "http://zenswarm.zenroom.org:29226/api/consensusroom-update",
+  ],
+  "output": {
+    "data": {
+      "updateInfo": {
+        "update": {
+          "myFile": "https://zenroom.org/instanceUpdate.zip",
+          "myMessage": "update package from apiroom 24.02.22"
+        },
+        "update.signature": {
+          "r": "A0SwViQwPXeVtBD9WmUJ898zhQFFqgC8g4Tg4hn6GOA=",
+          "s": "v4hofhu/wzP8QYb/wepws/SF45peawiUGW2J+MkpOoY="
+        }
+      }
+    }
+  }
+}
