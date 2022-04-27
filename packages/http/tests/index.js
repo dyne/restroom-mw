@@ -358,3 +358,16 @@ test("Check broken http", async (t) => {
   const res = await request(app).post("/http-test-store");
   t.is(res.status, 200);
 });
+
+test("Http results in zenroom", async (t) => {
+  const app = express();
+  app.use(bodyParser.json());
+  app.use(http);
+  app.use("/*", zencode);
+
+  const res = await request(app).post("/http-errors");
+  t.is(res.status, 200);
+  t.is(res.body.output200.status, 200);
+  t.is(res.body.output404.status, 404);
+  t.is(res.body.output500.status, 500);
+});
