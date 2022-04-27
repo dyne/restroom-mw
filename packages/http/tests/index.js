@@ -337,7 +337,7 @@ test("Parallel get for arrays", async (t) => {
   );
 });
 
-test("Parallel post for arrays", async (t) => {
+test.skip("Parallel post for arrays", async (t) => {
   const app = express();
   app.use(bodyParser.json());
   app.use(http);
