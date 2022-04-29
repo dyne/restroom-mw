@@ -35,5 +35,6 @@ test.serial("http post to restroom endpoint correctly", async (t) => {
       version: "1",
     },
   };
-  t.deepEqual(res.body.output, expected);
+  t.deepEqual(res.body.output.result, expected);
+  t.deepEqual(res.body.output.status, 200);
 });
