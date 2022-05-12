@@ -8,13 +8,14 @@ const checkForNestedBoolean = (obj: any) => {
       if (value != undefined) {
         if (value && typeof value === "object") {
           recurse(value, key);
-        } else {
+        }
+        /*else {
           if (typeof value === "boolean") {
             throw new Error(`[HTTP]
                       Boolean values are not permitted. Response JSON has property "${key}" with a boolean value.
                       Please use, for example, 0 and 1`);
           }
-        }
+        }*/
       }
     }
   }
