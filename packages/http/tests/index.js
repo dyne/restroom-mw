@@ -131,7 +131,7 @@ test(
     t.is(res.status, 200);
   });
 
-test(
+test.skip(
   "Check that the middleware fails with simple contract with endpoint in data responding with boolean in json",
   async (t) => {
     const _data = {
