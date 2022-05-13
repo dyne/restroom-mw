@@ -24,7 +24,7 @@
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint:fix",
     "pretest": "turbo run build",
-    "test": "c8 ava",
+    "test": "c8 ava --no-worker-threads",
     "watch:test": "ava -s --watch",
     "watch": "turbo run watch --parallel",
     "build": "turbo run build --parallel",

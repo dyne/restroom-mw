@@ -1,11 +1,10 @@
-import { RedisClientType } from "@node-redis/client";
 import anyTest, { TestFn } from "ava";
 import bodyParser from "body-parser";
 import express from "express";
 import { createClient } from "redis";
 import supertest, { SuperTest, Test } from "supertest";
 
-const test = anyTest as TestFn<{ app: SuperTest<Test>, c: RedisClientType }>;
+const test = anyTest as TestFn<{ app: SuperTest<Test>, c: any }>;
 
 
 process.env.ZENCODE_DIR = "./test/redis";
@@ -13,7 +12,7 @@ const redismw = require("../src/index");
 const zencode = require("../../core/src/index");
 
 test.before(async (t) => {
-  const c: RedisClientType = createClient();
+  const c = createClient();
   await c.connect();
   const app = express();
   app.use(bodyParser.json());
