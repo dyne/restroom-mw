@@ -21,6 +21,16 @@ test.before(async (t) => {
   t.context = { app: supertest(app), c };
 });
 
+test.serial("Middleware should read non existent key from redis correctly", async (t) => {
+  const { app, c } = t.context;
+  const res = await app.post("/get_non_existent");
+  t.is(res.status, 200, res.text);
+  const result = res.body;
+  const saved = await c.get("myHashkeyThatDoesNotExist");
+  t.true(Object.keys(result).includes("redisResult"));
+  t.deepEqual(JSON.parse(saved), {});
+});
+
 test.serial("Middleware should write on redis correctly", async (t) => {
   const { app, c } = t.context;
   const res = await app.post("/set");
@@ -41,3 +51,5 @@ test.serial("Middleware should read from redis correctly", async (t) => {
   t.true(Object.keys(result.redisResult).includes("random_object"));
   t.is(result.redisResult.random_object, JSON.parse(saved).random_object);
 });
+
+

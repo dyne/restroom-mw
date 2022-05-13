@@ -45,6 +45,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
     if (zencode.match(actions.READ)) {
       client = client || await getRedisClient();
       const [key, outputVariable] = namedParamsOf(actions.READ);
+      await client.sendCommand(['SETNX', key, '{}']);
       data[outputVariable] = JSON.parse((await client.get(key)) ?? {});
     }
   });
