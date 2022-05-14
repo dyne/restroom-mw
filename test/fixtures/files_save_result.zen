@@ -1,9 +1,7 @@
 Rule unknown ignore
 Scenario 'ecdh': Create the keypair
 Given that I am known as 'Alice'
-Given I have a 'string' named 'result path'
-When I create the keypair
-Then print 'keypair'
-Then print 'result path'
+When I create the ecdh key
+Then print the 'keyring'
 
-Then store 'keypair' in the file 'result_path'
+Then store 'keyring' in the file 'result_path'

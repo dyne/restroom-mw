@@ -10,6 +10,8 @@ import {
   PARALLEL_GET,
   PARALLEL_GET_ARRAY,
   PARALLEL_POST,
+  PARALLEL_POST_ARRAY_WITHIN,
+  PARALLEL_POST_ARRAY,
   PASS_OUTPUT,
   POST_AND_SAVE_TO_VARIABLE,
 } from "./actions";
@@ -46,20 +48,48 @@ export default (req: Request, res: Response, next: NextFunction) => {
         for (const [urlsName, i, o] of chunks(zencode.paramsOf(PARALLEL_GET_ARRAY), 3)) {
           const urls = content[urlsName]
           for(let j = 0; j < urls.length; j++) {
-            parallel_promises.push(axios.get(urls[j]));
+            parallel_promises.push(axios.get(urls[j], { validateStatus: () => true }));
             parallel_params.push({
               output: o,
               index: [i, j],
             });
           }
         }
-      } else if (zencode.match(PARALLEL_GET)) {
+      }
+
+      if (zencode.match(PARALLEL_GET)) {
         for (const [url, i, o] of chunks(zencode.paramsOf(PARALLEL_GET), 3)) {
-          parallel_promises.push(axios.get(content[url]));
+          parallel_promises.push(axios.get(content[url], { validateStatus: () => true }));
           parallel_params.push({
             output: o,
             index: [i, -1],
           });
+        }
+      }
+
+      if (zencode.match(PARALLEL_POST_ARRAY_WITHIN)) {
+        for (const [d, urlsName, i, o] of chunks(zencode.paramsOf(PARALLEL_POST_ARRAY_WITHIN), 4)) {
+          const urls = content[urlsName]
+          for(let j = 0; j < urls.length; j++) {
+            parallel_promises.push(axios.post(urls[j], content[d], { validateStatus: () => true }));
+            parallel_params.push({
+              output: o,
+              index: [i, j],
+            });
+          }
+        }
+      }
+
+      if (zencode.match(PARALLEL_POST_ARRAY)) {
+        for (const [d, urlsName, i] of chunks(zencode.paramsOf(PARALLEL_POST_ARRAY), 3)) {
+          const urls = content[urlsName]
+          for(let j = 0; j < urls.length; j++) {
+            parallel_promises.push(axios.post(urls[j], content[d], { validateStatus: () => true }))
+            parallel_params.push({
+              output: null,
+              index: [i, j],
+            });
+          }
         }
       }
 
@@ -77,18 +107,26 @@ export default (req: Request, res: Response, next: NextFunction) => {
       }
 
       if (parallel_promises.length) {
-        const parallel_results = await axios.all(parallel_promises);
+        let errors: { [key: number]: any} = {};
+        const parallel_with_catch = parallel_promises.map((v, i) => v.catch(
+          (e) => errors[i] = e
+        ))
+        const parallel_results = await axios.all(parallel_with_catch)
         parallel_results.map((r, i) => {
           const { output, index } = parallel_params[i];
-          if (!data.hasOwnProperty(output)) {
+          if (output && !data.hasOwnProperty(output)) {
             data[output] = {};
           }
+          const outputData = output ? data[output] : data;
+          const zenResult = errors[i]
+            ? { "status": errors[i].code, "result": "" }
+            : { "status": r.status, "result": r.data || ""}
           if(index[1] < 0) {
-            data[output][index[0]] = r.data;
+            outputData[index[0]] = zenResult;
           } else {
-            if(!data[output][index[0]])
-              data[output][index[0]] = []
-            data[output][index[0]][index[1]] = r.data
+            if(!outputData[index[0]])
+              outputData[index[0]] = []
+            outputData[index[0]][index[1]] = zenResult
           }
         });
       }
@@ -98,16 +136,15 @@ export default (req: Request, res: Response, next: NextFunction) => {
           zencode.paramsOf(POST_AND_SAVE_TO_VARIABLE),
           3
         )) {
-          try {
-            const r = await axios.post(content[url], content[postData], {
-              httpsAgent: new https.Agent({ rejectUnauthorized: false }),
-            });
-            data[variable] = r.data;
-          } catch (e) {
-            throw new Error(
-              `[HTTP] Error when get from endpoint "${content[url]}": ${e}`
-            );
-          }
+          let error: any = null;
+          const r = await axios.post(content[url], content[postData], {
+            httpsAgent: new https.Agent({ rejectUnauthorized: false }),
+            validateStatus: () => true
+          }).catch((e) => error = e);
+          const zenResult = error
+            ? { "status": error.code, "result": "" }
+            : { "status": r.status, "result": r.data || "" }
+          data[variable] = zenResult;
         }
       }
 
@@ -129,16 +166,21 @@ export default (req: Request, res: Response, next: NextFunction) => {
 
         for (const output of externalOutputs) {
           try {
+            let error: any = null;
             const url = content[output.urlKey];
             const agent = new https.Agent({
               rejectUnauthorized: false,
             });
             // make the api call with the keys key value url
-            const response = await axios.get(url, { httpsAgent: agent });
+            const response = await axios.get(url, { httpsAgent: agent, validateStatus: () => true })
+              .catch( (e) => error = e);
             //Check that response object does not contain boolean values
             typeof response.data === "object" &&
               checkForNestedBoolean(response.data);
-            data[output.outputName] = response.data;
+            const zenResult = error
+              ? { "status": error.code, "result": "" }
+              : { "status": response.status, "result": response.data || "" }
+            data[output.outputName] = zenResult;
           } catch (e) {
             throw new Error(
               `Error when getting from endpoint "${
@@ -170,7 +212,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
           const url = content[output];
           const r = typeof result === "object" ? result : JSON.parse(result);
           if (url && r) {
-            const response = await axios.post(url, r);
+            await axios.post(url, r);
           }
         } catch (e) {
           next(e);

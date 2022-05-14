@@ -1,0 +1,11 @@
+{
+	"endpoint-200": "https://apiroom.net/api/dyneorg/API-generate-keyring-passing-user-name",
+	"endpoint-404": "https://apiroom.net/api/dyneorg/API-generate-keyring-passing-user-nam",
+	"post": {
+		"data": {
+			"myName": "User123456"
+		}
+	},
+	"post-empty": {
+	}
+}

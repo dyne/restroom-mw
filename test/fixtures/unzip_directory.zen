@@ -1,5 +1,4 @@
 Rule unknown ignore 
 Given I have a 'string' named 'myFile'
-Given I have a 'string' named 'myFolder'
 Then print data
 Then I download the 'myFile' and extract it into 'myFolder'

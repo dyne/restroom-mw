@@ -1,0 +1,23 @@
+# Always use 'Rule caller restroom-mw' when using Restroom
+Rule caller restroom-mw
+
+# [R] Restroom-mw statements: state endpoints
+Given I have a 'string' named 'endpoint-200'
+Given I have a 'string' named 'endpoint-404'
+
+# Loading input data and telling Zenroom that 'output' will be created by Restroom-mw
+Given I have a 'string dictionary' named 'post'
+Given I have a 'string dictionary' named 'post-empty'
+Given I have a 'string dictionary' named 'output200'
+Given I have a 'string dictionary' named 'output404'
+Given I have a 'string dictionary' named 'output500'
+
+# Here Restroom-mw performs the REST call
+Given I connect to 'endpoint-200' and pass it the content of 'post' and save the output into 'output200'
+Given I connect to 'endpoint-404' and pass it the content of 'post' and save the output into 'output404'
+Given I connect to 'endpoint-200' and pass it the content of 'post-empty' and save the output into 'output500'
+
+# Print the output
+Then print the 'output200'
+Then print the 'output404'
+Then print the 'output500'

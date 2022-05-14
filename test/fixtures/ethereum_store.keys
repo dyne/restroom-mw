@@ -1,2 +1,11 @@
-fabchain: "http://test.fabchain.net:8545"
-sk: "2bb7018d08990874cea523d52642ecd470021a4e7d8b93553bbfcd2343ee8b37"
+{
+  "keys": { "ethereum": "2bb7018d08990874cea523d52642ecd470021a4e7d8b93553bbfcd2343ee8b37" },
+  "my_address": "28c44EeA27c304bE7416a220515A823E29a0Fb83",
+  "fabchain": "http://test.fabchain.net:8545",
+  "gas limit": "100000",
+  "gas price": "1000000000",
+  "gwei value": "0",
+  "storage_contract": "f0562148463aD4D3A8aB59222E2e390332Fc4a0d",
+  "data": "Nel mezzo del cammin di nostra vita\nmi ritrovai per una selva oscura,\nché la diritta via era smarrita."
+}
+

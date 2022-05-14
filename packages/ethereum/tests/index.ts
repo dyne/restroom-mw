@@ -17,33 +17,31 @@ test.before(async (t) => {
   t.context.app = supertest(app);
 });
 
-test("Store a zenroom object", async (t) => {
+test.skip("Store a zenroom object", async (t) => {
   const { app } = t.context;
   var res = await app.post("/ethereum_store");
   t.is(res.status, 200, res.text);
-  t.is(typeof res.body.myTag, "string");
-  t.is(res.body.myTag.length, 64);
-  t.is(typeof res.body.anotherTag, "string");
-  t.is(res.body.anotherTag.length, 64);
-  console.log(`{ 'myTab': ${res.body.myTag}, 'anotherTag': ${res.body.anotherTag} }`)
+  t.is(typeof res.body.txid, "string");
+  t.is(res.body.txid.length, 64);
+  console.log(`{ 'txid': ${res.body.txid} }`)
 });
 
-test.serial("Retrieve a zenroom object", async (t) => {
+test.skip("Retrieve a zenroom object", async (t) => {
+  const poem = "Nel mezzo del cammin di nostra vita\nmi ritrovai per una selva oscura,\nché la diritta via era smarrita."
   const { app } = t.context;
   var res = await app.post("/ethereum_retrieve");
   t.is(res.status, 200, res.text);
-  t.is(res.body.myHash, "YLjN72y4Rzwi5nkEbeIKXhoLoxTOqM54gwNxQQhr8rE=");
-  t.is(res.body.anotherHash, "1ylMt6FGLQBJU0zDpDVgzP5OW5nfV0N0ouXhNK5GhO8=");
+  t.is(res.body.poem, poem);
 });
 
-test.serial("Retrieve object that doesn't exist", async (t) => {
+test.skip("Retrieve object that doesn't exist", async (t) => {
   const { app } = t.context;
   var res = await app.post("/ethereum_retrieve_no_exist");
   t.is(res.status, 500, res.text);
 });
 
 
-test("Call ERC20 methods", async (t) => {
+test.skip("Call ERC20 methods", async (t) => {
   const { app } = t.context;
   var res = await app.post("/ethereum_erc20");
   t.is(res.status, 200, res.text);
@@ -57,4 +55,15 @@ test("Call ERC20 methods", async (t) => {
   t.is(res.body.symbol, "NON");
   t.is(res.body.total_supply, "42");
   t.is(res.body.balance, "0");
+});
+
+test.skip("Read head and previous", async (t) => {
+  const { app } = t.context;
+  var res = await app.post("/ethereum_blocks");
+  t.is(res.status, 200, res.text);
+  t.is(typeof res.body.my_hash, "string")
+  t.is(res.body.my_hash.length, 64)
+  t.is(typeof res.body.previous_hash, "string")
+  t.is(res.body.previous_hash.length, 64)
+  t.is(res.body.previous_old_hash, "702c9943ec7c335cc3e65ed6ef58be1f7bd59b09d92953148f099433faa2a850")
 });

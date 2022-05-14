@@ -9,7 +9,7 @@ const {
   createGlobalContext,
   createDebugEnabledGlobalContext,
   updateGlobalContext,
-  updateGlobalContextOutput
+  updateGlobalContextOutput,
 } = require("../dist/context");
 
 test("addConfToContext works correctly", (t) => {
@@ -96,110 +96,110 @@ test("addKeysToContext works correctly if keys not found", (t) => {
 test("createGlobalContext works correctly", (t) => {
   const globalContext = createGlobalContext();
   t.deepEqual(globalContext, {
-    debugEnabled: false
+    debugEnabled: false,
   });
 });
 
 test("createDebugEnabledGlobalContext works correctly", (t) => {
   const globalContext = createDebugEnabledGlobalContext();
   t.deepEqual(globalContext, {
-    debugEnabled: true
+    debugEnabled: true,
   });
 });
 
 test("updateGlobalContext works correctly with empty keys and data", (t) => {
   let globalContext = {
-    debugEnabled: false
+    debugEnabled: false,
   };
   const singleBlockContext = {
-    currentBlock: "id-0"
+    currentBlock: "id-0",
   };
 
-  updateGlobalContext(singleBlockContext, globalContext)
+  updateGlobalContext(singleBlockContext, globalContext);
   t.deepEqual(globalContext, {
     debugEnabled: false,
     currentBlock: "id-0",
     "id-0": {
       data: undefined,
-      keys: undefined
-    }
+      keys: undefined,
+    },
   });
 });
 
 test("updateGlobalContext works correctly with empty keys", (t) => {
   let globalContext = {
-    debugEnabled: false
+    debugEnabled: false,
   };
   const singleBlockContext = {
     currentBlock: "id-0",
     data: {
-      pippo: "pippo"
-    }
+      pippo: "pippo",
+    },
   };
 
-  updateGlobalContext(singleBlockContext, globalContext)
+  updateGlobalContext(singleBlockContext, globalContext);
   t.deepEqual(globalContext, {
     debugEnabled: false,
     currentBlock: "id-0",
     "id-0": {
-      data:  {
-        pippo: "pippo"
+      data: {
+        pippo: "pippo",
       },
-      keys: undefined
-    }
+      keys: undefined,
+    },
   });
 });
 
 test("updateGlobalContext works correctly with empty data", (t) => {
   let globalContext = {
-    debugEnabled: false
+    debugEnabled: false,
   };
   const singleBlockContext = {
     currentBlock: "id-0",
     keys: {
-      pippo: "pippo"
-    }
+      pippo: "pippo",
+    },
   };
 
-  updateGlobalContext(singleBlockContext, globalContext)
+  updateGlobalContext(singleBlockContext, globalContext);
   t.deepEqual(globalContext, {
     debugEnabled: false,
     currentBlock: "id-0",
     "id-0": {
-      keys:  {
-        pippo: "pippo"
+      keys: {
+        pippo: "pippo",
       },
-      data: undefined
-    }
+      data: undefined,
+    },
   });
 });
 
 test("updateGlobalContext works correctly with data and keys", (t) => {
   let globalContext = {
-    debugEnabled: false
+    debugEnabled: false,
   };
   const singleBlockContext = {
     currentBlock: "id-0",
     keys: {
-      pippo: "pippo"
+      pippo: "pippo",
     },
     data: {
-      pluto: "pluto"
-    }
+      pluto: "pluto",
+    },
   };
 
-  updateGlobalContext(singleBlockContext, globalContext)
+  updateGlobalContext(singleBlockContext, globalContext);
   t.deepEqual(globalContext, {
     debugEnabled: false,
     currentBlock: "id-0",
     "id-0": {
-      keys:  {
-        pippo: "pippo"
+      keys: {
+        pippo: "pippo",
       },
       data: {
-        pluto: "pluto"
-      }
-    }
+        pluto: "pluto",
+      },
+    },
   });
 });
 
@@ -207,18 +207,18 @@ test("updateGlobalContextOutput works correctly with output", (t) => {
   let globalContext = {
     currentBlock: "id-0",
     debugEnabled: false,
-    "id-0": {}
+    "id-0": {},
   };
   const singleBlockContext = {
-    currentBlock: "id-0"
+    currentBlock: "id-0",
   };
 
-  updateGlobalContextOutput("id-0", globalContext, {res:"true"})
+  updateGlobalContextOutput("id-0", globalContext, { res: "true" });
   t.deepEqual(globalContext, {
     currentBlock: "id-0",
     debugEnabled: false,
     "id-0": {
-      output: {res:"true"}
-    }
+      output: { res: "true" },
+    },
   });
 });

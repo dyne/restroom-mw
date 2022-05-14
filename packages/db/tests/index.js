@@ -6,8 +6,8 @@ import bodyParser from "body-parser";
 import fs from "fs";
 
 process.env.ZENCODE_DIR = "./test/db";
-const db = require("..").default;
-const zencode = require("../../core").default;
+const db = require("../").default;
+const zencode = require("@restroom-mw/core").default;
 
 const dbPath1 = "sqlite://./test/db/db1.db";
 const dbPath2 = "sqlite://./test/db/db2.db";
@@ -31,22 +31,20 @@ test.afterEach((t) => {
 
 test.beforeEach(async (t) => {
   const sequelize = new Sequelize(dbPath1);
-  const Table = sequelize.define(
-    "firstTable",
-    {
-      result: {
-        type: Sequelize.STRING,
-      },
+  const Table = sequelize.define("firstTable", {
+    result: {
+      type: Sequelize.STRING,
     },
-    {
-      freezeTableName: true,
-    }
-  );
+  }, {
+    freezeTableName: true,
+  });
   await Table.sync();
   try {
     const results = Array(5).fill(JSON.stringify({ testkey: "test value" }));
     for (const result of results) {
-      await Table.create({ result });
+      await Table.create({
+        result
+      });
     }
   } catch (e) {
     throw e;
@@ -62,6 +60,7 @@ test.serial(
   "Middleware db should work and response includes variable for db",
   async (t) => {
     try {
+<<<<<<< HEAD
       const { app } = t.context;
       const res = await app.post("/db-test-complex");
       t.is(res.status, 200, res.text);
@@ -87,13 +86,11 @@ test.serial("Middleware db should save the result in db1", async (t) => {
     });
     const sequelize1 = new Sequelize(dbPath1);
     const Result1 = sequelize1.define(
-      "firstTable",
-      {
+      "firstTable", {
         result: {
           type: Sequelize.STRING,
         },
-      },
-      {
+      }, {
         freezeTableName: true,
       }
     );
@@ -128,13 +125,11 @@ test.serial(
       });
       const sequelize2 = new Sequelize(dbPath2);
       const Result2 = sequelize2.define(
-        "firstCache",
-        {
+        "firstCache", {
           result: {
             type: Sequelize.STRING,
           },
-        },
-        {
+        }, {
           freezeTableName: true,
         }
       );
@@ -142,7 +137,9 @@ test.serial(
       let result;
       try {
         let query = await Result2.findByPk(1);
-        query = query.get({ plain: true });
+        query = query.get({
+          plain: true
+        });
         result = JSON.parse(query["result"]);
       } catch (e) {
         result = null;

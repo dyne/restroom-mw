@@ -1,0 +1,5 @@
+Rule caller restroom-mw
+Given I have a valid redis connection on 'redis://localhost:6379'
+When I create the random object of '256' bits
+Then print all data
+Then I write all data into redis under the key named 'myRedisKey'
