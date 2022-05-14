@@ -1,5 +1,5 @@
 import test from "ava";
-import request from "supertest";
+import supertest from "supertest";
 import express from "express";
 import { Sequelize } from "sequelize";
 import bodyParser from "body-parser";
@@ -11,6 +11,14 @@ const zencode = require("../../core").default;
 
 const dbPath1 = "sqlite://./test/db/db1.db";
 const dbPath2 = "sqlite://./test/db/db2.db";
+
+test.before(async (t) => {
+  const app = express();
+  app.use(bodyParser.json());
+  app.use(db);
+  app.use("/*", zencode);
+  t.context.app = supertest(app);
+});
 
 test.afterEach((t) => {
   try {
@@ -46,15 +54,6 @@ test.beforeEach(async (t) => {
   sequelize.close();
 });
 
-test.afterEach((t) => {
-  try {
-    fs.unlinkSync("./test/db/db1.db");
-  } catch {}
-  try {
-    fs.unlinkSync("./test/db/db2.db");
-  } catch {}
-});
-
 test("Middleware db should exist", (t) => {
   t.truthy(typeof db, "object");
 });
@@ -63,11 +62,8 @@ test.serial(
   "Middleware db should work and response includes variable for db",
   async (t) => {
     try {
-      const app = express();
-      app.use(bodyParser.json());
-      app.use(db);
-      app.use("/*", zencode);
-      const res = await request(app).post("/db-test-complex");
+      const { app } = t.context;
+      const res = await app.post("/db-test-complex");
       t.is(res.status, 200, res.text);
       t.true(
         Object.keys(res.body).includes("keypair"),
@@ -85,15 +81,10 @@ test.serial(
 
 test.serial("Middleware db should save the result in db1", async (t) => {
   try {
-    const app = express();
-    app.use(bodyParser.json());
-    app.use(db);
-    app.use("/*", zencode);
-    const res = await request(app)
-      .post("/db-test-complex")
-      .catch((e) => {
-        throw e;
-      });
+    const { app } = t.context;
+    const res = await app.post("/db-test-complex").catch((e) => {
+      throw e;
+    });
     const sequelize1 = new Sequelize(dbPath1);
     const Result1 = sequelize1.define(
       "firstTable",
@@ -131,15 +122,10 @@ test.serial(
   "Middleware db should save the result of variable given in zencode to db2",
   async (t) => {
     try {
-      const app = express();
-      app.use(bodyParser.json());
-      app.use(db);
-      app.use("/*", zencode);
-      const res = await request(app)
-        .post("/db-test-complex")
-        .catch((e) => {
-          throw e;
-        });
+      const { app } = t.context;
+      const res = await app.post("/db-test-complex").catch((e) => {
+        throw e;
+      });
       const sequelize2 = new Sequelize(dbPath2);
       const Result2 = sequelize2.define(
         "firstCache",
