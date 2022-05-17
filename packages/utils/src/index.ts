@@ -69,13 +69,27 @@ export const combineDataKeys = (data: ObjectLiteral, keys: string) => {
   }
 };
 
+/**
+ * Retrieve the named params content from the input (usually the combination of data and keys).
+ * This is for the sentences that do not directly have a params in them but instead
+ * a reference of the params are in the data and keys object.
+ * It is safe to be used also on sentences with plain params, as it does fallback
+ * to the Zencode.paramsOf function if not found in the input.
+ *
+ * Like: `Given I have a sawroom endpoint named 'mySawroomAddressDefinedInsideData'`
+ *
+ *
+ * @param zencode
+ * @param input
+ * @returns
+ */
 export const zencodeNamedParamsOf =
   (zencode: Zencode, input: ObjectLiteral) =>
-  (sid: string): string[] => {
-    if (!zencode.match(sid)) return [];
-    const params = zencode.paramsOf(sid);
-    return params.reduce((acc: string[], p: string) => {
-      acc.push(input[p] || p);
-      return acc;
-    }, []);
-  };
+    (sid: string): string[] => {
+      if (!zencode.match(sid)) return [];
+      const params = zencode.paramsOf(sid);
+      return params.reduce((acc: string[], p: string) => {
+        acc.push(input[p] || p);
+        return acc;
+      }, []);
+    };

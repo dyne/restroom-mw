@@ -24,6 +24,7 @@
     "build": "tsc -b tsconfig.json",
     "unlinks": "yarn unlink",
     "links": "yarn link",
+    "lint": "tslint -c ../../tslint.json src/**/*.ts",
     "test": "nyc ava"
   },
   "ava": {

@@ -1,0 +1,17 @@
+database:
+  sqlite://./test/db/test.db
+
+query_1: |
+  INSERT INTO member
+  (name) VALUES ('Alice');
+
+query_2: |
+  INSERT INTO member
+  (name) VALUES ('Bob');
+
+query_3: |
+  UPDATE member
+  SET name = 'Carl'
+  WHERE name like 'Bob';
+
+query_4: SELECT * FROM member;
