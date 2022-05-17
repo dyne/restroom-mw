@@ -8,10 +8,11 @@
 
 *   [DOWNLOAD](#download)
 *   [STORE_RESULT](#store_result)
+*   [FILES_DIR](#files_dir)
 
 ### DOWNLOAD
 
-[packages/files/src/index.ts:14-14](https://github.com/dyne/restroom-mw/blob/83c467361ce29fa1de5bfc7d84fbdf08b1d0962a/packages/files/src/index.ts#L14-L14 "Source code on GitHub")
+[packages/files/src/index.ts:17-17](https://github.com/dyne/restroom-mw/blob/fa95735ca50c7ee972a0a3eafca5d756733565f9/packages/files/src/index.ts#L17-L17 "Source code on GitHub")
 
 `download the 'myUrl' and extract it into 'myFolder'`
 
@@ -20,9 +21,17 @@ Download a zip file located at the url `myUrl` and extract it at the path
 
 ### STORE_RESULT
 
-[packages/files/src/index.ts:22-22](https://github.com/dyne/restroom-mw/blob/83c467361ce29fa1de5bfc7d84fbdf08b1d0962a/packages/files/src/index.ts#L22-L22 "Source code on GitHub")
+[packages/files/src/index.ts:25-25](https://github.com/dyne/restroom-mw/blob/fa95735ca50c7ee972a0a3eafca5d756733565f9/packages/files/src/index.ts#L25-L25 "Source code on GitHub")
 
 `store 'myVariable' in the file 'myFolder'`
 
 Store the content of the variable `myVariable` in the filesystem at the path
 `myFolder` on the server
+
+### FILES_DIR
+
+[packages/files/src/index.ts:35-35](https://github.com/dyne/restroom-mw/blob/fa95735ca50c7ee972a0a3eafca5d756733565f9/packages/files/src/index.ts#L35-L35 "Source code on GitHub")
+
+Base dir to store data for the user
+
+Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)

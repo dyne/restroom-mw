@@ -9,14 +9,74 @@ class Result extends Model {
   public result: string;
 }
 
+
+/**
+ * Available actions for the @restroom-mw/db  database middleware
+ *
+ * @enum {number}
+ */
 const enum ACTIONS {
+  /**
+   * Given I have a database uri named {}
+   * @param {string} uri the key of the connection string
+   * @example
+   *   SQLITE: sqlite://:memory:/ or sqlite:///path/to/database.sqlite
+   *   MSSQL: Server=localhost\MSSQLSERVER01;Database=master;Trusted_Connection=True
+   *   MYSQL: mysql://root:root@localhost:3306/test
+   *   POSTGRES: postgres://postgres:postgres@localhost:5432/test
+   *   MARIADB: mariadb://root:root@localhost:3306/test
+   *   REDSHIFT: postgres://root:root@localhost:5432/test
+   *   SNOWFLAKE: snowflake://root:root@localhost:5432/test
+   */
   GET_URI_KEYS = "have a database uri named {}",
+  /**
+   * Given I have a database table named {}
+   * @param {string} key of the table in data/keys
+   */
   GET_TABLE_KEYS = "have a database table named {}",
+  /**
+   * Given I read the record {} of the table {} of the database {} and save the result into {}
+   * @param {string} record name of the field (row)
+   * @param {string} table keyName of the table
+   * @param {string} database keyName of the database
+   * @param {string} output the variable to save the output
+   */
   GET_RECORD = "read the record {} of the table {} of the database {} and save the result into {}",
-  SAVE_OUTPUT = "save the output into the database {} into the table {}",
-  SAVE_VAR = "save the {} into the database {} into the table {}",
+  /**
+   * Given I execute the SQL statement named {} on the database named {} and save the result into {}
+   *
+   * @param {string} statement name of the SQL statement
+   * @param {string} database keyName of the database
+   * @param {string} output the variable to save the output
+   */
   EXECUTE_SQL = "execute the SQL statement named {} on the database named {} and save the result into {}",
+
+  /**
+   * **TBD**
+   * Given I execute the SQL statement named {} pass the parameters named {} on the database named {} and save the result into {}
+   *
+   * @param {string} statement name of the SQL statement
+   * @param {string} parameters name of the parameters
+   * @param {string} database keyName of the database
+   * @param {string} output the variable to save the output
+   */
   EXECUTE_SQL_WITH_PARAMS = "execute the SQL statement named {} pass the parameters named {} on the database named {} and save the result into {}",
+  /**
+   * Then save the output into the database {} into the table {}
+   *
+   *
+   * @param {string} database keyName of the database
+   * @param {string} table keyName of the table
+   */
+  SAVE_OUTPUT = "save the output into the database {} into the table {}",
+  /**
+   * Then save the {} into the database {} into the table {}
+   *
+   * @param {string} output the variable to save the output
+   * @param {string} database keyName of the database
+   * @param {string} table keyName of the table
+   */
+  SAVE_VAR = "save the {} into the database {} into the table {}",
 };
 
 export default (req: Request, res: Response, next: NextFunction) => {

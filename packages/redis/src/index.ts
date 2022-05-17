@@ -3,11 +3,37 @@ import { Restroom } from "@restroom-mw/core";
 import { NextFunction, Request, Response } from "express";
 import { zencodeNamedParamsOf } from "@restroom-mw/utils";
 
+/**
+ *
+ * @enum {string}
+ */
 enum Action {
+  /**
+   * Given I have a redis connection on {}
+   * @param {string} connection url
+   */
   CONNECT = "have a redis connection on {}",
+  /**
+   * Given I write data into redis under the key {}
+   * @param {string} key
+   */
   SET = "write data into redis under the key {}",
+  /**
+   * Given I read from redis the data under the key {} and save the output into {}
+   * @param {string} key
+   * @param {string} output
+   */
   GET = `read from redis the data under the key {} and save the output into {}`,
+  /**
+   * Given I write data into redis under the key named {}
+   * @param {string} key
+   */
   SET_NAMED = "write data into redis under the key named {}",
+  /**
+   * Given I read from redis the data under the key named {} and save the output into {}
+   * @param {string} key
+   * @param {string} output
+   */
   GET_NAMED = `read from redis the data under the key named {} and save the output into {}`,
 }
 

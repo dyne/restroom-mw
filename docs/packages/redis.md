@@ -2,7 +2,7 @@
 
 Is a basic middleware to make basic operations on [redis](https://redis.io).
 
-Interpretes the [actions](#actions) to connect to a redis server and save the result with a `SET` or a `HMSET`.
+Interpretes the [actions](#action) to connect to a redis server and save the result with a `SET` or a `HMSET`.
 
 ## Usage
 
@@ -23,14 +23,78 @@ app.use("/api/*", zencode);
 
 #### Table of Contents
 
-*   [actions](#actions)
+*   [Action](#action)
+    *   [CONNECT](#connect)
+        *   [Parameters](#parameters)
+    *   [SET](#set)
+        *   [Parameters](#parameters-1)
+    *   [GET](#get)
+        *   [Parameters](#parameters-2)
+    *   [SET_NAMED](#set_named)
+        *   [Parameters](#parameters-3)
+    *   [GET_NAMED](#get_named)
+        *   [Parameters](#parameters-4)
 
-### actions
+### Action
 
-[packages/redis/src/index.ts:16-20](https://github.com/dyne/restroom-mw/blob/83c467361ce29fa1de5bfc7d84fbdf08b1d0962a/packages/redis/src/index.ts#L16-L20 "Source code on GitHub")
+[packages/redis/src/index.ts:10-38](https://github.com/dyne/restroom-mw/blob/fa95735ca50c7ee972a0a3eafca5d756733565f9/packages/redis/src/index.ts#L10-L38 "Source code on GitHub")
 
-**CONNECT** `have a redis connection on {}`
+Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
 
-**WRITE_WITH_KEY** `write data into redis under the key {}`
+#### CONNECT
 
-**READ** `read from redis the data under the key {} and save the output into {}";`
+[packages/redis/src/index.ts:15-15](https://github.com/dyne/restroom-mw/blob/fa95735ca50c7ee972a0a3eafca5d756733565f9/packages/redis/src/index.ts#L15-L15 "Source code on GitHub")
+
+Given I have a redis connection on {}
+
+Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
+
+##### Parameters
+
+*   `connection` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** url
+
+#### SET
+
+[packages/redis/src/index.ts:20-20](https://github.com/dyne/restroom-mw/blob/fa95735ca50c7ee972a0a3eafca5d756733565f9/packages/redis/src/index.ts#L20-L20 "Source code on GitHub")
+
+Given I write data into redis under the key {}
+
+Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
+
+##### Parameters
+
+*   `key` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+
+#### GET
+
+[packages/redis/src/index.ts:26-26](https://github.com/dyne/restroom-mw/blob/fa95735ca50c7ee972a0a3eafca5d756733565f9/packages/redis/src/index.ts#L26-L26 "Source code on GitHub")
+
+Given I read from redis the data under the key {} and save the output into {}
+
+##### Parameters
+
+*   `key` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+*   `output` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+
+#### SET_NAMED
+
+[packages/redis/src/index.ts:31-31](https://github.com/dyne/restroom-mw/blob/fa95735ca50c7ee972a0a3eafca5d756733565f9/packages/redis/src/index.ts#L31-L31 "Source code on GitHub")
+
+Given I write data into redis under the key named {}
+
+Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
+
+##### Parameters
+
+*   `key` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+
+#### GET_NAMED
+
+[packages/redis/src/index.ts:37-37](https://github.com/dyne/restroom-mw/blob/fa95735ca50c7ee972a0a3eafca5d756733565f9/packages/redis/src/index.ts#L37-L37 "Source code on GitHub")
+
+Given I read from redis the data under the key named {} and save the output into {}
+
+##### Parameters
+
+*   `key` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+*   `output` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 

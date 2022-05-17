@@ -21,10 +21,12 @@ configuration in the environment separate from code) to define them in a `.env` 
 *   [CUSTOM\_404\_MESSAGE](#custom\_404\_message)
 *   [CHAIN_EXTENSION](#chain_extension)
 *   [YML_EXTENSION](#yml_extension)
+*   [zencodeNamedParamsOf](#zencodenamedparamsof)
+    *   [Parameters](#parameters)
 
 ### HTTP_PORT
 
-[packages/utils/src/index.ts:16-16](https://github.com/dyne/restroom-mw/blob/83c467361ce29fa1de5bfc7d84fbdf08b1d0962a/packages/utils/src/index.ts#L16-L16 "Source code on GitHub")
+[packages/utils/src/index.ts:16-16](https://github.com/dyne/restroom-mw/blob/fa95735ca50c7ee972a0a3eafca5d756733565f9/packages/utils/src/index.ts#L16-L16 "Source code on GitHub")
 
 The port on which the restroom middlewares can refer to listen for
 
@@ -32,7 +34,7 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 ### HTTPS_PORT
 
-[packages/utils/src/index.ts:24-24](https://github.com/dyne/restroom-mw/blob/83c467361ce29fa1de5bfc7d84fbdf08b1d0962a/packages/utils/src/index.ts#L24-L24 "Source code on GitHub")
+[packages/utils/src/index.ts:24-24](https://github.com/dyne/restroom-mw/blob/fa95735ca50c7ee972a0a3eafca5d756733565f9/packages/utils/src/index.ts#L24-L24 "Source code on GitHub")
 
 The **secure port** on which the restroom middlewares can refer to listen for
 
@@ -40,7 +42,7 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 ### HOST
 
-[packages/utils/src/index.ts:32-32](https://github.com/dyne/restroom-mw/blob/83c467361ce29fa1de5bfc7d84fbdf08b1d0962a/packages/utils/src/index.ts#L32-L32 "Source code on GitHub")
+[packages/utils/src/index.ts:32-32](https://github.com/dyne/restroom-mw/blob/fa95735ca50c7ee972a0a3eafca5d756733565f9/packages/utils/src/index.ts#L32-L32 "Source code on GitHub")
 
 The hostname on which the restroom middleware can refer to listen for
 
@@ -48,7 +50,7 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 ### ZENCODE_DIR
 
-[packages/utils/src/index.ts:39-39](https://github.com/dyne/restroom-mw/blob/83c467361ce29fa1de5bfc7d84fbdf08b1d0962a/packages/utils/src/index.ts#L39-L39 "Source code on GitHub")
+[packages/utils/src/index.ts:39-39](https://github.com/dyne/restroom-mw/blob/fa95735ca50c7ee972a0a3eafca5d756733565f9/packages/utils/src/index.ts#L39-L39 "Source code on GitHub")
 
 The absolut path of the directory containing the smart contracts
 
@@ -56,7 +58,7 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 ### CUSTOM\_404\_MESSAGE
 
-[packages/utils/src/index.ts:46-46](https://github.com/dyne/restroom-mw/blob/83c467361ce29fa1de5bfc7d84fbdf08b1d0962a/packages/utils/src/index.ts#L46-L46 "Source code on GitHub")
+[packages/utils/src/index.ts:46-46](https://github.com/dyne/restroom-mw/blob/fa95735ca50c7ee972a0a3eafca5d756733565f9/packages/utils/src/index.ts#L46-L46 "Source code on GitHub")
 
 Custom error message to show when hit a non existent contract
 
@@ -64,7 +66,7 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 ### CHAIN_EXTENSION
 
-[packages/utils/src/index.ts:53-53](https://github.com/dyne/restroom-mw/blob/83c467361ce29fa1de5bfc7d84fbdf08b1d0962a/packages/utils/src/index.ts#L53-L53 "Source code on GitHub")
+[packages/utils/src/index.ts:53-53](https://github.com/dyne/restroom-mw/blob/fa95735ca50c7ee972a0a3eafca5d756733565f9/packages/utils/src/index.ts#L53-L53 "Source code on GitHub")
 
 Chain extension
 
@@ -72,8 +74,25 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 ### YML_EXTENSION
 
-[packages/utils/src/index.ts:60-60](https://github.com/dyne/restroom-mw/blob/83c467361ce29fa1de5bfc7d84fbdf08b1d0962a/packages/utils/src/index.ts#L60-L60 "Source code on GitHub")
+[packages/utils/src/index.ts:60-60](https://github.com/dyne/restroom-mw/blob/fa95735ca50c7ee972a0a3eafca5d756733565f9/packages/utils/src/index.ts#L60-L60 "Source code on GitHub")
 
 YML extension
 
 Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
+
+### zencodeNamedParamsOf
+
+[packages/utils/src/index.ts:86-95](https://github.com/dyne/restroom-mw/blob/fa95735ca50c7ee972a0a3eafca5d756733565f9/packages/utils/src/index.ts#L86-L95 "Source code on GitHub")
+
+Retrieve the named params content from the input (usually the combination of data and keys).
+This is for the sentences that do not directly have a params in them but instead
+a reference of the params are in the data and keys object.
+It is safe to be used also on sentences with plain params, as it does fallback
+to the Zencode.paramsOf function if not found in the input.
+
+Like: `Given I have a sawroom endpoint named 'mySawroomAddressDefinedInsideData'`
+
+#### Parameters
+
+*   `zencode` **Zencode** 
+*   `input` **ObjectLiteral** 
