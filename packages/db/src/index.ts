@@ -2,72 +2,41 @@ import { DataTypes, Model, Sequelize } from "sequelize";
 import { Restroom } from "@restroom-mw/core";
 import { Request, Response, NextFunction } from "express";
 import { ObjectLiteral } from "@restroom-mw/types";
+import { QueryGetRecord, QuerySaveOutput, QuerySaveVar } from "./interfaces";
+import { Zencode } from "@restroom-mw/zencode";
 
 class Result extends Model {
   public result: string;
 }
 
-const ACTIONS = {
-  GET_URI_KEYS: "have a database uri named {}",
-  GET_TABLE_KEYS: "have a database table named {}",
-  GET_RECORD:
-    "read the record {} of the table {} of the database {} and save the result into {}", //done
-  SAVE_OUTPUT: "save the output into the database {} into the table {}",
-  SAVE_VAR: "save the {} into the database {} into the table {}",
+const enum ACTIONS {
+  GET_URI_KEYS = "have a database uri named {}",
+  GET_TABLE_KEYS = "have a database table named {}",
+  GET_RECORD = "read the record {} of the table {} of the database {} and save the result into {}",
+  SAVE_OUTPUT = "save the output into the database {} into the table {}",
+  SAVE_VAR = "save the {} into the database {} into the table {}",
+  EXECUTE_SQL = "execute the SQL statement named {} on the database named {} and save the result into {}",
+  EXECUTE_SQL_WITH_PARAMS = "execute the SQL statement named {} pass the parameters named {} on the database named {} and save the result into {}",
 };
-
-const parse = (o: string) => {
-  try {
-    return JSON.parse(o);
-  } catch (e) {
-    throw new Error(`[DATABASE] Error in JSON format "${o}"`);
-  }
-};
-
-interface QueryGetRecord {
-  id: string;
-  table: string;
-  database: string;
-  varName: string;
-}
-
-interface QuerySaveOutput {
-  table: string;
-  database: string;
-}
-
-interface QuerySaveVar {
-  varName: string;
-  database: string;
-  table: string;
-}
 
 export default (req: Request, res: Response, next: NextFunction) => {
   try {
     const rr = new Restroom(req, res);
-
-    let keysContent;
-    let dataContent;
+    const parse = (o: string) => rr.safeJSONParse(o, `[DATABASE] Error in JSON format "${o}"`)
     let content: ObjectLiteral = {};
     let contentKeys: string[];
     let dbUriKeys: string[] = [];
     let tableKeys: string[] = [];
 
-    rr.onBefore(async (params) => {
-      const { zencode, keys, data } = params;
-      keysContent =
-        typeof keys === "undefined"
-          ? {}
-          : keys && typeof keys === "object"
-            ? keys
-            : parse(keys);
-      dataContent =
-        typeof data === "undefined"
-          ? {}
-          : data && typeof data === "object"
-            ? data
-            : parse(data);
-      content = { ...dataContent, ...keysContent };
+    const validate = (queries: any[]) => {
+      runChecks(queries, dbUriKeys, contentKeys, "database");
+      runChecks(queries, tableKeys, contentKeys, "table");
+    }
+
+    rr.onBefore(async (params: { zencode: Zencode, keys: string, data: ObjectLiteral }) => {
+      let { zencode, keys, data } = params;
+      if (!data) data = {}
+      content = rr.combineDataKeys({ ...data }, keys);
       contentKeys = Object.keys(content);
 
       if (zencode.match(ACTIONS.GET_URI_KEYS)) {
@@ -78,12 +47,23 @@ export default (req: Request, res: Response, next: NextFunction) => {
         tableKeys = zencode.paramsOf(ACTIONS.GET_TABLE_KEYS);
       }
 
+      if (zencode.match(ACTIONS.EXECUTE_SQL)) {
+        const promises = zencode.chunkedParamsOf(ACTIONS.EXECUTE_SQL, 3).map(async ([statement, database, output]: [content: string, database: string, output: string]) => {
+          const db = new Sequelize(content[database]);
+          const t = await db.transaction();
+          const [o, m] = await db.query(content[statement], { transaction: t });
+          await t.commit();
+          data[output] = JSON.stringify(o ? o : m)
+        })
+        await Promise.all(promises)
+      }
+
       if (zencode.match(ACTIONS.GET_RECORD)) {
         const dbAllRecordData: string[] = zencode.paramsOf(ACTIONS.GET_RECORD);
 
-        //create object(s) with the FOUR values of each GET_RECORD
+        // create object(s) with the FOUR values of each GET_RECORD
         const dbQueries: QueryGetRecord[] = [];
-        for (var i = 0; i < dbAllRecordData.length; i += 4) {
+        for (let i = 0; i < dbAllRecordData.length; i += 4) {
           dbQueries.push({
             id: dbAllRecordData[i],
             table: dbAllRecordData[i + 1],
@@ -91,8 +71,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
             varName: dbAllRecordData[i + 3],
           });
         }
-        runChecks(dbQueries, dbUriKeys, contentKeys, "database");
-        runChecks(dbQueries, tableKeys, contentKeys, "table");
+        validate(dbQueries);
         try {
           for (const query of dbQueries) {
             const db = new Sequelize(content[query.database]);
@@ -110,11 +89,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
               if (result) {
                 result = result.get({ plain: true });
                 // column name is result
-                const resultData =
-                  typeof result["result"] === "object"
-                    ? result["result"]
-                    : parse(result["result"]);
-                checkForNestedBoolean(resultData);
+                const resultData = parse(result.result);
                 data[query.varName] = resultData;
               } else {
                 throw new Error(`[DATABASE]
@@ -127,28 +102,26 @@ export default (req: Request, res: Response, next: NextFunction) => {
             db.close();
           }
         } catch (e) {
-          throw new Error(`[DATABASE]
-          Databse error: ${e}`);
+          throw new Error(`[DATABASE] Database error: ${e}`);
         }
       }
     });
 
-    rr.onSuccess(async (args: { result: any; zencode: any }) => {
+    rr.onSuccess(async (args: { result: any; zencode: Zencode }) => {
       const { result, zencode } = args;
 
       if (zencode.match(ACTIONS.SAVE_OUTPUT)) {
         const dbAllSaveOutput: string[] = zencode.paramsOf(ACTIONS.SAVE_OUTPUT);
         const dbQueries: QuerySaveOutput[] = [];
-        //create object(s) with the TWO values in each GET_RECORD
-        for (var i = 0; i < dbAllSaveOutput.length; i += 2) {
+        // create object(s) with the TWO values in each GET_RECORD
+        for (let j = 0; j < dbAllSaveOutput.length; j += 2) {
           dbQueries.push({
-            database: dbAllSaveOutput[i],
-            table: dbAllSaveOutput[i + 1],
+            database: dbAllSaveOutput[j],
+            table: dbAllSaveOutput[j + 1],
           });
         }
-        //check that table and db are defined in keys or data, and in zencode
-        runChecks(dbQueries, dbUriKeys, contentKeys, "database");
-        runChecks(dbQueries, tableKeys, contentKeys, "table");
+        // check that table and db are defined in keys or data, and in zencode
+        validate(dbQueries);
         try {
           for (const query of dbQueries) {
             const db = new Sequelize(content[query.database]);
@@ -162,7 +135,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
             );
             await Result.sync();
             try {
-              //column name must be result
+              // column name must be result
               await Result.create({ result: JSON.stringify(result) });
             } catch (e) {
               throw new Error(`[DATABASE]
@@ -171,8 +144,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
             db.close();
           }
         } catch (e) {
-          throw new Error(`[DATABASE]
-            Databse error: ${e}`);
+          throw new Error(`[DATABASE] Database error: ${e}`);
         }
       }
 
@@ -181,17 +153,16 @@ export default (req: Request, res: Response, next: NextFunction) => {
           typeof result === "object" ? result : parse(result);
         const dbAllSaveVar: string[] = zencode.paramsOf(ACTIONS.SAVE_VAR);
         const dbQueries: QuerySaveVar[] = [];
-        //create object(s) with the THREE values in each GET_RECORD
-        for (var i = 0; i < dbAllSaveVar.length; i += 3) {
+        // create object(s) with the THREE values in each GET_RECORD
+        for (let i = 0; i < dbAllSaveVar.length; i += 3) {
           dbQueries.push({
             varName: dbAllSaveVar[i],
             database: dbAllSaveVar[i + 1],
             table: dbAllSaveVar[i + 2],
           });
         }
-        //check that table and db are defined in keys or data and in zencode
-        runChecks(dbQueries, dbUriKeys, contentKeys, "database");
-        runChecks(dbQueries, tableKeys, contentKeys, "table");
+        // check that table and db are defined in keys or data and in zencode
+        validate(dbQueries);
         try {
           for (const query of dbQueries) {
             if (!resultObj[query.varName])
@@ -209,7 +180,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
             );
             await Result.sync();
             try {
-              //column name must be result
+              // column name must be result
               await Result.create({
                 result: JSON.stringify({
                   [query.varName]: resultObj[query.varName],
@@ -222,8 +193,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
             db.close();
           }
         } catch (e) {
-          throw new Error(`[DATABASE]
-            Databse error: ${e}`);
+          throw new Error(`[DATABASE] Database error: ${e}`);
         }
       }
     });
@@ -240,7 +210,7 @@ const runChecks = (
   keyName: string
 ) => {
   keys.forEach((key: any) => {
-    //Check that all enpoints (urlKeys) have been defined using statement EXTERNAL_CONNECTION
+    // Check that all enpoints (urlKeys) have been defined using statement EXTERNAL_CONNECTION
     if (actionKeys.includes(key[keyName]) === false) {
       throw new Error(`[DATABASE]
               Error: "${key[keyName]}" has not been defined in zencode, please define it with
@@ -255,25 +225,4 @@ const runChecks = (
       }
     }
   });
-};
-
-const checkForNestedBoolean = (obj: any) => {
-  const res = {};
-  function recurse(obj: { [x: string]: any }, current: string) {
-    for (const key in obj) {
-      let value = obj[key];
-      if (value != undefined) {
-        if (value && typeof value === "object") {
-          recurse(value, key);
-        } else {
-          if (typeof value === "boolean") {
-            throw new Error(`[HTTP]
-                      Boolean values are not permitted. Response JSON has property "${key}" with a boolean value.
-                      Please use, for example, 0 and 1`);
-          }
-        }
-      }
-    }
-  }
-  recurse(obj, null);
 };

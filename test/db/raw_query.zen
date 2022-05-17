@@ -1,0 +1,11 @@
+Rule caller restroom-mw
+Given I have a database uri named 'database'
+Given I have a 'string' named 'result_1'
+Given I have a 'string' named 'result_2'
+Given I have a 'string' named 'result_3'
+Given I have a 'string' named 'result_4'
+When I execute the SQL statement named 'query_1' on the database named 'database' and save the result into 'result_1'
+When I execute the SQL statement named 'query_2' on the database named 'database' and save the result into 'result_2'
+When I execute the SQL statement named 'query_3' on the database named 'database' and save the result into 'result_3'
+When I execute the SQL statement named 'query_4' on the database named 'database' and save the result into 'result_4'
+Then print all data

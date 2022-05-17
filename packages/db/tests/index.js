@@ -1,7 +1,9 @@
 import test from "ava";
 import supertest from "supertest";
 import express from "express";
-import { Sequelize } from "sequelize";
+import {
+  Sequelize
+} from "sequelize";
 import bodyParser from "body-parser";
 import fs from "fs";
 
@@ -40,7 +42,9 @@ test.beforeEach(async (t) => {
   });
   await Table.sync();
   try {
-    const results = Array(5).fill(JSON.stringify({ testkey: "test value" }));
+    const results = Array(5).fill(JSON.stringify({
+      testkey: "test value"
+    }));
     for (const result of results) {
       await Table.create({
         result
@@ -60,13 +64,13 @@ test.serial(
   "Middleware db should work and response includes variable for db",
   async (t) => {
     try {
-<<<<<<< HEAD
-      const { app } = t.context;
+      const {
+        app
+      } = t.context;
       const res = await app.post("/db-test-complex");
       t.is(res.status, 200, res.text);
       t.true(
-        Object.keys(res.body).includes("keypair"),
-        'could not find "keypair " in response'
+        Object.keys(res.body).includes("keyring"), res.text
       );
       t.true(
         Object.keys(res.body).includes("myZenroomStringDictionary"),
@@ -80,7 +84,9 @@ test.serial(
 
 test.serial("Middleware db should save the result in db1", async (t) => {
   try {
-    const { app } = t.context;
+    const {
+      app
+    } = t.context;
     const res = await app.post("/db-test-complex").catch((e) => {
       throw e;
     });
@@ -98,7 +104,9 @@ test.serial("Middleware db should save the result in db1", async (t) => {
     let result;
     try {
       let query = await Result1.findByPk(6);
-      query = query.get({ plain: true });
+      query = query.get({
+        plain: true
+      });
       result = JSON.parse(query["result"]);
     } catch (e) {
       result = null;
@@ -119,7 +127,9 @@ test.serial(
   "Middleware db should save the result of variable given in zencode to db2",
   async (t) => {
     try {
-      const { app } = t.context;
+      const {
+        app
+      } = t.context;
       const res = await app.post("/db-test-complex").catch((e) => {
         throw e;
       });
