@@ -43,29 +43,29 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       const namedParamsOf = zencodeNamedParamsOf(zencode, input);
 
       if(zencode.match(GENERATEKEY)) {
-	// keypair is in base58 format
-	const { privateKey, publicKey } = new Ed25519Keypair();
-	data[ 'ed_keypair' ] = { private_key: privateKey, public_key: publicKey };
+        // keypair is in base58 format
+        const { privateKey, publicKey } = new Ed25519Keypair();
+        data[ 'ed_keypair' ] = { private_key: privateKey, public_key: publicKey };
       }
-      
+
       if(zencode.match(CONNECT)) {
         const [ endpoint ] = namedParamsOf(CONNECT);
-	// does not perform any http request
-	connection = new Connection(endpoint);
+        // does not perform any http request
+        connection = new Connection(endpoint);
       }
-      
+
       if(zencode.match(RETRIEVE)) {
-	const [ id, out ] =  namedParamsOf(RETRIEVE);
-	try {
-	  const receipt = await connection.getTransaction(id);
-	  let res: TransactionRetrieved = { 'asset': receipt.asset };
-	  if(receipt.metadata) {
-	    res.metadata = receipt.metadata;
-	  }
-	  data[ 'out' ] = res;
-	} catch (e) {
-	  throw new Error("Transaction not found");
-	}
+        const [ id, out ] =  namedParamsOf(RETRIEVE);
+        try {
+          const receipt = await connection.getTransaction(id);
+          let res: TransactionRetrieved = { 'asset': receipt.asset };
+          if(receipt.metadata) {
+            res.metadata = receipt.metadata;
+          }
+          data[ 'out' ] = res;
+        } catch (e) {
+          throw new Error("Transaction not found");
+        }
       }
     });
 
@@ -73,73 +73,73 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       const { zencode, result } = params;
 
       const store_asset = ( asset: Record<string, any>, metadata: Record<string, any> ) => {
-	if( !result.ed_keypair || !result.ed_keypair.public_key ) {
-	  throw new Error("Public key not found");
-	}
-	const tx = Transaction.makeCreateTransaction(
-	  asset,
-	  metadata,
-	  [ Transaction.makeOutput(
-	    Transaction.makeEd25519Condition(
-	      result.ed_keypair.public_key ))
-	  ],
-	  result.ed_keypair.public_key
-	);
-	result[ 'planetmint_transaction' ] = utf8_to_b64(JSON.stringify(tx));
+        if( !result.ed_keypair || !result.ed_keypair.public_key ) {
+          throw new Error("Public key not found");
+        }
+        const tx = Transaction.makeCreateTransaction(
+          asset,
+          metadata,
+          [ Transaction.makeOutput(
+            Transaction.makeEd25519Condition(
+              result.ed_keypair.public_key ))
+          ],
+          result.ed_keypair.public_key
+        );
+        result[ 'planetmint_transaction' ] = utf8_to_b64(JSON.stringify(tx));
       }
 
       if(zencode.match(ASSET)) {
-	const [ asset ] = zencode.paramsOf(ASSET);
-	const metadata: Record<string, any> = null;
-	if( !result[ asset ] ) {
-	  throw new Error("Asset not found");
-	}
-	store_asset( result[ asset ], metadata );	
+        const [ asset ] = zencode.paramsOf(ASSET);
+        const metadata: Record<string, any> = null;
+        if( !result[ asset ] ) {
+          throw new Error("Asset not found");
+        }
+        store_asset( result[ asset ], metadata );
       }
 
       if(zencode.match(ASSET_METADATA)) {
-	const [ asset, metadata ] = zencode.paramsOf(ASSET_METADATA);
-	if( !result[asset] ) {
-	  throw new Error("Asset not found");
-	}
-	if( !result[metadata] ) {
-	  throw new Error("Metadata not found");
-	}
-	store_asset( result[ asset ], result[ metadata ] );
+        const [ asset, metadata ] = zencode.paramsOf(ASSET_METADATA);
+        if( !result[asset] ) {
+          throw new Error("Asset not found");
+        }
+        if( !result[metadata] ) {
+          throw new Error("Metadata not found");
+        }
+        store_asset( result[ asset ], result[ metadata ] );
       }
 
       if(zencode.match(SIGNATURE)) {
-	const [ tx_b64 ] = zencode.paramsOf(SIGNATURE);
-	if( !result[ tx_b64 ] ) {
-	  throw new Error("Planetmint transaction not found");
-	}
-	if( !result.ed_keypair || !result.ed_keypair.private_key ) {
-	  throw new Error("Private key not found");
-	}
-	const tx = JSON.parse(b64_to_utf8(result[ tx_b64 ]));
-	const signed_tx = Transaction.signTransaction(
-	  tx,
-	  result.ed_keypair.private_key );
-	result[ 'signed_planetmint_transaction' ] = utf8_to_b64(JSON.stringify(signed_tx));
+        const [ tx_b64 ] = zencode.paramsOf(SIGNATURE);
+        if( !result[ tx_b64 ] ) {
+          throw new Error("Planetmint transaction not found");
+        }
+        if( !result.ed_keypair || !result.ed_keypair.private_key ) {
+          throw new Error("Private key not found");
+        }
+        const tx = JSON.parse(b64_to_utf8(result[ tx_b64 ]));
+        const signed_tx = Transaction.signTransaction(
+          tx,
+          result.ed_keypair.private_key );
+        result[ 'signed_planetmint_transaction' ] = utf8_to_b64(JSON.stringify(signed_tx));
       }
-      
+
       if(zencode.match(BROADCAST)) {
-	const [ signed_tx_b64 ] = zencode.paramsOf(BROADCAST);
-	if( !result[signed_tx_b64] ) {
-	  throw new Error("Signed planetmint transaction not found");
-	}
-	if( !connection ) {
-	  throw new Error("Connection not defined");
-	}
-	const signed_tx = JSON.parse(b64_to_utf8(result[signed_tx_b64]));
-	try {
-	  const res = await connection.postTransactionCommit(signed_tx)
-	  result[ 'txId' ] = res.id;
-	} catch(e) {
-	  throw new Error(`Connection to the node failed: ${e}`);
-	}
+        const [ signed_tx_b64 ] = zencode.paramsOf(BROADCAST);
+        if( !result[signed_tx_b64] ) {
+          throw new Error("Signed planetmint transaction not found");
+        }
+        if( !connection ) {
+          throw new Error("Connection not defined");
+        }
+        const signed_tx = JSON.parse(b64_to_utf8(result[signed_tx_b64]));
+        try {
+          const res = await connection.postTransactionCommit(signed_tx)
+          result[ 'txId' ] = res.id;
+        } catch(e) {
+          throw new Error(`Connection to the node failed: ${e}`);
+        }
       }
-      
+
     });
     next();
   } catch (e) {
