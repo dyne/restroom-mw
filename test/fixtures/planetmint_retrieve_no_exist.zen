@@ -2,7 +2,7 @@ Rule unknown ignore
 
 # Restroom onBefore
 Given I have a planetmint endpoint named 'endpoint'
-Given I read the planetmint bytes with hash 'txId' and save the output into 'out'
+Given I read the planetmint transaction 'txId' and save the output into 'out'
 
 # Zenroom
 Given I have a 'string dictionary' named 'out'

@@ -43,9 +43,9 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       const namedParamsOf = zencodeNamedParamsOf(zencode, input);
 
       if(zencode.match(GENERATEKEY)) {
-        // keypair is in base58 format
-        const { privateKey, publicKey } = new Ed25519Keypair();
-        data[ 'ed_keypair' ] = { private_key: privateKey, public_key: publicKey };
+	// keypair is in base58 format
+	const { privateKey, publicKey } = new Ed25519Keypair();
+	data[ 'ed25519_keypair' ] = { private_key: privateKey, public_key: publicKey };
       }
 
       if(zencode.match(CONNECT)) {
@@ -55,17 +55,17 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       }
 
       if(zencode.match(RETRIEVE)) {
-        const [ id, out ] =  namedParamsOf(RETRIEVE);
-        try {
-          const receipt = await connection.getTransaction(id);
-          let res: TransactionRetrieved = { 'asset': receipt.asset };
-          if(receipt.metadata) {
-            res.metadata = receipt.metadata;
-          }
-          data[ 'out' ] = res;
-        } catch (e) {
-          throw new Error("Transaction not found");
-        }
+const [ id, out ] =  namedParamsOf(RETRIEVE);
+	try {
+	  const receipt = await connection.getTransaction(id);
+	  let res: TransactionRetrieved = { 'asset': receipt.asset };
+	  if(receipt.metadata) {
+	    res.metadata = receipt.metadata;
+	  }
+	  data[ 'out' ] = res;
+	} catch (e) {
+	  throw new Error("Transaction not found");
+	}
       }
     });
 
@@ -73,19 +73,19 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       const { zencode, result } = params;
 
       const store_asset = ( asset: Record<string, any>, metadata: Record<string, any> ) => {
-        if( !result.ed_keypair || !result.ed_keypair.public_key ) {
-          throw new Error("Public key not found");
-        }
-        const tx = Transaction.makeCreateTransaction(
-          asset,
-          metadata,
-          [ Transaction.makeOutput(
-            Transaction.makeEd25519Condition(
-              result.ed_keypair.public_key ))
-          ],
-          result.ed_keypair.public_key
-        );
-        result[ 'planetmint_transaction' ] = utf8_to_b64(JSON.stringify(tx));
+	if( !result.ed25519_keypair || !result.ed25519_keypair.public_key ) {
+	  throw new Error("Public key not found");
+	}
+	const tx = Transaction.makeCreateTransaction(
+	  asset,
+	  metadata,
+	  [ Transaction.makeOutput(
+	    Transaction.makeEd25519Condition(
+	      result.ed25519_keypair.public_key ))
+	  ],
+	  result.ed25519_keypair.public_key
+	);
+	result[ 'planetmint_transaction' ] = utf8_to_b64(JSON.stringify(tx));
       }
 
       if(zencode.match(ASSET)) {
@@ -109,18 +109,18 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       }
 
       if(zencode.match(SIGNATURE)) {
-        const [ tx_b64 ] = zencode.paramsOf(SIGNATURE);
-        if( !result[ tx_b64 ] ) {
-          throw new Error("Planetmint transaction not found");
-        }
-        if( !result.ed_keypair || !result.ed_keypair.private_key ) {
-          throw new Error("Private key not found");
-        }
-        const tx = JSON.parse(b64_to_utf8(result[ tx_b64 ]));
-        const signed_tx = Transaction.signTransaction(
-          tx,
-          result.ed_keypair.private_key );
-        result[ 'signed_planetmint_transaction' ] = utf8_to_b64(JSON.stringify(signed_tx));
+	const [ tx_b64 ] = zencode.paramsOf(SIGNATURE);
+	if( !result[ tx_b64 ] ) {
+	  throw new Error("Planetmint transaction not found");
+	}
+	if( !result.ed25519_keypair || !result.ed25519_keypair.private_key ) {
+	  throw new Error("Private key not found");
+	}
+	const tx = JSON.parse(b64_to_utf8(result[ tx_b64 ]));
+	const signed_tx = Transaction.signTransaction(
+	  tx,
+	  result.ed25519_keypair.private_key );
+	result[ 'signed_planetmint_transaction' ] = utf8_to_b64(JSON.stringify(signed_tx));
       }
 
       if(zencode.match(BROADCAST)) {
