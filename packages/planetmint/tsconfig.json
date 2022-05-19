@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "resolveJsonModule": true,
+    "outDir": "./dist",
+    "rootDir": "./src"
+  },
+  "references": [{
+    "path": "../core/"
+  }, {
+    "path": "../types"
+  }],
+  "exclude": ["node_modules", "dist", "tests"],
+}
