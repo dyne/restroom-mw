@@ -72,7 +72,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     rr.onSuccess(async (params) => {
       const { zencode, result } = params;
 
-       const store_asset = ( asset: Record<string, any>, metadata: Record<string, any> ) => {
+      const store_asset = ( asset: Record<string, any>, metadata: Record<string, any> ) => {
 	if( !result.ed_keypair || !result.ed_keypair.public_key ) {
 	  throw new Error("Public key not found");
 	}
@@ -139,7 +139,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
 	  throw new Error(`Connection to the node failed: ${e}`);
 	}
       }
-	
+      
     });
     next();
   } catch (e) {
