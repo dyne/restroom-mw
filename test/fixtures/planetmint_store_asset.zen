@@ -1,0 +1,21 @@
+Rule unknown ignore
+
+# Restroom onBefore
+Given I have a planetmint endpoint named 'endpoint'
+
+# Zenroom
+Given I have a 'base58 dictionary' named 'ed25519 keypair'
+Given I have a 'string dictionary' named 'asset'
+Given I have a 'string' named 'endpoint'
+When done
+
+# Restroom onBefore
+When I create the ed25519 keypair
+
+# Restrom onSuccess
+When I create the planetmint transaction to store asset named 'asset'
+When I create the signed planetmint transaction of 'planetmint_transaction'
+Then ask planetmint to broadcast the 'signed_planetmint_transaction'
+
+# Zenroom
+Then print the data

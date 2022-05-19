@@ -1,0 +1,47 @@
+{
+  "name": "@restroom-mw/planetmint",
+  "version": "0.1.0",
+  "description": "Middleware to interact with planetmint",
+  "keywords": [
+    "blockchain",
+    "zenroom",
+    "planetmint",
+    "api",
+    "nodejs"
+  ],
+  "author": "Matteo Cristino <matteo@dyne.org>",
+  "homepage": "https://dyne.github.io/restroom-mw/",
+  "license": "AGPL-3.0",
+  "main": "dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dyne/restroom-mw.git"
+  },
+  "scripts": {
+    "clean": "rimraf dist && rimraf tsconfig.tsbuildinfo",
+    "doc": "documentation readme src/** -g -f md -s 'API' --readme-file ../../docs/packages/planetmint.md --shallow",
+    "links": "yarn link",
+    "unlinks": "yarn unlink",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix --ext .js,.jsx .",
+    "watch": "tsc -b tsconfig.json -w",
+    "build": "tsc -b tsconfig.json"
+  },
+  "bugs": {
+    "url": "https://github.com/dyne/restroom-mw/issues"
+  },
+  "ava": {
+    "babel": true
+  },
+  "dependencies": {
+    "base64url": "3.0.1",
+    "web3": "1.7.0",
+    "bigchaindb-driver": "4.3.0"
+  }
+}
