@@ -21,7 +21,6 @@ interface TransactionRetrieved {
 
 require("dotenv").config();
 let connection: Connection = null;
-let input: ObjectLiteral = null;
 
 const utf8ToB64 = ( str: string ) => {
   return Buffer.from( str, 'utf-8').toString( 'base64' );
@@ -37,7 +36,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   try {
     rr.onBefore(async (params) => {
       const { zencode, keys, data } = params;
-      input = rr.combineDataKeys(data, keys);
+      const input = rr.combineDataKeys(data, keys);
       const namedParamsOf = zencodeNamedParamsOf(zencode, input);
 
       if(zencode.match(GENERATEKEY)) {

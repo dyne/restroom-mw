@@ -40,14 +40,12 @@ test("Retrieve a zenroom object", async (t) => {
   const hash = "X3Ngi92hcL98N9SelgXAVu1SM8SXI18KZhFKTq4oyzo="
   const { app } = t.context;
   const res = await app.post("/planetmint_retrieve");
-  console.log(res.body.out.hash);
   t.is(res.status, 200, res.text);
   t.is(res.body.hash, hash);
 });
 
-/*test("Rename dictionary and broadcast it", async (t) => {
+test("Retrieve object that doesn't exist", async (t) => {
   const { app } = t.context;
-  const res = await app.post("/planetmint_rename_and_broadcast");
+  var res = await app.post("/planetmint_retrieve_no_exist");
   t.is(res.status, 500, res.text);
-});*/
-
+});
