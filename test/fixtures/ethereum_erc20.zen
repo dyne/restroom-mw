@@ -1,4 +1,4 @@
-Rule unknown ignore 
+Rule unknown ignore
 Given I have a 'string' named 'my decimals'
 Given I have a 'string' named 'my name'
 Given I have a 'string' named 'my symbol'
@@ -12,12 +12,12 @@ Given I have a 'string' named 'balance'
 Given I have a ethereum endpoint named 'fabchain'
 Given I query ethereum for the 'decimals' for erc20 'contract_address' named 'my_decimals'
 Given I query ethereum for the 'name' for erc20 'contract_address' named 'my_name'
-Given I query ethereum for the 'symbol' for erc20 'B93C83128168e6001Be4E4dE491A9d551ca81A71' named 'my_symbol'
+Given I query ethereum for the 'symbol' for erc20 '553092EfeaD3Ba876989658D57279458a6bFB0D3' named 'my_symbol'
 Given I query ethereum for the 'total supply' for erc20 'contract_address' named 'my_total_supply'
 Given I query ethereum for the 'balance' of 'owner' for erc20 'contract_address' named 'my_balance'
 Given I query ethereum for the 'decimals' for erc20 'contract_address'
 Given I query ethereum for the 'name' for erc20 'contract_address'
 Given I query ethereum for the 'symbol' for erc20 'contract_address'
-Given I query ethereum for the 'total supply' for erc20 'B93C83128168e6001Be4E4dE491A9d551ca81A71'
+Given I query ethereum for the 'total supply' for erc20 '553092EfeaD3Ba876989658D57279458a6bFB0D3'
 Given I query ethereum for the 'balance' of 'someone' for erc20 'contract_address'
 Then print data
