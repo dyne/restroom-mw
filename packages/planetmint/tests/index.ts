@@ -46,6 +46,6 @@ test("Retrieve a zenroom object", async (t) => {
 
 test("Retrieve object that doesn't exist", async (t) => {
   const { app } = t.context;
-  var res = await app.post("/planetmint_retrieve_no_exist");
+  const res = await app.post("/planetmint_retrieve_no_exist");
   t.is(res.status, 500, res.text);
 });

@@ -20,7 +20,6 @@ interface TransactionRetrieved {
 }
 
 require("dotenv").config();
-let connection: Connection = null;
 
 const utf8ToB64 = ( str: string ) => {
   return Buffer.from( str, 'utf-8').toString( 'base64' );
@@ -31,6 +30,7 @@ const b64ToUtf8 = ( str: string ) => {
 }
 
 export default async (req: Request, res: Response, next: NextFunction) => {
+  let connection: Connection = null;
   const rr = new Restroom(req, res);
 
   try {
