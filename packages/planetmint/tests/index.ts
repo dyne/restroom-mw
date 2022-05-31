@@ -19,34 +19,33 @@ test.before(async (t) => {
 
 test("Store the signed tx of an asset", async (t) => {
   const { app } = t.context;
-  var res = await app.post("/planetmint_store_asset");
+  const res = await app.post("/planetmint_store_asset");
   t.is(res.status, 200, res.text);
-  t.is(typeof res.body.txId, "string");
-  t.is(res.body.txId.length, 64);
-  console.log(`{ 'txid': ${res.body.txId} }`);
+  t.is(typeof res.body.txid, "string");
+  t.is(res.body.txid.length, 64);
+  console.log(`{ 'txid': ${res.body.txid} }`);
 });
 
 test("Store the signed tx of an asset with metadata", async (t) => {
   const { app } = t.context;
-  var res = await app.post("/planetmint_store_asset_metadata");
+  const res = await app.post("/planetmint_store_asset_metadata");
   t.is(res.status, 200, res.text);
-  t.is(typeof res.body.txId, "string");
-  t.is(res.body.txId.length, 64);
-  console.log(`{ 'txid': ${res.body.txId} }`);
+  t.is(typeof res.body.txid, "string");
+  t.is(res.body.txid.length, 64);
+  console.log(`{ 'txid': ${res.body.txid} }`);
 });
 
 
 test("Retrieve a zenroom object", async (t) => {
   const hash = "X3Ngi92hcL98N9SelgXAVu1SM8SXI18KZhFKTq4oyzo="
   const { app } = t.context;
-  var res = await app.post("/planetmint_retrieve");
-  console.log(res.body.out.hash);
+  const res = await app.post("/planetmint_retrieve");
   t.is(res.status, 200, res.text);
   t.is(res.body.hash, hash);
 });
 
 test("Retrieve object that doesn't exist", async (t) => {
   const { app } = t.context;
-  var res = await app.post("/planetmint_retrieve_no_exist");
+  const res = await app.post("/planetmint_retrieve_no_exist");
   t.is(res.status, 500, res.text);
 });

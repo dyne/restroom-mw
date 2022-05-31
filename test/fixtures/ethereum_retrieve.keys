@@ -1,3 +1,4 @@
-fabchain: "http://test.fabchain.net:8545"
-myTag: "b144ae7c53c0e26667b1009221b4a32b5b4865f67e738a3477a5acd4e4dfc5d7"
-
+{
+	"fabchain": "http://test.fabchain.net:8545",
+	"myTag": "a1849877633fc415b4475a1d9ac2dea52d4d3ef475650f6e5cb35511217cbbef",
+}

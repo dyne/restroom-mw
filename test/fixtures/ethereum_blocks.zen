@@ -1,10 +1,13 @@
 Rule unknown ignore
+
+Given I have a ethereum endpoint named 'fabchain'
+Given I read from 'ethereum' the data in the HEAD and save the output into 'my_hash'
+Given I read from 'ethereum' the hash in the block preceding 'my_hash' and save the output into 'previous_hash'
+Given I read from 'ethereum' the hash in the block preceding 'old_hash' and save the output into 'previous_old_hash'
+
 Given I have a 'string' named 'my hash'
 Given I have a 'string' named 'previous hash'
 Given I have a 'string' named 'old hash'
 Given I have a 'string' named 'previous old hash'
-When I have a ethereum endpoint named 'fabchain'
-When I read from 'ethereum' the data in the HEAD and save the output into 'my_hash'
-When I read from 'ethereum' the hash in the block preceding 'my_hash' and save the output into 'previous_hash'
-When I read from 'ethereum' the hash in the block preceding 'old_hash' and save the output into 'previous_old_hash'
+
 Then print data

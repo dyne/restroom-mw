@@ -3,5 +3,5 @@
 		  "city": "Berlin",
 	 	  "temperature": "22"
 	 	  },
-	"endpoint": "http://3.66.221.17/api/v1/"
+	"endpoint": "http://3.68.108.18/api/v1/"
 }

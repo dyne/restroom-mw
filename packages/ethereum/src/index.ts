@@ -24,7 +24,6 @@ require("dotenv").config();
 const ERC20_ABI = require('./erc20_abi.json');
 
 let web3: Web3 = null;
-let input: ObjectLiteral = null;
 
 const BLOCKCHAIN = "ethereum"
 
@@ -38,11 +37,11 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   try {
     rr.onBefore(async (params) => {
       const { zencode, keys, data } = params;
-      input = rr.combineDataKeys(data, keys);
+      const input = rr.combineDataKeys(data, keys);
       const namedParamsOf = zencodeNamedParamsOf(zencode, input);
 
       const call_erc20 = async (command: string, contractAddress: string,
-                            variableName: string, args: string[]) => {
+                                variableName: string, args: string[]) => {
         if(!web3.utils.isAddress(contractAddress)) {
           throw new Error(`Not an ethereum address ${contractAddress}`);
         }
