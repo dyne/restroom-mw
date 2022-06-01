@@ -5,9 +5,19 @@ import { Request, Response, NextFunction } from "express";
 import { HTTP_PORT, HTTPS_PORT } from "@restroom-mw/utils";
 
 const options = {
-  customCss: `.swagger-ui .topbar a img {
+  customCss: `
+  .swagger-ui .topbar a img {
     content: url(https://dev.zenroom.org/_media/images/zenroom_logo.png);
- } .swagger-ui .topbar { background-color: #dedede }`,
+ }
+ .swagger-ui .topbar { background-color: #dedede }
+ .swagger-ui h1 {
+    font-size: 1.0em;
+    margin: 0.67em 0;
+    font-style: italic;
+    color: gray;
+    font-weight: 100;
+}
+ `,
 };
 
 export default (options: MiddlewareUIOption) => {
