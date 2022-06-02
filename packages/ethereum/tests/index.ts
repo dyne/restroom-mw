@@ -67,3 +67,12 @@ test("Read head and previous", async (t) => {
   t.is(res.body.previous_hash.length, 64)
   t.is(res.body.previous_old_hash, "130dbca9dd4012891e8616ae1f43423a6e4f94f685293d23df84af45990994b3")
 });
+
+test("Read the address balance", async (t) => {
+  const { app } = t.context;
+  var res = await app.post("/ethereum_balance");
+  t.is(res.status, 200, res.text);
+  t.is(typeof res.body.ethereum_balance, "string");
+  t.is(res.body.ethereum_balance, "1000000000000000000");
+  console.log(`{ 'ethereum balance': ${res.body.ethereum_balance} }`);
+});

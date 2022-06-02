@@ -120,6 +120,7 @@ test("getContracts works correctly", async (t) => {
     "/database",
     "/database_table",
     "/empty",
+    "/ethereum_balance",
     "/ethereum_blocks",
     "/ethereum_erc20",
     "/ethereum_retrieve",
