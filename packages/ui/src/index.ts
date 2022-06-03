@@ -21,7 +21,6 @@ const options = {
 };
 
 export default (options: MiddlewareUIOption) => {
-  const rootPath = options.path;
   return [
     async (
       req: { hostname: any; swaggerDoc: OpenAPI },
@@ -29,7 +28,8 @@ export default (options: MiddlewareUIOption) => {
       next: NextFunction
     ) => {
       try {
-        const swaggerDoc = await generate(rootPath);
+        options.path = (options.path==='apiroom')? res.locals.path : options.path
+        const swaggerDoc = await generate(options.path);
         swaggerDoc.servers[0].variables.host = { default: req.hostname };
         // The port of the server could have changed
         const httpPort = parseInt(process.env.HTTP_PORT) || HTTP_PORT
