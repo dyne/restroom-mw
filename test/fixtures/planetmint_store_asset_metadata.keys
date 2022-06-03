@@ -6,5 +6,5 @@
 	"metadata" : {
 		   "what": "my first buigcahindb transaction"
 		   },
-	"endpoint": "http://3.73.50.172/api/v1/"
+	"endpoint": "https://test.ipdb.io/api/v1/"
 }

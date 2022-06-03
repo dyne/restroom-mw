@@ -1,0 +1,9 @@
+Rule unknown ignore
+Scenario ethereum
+
+Given I have a ethereum endpoint named 'fabchain'
+Given I read the ethereum balance for 'my_address'
+
+Given I have a 'wei value' named 'ethereum balance'
+
+Then print the 'ethereum balance' as 'wei value'

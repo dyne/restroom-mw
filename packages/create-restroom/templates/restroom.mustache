@@ -19,6 +19,12 @@ import rrredis from "@restroom-mw/redis";
 {{#@restroom-mw/sawroom}}
 import sawroom from "@restroom-mw/sawroom";
 {{/@restroom-mw/sawroom}}
+{{#@restroom-mw/ethereum}}
+import ethereum from "@restroom-mw/ethereum";
+{{/@restroom-mw/ethereum}}
+{{#@restroom-mw/planetmint}}
+import planetmint from "@restroom-mw/planetmint";
+{{/@restroom-mw/planetmint}}
 {{#@restroom-mw/timestamp}}
 import timestamp from "@restroom-mw/timestamp";
 {{/@restroom-mw/timestamp}}
@@ -60,6 +66,12 @@ app.use(rrredis.default);
 {{#@restroom-mw/sawroom}}
 app.use(sawroom.default);
 {{/@restroom-mw/sawroom}}
+{{#@restroom-mw/ethereum}}
+app.use(ethereum.default);
+{{/@restroom-mw/ethereum}}
+{{#@restroom-mw/planetmint}}
+app.use(planetmint.default);
+{{/@restroom-mw/planetmint}}
 {{#@restroom-mw/timestamp}}
 app.use(timestamp.default);
 {{/@restroom-mw/timestamp}}

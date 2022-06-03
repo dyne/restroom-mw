@@ -19,11 +19,16 @@ test.before(async (t) => {
 
 test("Store the signed tx of an asset", async (t) => {
   const { app } = t.context;
-  const res = await app.post("/planetmint_store_asset");
+  const asset = {city: "Berlin", temperature: "22"};
+  const res = await app.post("/planetmint_store_asset")
+    .send({keys: {}, data: {asset}});
   t.is(res.status, 200, res.text);
   t.is(typeof res.body.txid, "string");
   t.is(res.body.txid.length, 64);
   console.log(`{ 'txid': ${res.body.txid} }`);
+  const resRetrieve = await app.post("/planetmint_retrieve")
+    .send({keys: {}, data: {"txid": res.body.txid}});
+  t.is(res.body.hash, resRetrieve.body.hash);
 });
 
 test("Store the signed tx of an asset with metadata", async (t) => {
@@ -35,8 +40,9 @@ test("Store the signed tx of an asset with metadata", async (t) => {
   console.log(`{ 'txid': ${res.body.txid} }`);
 });
 
-
-test("Retrieve a zenroom object", async (t) => {
+// Test network looks not persisten, we can only read
+// what we store, joined with the "store test"
+test.skip("Retrieve a zenroom object", async (t) => {
   const hash = "X3Ngi92hcL98N9SelgXAVu1SM8SXI18KZhFKTq4oyzo="
   const { app } = t.context;
   const res = await app.post("/planetmint_retrieve");

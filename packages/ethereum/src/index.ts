@@ -14,6 +14,7 @@ import {
   ERC20_1_NAMED,
   READ_HEAD,
   READ_PREVIOUS,
+  READ_BALANCE,
   BROADCAST,
 } from "./actions";
 import Web3 from 'web3';
@@ -178,6 +179,14 @@ export default async (req: Request, res: Response, next: NextFunction) => {
             data[variableName] = result.parentHash.slice(2);
           }
         }
+      }
+
+      if(zencode.match(READ_BALANCE)) {
+        validateWeb3();
+        const [ address_input ] = namedParamsOf(READ_BALANCE);
+        const address = input[address_input] || address_input;
+        const balance = await web3.eth.getBalance(address);
+        data['ethereum_balance'] = balance.toString();
       }
     });
 

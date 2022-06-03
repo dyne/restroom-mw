@@ -61,7 +61,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
           }
           data[ out ]= txResult;
         } catch (e) {
-          throw new Error("Transaction not found");
+          throw new Error(`Transaction not found: ${id}`);
         }
       }
     });
