@@ -8,7 +8,7 @@ Given I create the ed25519 keypair
 Given I have a 'base58 dictionary' named 'ed25519 keypair'
 Given I have a 'string dictionary' named 'asset'
 Given I have a 'string' named 'endpoint'
-When done
+When I create the hash of 'asset'
 
 
 # Restrom onSuccess
