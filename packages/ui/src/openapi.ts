@@ -76,26 +76,30 @@ export const generate = async (rootPath: string) => {
   openapi.paths = {};
   for (const path in paths) {
 
-    const requestBody = {
-      content: {
-        "application/json": {
-          schema: {
-            properties: {
-              data: {
-                description: "DATA field",
-                type: "object",
-              },
-              keys: {
-                description: "KEYS field",
-                type: "object",
-              },
+    const requestBody = (keysExample, dataExample)=> ({
+        content: {
+            "application/json": {
+                schema: {
+                properties: {
+                    data: {
+                        description: "DATA field",
+                        type: "object",
+                        example: dataExample
+                    },
+                    keys: {
+                        description: "KEYS field",
+                        type: "object",
+                        example: keysExample
+                    },
+                },
+                },
             },
-          },
         },
-      },
-    };
+    });
 
     const contract = Zencode.fromPath(paths[path].fullPath);
+    const keysExample = paths[path].hasKeys? nl2br(Zencode.fromPath(paths[path].fullPath.split(".")[0] + '.keys').content) : {};
+    const dataExample = paths[path].hasData? nl2br(Zencode.fromPath(paths[path].fullPath.split(".")[0] + '.data').content) : {};
     const isChain = paths[path].type == 'yml' ? true : false;
     const description = isChain ? nl2br(preserveTabs(contract.content)) : nl2br(contract.content);
     const tag = isChain ? '⛓️ chain of contracts' : `🔖 ${contract.tag}`;
@@ -109,7 +113,7 @@ export const generate = async (rootPath: string) => {
         consumes: mime,
         produces: mime,
         operationId: `_function_${exposedPath}_post`,
-        requestBody,
+        requestBody: requestBody(keysExample, dataExample),
         responses,
       },
     };
