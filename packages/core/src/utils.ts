@@ -1,7 +1,7 @@
 import { Zencode } from "@restroom-mw/zencode";
 import readdirp from "readdirp";
 import fuzzball from "fuzzball";
-import { CUSTOM_404_MESSAGE, ZENCODE_DIR, YML_EXTENSION } from "@restroom-mw/utils";
+import { CUSTOM_404_MESSAGE, ZENCODE_DIR, YML_EXTENSION, KEYS_DIR } from "@restroom-mw/utils";
 import { Request, Response } from "express";
 import fs from "fs";
 import * as yaml from 'js-yaml';
@@ -12,11 +12,11 @@ const OBJECT = 'object';
 
 export const getKeys = (contractName: string) => {
   try {
-    const keysContent = fs.readFileSync(`${ZENCODE_DIR}/${contractName}.keys`, 'utf8');
+    const keysContent = fs.readFileSync(`${KEYS_DIR}/${contractName}.keys`, 'utf8');
     return JSON.stringify(yaml.load(keysContent));
   } catch (e) {
     try {
-      const keysContent = fs.readFileSync(`${ZENCODE_DIR}/${contractName}.keys`, 'utf8');
+      const keysContent = fs.readFileSync(`${KEYS_DIR}/${contractName}.keys`, 'utf8');
       return JSON.stringify(JSON.parse(keysContent))
     } catch (e) {
       return null;
