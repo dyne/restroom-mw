@@ -20,6 +20,7 @@ export default (options: MiddlewareUIOption) => {
       font-weight: 100;
     }
   `
+export default (options: MiddlewareUIOption, publicKeys:boolean = false) => {
   return [
     async (
       req: { hostname: any; swaggerDoc: OpenAPI },
