@@ -20,7 +20,7 @@ const options = {
  `,
 };
 
-export default (options: MiddlewareUIOption) => {
+export default (options: MiddlewareUIOption, publicKeys:boolean = false) => {
   return [
     async (
       req: { hostname: any; swaggerDoc: OpenAPI },
