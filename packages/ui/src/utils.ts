@@ -5,16 +5,17 @@ import readdirp from "readdirp";
  * @param {string} path for where to look at folders
  * @returns {object}
  */
-export const ls = async (root: string) => {
+export const ls = async (root: string, publicKeys:boolean) => {
   const contracts: { [key: string]: any } = {};
   try {
+    const filters:Array<string> = publicKeys? ["*.zen", "*.yml", "*.keys", "*.data"] : ["*.zen", "*.yml"]
     const entries = await readdirp.promise(root, { fileFilter: ["*.zen", "*.yml", "*.keys", "*.data"] });
     entries.map((e) => {
       const { path, fullPath } = e;
       const name = path.split(".")[0];
       const type = path.split(".")[1];
-      const hasKeys = entries.find((e)=>e.fullPath === fullPath.split(".")[0] + '.keys')
-      const hasData = entries.find((e)=>e.fullPath === fullPath.split(".")[0] + '.data')
+      const hasKeys = entries.some((e)=>e.fullPath === fullPath.split(".")[0] + '.keys')
+      const hasData = entries.some((e)=>e.fullPath === fullPath.split(".")[0] + '.data')
       contracts[name] = (type ==='zen'||type ==='yml')&&{
                 fullPath: fullPath,
                 type: type,

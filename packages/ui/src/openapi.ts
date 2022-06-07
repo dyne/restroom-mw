@@ -51,8 +51,8 @@ To add new endpoints you should add new zencode contracts in the directory.
  * @param {string} rootPath root folder directory to look for the swagger generation
  * @see {@link http://spec.openapis.org/oas/v3.0.3|Openapi Specs}
  */
-export const generate = async (rootPath: string) => {
-  const paths = await ls(rootPath);
+export const generate = async (rootPath: string, publicKeys:boolean) => {
+  const paths = await ls(rootPath, publicKeys);
   const mime = ["application/json"];
   const responses = {
     200: {
@@ -76,7 +76,7 @@ export const generate = async (rootPath: string) => {
   openapi.paths = {};
   for (const path in paths) {
 
-    const requestBody = (keysExample, dataExample)=> ({
+    const requestBody = (keysExample:string, dataExample:string)=> ({
         content: {
             "application/json": {
                 schema: {
@@ -98,8 +98,8 @@ export const generate = async (rootPath: string) => {
     });
 
     const contract = Zencode.fromPath(paths[path].fullPath);
-    const keysExample = paths[path].hasKeys? nl2br(Zencode.fromPath(paths[path].fullPath.split(".")[0] + '.keys').content) : {};
-    const dataExample = paths[path].hasData? nl2br(Zencode.fromPath(paths[path].fullPath.split(".")[0] + '.data').content) : {};
+    const keysExample:string = paths[path].hasKeys? nl2br(Zencode.fromPath(paths[path].fullPath.split(".")[0] + '.keys').content) : '{}';
+    const dataExample:string = paths[path].hasData? nl2br(Zencode.fromPath(paths[path].fullPath.split(".")[0] + '.data').content) : '{}';
     const isChain = paths[path].type == 'yml' ? true : false;
     const description = isChain ? nl2br(preserveTabs(contract.content)) : nl2br(contract.content);
     const tag = isChain ? '⛓️ chain of contracts' : `🔖 ${contract.tag}`;
