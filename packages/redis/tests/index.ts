@@ -74,3 +74,13 @@ test.serial("Middleware should read from redis correctly", async (t) => {
 });
 
 
+test.serial("Middlware should read data under multiple keys", async (t) => {
+  const { app, c } = t.context;
+  c.set("pattern:123aaa456", `{"data": "first"}`)
+  c.set("pattern:987aab321", `{"data": "second"}`)
+  c.set("pattern:987aaa321", `{"data": "third"}`)
+  const res = await app.post("/pattern");
+  t.is(res.status, 200, res.text);
+  t.is(typeof res.body.my_data, "object")
+  t.is(res.body.my_data.length, 2)
+});

@@ -35,8 +35,15 @@ enum Action {
    * @param {string} output
    */
   GET_NAMED = `read from redis the data under the key named {} and save the output into {}`,
+  /**
+   * Given I read from redis the data under the key named {} and save the output into {}
+   * @param {string} key
+   * @param {string} output
+   */
+  GET_KEYS_CONTAIN = "read from redis the data under the keys containing {} and save the output into {}",
 }
 
+const REDIS_LUA_FILTER_KEY_AND_GET = "local keys = redis.call('KEYS', '*'..KEYS[1]..'*'); return redis.call('MGET', unpack(keys))"
 export default (req: Request, res: Response, next: NextFunction) => {
   const rr = new Restroom(req, res);
   let client: any = null;
@@ -44,8 +51,8 @@ export default (req: Request, res: Response, next: NextFunction) => {
   let namedSet: string = null;
 
   rr.onBefore(async (params: any) => {
-    let { zencode, data, keys } = params;
-    let content = rr.combineDataKeys(data, keys);
+    const { zencode, data, keys } = params;
+    const content = rr.combineDataKeys(data, keys);
     const namedParamsOf = zencodeNamedParamsOf(zencode, content);
 
     if (zencode.match(Action.CONNECT)) {
@@ -53,7 +60,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
       getRedisClient = (() => {
         const getRedisClientFromUrl = async () => {
           if (client === null) {
-            client = await redis.createClient(url);
+            client = redis.createClient(url);
             await client.connect();
           }
           return client;
@@ -75,6 +82,13 @@ export default (req: Request, res: Response, next: NextFunction) => {
     if (zencode.match(Action.SET_NAMED)) {
       const [outputVariable] = namedParamsOf(Action.SET_NAMED);
       namedSet = outputVariable;
+    }
+    if (zencode.match(Action.GET_KEYS_CONTAIN)) {
+      client = client || (await getRedisClient());
+      const [contained, result] = namedParamsOf(Action.GET_KEYS_CONTAIN);
+      const dataFromRedis = await client.sendCommand(
+        ["EVAL", REDIS_LUA_FILTER_KEY_AND_GET, "1", contained]);
+      data[result] = dataFromRedis
     }
   });
 
