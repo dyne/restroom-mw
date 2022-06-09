@@ -5,7 +5,6 @@ import { Request, Response, NextFunction } from "express";
 import { HTTP_PORT, HTTPS_PORT } from "@restroom-mw/utils";
 
 
-
 export default (options: MiddlewareUIOption) => {
   options.customCss = `
     .swagger-ui .topbar a img {
