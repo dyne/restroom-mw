@@ -29,7 +29,7 @@ enum Action {
    * Given I write data into redis under the key named {}
    * @param {string} key
    */
-  SET_NAMED = "write data into redis under the key named {}",
+  SET_NAMED = "write data into redis under the key named by {}",
   /**
    * Given I read from redis the data under the key named {} and save the output into {}
    * @param {string} key

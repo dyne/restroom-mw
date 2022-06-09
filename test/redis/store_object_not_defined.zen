@@ -1,0 +1,3 @@
+Rule caller restroom-mw
+Given I have a valid redis connection on 'redis://localhost:6379'
+Then I write 'data' into redis under the key named by 'key'

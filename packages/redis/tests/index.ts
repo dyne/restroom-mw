@@ -95,3 +95,9 @@ test.serial("Middlware store object named", async (t) => {
   t.true(Object.keys(saved).includes('en'))
   t.is(typeof saved2, 'string')
 });
+test.serial("Middlware store object named that doesn't exist", async (t) => {
+  const { app, c } = t.context;
+  const res = await app.post("/store_object_not_defined");
+  t.is(res.status, 500, res.text);
+  t.true(res.body.exception.includes("data not defined"))
+});
