@@ -84,3 +84,14 @@ test.serial("Middlware should read data under multiple keys", async (t) => {
   t.is(typeof res.body.my_data, "object")
   t.is(res.body.my_data.length, 2)
 });
+
+test.serial("Middlware store object named", async (t) => {
+  const { app, c } = t.context;
+  const res = await app.post("/store_object_named");
+  t.is(res.status, 200, res.text);
+  const saved = JSON.parse(await c.get('store-named:greeting'))
+  const saved2 = JSON.parse(await c.get('store-named:hex'))
+  t.true(Object.keys(saved).includes('it'))
+  t.true(Object.keys(saved).includes('en'))
+  t.is(typeof saved2, 'string')
+});

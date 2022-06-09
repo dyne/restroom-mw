@@ -1,0 +1,10 @@
+{
+  "data": {
+    "en": "hello",
+    "it": "ciao"
+  },
+  "hex_string": "0011223344ff",
+  "key1": "store-named:greeting",
+  "key_name": "hex",
+  "key_base": "store-named:"
+}
