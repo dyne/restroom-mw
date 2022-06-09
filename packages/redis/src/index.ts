@@ -2,6 +2,7 @@ import * as redis from "redis";
 import { Restroom } from "@restroom-mw/core";
 import { NextFunction, Request, Response } from "express";
 import { zencodeNamedParamsOf } from "@restroom-mw/utils";
+import { ObjectLiteral } from "@restroom-mw/types";
 
 /**
  *
@@ -28,7 +29,7 @@ enum Action {
    * Given I write data into redis under the key named {}
    * @param {string} key
    */
-  SET_NAMED = "write data into redis under the key named {}",
+  SET_NAMED = "write data into redis under the key named by {}",
   /**
    * Given I read from redis the data under the key named {} and save the output into {}
    * @param {string} key
@@ -41,6 +42,12 @@ enum Action {
    * @param {string} output
    */
   GET_KEYS_CONTAIN = "read from redis the data under the keys containing {} and save the output into {}",
+  /**
+   * Then I write {} into redis under the key named by {}
+   * @param {string} object
+   * @param {string} key
+   */
+  SET_OBJECT_NAMED = "write {} into redis under the key named by {}",
 }
 
 const REDIS_LUA_FILTER_KEY_AND_GET = "local keys = redis.call('KEYS', '*'..KEYS[1]..'*'); return redis.call('MGET', unpack(keys))"
@@ -49,10 +56,11 @@ export default (req: Request, res: Response, next: NextFunction) => {
   let client: any = null;
   let getRedisClient: () => any;
   let namedSet: string = null;
+  let content: ObjectLiteral = null;
 
   rr.onBefore(async (params: any) => {
     const { zencode, data, keys } = params;
-    const content = rr.combineDataKeys(data, keys);
+    content = rr.combineDataKeys(data, keys);
     const namedParamsOf = zencodeNamedParamsOf(zencode, content);
 
     if (zencode.match(Action.CONNECT)) {
@@ -104,6 +112,29 @@ export default (req: Request, res: Response, next: NextFunction) => {
     if (zencode.match(Action.SET_NAMED)) {
       client = client || (await getRedisClient());
       await client.set(namedSet, JSON.stringify(result));
+    }
+
+    if (zencode.match(Action.SET_OBJECT_NAMED)) {
+      client = client || (await getRedisClient());
+      const chkParams = zencode.chunkedParamsOf(Action.SET_OBJECT_NAMED, 2);
+      for (const [objName, keyName] of chkParams) {
+        const key = result[keyName] || content[keyName];
+        if(!key) {
+          throw new Error(`${keyName} not defined`)
+        }
+        if(typeof key !== 'string') {
+          throw new Error(`${keyName} is not a string`)
+        }
+        const obj = result[objName]
+        if(!obj) {
+          throw new Error(`${objName} not defined in the results`)
+        }
+      }
+      for (const [objName, keyName] of chkParams) {
+        const key = result[keyName] || content[keyName];
+        const obj = result[objName]
+        await client.set(key, JSON.stringify(obj));
+      }
     }
   });
 

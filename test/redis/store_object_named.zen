@@ -1,0 +1,11 @@
+Rule caller restroom-mw
+Given I have a valid redis connection on 'redis://localhost:6379'
+Given I have a 'string dictionary' named 'data'
+Given I have a 'hex' named 'hex string'
+Given I have a 'string' named 'key name'
+Given I have a 'string' named 'key base'
+When I append 'key name' to 'key base'
+When I rename the 'key base' to 'key2'
+Then print data
+Then I write 'data' into redis under the key named by 'key1'
+Then I write 'hex_string' into redis under the key named by 'key2'
