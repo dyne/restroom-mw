@@ -48,6 +48,12 @@ enum Action {
    * @param {string} key
    */
   SET_OBJECT_NAMED = "write {} into redis under the key named by {}",
+  /**
+   * Given I read into {} and increment the key named by {}
+   * @param {string} object
+   * @param {string} key
+   */
+  INCREMENT = "read into {} and increment the key named by {}",
 }
 
 const REDIS_LUA_FILTER_KEY_AND_GET = "local keys = redis.call('KEYS', '*'..KEYS[1]..'*'); return redis.call('MGET', unpack(keys))"
@@ -97,6 +103,16 @@ export default (req: Request, res: Response, next: NextFunction) => {
       const dataFromRedis = await client.sendCommand(
         ["EVAL", REDIS_LUA_FILTER_KEY_AND_GET, "1", contained]);
       data[result] = dataFromRedis.map(JSON.parse)
+    }
+    if (zencode.match(Action.INCREMENT)) {
+      client = client || (await getRedisClient());
+      const chkParams = zencode.chunkedParamsOf(Action.INCREMENT, 2);
+      for(const [objName, keyName] of chkParams) {
+        const key = content[keyName] || keyName;
+        // the first time the value of the is printed
+        // (it is incremented in the second read)
+        data[objName] = await client.sendCommand(["INCR", key])-1;
+      }
     }
   });
 

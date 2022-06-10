@@ -103,3 +103,18 @@ test.serial("Middlware store object named that doesn't exist", async (t) => {
   t.is(res.status, 500, res.text);
   t.true(res.body.exception.includes("data not defined"))
 });
+test.serial("Middlware inits a counter and increments it", async (t) => {
+  const { app, c } = t.context;
+  const res = await app.post("/initialize");
+  t.is(res.status, 200, res.text);
+  const res1 = await app.post("/increment");
+  t.is(res1.status, 200, res.text);
+  t.is(typeof res1.body.incremented, 'number');
+  t.is(res1.body.incremented, 42);
+  t.is(res1.body.succ, 43);
+  const res2 = await app.post("/increment");
+  t.is(res2.status, 200, res.text);
+  t.is(typeof res2.body.incremented, 'number');
+  t.is(res2.body.incremented, 44);
+  t.is(res2.body.succ, 45);
+});
