@@ -51,8 +51,8 @@ To add new endpoints you should add new zencode contracts in the directory.
  * @param {string} rootPath root folder directory to look for the swagger generation
  * @see {@link http://spec.openapis.org/oas/v3.0.3|Openapi Specs}
  */
-export const generate = async (rootPath: string) => {
-  const paths = await ls(rootPath);
+export const generate = async (rootPath: string, isDataPublic:boolean) => {
+  const paths = await ls(rootPath, isDataPublic);
   const mime = ["application/json"];
   const responses = {
     200: {
@@ -76,26 +76,28 @@ export const generate = async (rootPath: string) => {
   openapi.paths = {};
   for (const path in paths) {
 
-    const requestBody = {
-      content: {
-        "application/json": {
-          schema: {
-            properties: {
-              data: {
-                description: "DATA field",
-                type: "object",
-              },
-              keys: {
-                description: "KEYS field",
-                type: "object",
-              },
+    const requestBody = (dataExample:string)=> ({
+        content: {
+            "application/json": {
+                schema: {
+                properties: {
+                    data: {
+                        description: "DATA field",
+                        type: "object",
+                        example: dataExample
+                    },
+                    keys: {
+                        description: "KEYS field",
+                        type: "object",
+                    },
+                },
+                },
             },
-          },
         },
-      },
-    };
+    });
 
     const contract = Zencode.fromPath(paths[path].fullPath);
+    const dataExample:string = paths[path].hasData? nl2br(Zencode.fromPath(paths[path].fullPath.split(".")[0] + '.data').content) : '{}';
     const isChain = paths[path].type == 'yml' ? true : false;
     const description = isChain ? nl2br(preserveTabs(contract.content)) : nl2br(contract.content);
     const tag = isChain ? '⛓️ chain of contracts' : `🔖 ${contract.tag}`;
@@ -109,7 +111,7 @@ export const generate = async (rootPath: string) => {
         consumes: mime,
         produces: mime,
         operationId: `_function_${exposedPath}_post`,
-        requestBody,
+        requestBody: requestBody(dataExample),
         responses,
       },
     };
