@@ -96,7 +96,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
       const [contained, result] = namedParamsOf(Action.GET_KEYS_CONTAIN);
       const dataFromRedis = await client.sendCommand(
         ["EVAL", REDIS_LUA_FILTER_KEY_AND_GET, "1", contained]);
-      data[result] = dataFromRedis
+      data[result] = dataFromRedis.map(JSON.parse)
     }
   });
 

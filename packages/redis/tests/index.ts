@@ -83,6 +83,8 @@ test.serial("Middlware should read data under multiple keys", async (t) => {
   t.is(res.status, 200, res.text);
   t.is(typeof res.body.my_data, "object")
   t.is(res.body.my_data.length, 2)
+  t.is(typeof res.body.my_data[0], 'object')
+  t.is(typeof res.body.my_data[1], 'object')
 });
 
 test.serial("Middlware store object named", async (t) => {
