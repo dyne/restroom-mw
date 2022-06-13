@@ -38,7 +38,7 @@ test("HOST default should work", t => {
 });
 
 test("ZENCODE_DIR should work", t => {
-  process.env.ZENCODE_DIR = './test/fixture'
+  process.env.ZENCODE_DIR = './test/fixtures'
   const {ZENCODE_DIR} = require("..")
   t.is("./test/fixtures", ZENCODE_DIR)
 });
