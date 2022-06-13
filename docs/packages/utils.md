@@ -21,12 +21,13 @@ configuration in the environment separate from code) to define them in a `.env` 
 *   [CUSTOM\_404\_MESSAGE](#custom\_404\_message)
 *   [CHAIN_EXTENSION](#chain_extension)
 *   [YML_EXTENSION](#yml_extension)
+*   [KEYS_DIR](#keys_dir)
 *   [zencodeNamedParamsOf](#zencodenamedparamsof)
     *   [Parameters](#parameters)
 
 ### HTTP_PORT
 
-[packages/utils/src/index.ts:16-16](https://github.com/dyne/restroom-mw/blob/fa95735ca50c7ee972a0a3eafca5d756733565f9/packages/utils/src/index.ts#L16-L16 "Source code on GitHub")
+[packages/utils/src/index.ts:16-16](https://github.com/dyne/restroom-mw/blob/c045664a9e9e7f0abdf0a8cc5a29e9ffe9488054/packages/utils/src/index.ts#L16-L16 "Source code on GitHub")
 
 The port on which the restroom middlewares can refer to listen for
 
@@ -34,7 +35,7 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 ### HTTPS_PORT
 
-[packages/utils/src/index.ts:24-24](https://github.com/dyne/restroom-mw/blob/fa95735ca50c7ee972a0a3eafca5d756733565f9/packages/utils/src/index.ts#L24-L24 "Source code on GitHub")
+[packages/utils/src/index.ts:24-24](https://github.com/dyne/restroom-mw/blob/c045664a9e9e7f0abdf0a8cc5a29e9ffe9488054/packages/utils/src/index.ts#L24-L24 "Source code on GitHub")
 
 The **secure port** on which the restroom middlewares can refer to listen for
 
@@ -42,7 +43,7 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 ### HOST
 
-[packages/utils/src/index.ts:32-32](https://github.com/dyne/restroom-mw/blob/fa95735ca50c7ee972a0a3eafca5d756733565f9/packages/utils/src/index.ts#L32-L32 "Source code on GitHub")
+[packages/utils/src/index.ts:32-32](https://github.com/dyne/restroom-mw/blob/c045664a9e9e7f0abdf0a8cc5a29e9ffe9488054/packages/utils/src/index.ts#L32-L32 "Source code on GitHub")
 
 The hostname on which the restroom middleware can refer to listen for
 
@@ -50,7 +51,7 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 ### ZENCODE_DIR
 
-[packages/utils/src/index.ts:39-39](https://github.com/dyne/restroom-mw/blob/fa95735ca50c7ee972a0a3eafca5d756733565f9/packages/utils/src/index.ts#L39-L39 "Source code on GitHub")
+[packages/utils/src/index.ts:39-39](https://github.com/dyne/restroom-mw/blob/c045664a9e9e7f0abdf0a8cc5a29e9ffe9488054/packages/utils/src/index.ts#L39-L39 "Source code on GitHub")
 
 The absolut path of the directory containing the smart contracts
 
@@ -58,7 +59,7 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 ### CUSTOM\_404\_MESSAGE
 
-[packages/utils/src/index.ts:46-46](https://github.com/dyne/restroom-mw/blob/fa95735ca50c7ee972a0a3eafca5d756733565f9/packages/utils/src/index.ts#L46-L46 "Source code on GitHub")
+[packages/utils/src/index.ts:46-46](https://github.com/dyne/restroom-mw/blob/c045664a9e9e7f0abdf0a8cc5a29e9ffe9488054/packages/utils/src/index.ts#L46-L46 "Source code on GitHub")
 
 Custom error message to show when hit a non existent contract
 
@@ -66,7 +67,7 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 ### CHAIN_EXTENSION
 
-[packages/utils/src/index.ts:53-53](https://github.com/dyne/restroom-mw/blob/fa95735ca50c7ee972a0a3eafca5d756733565f9/packages/utils/src/index.ts#L53-L53 "Source code on GitHub")
+[packages/utils/src/index.ts:53-53](https://github.com/dyne/restroom-mw/blob/c045664a9e9e7f0abdf0a8cc5a29e9ffe9488054/packages/utils/src/index.ts#L53-L53 "Source code on GitHub")
 
 Chain extension
 
@@ -74,15 +75,24 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 ### YML_EXTENSION
 
-[packages/utils/src/index.ts:60-60](https://github.com/dyne/restroom-mw/blob/fa95735ca50c7ee972a0a3eafca5d756733565f9/packages/utils/src/index.ts#L60-L60 "Source code on GitHub")
+[packages/utils/src/index.ts:60-60](https://github.com/dyne/restroom-mw/blob/c045664a9e9e7f0abdf0a8cc5a29e9ffe9488054/packages/utils/src/index.ts#L60-L60 "Source code on GitHub")
 
 YML extension
 
 Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
 
+### KEYS_DIR
+
+[packages/utils/src/index.ts:68-68](https://github.com/dyne/restroom-mw/blob/c045664a9e9e7f0abdf0a8cc5a29e9ffe9488054/packages/utils/src/index.ts#L68-L68 "Source code on GitHub")
+
+To enforce the distinction between data and code, it could be
+interesting to save keys in a distinct folder from the zencode
+
+Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
+
 ### zencodeNamedParamsOf
 
-[packages/utils/src/index.ts:86-95](https://github.com/dyne/restroom-mw/blob/fa95735ca50c7ee972a0a3eafca5d756733565f9/packages/utils/src/index.ts#L86-L95 "Source code on GitHub")
+[packages/utils/src/index.ts:94-103](https://github.com/dyne/restroom-mw/blob/c045664a9e9e7f0abdf0a8cc5a29e9ffe9488054/packages/utils/src/index.ts#L94-L103 "Source code on GitHub")
 
 Retrieve the named params content from the input (usually the combination of data and keys).
 This is for the sentences that do not directly have a params in them but instead
