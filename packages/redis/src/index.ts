@@ -165,9 +165,6 @@ export default (req: Request, res: Response, next: NextFunction) => {
         if(!key) {
           throw new Error(`${keyName} not defined`)
         }
-      }
-      for(const [keyName] of chkParams) {
-        const key = result[keyName] || content[keyName];
         await client.del(key);
       }
     }
