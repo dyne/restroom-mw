@@ -59,6 +59,14 @@ export const CHAIN_EXTENSION = process.env.CHAIN_EXT || "chain";
  */
 export const YML_EXTENSION = process.env.YML_EXT || "yml";
 
+/**
+ *  To enforce the distinction between data and code, it could be
+ *  interesting to save keys in a distinct folder from the zencode
+ *  @constant
+ *  @type {string}
+ */
+export const KEYS_DIR = process.env.KEYS_DIR || process.env.ZENCODE_DIR;
+
 export const UTF8_DECODER = new TextDecoder();
 
 export const combineDataKeys = (data: ObjectLiteral, keys: string) => {
