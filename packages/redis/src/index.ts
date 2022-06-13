@@ -54,6 +54,11 @@ enum Action {
    * @param {string} key
    */
   INCREMENT = "read into {} and increment the key named by {}",
+  /*
+   * Then I remove the key {} in redis
+   * @param {string} key
+   */
+  DEL = `remove the key {} in redis`,
 }
 
 const REDIS_LUA_FILTER_KEY_AND_GET = "local keys = redis.call('KEYS', '*'..KEYS[1]..'*'); return redis.call('MGET', unpack(keys))"
@@ -150,6 +155,20 @@ export default (req: Request, res: Response, next: NextFunction) => {
         const key = result[keyName] || content[keyName];
         const obj = result[objName]
         await client.set(key, JSON.stringify(obj));
+      }
+    }
+    if (zencode.match(Action.DEL)) {
+      client = client || (await getRedisClient());
+      const chkParams = zencode.chunkedParamsOf(Action.DEL, 1);
+      for(const [keyName] of chkParams) {
+        const key = result[keyName] || content[keyName];
+        if(!key) {
+          throw new Error(`${keyName} not defined`)
+        }
+      }
+      for(const [keyName] of chkParams) {
+        const key = result[keyName] || content[keyName];
+        await client.del(key);
       }
     }
   });
