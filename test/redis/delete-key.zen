@@ -1,0 +1,7 @@
+Rule unknown ignore
+Given I have a valid redis connection on 'redis://localhost:6379'
+Given I have a 'string' named 'key1'
+Given I have a 'string' named 'key2'
+Then I print the 'key2'
+Then I remove the key 'key1' in redis
+Then I remove the key 'key2' in redis

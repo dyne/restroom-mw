@@ -12,7 +12,7 @@
 
 ### DOWNLOAD
 
-[packages/files/src/index.ts:17-17](https://github.com/dyne/restroom-mw/blob/fa95735ca50c7ee972a0a3eafca5d756733565f9/packages/files/src/index.ts#L17-L17 "Source code on GitHub")
+[packages/files/src/index.ts:17-17](https://github.com/dyne/restroom-mw/blob/8bcf193be31549f8b5764f826d90bc30406c8b1a/packages/files/src/index.ts#L17-L17 "Source code on GitHub")
 
 `download the 'myUrl' and extract it into 'myFolder'`
 
@@ -21,7 +21,7 @@ Download a zip file located at the url `myUrl` and extract it at the path
 
 ### STORE_RESULT
 
-[packages/files/src/index.ts:25-25](https://github.com/dyne/restroom-mw/blob/fa95735ca50c7ee972a0a3eafca5d756733565f9/packages/files/src/index.ts#L25-L25 "Source code on GitHub")
+[packages/files/src/index.ts:25-25](https://github.com/dyne/restroom-mw/blob/8bcf193be31549f8b5764f826d90bc30406c8b1a/packages/files/src/index.ts#L25-L25 "Source code on GitHub")
 
 `store 'myVariable' in the file 'myFolder'`
 
@@ -30,7 +30,7 @@ Store the content of the variable `myVariable` in the filesystem at the path
 
 ### FILES_DIR
 
-[packages/files/src/index.ts:35-35](https://github.com/dyne/restroom-mw/blob/fa95735ca50c7ee972a0a3eafca5d756733565f9/packages/files/src/index.ts#L35-L35 "Source code on GitHub")
+[packages/files/src/index.ts:35-35](https://github.com/dyne/restroom-mw/blob/8bcf193be31549f8b5764f826d90bc30406c8b1a/packages/files/src/index.ts#L35-L35 "Source code on GitHub")
 
 Base dir to store data for the user
 

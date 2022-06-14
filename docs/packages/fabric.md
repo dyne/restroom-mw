@@ -24,7 +24,7 @@ app.use("/api/*", zencode);
 
 ### submitAndRetry
 
-[packages/fabric/src/index.ts:67-89](https://github.com/dyne/restroom-mw/blob/fa95735ca50c7ee972a0a3eafca5d756733565f9/packages/fabric/src/index.ts#L67-L89 "Source code on GitHub")
+[packages/fabric/src/index.ts:67-89](https://github.com/dyne/restroom-mw/blob/8bcf193be31549f8b5764f826d90bc30406c8b1a/packages/fabric/src/index.ts#L67-L89 "Source code on GitHub")
 
 #### Parameters
 

@@ -34,16 +34,22 @@ app.use("/api/*", zencode);
         *   [Parameters](#parameters-3)
     *   [GET_NAMED](#get_named)
         *   [Parameters](#parameters-4)
+    *   [GET_KEYS_CONTAIN](#get_keys_contain)
+        *   [Parameters](#parameters-5)
+    *   [SET_OBJECT_NAMED](#set_object_named)
+        *   [Parameters](#parameters-6)
+    *   [INCREMENT](#increment)
+        *   [Parameters](#parameters-7)
 
 ### Action
 
-[packages/redis/src/index.ts:10-38](https://github.com/dyne/restroom-mw/blob/fa95735ca50c7ee972a0a3eafca5d756733565f9/packages/redis/src/index.ts#L10-L38 "Source code on GitHub")
+[packages/redis/src/index.ts:11-62](https://github.com/dyne/restroom-mw/blob/8bcf193be31549f8b5764f826d90bc30406c8b1a/packages/redis/src/index.ts#L11-L62 "Source code on GitHub")
 
 Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
 
 #### CONNECT
 
-[packages/redis/src/index.ts:15-15](https://github.com/dyne/restroom-mw/blob/fa95735ca50c7ee972a0a3eafca5d756733565f9/packages/redis/src/index.ts#L15-L15 "Source code on GitHub")
+[packages/redis/src/index.ts:16-16](https://github.com/dyne/restroom-mw/blob/8bcf193be31549f8b5764f826d90bc30406c8b1a/packages/redis/src/index.ts#L16-L16 "Source code on GitHub")
 
 Given I have a redis connection on {}
 
@@ -55,7 +61,7 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 #### SET
 
-[packages/redis/src/index.ts:20-20](https://github.com/dyne/restroom-mw/blob/fa95735ca50c7ee972a0a3eafca5d756733565f9/packages/redis/src/index.ts#L20-L20 "Source code on GitHub")
+[packages/redis/src/index.ts:21-21](https://github.com/dyne/restroom-mw/blob/8bcf193be31549f8b5764f826d90bc30406c8b1a/packages/redis/src/index.ts#L21-L21 "Source code on GitHub")
 
 Given I write data into redis under the key {}
 
@@ -67,7 +73,7 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 #### GET
 
-[packages/redis/src/index.ts:26-26](https://github.com/dyne/restroom-mw/blob/fa95735ca50c7ee972a0a3eafca5d756733565f9/packages/redis/src/index.ts#L26-L26 "Source code on GitHub")
+[packages/redis/src/index.ts:27-27](https://github.com/dyne/restroom-mw/blob/8bcf193be31549f8b5764f826d90bc30406c8b1a/packages/redis/src/index.ts#L27-L27 "Source code on GitHub")
 
 Given I read from redis the data under the key {} and save the output into {}
 
@@ -78,7 +84,7 @@ Given I read from redis the data under the key {} and save the output into {}
 
 #### SET_NAMED
 
-[packages/redis/src/index.ts:31-31](https://github.com/dyne/restroom-mw/blob/fa95735ca50c7ee972a0a3eafca5d756733565f9/packages/redis/src/index.ts#L31-L31 "Source code on GitHub")
+[packages/redis/src/index.ts:32-32](https://github.com/dyne/restroom-mw/blob/8bcf193be31549f8b5764f826d90bc30406c8b1a/packages/redis/src/index.ts#L32-L32 "Source code on GitHub")
 
 Given I write data into redis under the key named {}
 
@@ -90,7 +96,7 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 #### GET_NAMED
 
-[packages/redis/src/index.ts:37-37](https://github.com/dyne/restroom-mw/blob/fa95735ca50c7ee972a0a3eafca5d756733565f9/packages/redis/src/index.ts#L37-L37 "Source code on GitHub")
+[packages/redis/src/index.ts:38-38](https://github.com/dyne/restroom-mw/blob/8bcf193be31549f8b5764f826d90bc30406c8b1a/packages/redis/src/index.ts#L38-L38 "Source code on GitHub")
 
 Given I read from redis the data under the key named {} and save the output into {}
 
@@ -98,3 +104,42 @@ Given I read from redis the data under the key named {} and save the output into
 
 *   `key` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
 *   `output` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+
+#### GET_KEYS_CONTAIN
+
+[packages/redis/src/index.ts:44-44](https://github.com/dyne/restroom-mw/blob/8bcf193be31549f8b5764f826d90bc30406c8b1a/packages/redis/src/index.ts#L44-L44 "Source code on GitHub")
+
+Given I read from redis the data under the key named {} and save the output into {}
+
+Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
+
+##### Parameters
+
+*   `key` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+*   `output` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+
+#### SET_OBJECT_NAMED
+
+[packages/redis/src/index.ts:50-50](https://github.com/dyne/restroom-mw/blob/8bcf193be31549f8b5764f826d90bc30406c8b1a/packages/redis/src/index.ts#L50-L50 "Source code on GitHub")
+
+Then I write {} into redis under the key named by {}
+
+Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
+
+##### Parameters
+
+*   `object` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+*   `key` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+
+#### INCREMENT
+
+[packages/redis/src/index.ts:56-56](https://github.com/dyne/restroom-mw/blob/8bcf193be31549f8b5764f826d90bc30406c8b1a/packages/redis/src/index.ts#L56-L56 "Source code on GitHub")
+
+Given I read into {} and increment the key named by {}
+
+Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
+
+##### Parameters
+
+*   `object` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+*   `key` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 

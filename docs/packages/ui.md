@@ -27,7 +27,7 @@ app.use("/docs/", ui);
 
 ### ls
 
-[packages/ui/src/utils.ts:8-22](https://github.com/dyne/restroom-mw/blob/fa95735ca50c7ee972a0a3eafca5d756733565f9/packages/ui/src/utils.ts#L8-L22 "Source code on GitHub")
+[packages/ui/src/utils.ts:8-29](https://github.com/dyne/restroom-mw/blob/8bcf193be31549f8b5764f826d90bc30406c8b1a/packages/ui/src/utils.ts#L8-L29 "Source code on GitHub")
 
 Reads the directory and list all the files
 into an object with the full path
@@ -35,13 +35,14 @@ into an object with the full path
 #### Parameters
 
 *   `root` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+*   `isDataPublic` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** 
 *   `path` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** for where to look at folders
 
 Returns **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
 
 ### generate
 
-[packages/ui/src/openapi.ts:54-122](https://github.com/dyne/restroom-mw/blob/fa95735ca50c7ee972a0a3eafca5d756733565f9/packages/ui/src/openapi.ts#L54-L122 "Source code on GitHub")
+[packages/ui/src/openapi.ts:54-124](https://github.com/dyne/restroom-mw/blob/8bcf193be31549f8b5764f826d90bc30406c8b1a/packages/ui/src/openapi.ts#L54-L124 "Source code on GitHub")
 
 *   **See**: [Openapi Specs](http://spec.openapis.org/oas/v3.0.3)
 
@@ -50,3 +51,4 @@ Generates an openapi definition out of the contracts in `ZENCODE_DIR`
 #### Parameters
 
 *   `rootPath` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** root folder directory to look for the swagger generation
+*   `isDataPublic` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** 

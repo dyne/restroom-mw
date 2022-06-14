@@ -128,3 +128,12 @@ test.serial("Middlware increments not a number", async (t) => {
   t.is(res.status, 500, res.text);
   t.true(res.body.exception.includes("not an integer"))
 });
+test.serial("Middlware remove key from redis", async (t) => {
+  const { app, c } = t.context;
+  c.set('pippo', 'pippo value')
+  c.set('mimmo', 'mimmo value')
+  const res = await app.post("/delete-key");
+  t.is(res.status, 200, res.text);
+  t.is(await c.get('pippo'), null);
+  t.is(await c.get('mimmo'), null);
+});
