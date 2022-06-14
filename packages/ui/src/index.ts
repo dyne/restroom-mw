@@ -4,7 +4,6 @@ import { generate } from "./openapi";
 import { Request, Response, NextFunction } from "express";
 import { HTTP_PORT, HTTPS_PORT } from "@restroom-mw/utils";
 
-
 export default (options: MiddlewareUIOption) => {
   options.customCss = `
     .swagger-ui .topbar a img {
@@ -19,7 +18,6 @@ export default (options: MiddlewareUIOption) => {
       font-weight: 100;
     }
   `
-export default (options: MiddlewareUIOption, publicKeys:boolean = false) => {
   return [
     async (
       req: { hostname: any; swaggerDoc: OpenAPI },
