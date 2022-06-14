@@ -16,11 +16,14 @@ export const ls = async (root: string, isDataPublic:boolean) => {
       const name = path.split(".")[0];
       const type = path.split(".")[1];
       const hasData = entries.some((e)=>e.fullPath === fullPath.split(".")[0] + '.data')
-      contracts[name] = (type ==='zen'||type ==='yml')&&{
+      if (type ==='zen'||type ===process.env.YML_EXT) {
+         contracts[name] = {
                 fullPath: fullPath,
                 type: type,
                 hasData: hasData
             };
+      }
+
     });
   } catch (e) {
     throw e;
