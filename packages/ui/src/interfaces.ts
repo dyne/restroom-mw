@@ -1,7 +1,7 @@
 import { SwaggerUiOptions } from "swagger-ui-express";
 
 export interface OpenAPI {
-  paths?: { [key: string]: any };
+  paths: { [key: string]: any };
   openapi: string;
   info: {
     title: string;
@@ -36,6 +36,6 @@ export interface OpenAPI {
 }
 
 export interface MiddlewareUIOption extends SwaggerUiOptions {
-  path: string;
+  path?: string;
   isDataPublic: boolean;
 }
