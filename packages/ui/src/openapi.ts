@@ -51,7 +51,7 @@ To add new endpoints you should add new zencode contracts in the directory.
  * @param {string} rootPath root folder directory to look for the swagger generation
  * @see {@link http://spec.openapis.org/oas/v3.0.3|Openapi Specs}
  */
-export const generate = async (rootPath: string, isDataPublic:boolean, rootPrefix:string) => {
+export const generate = async (rootPath: string, isDataPublic:boolean, rootPrefix:string, pathWithUser?:boolean) => {
   const paths = await ls(rootPath, isDataPublic);
   const mime = ["application/json"];
   const responses = {
