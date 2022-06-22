@@ -38,4 +38,5 @@ export interface OpenAPI {
 export interface MiddlewareUIOption extends SwaggerUiOptions {
   path?: string;
   isDataPublic: boolean;
+  pathWithUser?: boolean;
 }

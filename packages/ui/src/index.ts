@@ -26,13 +26,20 @@ export default (options: MiddlewareUIOption) => {
     ) => {
       try {
         options.path = options.path? options.path :  res.locals.path
-        const swaggerDoc = await generate(options.path, options.isDataPublic);
+        const swaggerDoc = await generate(options.path, options.isDataPublic, options.pathWithUser);
         swaggerDoc.servers[0].variables.host = { default: req.hostname };
         // The port of the server could have changed
         const httpPort = parseInt(process.env.HTTP_PORT) || HTTP_PORT
         const httpsPort = parseInt(process.env.HTTPS_PORT) || HTTPS_PORT
         swaggerDoc.servers[0].variables.port.enum = [httpPort, httpsPort];
         swaggerDoc.servers[0].variables.port.default = httpPort;
+        if (options.pathWithUser) {
+          const protocol = 'http'
+          swaggerDoc.servers[0].variables.port.enum = [httpsPort];
+          swaggerDoc.servers[0].variables.port.default = httpsPort;
+          swaggerDoc.servers[0].variables.protocol.enum = [protocol];
+          swaggerDoc.servers[0].variables.protocol.default = protocol;
+        }
         req.swaggerDoc = swaggerDoc;
         next();
       } catch (e) {
