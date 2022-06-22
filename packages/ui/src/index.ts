@@ -2,7 +2,7 @@ import swaggerUi from "swagger-ui-express";
 import { MiddlewareUIOption, OpenAPI } from "./interfaces";
 import { generate } from "./openapi";
 import { Request, Response, NextFunction } from "express";
-import { HTTP_PORT, HTTPS_PORT } from "@restroom-mw/utils";
+import { HTTP_PORT, HTTPS_PORT, HOST } from "@restroom-mw/utils";
 
 export default (options: MiddlewareUIOption) => {
   options.customCss = `
@@ -27,7 +27,6 @@ export default (options: MiddlewareUIOption) => {
       try {
         options.path = req.params.root? options.path :  `${options.path}${req.params.root}/`
         const swaggerDoc = await generate(options.path, options.isDataPublic);
-        swaggerDoc.servers[0].variables.host = { default: req.hostname };
         // The port of the server could have changed
         const httpPort = parseInt(process.env.HTTP_PORT) || HTTP_PORT
         const httpsPort = parseInt(process.env.HTTPS_PORT) || HTTPS_PORT
