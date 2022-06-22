@@ -1,4 +1,4 @@
-import swaggerUi from "swagger-ui-express";
+import swaggerUi, { SwaggerUiOptions } from "swagger-ui-express";
 import { MiddlewareUIOption, OpenAPI } from "./interfaces";
 import { generate } from "./openapi";
 import { Request, Response, NextFunction } from "express";
