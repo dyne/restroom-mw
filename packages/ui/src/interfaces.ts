@@ -36,8 +36,8 @@ export interface OpenAPI {
 }
 
 export interface MiddlewareUIOption extends SwaggerUiOptions {
-  path?: string;
-  isDataPublic: boolean;
-  defaultPort?:number, 
+  path: string;
+  isDataPublic?: boolean;
+  defaultPort?:number,
   defaultProtocol?:"http"|"https"
 }
