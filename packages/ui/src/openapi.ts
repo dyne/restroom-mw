@@ -101,7 +101,8 @@ export const generate = async (rootPath: string, isDataPublic:boolean) => {
     const isChain = paths[path].type == 'yml' ? true : false;
     const description = isChain ? nl2br(preserveTabs(contract.content)) : nl2br(contract.content);
     const tag = isChain ? '⛓️ chain of contracts' : `🔖 ${contract.tag}`;
-    const exposedPath = isChain ? `${path}.${CHAIN_EXTENSION}` : path;
+    const  exposedPath = isChain ? `${path}.${CHAIN_EXTENSION}` : path;
+
 
     let endpoint = {
       post: {
