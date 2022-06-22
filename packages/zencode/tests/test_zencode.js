@@ -144,6 +144,20 @@ test("should handle correctly duplicated sentences", (t) => {
   t.deepEqual(["alice", "bob"], zencode.paramsOf(SENTENCES.DEFINE));
 });
 
+test("Should handle senario without colon", (t) => {
+  const contract = `Scenario 'ecdh'\nGiven nothing\nThen print the string 'Eureka!'`;
+  const z = new Zencode(contract);
+  t.is(z.scenario, "Scenario 'ecdh'");
+  t.is(z.summary, "");
+});
+
+test("Should handle senario with colon", (t) => {
+  const contract = `Scenario 'ecdh':\nGiven nothing\nThen print the string 'Eureka!'`;
+  const z = new Zencode(contract);
+  t.is(z.scenario, "Scenario 'ecdh':");
+  t.is(z.summary, "");
+});
+
 // TODO: for when the new zencode parsing will be ready
 // test("should handle correctly duplicated sentences with multiple param in one sentence", (t) => {
 //   const content = `Given I am I

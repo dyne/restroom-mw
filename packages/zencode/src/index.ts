@@ -102,7 +102,7 @@ export class Zencode {
    * @type {string}
    */
   get summary() {
-    return this.__parseDescription((words) => words[1].trim());
+    return this.__parseDescription((words) => words[1]?.trim() || "");
   }
 
   /**
