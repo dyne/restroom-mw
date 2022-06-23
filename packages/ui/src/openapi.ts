@@ -101,7 +101,11 @@ export const generate = async (rootPath: string, isDataPublic:boolean, rootPrefi
     const isChain = paths[path].type == 'yml' ? true : false;
     const description = isChain ? nl2br(preserveTabs(contract.content)) : nl2br(contract.content);
     const tag = isChain ? '⛓️ chain of contracts' : `🔖 ${contract.tag}`;
+<<<<<<< HEAD
     const exposedPath = isChain ? `${path}.${CHAIN_EXTENSION}` : path;
+=======
+    const exposedPath = isChain ? `${path}.${CHAIN_EXTENSION}` : `${path}`;
+>>>>>>> c65d04a (fix restrict folder in swagger ui)
 
     let endpoint = {
       post: {
@@ -110,13 +114,21 @@ export const generate = async (rootPath: string, isDataPublic:boolean, rootPrefi
         tags: [`${tag}`],
         consumes: mime,
         produces: mime,
+<<<<<<< HEAD
         operationId: `_function_${rootPrefix}${exposedPath}_post`,
+=======
+        operationId: `_function_${rootPrefix + exposedPath}_post`,
+>>>>>>> c65d04a (fix restrict folder in swagger ui)
         requestBody: requestBody(dataExample),
         responses,
       },
     };
 
+<<<<<<< HEAD
     openapi.paths[`/${rootPrefix}${exposedPath}`] = endpoint;
+=======
+    openapi.paths[`/${rootPrefix + exposedPath}`] = endpoint;
+>>>>>>> c65d04a (fix restrict folder in swagger ui)
 
   }
 
