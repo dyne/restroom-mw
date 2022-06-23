@@ -101,7 +101,7 @@ export const generate = async (rootPath: string, isDataPublic:boolean, rootPrefi
     const isChain = paths[path].type == 'yml' ? true : false;
     const description = isChain ? nl2br(preserveTabs(contract.content)) : nl2br(contract.content);
     const tag = isChain ? '⛓️ chain of contracts' : `🔖 ${contract.tag}`;
-    const exposedPath = isChain ? `${path}.${CHAIN_EXTENSION}` : `${path}`;
+    const exposedPath = isChain ? `${path}.${CHAIN_EXTENSION}` : path;
 
     let endpoint = {
       post: {
@@ -110,13 +110,13 @@ export const generate = async (rootPath: string, isDataPublic:boolean, rootPrefi
         tags: [`${tag}`],
         consumes: mime,
         produces: mime,
-        operationId: `_function_${rootPrefix + exposedPath}_post`,
+        operationId: `_function_${rootPrefix}${exposedPath}_post`,
         requestBody: requestBody(dataExample),
         responses,
       },
     };
 
-    openapi.paths[`/${rootPrefix + exposedPath}`] = endpoint;
+    openapi.paths[`/${rootPrefix}${exposedPath}`] = endpoint;
 
   }
 
