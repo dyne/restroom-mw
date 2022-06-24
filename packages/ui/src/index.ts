@@ -27,7 +27,7 @@ export default (options: MiddlewareUIOption) => {
       try {
         const rootPath = req.params.root? `${options.path}${req.params.root}/` :  options.path
         const rootPrefix = req.params.root? `${req.params.root}/` :  ''
-        const swaggerDoc = await generate(rootPath, options.isDataPublic, rootPrefix);
+        const swaggerDoc = await generate(rootPath, options.isDataPublic, rootPrefix, options.withOutPort);
         // The port of the server could have changed
         const httpPort = parseInt(process.env.HTTP_PORT) || HTTP_PORT
         const httpsPort = parseInt(process.env.HTTPS_PORT) || HTTPS_PORT

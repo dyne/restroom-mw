@@ -39,5 +39,6 @@ export interface MiddlewareUIOption extends SwaggerUiOptions {
   path: string;
   isDataPublic?: boolean;
   defaultPort?:number;
+  withOutPort?:boolean;
   defaultProtocol?:"http"|"https";
 }
