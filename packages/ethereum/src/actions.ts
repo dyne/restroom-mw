@@ -9,4 +9,5 @@ export const ERC20_1_NAMED = "query ethereum for the {} of {} for erc20 {} named
 export const READ_HEAD = "read from {} the data in the HEAD and save the output into {}";
 export const READ_PREVIOUS = "read from {} the hash in the block preceding {} and save the output into {}";
 export const READ_BALANCE = "read the ethereum balance for {}";
+export const READ_BALANCE_ARRAY = "read the ethereum balance for array {} in {}";
 export const BROADCAST = "ask ethereum to broadcast the {} and save the transaction id in {}";

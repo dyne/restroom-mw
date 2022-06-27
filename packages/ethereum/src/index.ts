@@ -15,6 +15,7 @@ import {
   READ_HEAD,
   READ_PREVIOUS,
   READ_BALANCE,
+  READ_BALANCE_ARRAY,
   BROADCAST,
 } from "./actions";
 import Web3 from 'web3';
@@ -41,7 +42,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       const input = rr.combineDataKeys(data, keys);
       const namedParamsOf = zencodeNamedParamsOf(zencode, input);
 
-      const call_erc20 = async (command: string, contractAddress: string,
+      const callErc20 = async (command: string, contractAddress: string,
                                 variableName: string, args: string[]) => {
         if(!web3.utils.isAddress(contractAddress)) {
           throw new Error(`Not an ethereum address ${contractAddress}`);
@@ -76,16 +77,16 @@ export default async (req: Request, res: Response, next: NextFunction) => {
 
       if(zencode.match(NONCE)) {
         validateWeb3();
-        const [ address_input ] = namedParamsOf(NONCE);
-        const address = input[address_input] || address_input;
+        const [ addressInput ] = namedParamsOf(NONCE);
+        const address = input[addressInput] || addressInput;
         const nonce = await web3.eth.getTransactionCount(address);
-        data['ethereum_nonce'] = nonce.toString();
+        data.ethereum_nonce = nonce.toString();
       }
 
       if(zencode.match(GAS_PRICE)) {
         validateWeb3();
         const gasPrice = await web3.eth.getGasPrice();
-        data['gas_price'] = gasPrice.toString();
+        data.gas_price = gasPrice.toString();
       }
 
       if(zencode.match(RETRIEVE)) {
@@ -116,7 +117,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
           const command = params[0];
           const contractAddress = input[params[1]] || params[1];
           const variableName = params[2];
-          await call_erc20(command, contractAddress, variableName, []);
+          await callErc20(command, contractAddress, variableName, []);
         }
       }
 
@@ -126,7 +127,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         for(const params of chkParams) {
           const command = params[0];
           const contractAddress = input[params[1]] || params[1];
-          await call_erc20(command, contractAddress, command.replace(" ", "_"), []);
+          await callErc20(command, contractAddress, command.replace(" ", "_"), []);
         }
       }
 
@@ -137,7 +138,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
           const command = params[0];
           const arg = input[params[1]] || params[1];
           const contractAddress = input[params[2]] || params[2];
-          await call_erc20(command, contractAddress, command.replace(" ", "_"),
+          await callErc20(command, contractAddress, command.replace(" ", "_"),
                            [ '0x' + arg ]);
         }
       }
@@ -150,7 +151,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
           const arg = input[params[1]] || params[1];
           const contractAddress = input[params[2]] || params[2];
           const variableName = params[3];
-          await call_erc20(command, contractAddress, variableName,
+          await callErc20(command, contractAddress, variableName,
                            [ '0x' + arg ]);
         }
       }
@@ -183,10 +184,29 @@ export default async (req: Request, res: Response, next: NextFunction) => {
 
       if(zencode.match(READ_BALANCE)) {
         validateWeb3();
-        const [ address_input ] = namedParamsOf(READ_BALANCE);
-        const address = input[address_input] || address_input;
+        const [ addressInput ] = namedParamsOf(READ_BALANCE);
+        const address = input[addressInput] || addressInput;
         const balance = await web3.eth.getBalance(address);
-        data['ethereum_balance'] = balance.toString();
+        data.ethereum_balance = balance.toString();
+      }
+
+      if(zencode.match(READ_BALANCE_ARRAY)) {
+        validateWeb3();
+
+        for (const [addressesName, balancesName]
+                   of zencode.chunkedParamsOf(READ_BALANCE_ARRAY,2)) {
+          const addressesInput = input[addressesName] || data[addressesName]
+          if(!addressesInput) {
+            throw new Error(`Could not find ${addressesInput} anywhere`);
+          }
+          if(!Array.isArray(addressesInput)) {
+            throw new Error(`${addressesInput} is not an array`);
+          }
+          const balances = await Promise.all(
+            addressesInput.map(v => web3.eth.getBalance(v)))
+          data[balancesName] = balances.map(v =>
+            {return {wei_value: v.toString()}})
+        }
       }
     });
 

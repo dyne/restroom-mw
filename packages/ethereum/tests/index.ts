@@ -19,7 +19,7 @@ test.before(async (t) => {
 
 test.serial("Store a zenroom object", async (t) => {
   const { app } = t.context;
-  var res = await app.post("/ethereum_store");
+  const res = await app.post("/ethereum_store");
   t.is(res.status, 200, res.text);
   t.is(typeof res.body.txid, "string");
   t.is(res.body.txid.length, 64);
@@ -29,21 +29,21 @@ test.serial("Store a zenroom object", async (t) => {
 test("Retrieve a zenroom object", async (t) => {
   const poem = "Nel mezzo del cammin di nostra vita\nmi ritrovai per una selva oscura,\nché la diritta via era smarrita."
   const { app } = t.context;
-  var res = await app.post("/ethereum_retrieve");
+  const res = await app.post("/ethereum_retrieve");
   t.is(res.status, 200, res.text);
   t.is(res.body.poem, poem);
 });
 
 test("Retrieve object that doesn't exist", async (t) => {
   const { app } = t.context;
-  var res = await app.post("/ethereum_retrieve_no_exist");
+  const res = await app.post("/ethereum_retrieve_no_exist");
   t.is(res.status, 500, res.text);
 });
 
 
 test("Call ERC20 methods", async (t) => {
   const { app } = t.context;
-  var res = await app.post("/ethereum_erc20");
+  const res = await app.post("/ethereum_erc20");
   t.is(res.status, 200, res.text);
   t.is(res.body.my_decimals, "42");
   t.is(res.body.my_name, "Non movable tokens");
@@ -59,7 +59,7 @@ test("Call ERC20 methods", async (t) => {
 
 test("Read head and previous", async (t) => {
   const { app } = t.context;
-  var res = await app.post("/ethereum_blocks");
+  const res = await app.post("/ethereum_blocks");
   t.is(res.status, 200, res.text);
   t.is(typeof res.body.my_hash, "string")
   t.is(res.body.my_hash.length, 64)
@@ -70,9 +70,18 @@ test("Read head and previous", async (t) => {
 
 test("Read the address balance", async (t) => {
   const { app } = t.context;
-  var res = await app.post("/ethereum_balance");
+  const res = await app.post("/ethereum_balance");
   t.is(res.status, 200, res.text);
   t.is(typeof res.body.ethereum_balance, "string");
   t.is(res.body.ethereum_balance, "1000000000000000000");
   console.log(`{ 'ethereum balance': ${res.body.ethereum_balance} }`);
+});
+
+test("Read the balance of an array of addresses", async (t) => {
+  const { app } = t.context;
+  const res = await app.post("/ethereum_balance_array");
+  t.is(res.status, 200, res.text);
+  t.is(res.body.ethereum_balances.length, 3)
+  for (const v of res.body.ethereum_balances)
+    t.is(typeof v.wei_value, "string")
 });
