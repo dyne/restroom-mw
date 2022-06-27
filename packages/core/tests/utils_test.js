@@ -73,11 +73,11 @@ test("getContractByContractName works correctly", (t) => {
   const zencode = getContractByContractName("broken");
   t.is(
     zencode.content,
-    `Scenario 'ecdh': Encrypt a message with the password 
-Given that I have a 'string' named 'password' 
-Given that I have a 'string' named 'header' 
-Given that I have a 'string' named 'message' 
-When I encrypt the secret message 'message' with 'password' 
+    `Scenario 'ecdh': Encrypt a message with the password
+Given that I have a 'string' named 'password'
+Given that I have a 'string' named 'header'
+Given that I have a 'string' named 'message'
+When I encrypt the secret message 'message' with 'password'
 Then print the 'secret message'`
   );
   t.throws(() => {
@@ -89,11 +89,11 @@ test("getContractFromPath works correctly", (t) => {
   const zencode = getContractFromPath("broken.zen");
   t.is(
     zencode.content,
-    `Scenario 'ecdh': Encrypt a message with the password 
-Given that I have a 'string' named 'password' 
-Given that I have a 'string' named 'header' 
-Given that I have a 'string' named 'message' 
-When I encrypt the secret message 'message' with 'password' 
+    `Scenario 'ecdh': Encrypt a message with the password
+Given that I have a 'string' named 'password'
+Given that I have a 'string' named 'header'
+Given that I have a 'string' named 'message'
+When I encrypt the secret message 'message' with 'password'
 Then print the 'secret message'`
   );
   t.throws(() => {
@@ -121,6 +121,7 @@ test("getContracts works correctly", async (t) => {
     "/database_table",
     "/empty",
     "/ethereum_balance",
+    "/ethereum_balance_array",
     "/ethereum_blocks",
     "/ethereum_erc20",
     "/ethereum_retrieve",
