@@ -43,7 +43,10 @@ test("Check that the middleware detects when zenfile is missing into contract bl
   app.use("/api/*", core);
   const res = await request(app).post("/api/missing-zenfile.chain");
 
-  t.true(res.body.exception.includes("Zen file is missing for block id"), res.body.exception);
+  t.true(
+    res.body.exception.includes("Zen file is missing for block id"),
+    res.body.exception
+  );
   t.is(res.status, 500);
 });
 
