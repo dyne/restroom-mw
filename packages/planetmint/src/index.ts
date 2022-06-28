@@ -9,6 +9,7 @@ import {
   CONNECT,
   ASSET,
   ASSET_METADATA,
+  TRANSFER,
   SIGNATURE,
   BROADCAST,
   RETRIEVE,
@@ -31,12 +32,13 @@ const b64ToUtf8 = ( str: string ) => {
 
 export default async (req: Request, res: Response, next: NextFunction) => {
   let connection: Connection = null;
+  let input: ObjectLiteral = null;
   const rr = new Restroom(req, res);
 
   try {
     rr.onBefore(async (params) => {
       const { zencode, keys, data } = params;
-      const input = rr.combineDataKeys(data, keys);
+      input = rr.combineDataKeys(data, keys);
       const namedParamsOf = zencodeNamedParamsOf(zencode, input);
 
       if(zencode.match(GENERATEKEY)) {
@@ -103,6 +105,31 @@ export default async (req: Request, res: Response, next: NextFunction) => {
           throw new Error("Metadata not found");
         }
         storeAsset( result[ asset ], result[ metadata ] );
+      }
+
+      if(zencode.match(TRANSFER)) {
+        const [ txidName, recipientName ] = zencode.paramsOf(TRANSFER);
+        const txid = result[txidName] || input[txidName];
+        const recipient = result[recipientName] || input[recipientName];
+        if( !txid ) {
+          throw new Error("Transaction id not found");
+        }
+        if( !recipient ) {
+          throw new Error("Recipient public key not found");
+        }
+        const txIn = await connection.getTransaction(txid)
+        if( !txIn ) {
+          throw new Error(`Transaction with id ${txid} not found`);
+        }
+        const tx = Transaction.makeTransferTransaction(
+          [ { tx: txIn, output_index: 0 } ],
+          [ Transaction.makeOutput(
+            Transaction.makeEd25519Condition(
+              recipient ))
+          ],
+          null
+        );
+        result.planetmint_transaction = utf8ToB64(JSON.stringify(tx));
       }
 
       if(zencode.match(SIGNATURE)) {
