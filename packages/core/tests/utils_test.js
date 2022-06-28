@@ -126,6 +126,7 @@ test("getContracts works correctly", async (t) => {
     "/ethereum_balance_array",
     "/ethereum_blocks",
     "/ethereum_erc20",
+    "/ethereum_read_token_id",
     "/ethereum_retrieve",
     "/ethereum_retrieve_no_exist",
     "/ethereum_store",

@@ -85,3 +85,12 @@ test("Read the balance of an array of addresses", async (t) => {
   for (const v of res.body.ethereum_balances)
     t.is(typeof v.wei_value, "string")
 });
+
+test("Read the token id for a nft created in a transaction", async (t) => {
+  const { app } = t.context;
+  const res = await app.post("/ethereum_read_token_id");
+  t.is(res.status, 200, res.text);
+  t.is(res.body.erc721_id, 13);
+  t.is(res.body.owner, "dC51204D6ceB8aE21cD2e826A07D5406809aA389".toLowerCase())
+  t.is(res.body.asset, '{"ciao": "mondo"}')
+});

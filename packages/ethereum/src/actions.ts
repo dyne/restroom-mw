@@ -10,4 +10,7 @@ export const READ_HEAD = "read from {} the data in the HEAD and save the output 
 export const READ_PREVIOUS = "read from {} the hash in the block preceding {} and save the output into {}";
 export const READ_BALANCE = "read the ethereum balance for {}";
 export const READ_BALANCE_ARRAY = "read the ethereum balance for array {} in {}";
+export const READ_TOKEN_ID = "read the erc721 id saved in the transaction {}";
+export const READ_OWNER = "read the owner of the erc721 {} for contract {}";
+export const READ_ASSET = "read the asset in the erc721 {} for contract {}";
 export const BROADCAST = "ask ethereum to broadcast the {} and save the transaction id in {}";
