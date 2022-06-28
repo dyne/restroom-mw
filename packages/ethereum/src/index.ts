@@ -17,6 +17,9 @@ import {
   READ_BALANCE,
   READ_BALANCE_ARRAY,
   BROADCAST,
+  READ_TOKEN_ID,
+  READ_OWNER,
+  READ_ASSET,
 } from "./actions";
 import Web3 from 'web3';
 // import * as ERC20_ABI from './erc20_abi.json'
@@ -24,10 +27,13 @@ import Web3 from 'web3';
 require("dotenv").config();
 
 const ERC20_ABI = require('./erc20_abi.json');
+const ERC721_ABI = require('./erc721_abi.json');
+const ERC721_METADATA_ABI = require('./erc721_metadata_abi.json');
 
 let web3: Web3 = null;
 
 const BLOCKCHAIN = "ethereum"
+const ERC721_TRANSFER_EVENT = "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
 
 const validateWeb3 = () => {
   if(web3 == null) throw Error("No connection to a client")
@@ -35,6 +41,8 @@ const validateWeb3 = () => {
 
 export default async (req: Request, res: Response, next: NextFunction) => {
   const rr = new Restroom(req, res);
+  // preserve data passed to zenroom also in restroom
+  let rrData: Record<string, string> = {};
 
   try {
     rr.onBefore(async (params) => {
@@ -207,6 +215,41 @@ export default async (req: Request, res: Response, next: NextFunction) => {
           data[balancesName] = balances.map(v =>
             {return {wei_value: v.toString()}})
         }
+      }
+
+
+      // ERC 721
+      if(zencode.match(READ_TOKEN_ID)) {
+        validateWeb3();
+        const [ txidName ] = namedParamsOf(READ_TOKEN_ID);
+        const txid = input[txidName] || txidName;
+        const receipt = await web3.eth.getTransactionReceipt('0x' + txid);
+        const log = receipt.logs.find(
+          v => v.topics.length > 0 && v.topics[0] === ERC721_TRANSFER_EVENT);
+        if(!log) {
+          throw new Error("Token Id not found")
+        }
+        data.erc721_id = parseInt(log.topics[3], 16);
+      }
+
+      if(zencode.match(READ_OWNER)) {
+        validateWeb3();
+        const [tokenName, contractName] = namedParamsOf(READ_OWNER);
+        const contractAddress = data[contractName] || input[contractName] || contractName;
+        const token = data[tokenName] || input[tokenName] || tokenName;
+        const erc721 = new web3.eth.Contract(ERC721_ABI, contractAddress);
+        const owner = await erc721.methods.ownerOf(token).call()
+        data.owner = owner.substring(2)
+      }
+
+      if(zencode.match(READ_ASSET)) {
+        validateWeb3();
+        const [tokenName, contractName] = namedParamsOf(READ_OWNER);
+        const contractAddress = data[contractName] || input[contractName] || contractName;
+        const token = data[tokenName] || input[tokenName] || tokenName;
+        const erc721 = new web3.eth.Contract(ERC721_METADATA_ABI, contractAddress);
+        const asset = await erc721.methods.tokenURI(token).call()
+        data.asset = asset
       }
     });
 
