@@ -10,30 +10,41 @@ export default (options: MiddlewareUIOption) => {
       content: url(https://dev.zenroom.org/_media/images/zenroom_logo.png);
    }
    .swagger-ui .topbar { background-color: #dedede }
+   .swagger-ui h1:before { content: "# " }
    .swagger-ui h1 {
-      font-size: 1.0em;
-      margin: 0.67em 0;
+      font-size: 14px;
+      margin: 0 0;
       font-style: italic;
-      color: gray;
+      color: #444;
       font-weight: 100;
     }
-  `
+    .swagger-ui .renderedMarkdown p { margin: 10px 0px; font-weight: 400 }
+  `;
   return [
     async (
-      req: Request & {swaggerDoc: OpenAPI},
+      req: Request & { swaggerDoc: OpenAPI },
       res: Response,
       next: NextFunction
     ) => {
       try {
-        const rootPath = req.params.root? `${options.path}${req.params.root}/` :  options.path
-        const rootPrefix = req.params.root? `${req.params.root}/` :  ''
-        const swaggerDoc = await generate(rootPath, options.isDataPublic, rootPrefix, options.withOutPort);
+        const rootPath = req.params.root
+          ? `${options.path}${req.params.root}/`
+          : options.path;
+        const rootPrefix = req.params.root ? `${req.params.root}/` : "";
+        const swaggerDoc = await generate(
+          rootPath,
+          options.isDataPublic,
+          rootPrefix,
+          options.withOutPort
+        );
         // The port of the server could have changed
-        const httpPort = parseInt(process.env.HTTP_PORT) || HTTP_PORT
-        const httpsPort = parseInt(process.env.HTTPS_PORT) || HTTPS_PORT
+        const httpPort = parseInt(process.env.HTTP_PORT) || HTTP_PORT;
+        const httpsPort = parseInt(process.env.HTTPS_PORT) || HTTPS_PORT;
         swaggerDoc.servers[0].variables.port.enum = [httpPort, httpsPort];
-        swaggerDoc.servers[0].variables.port.default = options.defaultPort || httpPort;
-        swaggerDoc.servers[0].variables.protocol.default = options.defaultProtocol || 'https';
+        swaggerDoc.servers[0].variables.port.default =
+          options.defaultPort || httpPort;
+        swaggerDoc.servers[0].variables.protocol.default =
+          options.defaultProtocol || "https";
         req.swaggerDoc = swaggerDoc;
         next();
       } catch (e) {
