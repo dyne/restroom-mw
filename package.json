@@ -28,7 +28,7 @@
     "watch:test": "ava -s --watch",
     "watch": "turbo run watch --parallel",
     "build": "turbo run build --parallel",
-    "serve": "babel-watch test/fixtures/server.js",
+    "serve": "nodemon --watch 'packages/**' --exec 'ts-node test/fixtures/server.ts' --ext 'ts,js,mjs,json'",
     "doc": "turbo run doc"
   },
   "ava": {
@@ -79,6 +79,7 @@
     "husky": "^5.0.9",
     "lerna": "^4.0.0",
     "morgan": "^1.10.0",
+    "nodemon": "^2.0.18",
     "prettier": "^2.2.1",
     "qs": "^6.9.6",
     "rimraf": "^3.0.2",
