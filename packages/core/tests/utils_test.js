@@ -151,6 +151,7 @@ test("getContracts works correctly", async (t) => {
     "/planetmint_retrieve_no_exist",
     "/planetmint_store_asset",
     "/planetmint_store_asset_metadata",
+    "/planetmint_transfer",
     "/random",
     "/sawroom-read-secret-message-foreach",
     "/sawroom-read-secret-message",
