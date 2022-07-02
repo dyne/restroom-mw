@@ -38,11 +38,11 @@ export default (options: MiddlewareUIOption) => {
           options.withOutPort
         );
         // The port of the server could have changed
-        const httpPort = parseInt(process.env.HTTP_PORT) || HTTP_PORT;
-        const httpsPort = parseInt(process.env.HTTPS_PORT) || HTTPS_PORT;
+        const httpPort = parseInt(process.env.HTTP_PORT, 10) || HTTP_PORT;
+        const httpsPort = parseInt(process.env.HTTPS_PORT, 10) || HTTPS_PORT;
         swaggerDoc.servers[0].variables.port.enum = [httpPort, httpsPort];
         swaggerDoc.servers[0].variables.port.default =
-          options.defaultPort || httpPort;
+          options.defaultPort || httpsPort;
         swaggerDoc.servers[0].variables.protocol.default =
           options.defaultProtocol || "https";
         req.swaggerDoc = swaggerDoc;
