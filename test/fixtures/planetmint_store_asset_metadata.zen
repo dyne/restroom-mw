@@ -5,7 +5,6 @@ Given I have a planetmint endpoint named 'endpoint'
 Given I create the ed25519 keypair
 
 # Zenroom
-Given I have a 'base58 dictionary' named 'ed25519 keypair'
 Given I have a 'string dictionary' named 'asset'
 Given I have a 'string dictionary' named 'metadata'
 Given I have a 'string' named 'endpoint'

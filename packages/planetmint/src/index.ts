@@ -33,6 +33,7 @@ const b64ToUtf8 = ( str: string ) => {
 export default async (req: Request, res: Response, next: NextFunction) => {
   let connection: Connection = null;
   let input: ObjectLiteral = null;
+  let rrData: ObjectLiteral = null;
   const rr = new Restroom(req, res);
 
   try {
@@ -66,13 +67,17 @@ export default async (req: Request, res: Response, next: NextFunction) => {
           throw new Error(`Transaction not found: ${id}`);
         }
       }
+
+      rrData = data;
     });
 
     rr.onSuccess(async (params) => {
       const { zencode, result } = params;
 
       const storeAsset = ( asset: Record<string, any>, metadata: Record<string, any> ) => {
-        if( !result.ed25519_keypair || !result.ed25519_keypair.public_key ) {
+        const ed25519Keypair = result.ed25519_keypair
+          || rrData.ed25519_keypair || input.ed25519_keypair;
+        if( !ed25519Keypair || !ed25519Keypair.public_key ) {
           throw new Error("Public key not found");
         }
         const tx = Transaction.makeCreateTransaction(
@@ -80,9 +85,9 @@ export default async (req: Request, res: Response, next: NextFunction) => {
           metadata,
           [ Transaction.makeOutput(
             Transaction.makeEd25519Condition(
-              result.ed25519_keypair.public_key ))
+              ed25519Keypair.public_key ))
           ],
-          result.ed25519_keypair.public_key
+          ed25519Keypair.public_key
         );
         result.planetmint_transaction = utf8ToB64(JSON.stringify(tx));
       }
@@ -137,13 +142,15 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         if( !result[ txB64 ] ) {
           throw new Error("Planetmint transaction not found");
         }
-        if( !result.ed25519_keypair || !result.ed25519_keypair.private_key ) {
+        const ed25519Keypair = result.ed25519_keypair
+          || rrData.ed25519_keypair || input.ed25519_keypair;
+        if( !ed25519Keypair || !ed25519Keypair.private_key ) {
           throw new Error("Private key not found");
         }
         const tx = JSON.parse(b64ToUtf8(result[ txB64 ]));
         const signedTx = Transaction.signTransaction(
           tx,
-          result.ed25519_keypair.private_key );
+          ed25519Keypair.private_key );
         result.signed_planetmint_transaction = utf8ToB64(JSON.stringify(signedTx));
       }
 
