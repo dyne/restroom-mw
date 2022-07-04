@@ -244,7 +244,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
 
       if(zencode.match(READ_ASSET)) {
         validateWeb3();
-        const [tokenName, contractName] = namedParamsOf(READ_OWNER);
+        const [tokenName, contractName] = namedParamsOf(READ_ASSET);
         const contractAddress = data[contractName] || input[contractName] || contractName;
         const token = data[tokenName] || input[tokenName] || tokenName;
         const erc721 = new web3.eth.Contract(ERC721_METADATA_ABI, contractAddress);
