@@ -4,15 +4,17 @@ import { Zencode } from "@restroom-mw/zencode";
 import { OpenAPI } from "./interfaces";
 import { CHAIN_EXTENSION } from "@restroom-mw/utils";
 
-
-
 /**
  * Generates an openapi definition out of the contracts in `ZENCODE_DIR`
  * @param {string} rootPath root folder directory to look for the swagger generation
  * @see {@link http://spec.openapis.org/oas/v3.0.3|Openapi Specs}
  */
-export const generate = async (rootPath: string, isDataPublic:boolean, rootPrefix:string, withOutPort?:boolean) => {
-
+export const generate = async (
+  rootPath: string,
+  isDataPublic: boolean,
+  rootPrefix: string,
+  withOutPort?: boolean
+) => {
   let openapi: OpenAPI = {
     openapi: "3.0.3",
     info: {
@@ -36,7 +38,7 @@ export const generate = async (rootPath: string, isDataPublic:boolean, rootPrefi
     servers: [
       {
         description: "development local server",
-        url: `{protocol}://{host}${withOutPort? '/' : ':{port}/'}{basePath}`,
+        url: `{protocol}://{host}${withOutPort ? "/" : ":{port}/"}{basePath}`,
         variables: {
           port: {
             enum: [HTTP_PORT, HTTPS_PORT],
@@ -50,8 +52,8 @@ export const generate = async (rootPath: string, isDataPublic:boolean, rootPrefi
     ],
     schemes: ["http"],
     paths: {},
-    components:{
-      schemas: {}
+    components: {
+      schemas: {},
     },
   };
 
@@ -78,35 +80,50 @@ export const generate = async (rootPath: string, isDataPublic:boolean, rootPrefi
 
   openapi.paths = {};
   for (const path in paths) {
-
-    const requestBody = (dataExample:string)=> ({
-        content: {
-            "application/json": {
-                schema: {
-                properties: {
-                    data: {
-                        description: "DATA field",
-                        type: "object",
-                        example: dataExample
-                    },
-                    keys: {
-                        description: "KEYS field",
-                        type: "object",
-                    },
-                },
-                },
+    const requestBody = (dataExample: string) => ({
+      content: {
+        "application/json": {
+          schema: {
+            properties: {
+              data: {
+                description: "DATA field",
+                type: "object",
+                example: dataExample,
+              },
+              keys: {
+                description: "KEYS field",
+                type: "object",
+              },
             },
+          },
         },
+      },
     });
 
     const contract = Zencode.fromPath(paths[path].fullPath);
-    const dataExample:string = paths[path].hasData? nl2br(Zencode.fromPath(paths[path].fullPath.split(".")[0] + '.data').content) : '{}';
-    const isChain = paths[path].type == 'yml' ? true : false;
-    const description = isChain ? nl2br(preserveTabs(contract.content)) : nl2br(contract.content);
-    const tag = isChain ? '⛓️ chain of contracts' : `🔖 ${contract.tag}`;
+    const dataExample: string = paths[path].hasData
+      ? nl2br(
+          Zencode.fromPath(paths[path].fullPath.split(".")[0] + ".data").content
+        )
+      : "{}";
+    const isChain = paths[path].type == "yml" ? true : false;
+    const description = isChain
+      ? nl2br(preserveTabs(contract.content))
+      : nl2br(contract.content);
+    const tag = isChain ? "⛓️ chain of contracts" : `🔖 ${contract.tag}`;
     const exposedPath = isChain ? `${path}.${CHAIN_EXTENSION}` : path;
 
     let endpoint = {
+      get: {
+        summary: contract.summary,
+        description: description,
+        tags: [`${tag}`],
+        consumes: mime,
+        produces: mime,
+        operationId: `_function_${rootPrefix}${exposedPath}_post`,
+        requestBody: requestBody(dataExample),
+        responses,
+      },
       post: {
         summary: contract.summary,
         description: description,
