@@ -5,7 +5,7 @@ const choices: { title: string, value: string }[] = [];
 for (const mw of mws) {
   choices.push({
     title: mw,
-    value: (mw === '@restroom-mw/ui') ? mw : `${mw}@next`,
+    value: mw,
   });
 }
 
