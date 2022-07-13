@@ -1,0 +1,34 @@
+zenchain: 1.0
+name: correct-keypair
+start: id-0
+blocks:
+  id-0:
+    zenContent: |
+      Scenario 'ecdh': create the signature of an object
+      Given I am 'theBackend'
+      Given I have my 'keyring'
+
+      # This is the password that will be used for PBKDF
+      Given I have a 'string' named 'theBackendPassword'
+
+      # Loading the data that the user is entering at the signup. This data will be sent from the client to the server
+      Given I have a 'string dictionary' named 'userData'
+
+      # The server creates a PBKDF of the 'userData'
+      When I create the key derivation of 'userData' with password 'theBackendPassword'
+
+      # Here we print the PBKDF
+      Then print the 'key derivation'
+
+      Then print the 'email' from 'userData' as 'string'
+
+    next: id-1
+    keysFile: create-pbkdf-input.keys
+  id-1:
+    zenFile: create-keypair.zen
+    next: id-2
+    confFile: create-keypair-configuration.conf
+    keysFile: create-keypair-input.keys
+  id-0:
+    zenFile: verify-keypair.zen
+    keysFile: verify-keypair-input.keys

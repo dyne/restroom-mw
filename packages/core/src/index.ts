@@ -13,6 +13,7 @@ import {
   isChainLastBlock,
 } from "./utils";
 import { zencode_exec } from "zenroom";
+import { Zencode } from "@restroom-mw/zencode";
 import {
   addKeysToContext,
   addDataToContext,
@@ -226,13 +227,13 @@ export default async (req: Request, res: Response, next: NextFunction) => {
 
     const zencode = singleContext.zenFile
       ? getContractFromPath(singleContext.zenFile)
-      : singleContext.zenContent;
+      : new Zencode(singleContext.zenContent);
     const restroomResult: RestroomResult = await callRestroom({
       data: singleContext.data,
       keys: singleContext.keys,
       conf: singleContext.conf,
       zencode: zencode,
-      contractPath: singleContext.zenFile ? singleContext.zenFile : null
+      contractPath: singleContext.zenFile ? singleContext.zenFile : ""
     });
 
     return {restroomResult: restroomResult, singleContext: singleContext, globalContext: globalContext};
