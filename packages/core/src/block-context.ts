@@ -1,9 +1,10 @@
 export type BlockContext = {
-  keys: any; 
+  keys: any;
   data: any;
   next: string;
-  conf: string; 
+  conf: string;
   output: any;
-  zenFile: string;
+  zenFile?: string;
+  zenContent?: string;
   currentBlock: string;
 };

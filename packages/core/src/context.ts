@@ -14,7 +14,7 @@ export function addDataToContext(singleBlockContext: any, data: any) {
 }
 
 /**
- * This function is responsible to create a global context used for debug purposes 
+ * This function is responsible to create a global context used for debug purposes
  * @returns {globalContext} Returns a fresh created global context
  */
  export function createGlobalContext() {
@@ -25,7 +25,7 @@ export function addDataToContext(singleBlockContext: any, data: any) {
 }
 
 /**
- * This function is responsible to create a global context with debugEnabled mode 
+ * This function is responsible to create a global context with debugEnabled mode
  * @returns {globalContext} Returns a fresh created global context with debugEnabled true
  */
  export function createDebugEnabledGlobalContext() {
@@ -36,7 +36,7 @@ export function addDataToContext(singleBlockContext: any, data: any) {
 }
 
 /**
- * This function is responsible to update global context used for debug purposes 
+ * This function is responsible to update global context used for debug purposes
  * @param {singleBlockContext} object context of a single block
  * @param {globalContext} object previous global context
  */
@@ -49,7 +49,7 @@ export function addDataToContext(singleBlockContext: any, data: any) {
 }
 
 /**
- * This function is responsible to update a global context output used for debug purposes 
+ * This function is responsible to update a global context output used for debug purposes
  * @param {singleBlockContext} object context of a single block
  * @param {globalContext} object previous global context
  */
@@ -99,6 +99,7 @@ export function addNextToContext(singleBlockContext: any, ymlContent: any) {
  * @param {singleBlockContext} object context of a single block
  * @param {ymlContent} object yaml content
  */
-export function addZenFileToContext(singleBlockContext: any, ymlContent: any) {
+export function addZenToContext(singleBlockContext: any, ymlContent: any) {
   singleBlockContext.zenFile = ymlContent?.zenFile;
+  singleBlockContext.zenContent = ymlContent?.zenContent;
 }

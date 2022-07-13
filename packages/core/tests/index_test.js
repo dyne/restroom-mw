@@ -38,13 +38,13 @@ test("Check that the middleware detects a loop in yaml", async (t) => {
   t.is(res.status, 500);
 });
 
-test("Check that the middleware detects when zenfile is missing into contract block", async (t) => {
+test("Check that the middleware detects when zenfile and zencontent are missing into contract block", async (t) => {
   const app = express();
   app.use("/api/*", core);
   const res = await request(app).post("/api/missing-zenfile.chain");
 
   t.true(
-    res.body.exception.includes("Zen file is missing for block id"),
+    res.body.exception.includes("Neither zenFile nor zenContent are declared for block id"),
     res.body.exception
   );
   t.is(res.status, 500);
