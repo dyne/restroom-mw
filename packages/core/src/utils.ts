@@ -1,23 +1,34 @@
 import { Zencode } from "@restroom-mw/zencode";
 import readdirp from "readdirp";
 import fuzzball from "fuzzball";
-import { CUSTOM_404_MESSAGE, ZENCODE_DIR, YML_EXTENSION, KEYS_DIR } from "@restroom-mw/utils";
+import {
+  CUSTOM_404_MESSAGE,
+  ZENCODE_DIR,
+  YML_EXTENSION,
+  KEYS_DIR,
+} from "@restroom-mw/utils";
 import { Request, Response } from "express";
 import fs from "fs";
-import * as yaml from 'js-yaml';
+import * as yaml from "js-yaml";
 import { SingleInstanceOutput } from "./single-instance-output";
 
-const STRING = 'string';
-const OBJECT = 'object';
+const STRING = "string";
+const OBJECT = "object";
 
 export const getKeys = (contractName: string) => {
   try {
-    const keysContent = fs.readFileSync(`${KEYS_DIR}/${contractName}.keys`, 'utf8');
+    const keysContent = fs.readFileSync(
+      `${KEYS_DIR}/${contractName}.keys`,
+      "utf8"
+    );
     return JSON.stringify(yaml.load(keysContent));
   } catch (e) {
     try {
-      const keysContent = fs.readFileSync(`${KEYS_DIR}/${contractName}.keys`, 'utf8');
-      return JSON.stringify(JSON.parse(keysContent))
+      const keysContent = fs.readFileSync(
+        `${KEYS_DIR}/${contractName}.keys`,
+        "utf8"
+      );
+      return JSON.stringify(JSON.parse(keysContent));
     } catch (e) {
       return null;
     }
@@ -27,7 +38,9 @@ export const getKeys = (contractName: string) => {
 export const getFile = (fileWithExtension: string) => {
   try {
     return (
-      fs.readFileSync(`${ZENCODE_DIR}/${fileWithExtension}`, 'utf8').toString() || null
+      fs
+        .readFileSync(`${ZENCODE_DIR}/${fileWithExtension}`, "utf8")
+        .toString() || null
     );
   } catch (e) {
     return null;
@@ -58,7 +71,10 @@ export const getContractFromPath = (path: string): Zencode => {
  *  @returns {string}
  */
 export const getYml = (ymlName: string) => {
-  return fs.readFileSync(`${ZENCODE_DIR}/${ymlName}.${YML_EXTENSION}`).toString() || null;
+  return (
+    fs.readFileSync(`${ZENCODE_DIR}/${ymlName}.${YML_EXTENSION}`).toString() ||
+    null
+  );
 };
 
 export const getConf = (contractName: string) => {
@@ -121,25 +137,30 @@ export const getMessage = async (req: Request) => {
 };
 
 export const getData = (req: Request, res: Response) => {
-  return res.locals?.zenroom_data || req.body?.data || {};
+  let params = {};
+  if (req.method === "GET") params = JSON.parse(req.query?.data as string);
+
+  if (req.method === "POST") params = req.body?.data;
+
+  return res.locals?.zenroom_data || params;
 };
 
 export const isChainLastBlock = (internalResult: SingleInstanceOutput) => {
   return !internalResult.singleContext?.next;
-}
+};
 
 export const isErrorResult = (internalResult: SingleInstanceOutput) => {
   return internalResult.restroomResult?.error;
-}
+};
 
 export const isForEachPresent = (ymlContent: any, block: string) => {
   return ymlContent.blocks[block].forEach;
-}
+};
 
-export const isObject = (item:any) => {
+export const isObject = (item: any) => {
   return typeof item === OBJECT;
-}
+};
 
-export const isString = (item:unknown) => {
+export const isString = (item: unknown) => {
   return typeof item === STRING;
-}
+};
