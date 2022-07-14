@@ -14,7 +14,10 @@ import { mws_deps } from "./helpers/mws";
 import { template } from "./templates/restroom";
 
 
-export async function create({ appPath, mws, debug = false, zencodeDir = 'contracts' }: { appPath: string, mws: (string | undefined)[] | null, debug: boolean, zencodeDir: string }): Promise<void> {
+export async function create({ appPath, mws, debug = false,
+  zencodeDir = 'contracts', version = 'next' }:
+  { appPath: string, mws: (string | undefined)[] | null,
+    debug: boolean, zencodeDir: string, version: string }): Promise<void> {
   const root = path.resolve(appPath);
   if (!(await isWriteable(path.dirname(root)))) {
     console.error(
@@ -71,12 +74,12 @@ in ${chalk.green(root)}.`);
 
   const dependencies = [
     "zenroom@next",
-    "@restroom-mw/core@next",
-    "@restroom-mw/zencode@next",
-    "@restroom-mw/utils@next",
+    "@restroom-mw/core@" + version,
+    "@restroom-mw/zencode@" + version,
+    "@restroom-mw/utils@" + version,
     "express",
     "dotenv",
-    ...middleware_deps,
+    ...middleware_deps.map( (name: string) => `${name}@${version}` ),
     ...deps_of_deps,
   ];
 

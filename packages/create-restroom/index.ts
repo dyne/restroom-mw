@@ -21,6 +21,8 @@ const program = new Command(packageJson.name)
     projectPath = name
   }).option('-d, --debug', 'Enable debug mode')
   .option('-z, --zencode-dir <path>', 'Define a zencode directory', 'contracts')
+  .option('-r, --release <string>',
+    'Which version of restroom to use (e.g. next or latest)', 'next')
   .option('-a, --all', 'Install all middlewares')
 
 for (const mw of mws) {
@@ -102,11 +104,18 @@ async function run(): Promise<void> {
     }
   }).filter(x => !!x);
 
+  const version = options.release.trim()
+  if(version !== "next" && version !== "latest") {
+    console.error("Version has to be either next or latest")
+    process.exit(1)
+  }
+
   await create({
     appPath: resolvedProjectPath,
     mws: to_install.length ? to_install : null,
     debug: options.debug,
     zencodeDir: options.zencodeDir,
+    version,
   })
 }
 
