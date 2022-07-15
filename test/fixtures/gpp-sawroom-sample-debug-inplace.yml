@@ -1,0 +1,38 @@
+zenchain: 1.0
+mode: debug
+name: sawroom-blockchain
+start: single-random.zen
+blocks:
+  single-random.zen:
+    zenContent: |
+      rule check version 1.0.0
+
+      Scenario simple: Generate a random password
+
+      Given nothing
+
+      When I create the random object of '128' bits
+      When I rename the 'random_object' to 'myRandom'
+
+      Then print the 'myRandom'
+    next: sawroom-store-secret-message.zen
+  sawroom-store-secret-message.zen:
+    zenContent: |
+      Rule unknown ignore
+
+      Scenario 'ecdh': Encrypt a message with the password
+
+      Given that I have a 'string' named 'password'
+      Given that I have a 'string' named 'myRandom'
+      Given that I have a sawroom endpoint named 'sawroomEndpoint'
+
+      When I encrypt the secret message 'myRandom' with 'password'
+      Then print the 'secret_message'
+      Then print the 'password'
+
+      Then I ask Sawroom to store the data named 'secret_message' into the tag 'transactionId'
+    keysFile: sawroom-store-secret-message-input.keys
+    next: sawroom-read-secret-message.zen
+  sawroom-read-secret-message.zen:
+    zenFile: sawroom-read-secret-message.zen
+    keysFile: sawroom-read-secret-message-input.keys

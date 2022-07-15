@@ -38,13 +38,13 @@ test("Check that the middleware detects a loop in yaml", async (t) => {
   t.is(res.status, 500);
 });
 
-test("Check that the middleware detects when zenfile is missing into contract block", async (t) => {
+test("Check that the middleware detects when zenfile and zencontent are missing into contract block", async (t) => {
   const app = express();
   app.use("/api/*", core);
   const res = await request(app).post("/api/missing-zenfile.chain");
 
   t.true(
-    res.body.exception.includes("Zen file is missing for block id"),
+    res.body.exception.includes("Neither zenFile nor zenContent are declared for block id"),
     res.body.exception
   );
   t.is(res.status, 500);
@@ -62,19 +62,25 @@ test("Check that the middleware provide context when debug is on for missing zen
 test("Check that the middleware provide context when debug is on for gpp sawroom sample", async (t) => {
   const app = express();
   app.use("/api/*", core);
-  const res = await request(app).post("/api/gpp-sawroom-sample-debug.chain");
+  for(const url of ["gpp-sawroom-sample-debug",
+                    "gpp-sawroom-sample-debug-inplace"]) {
+    const res = await request(app).post(`/api/${url}.chain`);
 
-  t.is(res.body.context.debugEnabled, true);
-  t.is(res.status, 200);
+    t.is(res.body.context.debugEnabled, true);
+    t.is(res.status, 200);
+  }
 });
 
 test("Check that the middleware detects a duplicated mapping key in yaml blocks", async (t) => {
   const app = express();
   app.use("/api/*", core);
-  const res = await request(app).post("/api/duplicated-mapping-key.chain");
+  for(const url of ["duplicated-mapping-key",
+                    "duplicated-mapping-key-inplace"]) {
+    const res = await request(app).post(`/api/${url}.chain`);
 
-  t.true(res.body.exception.includes("YAMLException: duplicated mapping key"));
-  t.is(res.status, 500);
+    t.true(res.body.exception.includes("YAMLException: duplicated mapping key"));
+    t.is(res.status, 500);
+  }
 });
 
 test("Check that the middleware detects two different paths in yml", async (t) => {
@@ -107,15 +113,18 @@ test("Check that the middleware is able to execute for each chain with for each 
   app.use(bodyParser.json());
   app.use("/api/*", core);
 
-  const res = await request(app)
-    .post("/api/gpp-sawroom-sample-foreach.chain")
-    .send(_data);
+  for(const url of ["gpp-sawroom-sample-foreach",
+                    "gpp-sawroom-sample-foreach-inplace"]) {
+    const res = await request(app)
+      .post(`/api/${url}.chain`)
+      .send(_data);
 
-  t.is(res.body.myUsers.Pippo.password, "p1pp0");
-  t.is(res.body.myUsers.Topolino.password, "t0p0l1n0");
-  t.is(res.body.myUsers.Pluto.password, "plut0");
-  t.is(res.body.myUsers.Paperino.password, "p4p3r1n0");
-  t.is(res.status, 200);
+    t.is(res.body.myUsers.Pippo.password, "p1pp0");
+    t.is(res.body.myUsers.Topolino.password, "t0p0l1n0");
+    t.is(res.body.myUsers.Pluto.password, "plut0");
+    t.is(res.body.myUsers.Paperino.password, "p4p3r1n0");
+    t.is(res.status, 200);
+  }
 });
 
 test("Check that the middleware is able to execute for each chain with for each input as a map with debug mode on", async (t) => {

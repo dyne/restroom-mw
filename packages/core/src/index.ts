@@ -13,12 +13,13 @@ import {
   isChainLastBlock,
 } from "./utils";
 import { zencode_exec } from "zenroom";
+import { Zencode } from "@restroom-mw/zencode";
 import {
   addKeysToContext,
   addDataToContext,
   addNextToContext,
   addConfToContext,
-  addZenFileToContext,
+  addZenToContext,
   createGlobalContext,
   updateGlobalContext,
   createDebugEnabledGlobalContext,
@@ -33,12 +34,12 @@ import { BlockContext } from "./block-context";
 import { CHAIN_EXTENSION } from "@restroom-mw/utils";
 import { BlockInput } from "./block-input";
 import { RestroomInput } from "./restroom-input";
-import { validateForEach, 
-  validateIterable, 
-  validateNextBlock, 
-  validateStartBlock, 
-  validateZenFile,
-  validatePathsInYml,  
+import { validateForEach,
+  validateIterable,
+  validateNextBlock,
+  validateStartBlock,
+  validateZen,
+  validatePathsInYml,
   validateNoLoopInChain,
 } from "./validations";
 import { ChainInput } from "./chain-input";
@@ -152,9 +153,9 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       validatePathsInYml(ymlContent);
 
       return await handleBlockResult({
-        block: startBlock, 
-        ymlContent: ymlContent, 
-        data: data, 
+        block: startBlock,
+        ymlContent: ymlContent,
+        data: data,
         globalContext: globalContext}
       );
     } catch (err) {
@@ -181,8 +182,8 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     try {
       return isChain
         ? executeChain({
-          ymlContent: getYml(contractName.split(DOT)[0]), 
-          data, 
+          ymlContent: getYml(contractName.split(DOT)[0]),
+          data,
           globalContext
         })
         : callRestroom({
@@ -219,17 +220,20 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     addDataToContext(singleContext, data);
     addConfToContext(singleContext, ymlContent.blocks[block]);
     addNextToContext(singleContext, ymlContent.blocks[block]);
-    addZenFileToContext(singleContext, ymlContent.blocks[block]);
+    addZenToContext(singleContext, ymlContent.blocks[block]);
     updateGlobalContext(singleContext, globalContext);
 
-    validateZenFile(singleContext, block);
-    const zencode = getContractFromPath(singleContext.zenFile);
+    validateZen(singleContext, block);
+
+    const zencode = singleContext.zenFile
+      ? getContractFromPath(singleContext.zenFile)
+      : new Zencode(singleContext.zenContent);
     const restroomResult: RestroomResult = await callRestroom({
       data: singleContext.data,
       keys: singleContext.keys,
       conf: singleContext.conf,
       zencode: zencode,
-      contractPath: singleContext.zenFile
+      contractPath: singleContext.zenFile ? singleContext.zenFile : ""
     });
 
     return {restroomResult: restroomResult, singleContext: singleContext, globalContext: globalContext};
@@ -253,8 +257,8 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     let internalResult: SingleInstanceOutput = {};
     let output: any;
     const forEachObjectName = ymlContent.blocks[block].forEach;
-    const forEachIndex = ymlContent.blocks[block].index ? 
-      ymlContent.blocks[block].index : 
+    const forEachIndex = ymlContent.blocks[block].index ?
+      ymlContent.blocks[block].index :
       FOREACH_INDEX_DEFAULT_VALUE;
 
     const forEachObject = data[forEachObjectName];
@@ -277,9 +281,9 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         globalContext: globalContext,
         singleContext: singleContext
       });
-      const resultToAdd = internalResult?.restroomResult.result && 
-        internalResult?.restroomResult.result[forEachIndex] ? 
-        internalResult?.restroomResult.result[forEachIndex] : 
+      const resultToAdd = internalResult?.restroomResult.result &&
+        internalResult?.restroomResult.result[forEachIndex] ?
+        internalResult?.restroomResult.result[forEachIndex] :
         internalResult?.restroomResult.result;
       forEachResult[forEachObjectName][name] = resultToAdd;
       forEachResultAsArray[forEachObjectName].push(resultToAdd);
@@ -347,7 +351,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     const singleContext: BlockContext = initializeSingleContext(block);
     let result: SingleInstanceOutput = {};
     let output: any;
-    
+
     try {
       const blockResult: BlockOutput = await evaluateBlockResult({
         singleContext: singleContext,

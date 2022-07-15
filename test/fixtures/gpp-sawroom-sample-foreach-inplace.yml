@@ -1,0 +1,56 @@
+zenchain: 1.0
+name: sawroom-blockchain
+start: single-random-foreach.zen
+blocks:
+  single-random-foreach.zen:
+    forEach: myUsers
+    index: user
+    zenContent: |
+      Rule unknown ignore
+
+      Scenario simple: Generate a random password
+
+      Given that I have a 'string' named 'password' inside 'user'
+
+      When I create the random object of '128' bits
+      When I rename the 'random_object' to 'myRandom'
+
+      Then print the 'myRandom'
+      Then print the 'password'
+    next: sawroom-store-secret-message-foreach.zen
+  sawroom-store-secret-message-foreach.zen:
+    forEach: myUsers
+    index: user
+    zenContent: |
+      Rule unknown ignore
+
+      Scenario 'ecdh': Encrypt a message with the password
+
+      Given that I have a 'string' named 'password' inside 'user'
+      Given that I have a 'string' named 'myRandom' inside 'user'
+      Given that I have a sawroom endpoint named 'sawroomEndpoint'
+
+      When I encrypt the secret message 'myRandom' with 'password'
+      Then print the 'secret_message'
+      Then print the 'password'
+
+      Then I ask Sawroom to store the data named 'secret_message' into the tag 'transactionId'
+    keysFile: sawroom-store-secret-message-input-foreach.keys
+    next: sawroom-read-secret-message-foreach.zen
+  sawroom-read-secret-message-foreach.zen:
+    forEach: myUsers
+    index: user
+    zenContent: |
+      Rule unknown ignore
+      Scenario 'ecdh': Decrypt the message with the password
+
+      Given that I have a sawroom endpoint named 'endpoint'
+      And I have a 'secret_message' named 'secret_message' inside 'user'
+      Given I read from Sawroom the data in tag 'transactionId' inside 'user' and save the output into 'secret_message'
+      Given that I have a 'string' named 'password' inside 'user'
+
+      When I decrypt the text of 'secret_message' with 'password'
+      When I rename the 'text' to 'textDecrypted'
+      Then print all data
+      Then print the 'textDecrypted' as 'string'
+    keysFile: sawroom-read-secret-message-input-foreach.keys

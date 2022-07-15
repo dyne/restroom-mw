@@ -28,9 +28,15 @@ export const validateForEach = (forEachObject: any, forEachObjectName:string, bl
   }
 }
 
-export const validateZenFile = (singleContext: any, block: string) => {
-  if (!singleContext.zenFile) {
-    throw new Error(`Zen file is missing for block id: ${block}`);
+export const validateZen = (singleContext: any, block: string) => {
+  let errorMessage = null
+  if(singleContext.zenFile && singleContext.zenContent) {
+    errorMessage = "Cannot declare both zenContent and zenFile";
+  } else if(!singleContext.zenFile && !singleContext.zenContent) {
+    errorMessage = "Neither zenFile nor zenContent are declared";
+  }
+  if (errorMessage) {
+    throw new Error(`${errorMessage} for block id: ${block}`);
   }
 }
 
