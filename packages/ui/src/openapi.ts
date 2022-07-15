@@ -103,8 +103,8 @@ export const generate = async (
     const contract = Zencode.fromPath(paths[path].fullPath);
     const dataExample: string = paths[path].hasData
       ? nl2br(
-          Zencode.fromPath(paths[path].fullPath.split(".")[0] + ".data").content
-        )
+        Zencode.fromPath(paths[path].fullPath.split(".")[0] + ".data").content
+      )
       : "{}";
     const isChain = paths[path].type == "yml" ? true : false;
     const description = isChain
@@ -120,8 +120,28 @@ export const generate = async (
         tags: [`${tag}`],
         consumes: mime,
         produces: mime,
-        operationId: `_function_${rootPrefix}${exposedPath}_post`,
-        requestBody: requestBody(dataExample),
+        operationId: `_function_${rootPrefix}${exposedPath}_get`,
+        parameters: [
+          {
+            in: "query",
+            name: "data",
+            allowReserved: true,
+            description: "The data in form of a json string",
+            example: dataExample,
+            schema: {
+              type: "string",
+            },
+          },
+          {
+            in: "query",
+            name: "keys",
+            allowReserved: true,
+            description: "The keys in form of a json string",
+            schema: {
+              type: "string",
+            },
+          },
+        ],
         responses,
       },
       post: {

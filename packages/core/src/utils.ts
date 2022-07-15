@@ -138,7 +138,9 @@ export const getMessage = async (req: Request) => {
 
 export const getData = (req: Request, res: Response) => {
   let params = {};
-  if (req.method === "GET") params = JSON.parse(req.query?.data as string);
+  try {
+    if (req.method === "GET") params = JSON.parse(req.query?.data as string);
+  } catch (e) { }
 
   if (req.method === "POST") params = req.body?.data;
 

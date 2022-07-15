@@ -114,6 +114,7 @@ test("getContracts works correctly", async (t) => {
   const contracts = await getContracts("/");
   t.log(contracts);
   t.deepEqual(contracts, [
+    "/a_test_data",
     "/broken",
     "/contract_keys",
     "/contract_yaml_keys",
