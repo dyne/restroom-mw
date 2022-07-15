@@ -6,7 +6,7 @@ applications. It offers a modern build setup with no configuration.
 ## Quick Start
 
 ```sh
-npx create-restroom my-restroom
+npx -y create-restroom@next my-restroom --all
 cd my-restroom
 npm start
 ```
@@ -25,18 +25,19 @@ Create a project, and you’re good to go.
 
 ## Creating an App
 
-**You’ll need to have Node >= 14 on your local development machine** (but it’s not required on the server). You can use [nvm](https://github.com/creationix/nvm#installation) (macOS/Linux) or [nvm-windows](https://github.com/coreybutler/nvm-windows#node-version-manager-nvm-for-windows) to switch Node versions between different projects.
+**You’ll need to have Node >= 16 on your local development machine** (but it’s not required on the server). You can use [nvm](https://github.com/creationix/nvm#installation) (macOS/Linux) or [nvm-windows](https://github.com/coreybutler/nvm-windows#node-version-manager-nvm-for-windows) to switch Node versions between different projects.
 
 To create a new app, you may choose one of the following methods:
 
 ### npx
 
 ```sh
-npx create-restroom my-restroom
+npx -y create-restroom@next my-restroom --all
 ```
 
 _([npx](https://medium.com/@maybekatz/introducing-npx-an-npm-package-runner-55f7d4bd282b) comes with npm 5.2+ and higher, see [instructions for older npm versions](https://gist.github.com/gaearon/4064d3c23a77c74a3614c498a8bb1c5f))_
 
+<!--
 ### npm
 
 ```sh
@@ -53,6 +54,8 @@ yarn create restroom my-restroom
 
 _`yarn create` is available in Yarn 0.25+_
 
+
+
 ### Selecting a package manager
 
 When you create a new app, the CLI will use [npm](https://docs.npmjs.com) or [Yarn](https://yarnpkg.com/) to install dependencies, depending on which tool you use to run `create-restroom`. For example:
@@ -63,6 +66,7 @@ npx create-restroom my-restroom
 # Or run this to use yarn
 yarn create restroom my-restroom
 ```
+-->
 
 ## Output
 
