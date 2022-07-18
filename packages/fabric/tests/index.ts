@@ -55,9 +55,9 @@ test.serial("Init ledger, read&write and re-read", async (t) => {
 
   const res1 = await app.post("/fabric_read_write");
   t.is(res1.status, 200, res1.text);
-  t.is(res1.body.hash, "waS8LuZEWge+Y7k+zsG3cd58iw/o+vNKGS52U+fxeP0=");
+  t.is(res1.body.hash, "ZOv48pncZcsN3kgk8gTl6spgmeaDLGURKnwpTUPXWLk=");
 
   const res2 = await app.post("/fabric_read_write");
   t.is(res2.status, 200, res2.text);
-  t.is(res2.body.hash, "PDHNX7wMa1zl8A9jBqSsEtMqxpPNVZqoEpTl28+odfg=");
+  t.is(res2.body.hash, "0ND+PYxeIy+g58trq3VHQ2hX23pHYOpIihARBfXDJxU=");
 });
