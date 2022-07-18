@@ -144,7 +144,7 @@ export const getData = (req: Request, res: Response) => {
 
   if (req.method === "POST") params = req.body?.data;
 
-  return res.locals?.zenroom_data || params;
+  return res.locals?.zenroom_data || params || {};
 };
 
 export const isChainLastBlock = (internalResult: SingleInstanceOutput) => {
