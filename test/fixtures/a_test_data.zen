@@ -1,0 +1,3 @@
+Scenario test: GET and DATA
+Given I have a 'string' named 'some_param_string'
+Then print the 'some_param_string'

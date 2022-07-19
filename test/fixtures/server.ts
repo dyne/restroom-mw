@@ -16,7 +16,12 @@ app.use(httpmw);
 app.use(db);
 app.use(sawroom);
 app.use("/api/*", core);
-app.use("/docs", ui({ path: process.env.ZENCODE_DIR }));
+app.use("/docs", ui({
+  path: process.env.ZENCODE_DIR,
+  isDataPublic: true,
+  defaultProtocol: 'http',
+  defaultPort: 3000
+}));
 
 const httpServer = http.createServer(app);
 httpServer.listen(3000, "0.0.0.0");

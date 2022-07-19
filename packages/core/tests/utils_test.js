@@ -114,6 +114,7 @@ test("getContracts works correctly", async (t) => {
   const contracts = await getContracts("/");
   t.log(contracts);
   t.deepEqual(contracts, [
+    "/a_test_data",
     "/broken",
     "/contract_keys",
     "/contract_yaml_keys",
@@ -230,7 +231,7 @@ test("getData with empty request", (t) => {
 });
 
 test("getData with empty response", (t) => {
-  const req = { body: { data: 42 } };
+  const req = { method: "POST", body: { data: 42 } };
   const res = { locals: { zenroom_data: null } };
   t.is(getData(req, res), 42);
 });
