@@ -125,7 +125,6 @@ export const generate = async (
           {
             in: "query",
             name: "data",
-            allowReserved: true,
             description: "The data in form of a json string",
             example: dataExample,
             schema: {
@@ -135,7 +134,6 @@ export const generate = async (
           {
             in: "query",
             name: "keys",
-            allowReserved: true,
             description: "The keys in form of a json string",
             schema: {
               type: "string",
