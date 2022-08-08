@@ -96,6 +96,19 @@ test("Check that the middleware detects two different paths in yml", async (t) =
   t.is(res.status, 500);
 });
 
+test("Check that the middleware detects yml in different path then props", async (t) => {
+  const app = express();
+  app.use("/api/*", core);
+  const res = await request(app).post("/api/yml-in-different-path.chain");
+
+  t.true(
+    res.body.exception.includes(
+      "Permission Denied. The path of the chain is different from the one in the yml"
+    )
+  );
+  t.is(res.status, 500);
+});
+
 test("Check that the middleware is able to execute for each chain with for each input as a map", async (t) => {
   const _data = {
     data: {

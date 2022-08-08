@@ -166,3 +166,4 @@ export const isObject = (item: any) => {
 export const isString = (item: unknown) => {
   return typeof item === STRING;
 };
+export const SLASH = "/";

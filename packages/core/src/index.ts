@@ -11,6 +11,7 @@ import {
   isForEachPresent,
   isErrorResult,
   isChainLastBlock,
+  SLASH,
 } from "./utils";
 import { zencode_exec } from "zenroom";
 import { Zencode } from "@restroom-mw/zencode";
@@ -140,6 +141,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
    */
   async function executeChain(
     input: ChainInput,
+    folder: string | null,
   ): Promise<RestroomResult> {
     let globalContext = input.globalContext;
     const data = input.data;
@@ -150,7 +152,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
 
       validateStartBlock(startBlock, ymlContent);
       validateNoLoopInChain(startBlock, ymlContent);
-      validatePathsInYml(ymlContent);
+      validatePathsInYml(ymlContent, folder);
 
       return await handleBlockResult({
         block: startBlock,
@@ -179,13 +181,16 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     const isChain = contractName.split(DOT)[1] === CHAIN_EXTENSION || false;
     const keys = isChain ? EMPTY_OBJECT_STRING : getKeys(contractName);
     const globalContext = createGlobalContext();
+    const dirsInContractName = contractName.split(SLASH);
     try {
       return isChain
         ? executeChain({
           ymlContent: getYml(contractName.split(DOT)[0]),
           data,
           globalContext
-        })
+        },
+        (dirsInContractName.length > 1) ? dirsInContractName[0] : null,
+        )
         : callRestroom({
             data: data,
             keys: keys,
