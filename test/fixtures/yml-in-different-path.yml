@@ -1,0 +1,13 @@
+zenchain: 1.0
+name: correct-keypair
+start: path1/create-pbkdf.zen
+blocks:
+  path1/create-pbkdf.zen:
+    next: path1/create-keypair.zen
+    keysFile: path1/create-pbkdf-input.keys
+  path1/create-keypair.zen:
+    next: path1/verify-keypair.zen
+    confFile: path1/create-keypair-configuration.conf
+    keysFile: path1/create-keypair-input.keys
+  path2/verify-keypair.zen:
+    keysFile: path1/verify-keypair-input.keys
