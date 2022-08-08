@@ -44,17 +44,19 @@ const excludeProps = ["zenContent"]
 /**
  * Function responsible to check if paths in the yml containing same folder
  * @param {ymlContent} object yml object
+ * @param {ymlFolder} subfolder the yml file is in (null if it is
+ *                    not in a subfolder)
  */
-export const validatePathsInYml = (ymlContent: any, user: string | null) => {
-  let allFolders: string[] = [];
+export const validatePathsInYml = (ymlContent: any, ymlFolder: string | null) => {
+  const allFolders: string[] = [];
   if (ymlContent?.blocks) {
     Object.keys(ymlContent?.blocks).forEach(path=>{
       if (ymlContent?.blocks[path]){
         Object.keys(ymlContent?.blocks[path]).forEach(prop=>{
-          let value = ymlContent?.blocks[path][prop];
+          const value = ymlContent?.blocks[path][prop];
           if (isString(value) && !excludeProps.includes(prop) &&
               value.includes(SLASH)){
-            let folder = value.substring(0, value.lastIndexOf(SLASH));
+            const folder = value.substring(0, value.lastIndexOf(SLASH));
             allFolders.push(folder);
           }
         });
@@ -64,8 +66,8 @@ export const validatePathsInYml = (ymlContent: any, user: string | null) => {
   if (allFolders.length > 1 && !allFolders.every((val, i, arr) => val === arr[0])){
     throw new Error(`Permission Denied. The paths in the yml cannot be different`);
   }
-  const contentUser = (allFolders.length > 1) ? allFolders[0] : null
-  if (contentUser !== user){
+  const propFolder = (allFolders.length > 1) ? allFolders[0] : null
+  if (ymlFolder !== propFolder){
     throw new Error(`Permission Denied. The path of the chain is different from the one in the yml`);
   }
 }
