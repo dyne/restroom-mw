@@ -141,7 +141,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
    */
   async function executeChain(
     input: ChainInput,
-    user: string | null,
+    folder: string | null,
   ): Promise<RestroomResult> {
     let globalContext = input.globalContext;
     const data = input.data;
@@ -152,7 +152,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
 
       validateStartBlock(startBlock, ymlContent);
       validateNoLoopInChain(startBlock, ymlContent);
-      validatePathsInYml(ymlContent, user);
+      validatePathsInYml(ymlContent, folder);
 
       return await handleBlockResult({
         block: startBlock,
