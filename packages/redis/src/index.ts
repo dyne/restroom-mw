@@ -147,7 +147,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
           throw new Error(`${keyName} is not a string`)
         }
         const obj = result[objName]
-        if(!obj) {
+        if(typeof obj === 'undefined') {
           throw new Error(`${objName} not defined in the results`)
         }
       }
