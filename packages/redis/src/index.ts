@@ -140,7 +140,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
       const chkParams = zencode.chunkedParamsOf(Action.SET_OBJECT_NAMED, 2);
       for (const [objName, keyName] of chkParams) {
         const key = result[keyName] || content[keyName];
-        if(!key) {
+        if(typeof key === 'undefined') {
           throw new Error(`${keyName} not defined`)
         }
         if(typeof key !== 'string') {
