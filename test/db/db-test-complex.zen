@@ -12,5 +12,6 @@ When I create the ecdh key
 When I create the signature of 'myZenroomStringDictionary'
 When I create the array of '8' random objects of '256' bits
 Then print all data
+Then print the keyring
 Then I save the output into the database 'myDb1' into the table 'myTable'
 Then I save the 'keyring' into the database 'myDb2' into the table 'myCache'

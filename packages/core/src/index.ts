@@ -238,7 +238,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       keys: singleContext.keys,
       conf: singleContext.conf,
       zencode: zencode,
-      contractPath: singleContext.zenFile ? singleContext.zenFile : ""
+      contractPath: singleContext.currentBlock
     });
 
     return {restroomResult: restroomResult, singleContext: singleContext, globalContext: globalContext};
