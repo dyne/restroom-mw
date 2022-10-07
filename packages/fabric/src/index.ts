@@ -100,7 +100,14 @@ const validateStep = (requested: FabricInterop) => {
 }
 
 export default async (req: Request, res: Response, next: NextFunction) => {
-  const rr = new Restroom(req, res);
+  const rr = new Restroom(req, res, [ADDRESS,
+    CONNECT,
+    CHANNEL,
+    CONTRACT,
+    QUERY,
+    SUBMIT,
+    STORE,
+    RETRIEVE]);
 
   try {
     rr.onBefore(async (params) => {

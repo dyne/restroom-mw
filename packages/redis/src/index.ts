@@ -63,7 +63,7 @@ enum Action {
 
 const REDIS_LUA_FILTER_KEY_AND_GET = "local keys = redis.call('KEYS', '*'..KEYS[1]..'*'); return redis.call('MGET', unpack(keys))"
 export default (req: Request, res: Response, next: NextFunction) => {
-  const rr = new Restroom(req, res);
+  const rr = new Restroom(req, res, Object.values(Action));
   let client: any = null;
   let getRedisClient: () => any;
   let namedSet: string = null;

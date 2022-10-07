@@ -33,7 +33,18 @@ let sawroomAddress: string = null;
 let input: ObjectLiteral = {};
 
 export default async (req: Request, res: Response, next: NextFunction) => {
-  const rr = new Restroom(req, res);
+  const rr = new Restroom(req, res, [EXECUTE,
+    READ,
+    SAVE,
+    SAWROOM_ADDRESS,
+    TOKEN,
+    STORE,
+    STORE_OUTPUT,
+    RETRIEVE,
+    BALANCE,
+    DEPOSIT,
+    WITHDRAW,
+    TRANSFER]);
   try {
     rr.onBefore(async (params) => {
       let { zencode, keys, data } = params;

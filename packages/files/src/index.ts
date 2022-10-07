@@ -51,7 +51,7 @@ const validatePath = (p: string) => {
 }
 
 export default (req: Request, res: Response, next: NextFunction) => {
-  const rr = new Restroom(req, res);
+  const rr = new Restroom(req, res, [READ, DOWNLOAD, STORE_RESULT]);
 
 
   rr.onBefore(async (params) => {

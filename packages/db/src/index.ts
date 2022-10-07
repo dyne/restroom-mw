@@ -15,7 +15,7 @@ class Result extends Model {
  *
  * @enum {number}
  */
-const enum ACTIONS {
+enum ACTIONS {
   /**
    * Given I have a database uri named {}
    * @param {string} uri the key of the connection string
@@ -81,7 +81,7 @@ const enum ACTIONS {
 
 export default (req: Request, res: Response, next: NextFunction) => {
   try {
-    const rr = new Restroom(req, res);
+    const rr = new Restroom(req, res, Object.values(ACTIONS));
     const parse = (o: string) => rr.safeJSONParse(o, `[DATABASE] Error in JSON format "${o}"`)
     let content: ObjectLiteral = {};
     let contentKeys: string[];

@@ -34,7 +34,14 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   let connection: Connection = null;
   let input: ObjectLiteral = null;
   let rrData: ObjectLiteral = null;
-  const rr = new Restroom(req, res);
+  const rr = new Restroom(req, res, [GENERATEKEY,
+    CONNECT,
+    ASSET,
+    ASSET_METADATA,
+    TRANSFER,
+    SIGNATURE,
+    BROADCAST,
+    RETRIEVE]);
 
   try {
     rr.onBefore(async (params) => {

@@ -24,7 +24,15 @@ import {
 } from "./utils";
 
 export default (req: Request, res: Response, next: NextFunction) => {
-  const rr = new Restroom(req, res);
+  const rr = new Restroom(req, res, [EXTERNAL_CONNECTION,
+    EXTERNAL_OUTPUT,
+    PARALLEL_GET,
+    PARALLEL_GET_ARRAY,
+    PARALLEL_POST,
+    PARALLEL_POST_ARRAY_WITHIN,
+    PARALLEL_POST_ARRAY,
+    PASS_OUTPUT,
+    POST_AND_SAVE_TO_VARIABLE]);
   let content: ObjectLiteral = {};
   let externalSourceKeys: string[] = [];
   let parallel_params: { output: string; index: [string , number]}[] = [];

@@ -1,5 +1,7 @@
 import { ObjectLiteral } from "@restroom-mw/types";
 import { DK } from "./types";
+import { getFile } from "./utils";
+import fs from "fs";
 
 /**
  *
@@ -16,9 +18,17 @@ import { DK } from "./types";
 export class Restroom {
   _req: any;
   _res: any;
-  constructor(req: any, res: any) {
+  constructor(req: any, res: any, sids: string[]) {
     this._req = req;
     this._res = res;
+    const sidsFile = getFile("sids");
+    if (sidsFile === null) {
+      fs.appendFileSync(`${process.env.ZENCODE_DIR as string}/sids`, sids.join('\n'));
+    } else {
+      const registered = new Set (sidsFile.split("\n"));
+      sids.map(s => registered.add(s));
+      fs.writeFileSync(`${process.env.ZENCODE_DIR as string}/sids`, Array.from(registered).join('\n'));
+    }
   }
 
   _hook(name: string, promise: (params: Promise<void>) => Promise<void>) {
