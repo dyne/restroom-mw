@@ -1,4 +1,4 @@
-fabchain: "http://test.fabchain.net:8545"
-contract_address: "fB062b5F8eac5914174D3E39Fb01c7F9520B0aEC"
-owner: "dC51204D6ceB8aE21cD2e826A07D5406809aA389"
+fabchain: "http://78.47.38.223:9485"
+contract_address: "720F72765775bb85EAAa08BB74442F106d3ffA03"
+owner: "7d6df85bDBCe99151c813fd1DDE6BC007c523C27"
 someone: "5917D88B6D8a6ed217dfA54e50b677E1D2577b89"

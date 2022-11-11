@@ -1,9 +1,9 @@
 {
-  "fabchain": "http://test.fabchain.net:8545",
+  "fabchain": "http://78.47.38.223:9485",
 	"ethereum_address_array": [
-		"8388f6a2a4940c3fe14d640ddf151aa771f03b81",
-		"fcb3156532549730e7b118cb99a736776551f0e4",
-		"6ef80725bc7eaf1e227f82dbc6c8e1f73156a438"
+		"c32510251F77382bb9214144D2c488408Ec2047C",
+		"Ff02577F140557190693cFf549025e66119FEA52",
+		"4743879F5e9dc3fcE41E30380365441E8D14CCEc"
 	]
 }
 
