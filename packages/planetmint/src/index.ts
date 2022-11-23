@@ -3,13 +3,19 @@ import { ObjectLiteral } from "@restroom-mw/types";
 import { zencodeNamedParamsOf } from '@restroom-mw/utils';
 
 import { Ed25519Keypair, Connection, Transaction } from "bigchaindb-driver";
+import { TransactionOperations, TransactionUnspentOutput,
+         TransactionCommon }
+  from "bigchaindb-driver/types/transaction"
 import { NextFunction, Request, Response } from "express";
 import {
   GENERATEKEY,
   CONNECT,
   ASSET,
   ASSET_METADATA,
+  ASSET_AMOUNT,
+  ASSET_AMOUNT_METADATA,
   TRANSFER,
+  TRANSFER_AMOUNT,
   SIGNATURE,
   BROADCAST,
   RETRIEVE,
@@ -74,7 +80,8 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     rr.onSuccess(async (params) => {
       const { zencode, result } = params;
 
-      const storeAsset = ( asset: Record<string, any>, metadata: Record<string, any> ) => {
+      const storeAsset = ( asset: Record<string, any>, metadata: Record<string, any>,
+          amount: string = "1" ) => {
         const ed25519Keypair = result.ed25519_keypair
           || rrData.ed25519_keypair || input.ed25519_keypair;
         if( !ed25519Keypair || !ed25519Keypair.public_key ) {
@@ -85,7 +92,8 @@ export default async (req: Request, res: Response, next: NextFunction) => {
           metadata,
           [ Transaction.makeOutput(
             Transaction.makeEd25519Condition(
-              ed25519Keypair.public_key ))
+              ed25519Keypair.public_key ),
+            amount)
           ],
           ed25519Keypair.public_key
         );
@@ -98,7 +106,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         if( !result[ asset ] ) {
           throw new Error("Asset not found");
         }
-        storeAsset( result[ asset ], metadata );
+        storeAsset( result[ asset ], metadata, "1" );
       }
 
       if(zencode.match(ASSET_METADATA)) {
@@ -109,7 +117,33 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         if( !result[metadata] ) {
           throw new Error("Metadata not found");
         }
-        storeAsset( result[ asset ], result[ metadata ] );
+        storeAsset( result[ asset ], result[ metadata ], "1" );
+      }
+
+      if(zencode.match(ASSET_AMOUNT)) {
+        const [ asset, amount ] = zencode.paramsOf(ASSET_AMOUNT);
+        const metadata: Record<string, any> = null;
+        if( !result[asset] ) {
+          throw new Error("Asset not found");
+        }
+        if( !result[amount] ) {
+          throw new Error("Amount not found");
+        }
+        storeAsset( result[ asset ], metadata, result[ amount ] );
+      }
+
+      if(zencode.match(ASSET_AMOUNT_METADATA)) {
+        const [ asset, amount, metadata ] = zencode.paramsOf(ASSET_AMOUNT_METADATA);
+        if( !result[asset] ) {
+          throw new Error("Asset not found");
+        }
+        if( !result[metadata] ) {
+          throw new Error("Metadata not found");
+        }
+        if( !result[amount] ) {
+          throw new Error("Amount not found");
+        }
+        storeAsset( result[ asset ], result[ metadata ], result[ amount ] );
       }
 
       if(zencode.match(TRANSFER)) {
@@ -137,6 +171,68 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         result.planetmint_transaction = utf8ToB64(JSON.stringify(tx));
       }
 
+      if(zencode.match(TRANSFER_AMOUNT)) {
+        const [ amountName, txidName, recipientName ]
+          = zencode.paramsOf(TRANSFER_AMOUNT);
+        const amountStr = result[amountName] || input[amountName];
+        const txid = result[txidName] || input[txidName];
+        const recipient = result[recipientName] || input[recipientName];
+        if( !amountStr ) {
+          throw new Error("Amount not found");
+        }
+        if( !txid ) {
+          throw new Error("Transaction id not found");
+        }
+        if( !recipient ) {
+          throw new Error("Recipient public key not found");
+        }
+        const ed25519Keypair = result.ed25519_keypair
+          || rrData.ed25519_keypair || input.ed25519_keypair;
+        const amount = BigInt(amountStr)
+
+        // Read UTXO
+        const txs = await
+          connection.listOutputs(result.ed25519_keypair.public_key, false)
+
+        // Filter UTXO that refer to the current COIN (asset txid)
+        let txsUsed = []
+        let currentAmount = BigInt(0)
+        for(const txOld of txs) {
+          const txDict = await
+            connection.getTransaction
+              <TransactionOperations.TRANSFER>(txOld.transaction_id)
+
+          const assetId = txDict.asset.id ? txDict.asset.id : txDict.id;
+          if(assetId === txid) {
+            // Refer to the current coin, we will use it!
+            txsUsed.push({
+              tx: txDict as TransactionCommon<TransactionOperations>,
+              output_index: txOld.output_index
+            } as TransactionUnspentOutput)
+            currentAmount += BigInt(txDict.outputs[txOld.output_index].amount)
+          }
+
+          // The amount is more than what we want to transfer
+          if(currentAmount > amount) {
+            break;
+          }
+        }
+
+        // Create the transfer transaction
+        const tx = Transaction.makeTransferTransaction(
+          txsUsed,
+          [ Transaction.makeOutput(
+              Transaction.makeEd25519Condition(
+                ed25519Keypair.public_key), (currentAmount-amount).toString(10)),
+            Transaction.makeOutput(
+              Transaction.makeEd25519Condition(
+                recipient), amountStr)
+          ],
+          null
+        );
+        result.planetmint_transaction = utf8ToB64(JSON.stringify(tx));
+      }
+
       if(zencode.match(SIGNATURE)) {
         const [ txB64 ] = zencode.paramsOf(SIGNATURE);
         if( !result[ txB64 ] ) {
@@ -148,9 +244,11 @@ export default async (req: Request, res: Response, next: NextFunction) => {
           throw new Error("Private key not found");
         }
         const tx = JSON.parse(b64ToUtf8(result[ txB64 ]));
+        const privateKeys = Array(tx.inputs.length)
+            .fill( ed25519Keypair.private_key )
         const signedTx = Transaction.signTransaction(
           tx,
-          ed25519Keypair.private_key );
+          ...privateKeys);
         result.signed_planetmint_transaction = utf8ToB64(JSON.stringify(signedTx));
       }
 
