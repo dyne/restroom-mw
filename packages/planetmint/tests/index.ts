@@ -81,3 +81,35 @@ test.serial("Create asset, transfer it and then trasnfer it back", async (t) => 
     }});
   t.is(resTransfer2.status, 200, resTransfer2.text);
 });
+
+test.serial("Create a token and transfer it", async (t) => {
+  const { app } = t.context;
+  const asset = {timestamp: new Date().getTime(), name: "MY SUPER COIN 💣️"};
+  const resCreate = await app.post("/planetmint_store_asset_amount")
+    .send({keys: {}, data: {asset}});
+  t.is(resCreate.status, 200, resCreate.text);
+  console.log(resCreate.body.ed25519_keypair);
+  const resTransfer1 = await app.post("/planetmint_transfer_token")
+    .send({keys: {}, data: {
+      txid: resCreate.body.txid,
+      sender: resCreate.body.ed25519_keypair,
+    }});
+  t.is(resTransfer1.status, 200, resTransfer1.text);
+  console.log(resTransfer1.body.receiver);
+  const resTransfer2 = await app.post("/planetmint_transfer_token2")
+    .send({keys: {}, data: {
+      txid: resCreate.body.txid,
+      ed25519_keypair: resTransfer1.body.receiver,
+      receiver: resCreate.body.ed25519_keypair.public_key,
+      amount: "40000000000000000"
+    }});
+  t.is(resTransfer2.status, 200, resTransfer2.text);
+  const resTransfer3 = await app.post("/planetmint_transfer_token2")
+    .send({keys: {}, data: {
+      txid: resCreate.body.txid,
+      ed25519_keypair: resCreate.body.ed25519_keypair,
+      receiver: resTransfer1.body.receiver.public_key,
+      amount: "50000000000000000"
+    }});
+  t.is(resTransfer3.status, 200, resTransfer3.text);
+});
