@@ -7,5 +7,5 @@ export const ASSET_AMOUNT = "create the planetmint transaction to store asset na
 export const ASSET_AMOUNT_METADATA = "create the planetmint transaction to store asset named {} with amount {} and metadata {}";
 export const TRANSFER = "create the planetmint transaction to transfer the asset in {} to {}";
 export const TRANSFER_AMOUNT = "create the planetmint transaction to transfer the amount {} of {} to {}";
-export const SIGNATURE = "create the signed planetmint transaction of {}";
+export const SIGNATURE = "create the signed planetmint transaction of {} with {}";
 export const BROADCAST = "ask planetmint to broadcast the {}";
