@@ -17,7 +17,7 @@ test.before(async (t) => {
   t.context.app = supertest(app);
 });
 
-test.serial("Store the signed tx of an asset", async (t) => {
+test("Store the signed tx of an asset", async (t) => {
   const { app } = t.context;
   const asset = {timestamp: new Date().getTime(), city: "Berlin", temperature: "22"};
   const res = await app.post("/planetmint_store_asset")
@@ -31,7 +31,7 @@ test.serial("Store the signed tx of an asset", async (t) => {
   t.is(res.body.hash, resRetrieve.body.hash);
 });
 
-test.serial("Store the signed tx of an asset with metadata", async (t) => {
+test("Store the signed tx of an asset with metadata", async (t) => {
   const { app } = t.context;
   const metadata = {timestamp: new Date().getTime().toString()};
   const res = await app.post("/planetmint_store_asset_metadata")
@@ -52,13 +52,13 @@ test.skip("Retrieve a zenroom object", async (t) => {
   t.is(res.body.hash, hash);
 });
 
-test.serial("Retrieve object that doesn't exist", async (t) => {
+test("Retrieve object that doesn't exist", async (t) => {
   const { app } = t.context;
   const res = await app.post("/planetmint_retrieve_no_exist");
   t.is(res.status, 500, res.text);
 });
 
-test.serial("Create asset, transfer it and then trasnfer it back", async (t) => {
+test("Create asset, transfer it and then trasnfer it back", async (t) => {
   const bob = {
     private_key: "J9tV35oDozNe9S7esxi4p4zkkefmrPp2ez63PjKwqfRz",
     public_key: "2umg6yiPZV5QqnaLBy1cwszFiAUSNTVAaXjekwqXL8NW"
@@ -90,7 +90,8 @@ test.serial("Create asset, transfer it and then trasnfer it back", async (t) => 
   t.is(resTransfer2.status, 200, resTransfer2.text);
 });
 
-test.serial("Create a token and transfer it", async (t) => {
+test("Create a token and transfer it", async (t) => {
+  t.timeout(40000)
   const bob = {
     private_key: "J9tV35oDozNe9S7esxi4p4zkkefmrPp2ez63PjKwqfRz",
     public_key: "2umg6yiPZV5QqnaLBy1cwszFiAUSNTVAaXjekwqXL8NW"
