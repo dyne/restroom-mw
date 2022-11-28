@@ -15,12 +15,12 @@ jobs:
     strategy:
       max-parallel: 1
       matrix:
-        node-version: [14.18.0, 16.13.0]
+        node-version: [16.13.0, 18]
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
     - uses: supercharge/redis-github-action@1.4.0
@@ -30,7 +30,7 @@ jobs:
     - run: yarn add -W zenroom@latest
     - run: yarn build
     - run: yarn test
-    - uses: codecov/codecov-action@v1
+    - uses: codecov/codecov-action@v3
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         file: ./coverage/lcov.info
@@ -39,10 +39,10 @@ jobs:
     if: github.ref == 'refs/heads/master'
     needs: build
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: "0"
-    - uses: actions/setup-node@v1
+    - uses: actions/setup-node@v3
       with:
         node-version: 16.x
         registry-url: 'https://registry.npmjs.org'
