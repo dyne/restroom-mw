@@ -27,7 +27,7 @@ jobs:
       with:
         redis-version: 6
     - run: yarn
-    - run: yarn add -W zenroom@latest
+    - run: yarn add -W zenroom
     - run: yarn build
     - run: yarn test
     - uses: codecov/codecov-action@v3
@@ -48,7 +48,7 @@ jobs:
         registry-url: 'https://registry.npmjs.org'
     - run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
     - run: yarn
-    - run: yarn add -W zenroom@next
+    - run: yarn add -W zenroom
     - run: yarn build
     - run: git update-index --assume-unchanged package.json
     - name: Install lerna globally
