@@ -64,7 +64,7 @@ test.serial("Create asset, transfer it and then trasnfer it back", async (t) => 
     public_key: "2umg6yiPZV5QqnaLBy1cwszFiAUSNTVAaXjekwqXL8NW"
   };
   const { app } = t.context;
-  const asset = {timestamp: new Date().getTime()};
+  const asset = {timestamp: new Date().getTime(), to_be_transfered: true};
   const resCreate = await app.post("/planetmint_store_asset")
     .send({keys: {}, data: {asset}});
   t.is(resCreate.status, 200, resCreate.text);

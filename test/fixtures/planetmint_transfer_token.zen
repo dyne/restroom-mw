@@ -4,7 +4,7 @@ Scenario 'planetmint': Create the key
 
 # Restroom onBefore
 Given I have a planetmint endpoint named 'endpoint'
-Given I create the planetmint transaction to transfer the amount 'amount' of 'txid' to 'public_key'
+Given I create the planetmint transaction to transfer the amount 'amount' of 'txid' from 'eddsa_public_key' to 'public_key'
 
 # Zenroom
 Given I have the 'keyring'
@@ -13,10 +13,10 @@ Given I have a 'string' named 'txid'
 Given I have a 'string' named 'amount'
 Given I have a 'string' named 'planetmint transaction'
 
-When I create the planetmint output signatures of 'planetmint transaction'
+When I create the planetmint signatures of planetmint transaction with eddsa
 
 # Restrom onSuccess
-Then I create the signed planetmint transaction of 'planetmint_transaction' with 'planetmint_output_signatures'
+Then I create the signed planetmint transaction of planetmint transaction with planetmint signatures and 'eddsa_public_key'
 Then ask planetmint to broadcast the 'signed_planetmint_transaction'
 # Zenroom
 Then print the data

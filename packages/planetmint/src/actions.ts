@@ -1,11 +1,11 @@
 export const GENERATEKEY = "create the ed25519 keypair";
 export const CONNECT = "have a planetmint endpoint named {}";
 export const RETRIEVE = "read the planetmint transaction {} and save the output into {}";
-export const ASSET = "create the planetmint transaction to store asset named {}";
-export const ASSET_METADATA = "create the planetmint transaction to store asset named {} with metadata {}";
-export const ASSET_AMOUNT = "create the planetmint transaction to store asset named {} with amount {}";
-export const ASSET_AMOUNT_METADATA = "create the planetmint transaction to store asset named {} with amount {} and metadata {}";
+export const ASSET = "create the planetmint transaction to store asset named {} from {}";
+export const ASSET_METADATA = "create the planetmint transaction to store asset named {} with metadata {} from {}";
+export const ASSET_AMOUNT = "create the planetmint transaction to store asset named {} with amount {} from {}";
+export const ASSET_AMOUNT_METADATA = "create the planetmint transaction to store asset named {} with amount {} and metadata {} from {}";
 export const TRANSFER = "create the planetmint transaction to transfer the asset in {} to {}";
-export const TRANSFER_AMOUNT = "create the planetmint transaction to transfer the amount {} of {} to {}";
-export const SIGNATURE = "create the signed planetmint transaction of {} with {}";
+export const TRANSFER_AMOUNT = "create the planetmint transaction to transfer the amount {} of {} from {} to {}";
+export const SIGNATURE = "create the signed planetmint transaction of planetmint transaction with planetmint signatures and {}";
 export const BROADCAST = "ask planetmint to broadcast the {}";

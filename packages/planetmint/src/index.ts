@@ -58,12 +58,6 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       input = rr.combineDataKeys(data, keys);
       const namedParamsOf = zencodeNamedParamsOf(zencode, input);
 
-      if(zencode.match(GENERATEKEY)) {
-        // keypair is in base58 format
-        const { privateKey, publicKey } = new Ed25519Keypair();
-        data.ed25519_keypair = { private_key: privateKey, public_key: publicKey };
-      }
-
       if(zencode.match(CONNECT)) {
         const [ endpoint ] = namedParamsOf(CONNECT);
         // does not perform any http request
@@ -84,9 +78,9 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         }
       }
 
-      const storeAsset = ( asset: Record<string, any>, metadata: Record<string, any>,
+      const storeAsset = ( publicKey: string, asset: Record<string, any>, metadata: Record<string, any>,
           amount: string = "1" ) => {
-        const eddsaPublicKey = input.eddsa_public_key
+        const eddsaPublicKey = input[publicKey]
         if(!eddsaPublicKey) {
           throw new Error("Public key not found");
         }
@@ -95,7 +89,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
           metadata,
           [ Transaction.makeOutput(
             Transaction.makeEd25519Condition(
-              eddsaPublicKey ),
+              eddsaPublicKey),
             amount)
           ],
           eddsaPublicKey
@@ -105,27 +99,27 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       }
 
       if(zencode.match(ASSET)) {
-        const [ asset ] = zencode.paramsOf(ASSET);
+        const [ asset, publicKey ] = zencode.paramsOf(ASSET);
         const metadata: Record<string, any> = null;
         if( !input[ asset ] ) {
           throw new Error("Asset not found");
         }
-        storeAsset( input[ asset ], metadata, "1" );
+        storeAsset(publicKey, input[ asset ], metadata, "1" );
       }
 
       if(zencode.match(ASSET_METADATA)) {
-        const [ asset, metadata ] = zencode.paramsOf(ASSET_METADATA);
+        const [ asset, metadata, publicKey ] = zencode.paramsOf(ASSET_METADATA);
         if( !input[asset] ) {
           throw new Error("Asset not found");
         }
         if( !input[metadata] ) {
           throw new Error("Metadata not found");
         }
-        storeAsset( input[ asset ], input[ metadata ], "1" );
+        storeAsset(publicKey, input[ asset ], input[ metadata ], "1" );
       }
 
       if(zencode.match(ASSET_AMOUNT)) {
-        const [ asset, amount ] = zencode.paramsOf(ASSET_AMOUNT);
+        const [ asset, amount, publicKey ] = zencode.paramsOf(ASSET_AMOUNT);
         const metadata: Record<string, any> = null;
         if( !input[asset] ) {
           throw new Error("Asset not found");
@@ -133,11 +127,11 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         if( !input[amount] ) {
           throw new Error("Amount not found");
         }
-        storeAsset( input[ asset ], metadata, input[ amount ] );
+        storeAsset(publicKey, input[ asset ], metadata, input[ amount ]);
       }
 
       if(zencode.match(ASSET_AMOUNT_METADATA)) {
-        const [ asset, amount, metadata ] =
+        const [ asset, amount, metadata, publicKey ] =
           zencode.paramsOf(ASSET_AMOUNT_METADATA);
         if( !input[asset] ) {
           throw new Error("Asset not found");
@@ -148,7 +142,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         if( !input[amount] ) {
           throw new Error("Amount not found");
         }
-        storeAsset( input[ asset ], input[ metadata ], input[ amount ] );
+        storeAsset(publicKey, input[ asset ], input[ metadata ], input[ amount ]);
       }
 
       if(zencode.match(TRANSFER)) {
@@ -178,29 +172,29 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       }
 
       if(zencode.match(TRANSFER_AMOUNT)) {
-        const [ amountName, txidName, recipientName ]
+        const [ amountName, txidName, senderName, recipientName ]
           = zencode.paramsOf(TRANSFER_AMOUNT);
         const amountStr = input[amountName];
         const txid = input[txidName];
-        const recipient = input[recipientName];
+        const senderPublicKey = input[senderName];
+        const recipientPublicKey = input[recipientName];
         if( !amountStr ) {
           throw new Error("Amount not found");
         }
         if( !txid ) {
           throw new Error("Transaction id not found");
         }
-        if( !recipient ) {
-          throw new Error("Recipient public key not found");
+        if( !senderPublicKey ) {
+          throw new Error("Sender public key not found");
         }
-        const eddsaPublicKey = input.eddsa_public_key
-        if(!eddsaPublicKey) {
-          throw new Error("Public key not found");
+        if( !recipientPublicKey ) {
+          throw new Error("Recipient public key not found");
         }
         const amount = BigInt(amountStr)
 
         // Read UTXO
         const txs = await
-          connection.listOutputs(eddsaPublicKey, false)
+          connection.listOutputs(senderPublicKey, false)
 
         // Filter UTXO that refer to the current COIN (asset txid)
         const txsUsed = []
@@ -231,10 +225,10 @@ export default async (req: Request, res: Response, next: NextFunction) => {
           txsUsed,
           [ Transaction.makeOutput(
               Transaction.makeEd25519Condition(
-                eddsaPublicKey), (currentAmount-amount).toString(10)),
+                senderPublicKey), (currentAmount-amount).toString(10)),
             Transaction.makeOutput(
               Transaction.makeEd25519Condition(
-                recipient), amountStr)
+                recipientPublicKey), amountStr)
           ],
           null
         );
@@ -248,27 +242,27 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       const { zencode, result } = params;
 
       if(zencode.match(SIGNATURE)) {
-        const [ serializedTx, signatures ] = zencode.paramsOf(SIGNATURE);
-        if( !result[ serializedTx ] ) {
+        const [ publicKeyName ] = zencode.paramsOf(SIGNATURE);
+        if( !result.planetmint_transaction ) {
           throw new Error("Planetmint transaction not found");
         }
-        if( !result[ signatures ] ) {
+        if( !result.planetmint_signatures ) {
           throw new Error("Planetmint signature list not found");
         }
 
-        const publicKeyBS58 = result.eddsa_public_key || input.eddsa_public_key
+        const publicKeyBS58 = result[publicKeyName] || input[publicKeyName]
 
         if( !publicKeyBS58 ) {
           throw new Error("EdDSA public key not provided");
         }
         const publicKey = base58.decode(publicKeyBS58)
-        const tx = JSON.parse(result[serializedTx]) as
+        const tx = JSON.parse(result.planetmint_transaction) as
           TransactionCommon<TransactionOperations>;
         tx.inputs.forEach((txInput, index) => {
           const ed25519Fulfillment = new Ed25519Sha256()
           ed25519Fulfillment.setPublicKey(Buffer.from(publicKey))
           ed25519Fulfillment.setSignature(
-            Buffer.from(result[signatures][index], 'hex'))
+            Buffer.from(result.planetmint_signatures[index], 'hex'))
           txInput.fulfillment = ed25519Fulfillment.serializeUri()
         });
 
