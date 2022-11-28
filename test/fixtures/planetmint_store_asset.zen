@@ -4,7 +4,7 @@ Scenario 'planetmint': Create the key
 
 # Restroom onBefore
 Given I have a planetmint endpoint named 'endpoint'
-Given I create the planetmint transaction to store asset named 'asset' from 'eddsa_public_key'
+Given I prepare the planetmint transaction to store 'asset' from 'eddsa_public_key'
 
 # Zenroom
 Given I have the 'keyring'
@@ -15,10 +15,10 @@ Given I have a 'string' named 'planetmint transaction'
 # Given I have a 'string dictionary' named 'mytx'
 When I create the hash of 'asset'
 
-When I create the planetmint signatures of planetmint transaction with eddsa
+When I create the planetmint signatures of 'planetmint transaction'
 
 # Restrom onSuccess
-Then I create the signed planetmint transaction of planetmint transaction with planetmint signatures and 'eddsa_public_key'
+Then I prepare the signed planetmint transaction of 'planetmint_transaction' from 'eddsa_public_key'
 Then ask planetmint to broadcast the 'signed_planetmint_transaction'
 
 # Zenroom

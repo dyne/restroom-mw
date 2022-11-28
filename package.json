@@ -97,7 +97,7 @@
     "@babel/preset-env": "^7.12.16",
     "@dyne/sawroom-client": "^1.9.0",
     "express": "^4.17.2",
-    "zenroom": "^2.4.1"
+    "zenroom": "^2.4.2"
   },
   "packageManager": "yarn@1.22.10"
 }

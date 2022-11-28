@@ -11,7 +11,6 @@ import { NextFunction, Request, Response } from "express";
 import base58 from 'bs58';
 import { sha3_256 } from 'js-sha3'
 import {
-  GENERATEKEY,
   CONNECT,
   ASSET,
   ASSET_METADATA,
@@ -119,7 +118,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       }
 
       if(zencode.match(ASSET_AMOUNT)) {
-        const [ asset, amount, publicKey ] = zencode.paramsOf(ASSET_AMOUNT);
+        const [ amount, asset, publicKey ] = zencode.paramsOf(ASSET_AMOUNT);
         const metadata: Record<string, any> = null;
         if( !input[asset] ) {
           throw new Error("Asset not found");
@@ -131,7 +130,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       }
 
       if(zencode.match(ASSET_AMOUNT_METADATA)) {
-        const [ asset, amount, metadata, publicKey ] =
+        const [ amount, asset, metadata, publicKey ] =
           zencode.paramsOf(ASSET_AMOUNT_METADATA);
         if( !input[asset] ) {
           throw new Error("Asset not found");
@@ -242,12 +241,14 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       const { zencode, result } = params;
 
       if(zencode.match(SIGNATURE)) {
-        const [ publicKeyName ] = zencode.paramsOf(SIGNATURE);
-        if( !result.planetmint_transaction ) {
+        const [ planetmintTransactionName, publicKeyName ] = zencode.paramsOf(SIGNATURE);
+        const planetmintTransaction = result[planetmintTransactionName]
+            || input[planetmintTransactionName];
+        if( !planetmintTransaction ) {
           throw new Error("Planetmint transaction not found");
         }
         if( !result.planetmint_signatures ) {
-          throw new Error("Planetmint signature list not found");
+          throw new Error("planetmint_signatures not found");
         }
 
         const publicKeyBS58 = result[publicKeyName] || input[publicKeyName]
@@ -256,7 +257,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
           throw new Error("EdDSA public key not provided");
         }
         const publicKey = base58.decode(publicKeyBS58)
-        const tx = JSON.parse(result.planetmint_transaction) as
+        const tx = JSON.parse(planetmintTransaction) as
           TransactionCommon<TransactionOperations>;
         tx.inputs.forEach((txInput, index) => {
           const ed25519Fulfillment = new Ed25519Sha256()
