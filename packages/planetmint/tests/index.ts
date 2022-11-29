@@ -111,7 +111,7 @@ test("Create a token and transfer it", async (t) => {
       public_key: bob.public_key
     }});
   t.is(resTransfer1.status, 200, resTransfer1.text);
-  /*const resTransfer2 = await app.post("/planetmint_transfer_token2")
+  const resTransfer2 = await app.post("/planetmint_transfer_token2")
     .send({keys: {}, data: {
       txid: resCreate.body.txid,
       keyring: {
@@ -122,7 +122,7 @@ test("Create a token and transfer it", async (t) => {
       amount: "40000000000000000"
     }});
   t.is(resTransfer2.status, 200, resTransfer2.text);
-  const resTransfer3 = await app.post("/planetmint_transfer_token2")
+  /*const resTransfer3 = await app.post("/planetmint_transfer_token2")
     .send({keys: {}, data: {
       txid: resCreate.body.txid,
       keyring: {
