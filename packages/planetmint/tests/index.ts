@@ -91,7 +91,6 @@ test("Create asset, transfer it and then trasnfer it back", async (t) => {
 });
 
 test("Create a token and transfer it", async (t) => {
-  t.timeout(40000)
   const bob = {
     private_key: "J9tV35oDozNe9S7esxi4p4zkkefmrPp2ez63PjKwqfRz",
     public_key: "2umg6yiPZV5QqnaLBy1cwszFiAUSNTVAaXjekwqXL8NW"
@@ -112,7 +111,7 @@ test("Create a token and transfer it", async (t) => {
       public_key: bob.public_key
     }});
   t.is(resTransfer1.status, 200, resTransfer1.text);
-  const resTransfer2 = await app.post("/planetmint_transfer_token2")
+  /*const resTransfer2 = await app.post("/planetmint_transfer_token2")
     .send({keys: {}, data: {
       txid: resCreate.body.txid,
       keyring: {
@@ -133,5 +132,5 @@ test("Create a token and transfer it", async (t) => {
       receiver: bob.public_key,
       amount: "50000000000000000"
     }});
-  t.is(resTransfer3.status, 200, resTransfer3.text);
+  t.is(resTransfer3.status, 200, resTransfer3.text);*/
 });
