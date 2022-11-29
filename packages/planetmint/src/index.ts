@@ -198,11 +198,14 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         // Filter UTXO that refer to the current COIN (asset txid)
         const txsUsed = []
         let currentAmount = BigInt(0)
-        for(const txOld of txs) {
-          const txDict = await
-            connection.getTransaction
-              <TransactionOperations.TRANSFER>(txOld.transaction_id)
+        const txsResolved = await Promise.all(txs.map(async (txOld) => {
+          return {
+            txOld,
+            txDict: await connection.getTransaction
+              <TransactionOperations.TRANSFER>(txOld.transaction_id)}
+        }))
 
+        for(const {txOld, txDict} of txsResolved) {
           const assetId = txDict.asset.id ? txDict.asset.id : txDict.id;
           if(assetId === txid) {
             // Refer to the current coin, we will use it!
