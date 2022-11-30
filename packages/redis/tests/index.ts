@@ -97,6 +97,18 @@ test.serial("Middlware store object named", async (t) => {
   t.true(Object.keys(saved).includes('en'))
   t.is(typeof saved2, 'string')
 });
+test.serial("Middleware should read from redis correctly multiple keys", async (t) => {
+  const { app, c } = t.context;
+  const res = await app.post("/get_multiple");
+  t.is(res.status, 200, res.text);
+  const result = res.body;
+  const saved = await c.get("store-named:greeting");
+  const saved2 = await c.get("store-named:hex");
+  t.true(Object.keys(result).includes("redisResult"));
+  t.true(Object.keys(result).includes("redisResult2"));
+  t.deepEqual(result.redisResult, JSON.parse(saved));
+  t.is(result.redisResult2, JSON.parse(saved2));
+});
 test.serial("Middlware store object named that doesn't exist", async (t) => {
   const { app, c } = t.context;
   const res = await app.post("/store_object_not_defined");
