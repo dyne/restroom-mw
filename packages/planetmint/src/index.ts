@@ -6,9 +6,11 @@ import { Ed25519Keypair, Connection, Transaction } from "bigchaindb-driver";
 import { TransactionOperations, TransactionUnspentOutput,
          TransactionCommon }
   from "bigchaindb-driver/types/transaction"
+import { Ed25519Sha256 } from 'crypto-conditions'
 import { NextFunction, Request, Response } from "express";
+import base58 from 'bs58';
+import { sha3_256 } from 'js-sha3'
 import {
-  GENERATEKEY,
   CONNECT,
   ASSET,
   ASSET_METADATA,
@@ -36,6 +38,13 @@ const b64ToUtf8 = ( str: string ) => {
   return Buffer.from( str, 'base64').toString( 'utf-8' );
 }
 
+const sha256Hash = (data: string) => {
+    return sha3_256
+        .create()
+        .update(data)
+        .hex()
+}
+
 export default async (req: Request, res: Response, next: NextFunction) => {
   let connection: Connection = null;
   let input: ObjectLiteral = null;
@@ -47,12 +56,6 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       const { zencode, keys, data } = params;
       input = rr.combineDataKeys(data, keys);
       const namedParamsOf = zencodeNamedParamsOf(zencode, input);
-
-      if(zencode.match(GENERATEKEY)) {
-        // keypair is in base58 format
-        const { privateKey, publicKey } = new Ed25519Keypair();
-        data.ed25519_keypair = { private_key: privateKey, public_key: publicKey };
-      }
 
       if(zencode.match(CONNECT)) {
         const [ endpoint ] = namedParamsOf(CONNECT);
@@ -74,17 +77,10 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         }
       }
 
-      rrData = data;
-    });
-
-    rr.onSuccess(async (params) => {
-      const { zencode, result } = params;
-
-      const storeAsset = ( asset: Record<string, any>, metadata: Record<string, any>,
+      const storeAsset = ( publicKey: string, asset: Record<string, any>, metadata: Record<string, any>,
           amount: string = "1" ) => {
-        const ed25519Keypair = result.ed25519_keypair
-          || rrData.ed25519_keypair || input.ed25519_keypair;
-        if( !ed25519Keypair || !ed25519Keypair.public_key ) {
+        const eddsaPublicKey = input[publicKey]
+        if(!eddsaPublicKey) {
           throw new Error("Public key not found");
         }
         const tx = Transaction.makeCreateTransaction(
@@ -92,64 +88,66 @@ export default async (req: Request, res: Response, next: NextFunction) => {
           metadata,
           [ Transaction.makeOutput(
             Transaction.makeEd25519Condition(
-              ed25519Keypair.public_key ),
+              eddsaPublicKey),
             amount)
           ],
-          ed25519Keypair.public_key
+          eddsaPublicKey
         );
-        result.planetmint_transaction = utf8ToB64(JSON.stringify(tx));
+        data.planetmint_transaction =
+              Transaction.serializeTransactionIntoCanonicalString(tx)
       }
 
       if(zencode.match(ASSET)) {
-        const [ asset ] = zencode.paramsOf(ASSET);
+        const [ asset, publicKey ] = zencode.paramsOf(ASSET);
         const metadata: Record<string, any> = null;
-        if( !result[ asset ] ) {
+        if( !input[ asset ] ) {
           throw new Error("Asset not found");
         }
-        storeAsset( result[ asset ], metadata, "1" );
+        storeAsset(publicKey, input[ asset ], metadata, "1" );
       }
 
       if(zencode.match(ASSET_METADATA)) {
-        const [ asset, metadata ] = zencode.paramsOf(ASSET_METADATA);
-        if( !result[asset] ) {
+        const [ asset, metadata, publicKey ] = zencode.paramsOf(ASSET_METADATA);
+        if( !input[asset] ) {
           throw new Error("Asset not found");
         }
-        if( !result[metadata] ) {
+        if( !input[metadata] ) {
           throw new Error("Metadata not found");
         }
-        storeAsset( result[ asset ], result[ metadata ], "1" );
+        storeAsset(publicKey, input[ asset ], input[ metadata ], "1" );
       }
 
       if(zencode.match(ASSET_AMOUNT)) {
-        const [ asset, amount ] = zencode.paramsOf(ASSET_AMOUNT);
+        const [ amount, asset, publicKey ] = zencode.paramsOf(ASSET_AMOUNT);
         const metadata: Record<string, any> = null;
-        if( !result[asset] ) {
+        if( !input[asset] ) {
           throw new Error("Asset not found");
         }
-        if( !result[amount] ) {
+        if( !input[amount] ) {
           throw new Error("Amount not found");
         }
-        storeAsset( result[ asset ], metadata, result[ amount ] );
+        storeAsset(publicKey, input[ asset ], metadata, input[ amount ]);
       }
 
       if(zencode.match(ASSET_AMOUNT_METADATA)) {
-        const [ asset, amount, metadata ] = zencode.paramsOf(ASSET_AMOUNT_METADATA);
-        if( !result[asset] ) {
+        const [ amount, asset, metadata, publicKey ] =
+          zencode.paramsOf(ASSET_AMOUNT_METADATA);
+        if( !input[asset] ) {
           throw new Error("Asset not found");
         }
-        if( !result[metadata] ) {
+        if( !input[metadata] ) {
           throw new Error("Metadata not found");
         }
-        if( !result[amount] ) {
+        if( !input[amount] ) {
           throw new Error("Amount not found");
         }
-        storeAsset( result[ asset ], result[ metadata ], result[ amount ] );
+        storeAsset(publicKey, input[ asset ], input[ metadata ], input[ amount ]);
       }
 
       if(zencode.match(TRANSFER)) {
         const [ txidName, recipientName ] = zencode.paramsOf(TRANSFER);
-        const txid = result[txidName] || input[txidName];
-        const recipient = result[recipientName] || input[recipientName];
+        const txid = input[txidName];
+        const recipient = input[recipientName];
         if( !txid ) {
           throw new Error("Transaction id not found");
         }
@@ -168,40 +166,46 @@ export default async (req: Request, res: Response, next: NextFunction) => {
           ],
           null
         );
-        result.planetmint_transaction = utf8ToB64(JSON.stringify(tx));
+        data.planetmint_transaction =
+              Transaction.serializeTransactionIntoCanonicalString(tx)
       }
 
       if(zencode.match(TRANSFER_AMOUNT)) {
-        const [ amountName, txidName, recipientName ]
+        const [ amountName, txidName, senderName, recipientName ]
           = zencode.paramsOf(TRANSFER_AMOUNT);
-        const amountStr = result[amountName] || input[amountName];
-        const txid = result[txidName] || input[txidName];
-        const recipient = result[recipientName] || input[recipientName];
+        const amountStr = input[amountName];
+        const txid = input[txidName];
+        const senderPublicKey = input[senderName];
+        const recipientPublicKey = input[recipientName];
         if( !amountStr ) {
           throw new Error("Amount not found");
         }
         if( !txid ) {
           throw new Error("Transaction id not found");
         }
-        if( !recipient ) {
+        if( !senderPublicKey ) {
+          throw new Error("Sender public key not found");
+        }
+        if( !recipientPublicKey ) {
           throw new Error("Recipient public key not found");
         }
-        const ed25519Keypair = result.ed25519_keypair
-          || rrData.ed25519_keypair || input.ed25519_keypair;
         const amount = BigInt(amountStr)
 
         // Read UTXO
         const txs = await
-          connection.listOutputs(result.ed25519_keypair.public_key, false)
+          connection.listOutputs(senderPublicKey, false)
 
         // Filter UTXO that refer to the current COIN (asset txid)
-        let txsUsed = []
+        const txsUsed = []
         let currentAmount = BigInt(0)
-        for(const txOld of txs) {
-          const txDict = await
-            connection.getTransaction
-              <TransactionOperations.TRANSFER>(txOld.transaction_id)
+        const txsResolved = await Promise.all(txs.map(async (txOld) => {
+          return {
+            txOld,
+            txDict: await connection.getTransaction
+              <TransactionOperations.TRANSFER>(txOld.transaction_id)}
+        }))
 
+        for(const {txOld, txDict} of txsResolved) {
           const assetId = txDict.asset.id ? txDict.asset.id : txDict.id;
           if(assetId === txid) {
             // Refer to the current coin, we will use it!
@@ -223,44 +227,65 @@ export default async (req: Request, res: Response, next: NextFunction) => {
           txsUsed,
           [ Transaction.makeOutput(
               Transaction.makeEd25519Condition(
-                ed25519Keypair.public_key), (currentAmount-amount).toString(10)),
+                senderPublicKey), (currentAmount-amount).toString(10)),
             Transaction.makeOutput(
               Transaction.makeEd25519Condition(
-                recipient), amountStr)
+                recipientPublicKey), amountStr)
           ],
           null
         );
-        result.planetmint_transaction = utf8ToB64(JSON.stringify(tx));
+        data.planetmint_transaction =
+              Transaction.serializeTransactionIntoCanonicalString(tx)
       }
+      rrData = data;
+    });
+
+    rr.onSuccess(async (params) => {
+      const { zencode, result } = params;
 
       if(zencode.match(SIGNATURE)) {
-        const [ txB64 ] = zencode.paramsOf(SIGNATURE);
-        if( !result[ txB64 ] ) {
+        const [ planetmintTransactionName, publicKeyName ] = zencode.paramsOf(SIGNATURE);
+        const planetmintTransaction = result[planetmintTransactionName]
+            || input[planetmintTransactionName];
+        if( !planetmintTransaction ) {
           throw new Error("Planetmint transaction not found");
         }
-        const ed25519Keypair = result.ed25519_keypair
-          || rrData.ed25519_keypair || input.ed25519_keypair;
-        if( !ed25519Keypair || !ed25519Keypair.private_key ) {
-          throw new Error("Private key not found");
+        if( !result.planetmint_signatures ) {
+          throw new Error("planetmint_signatures not found");
         }
-        const tx = JSON.parse(b64ToUtf8(result[ txB64 ]));
-        const privateKeys = Array(tx.inputs.length)
-            .fill( ed25519Keypair.private_key )
-        const signedTx = Transaction.signTransaction(
-          tx,
-          ...privateKeys);
-        result.signed_planetmint_transaction = utf8ToB64(JSON.stringify(signedTx));
+
+        const publicKeyBS58 = result[publicKeyName] || input[publicKeyName]
+
+        if( !publicKeyBS58 ) {
+          throw new Error("EdDSA public key not provided");
+        }
+        const publicKey = base58.decode(publicKeyBS58)
+        const tx = JSON.parse(planetmintTransaction) as
+          TransactionCommon<TransactionOperations>;
+        tx.inputs.forEach((txInput, index) => {
+          const ed25519Fulfillment = new Ed25519Sha256()
+          ed25519Fulfillment.setPublicKey(Buffer.from(publicKey))
+          ed25519Fulfillment.setSignature(
+            Buffer.from(result.planetmint_signatures[index], 'hex'))
+          txInput.fulfillment = ed25519Fulfillment.serializeUri()
+        });
+
+        const serializedSignedTransaction =
+          Transaction.serializeTransactionIntoCanonicalString(tx)
+        tx.id = sha3_256(serializedSignedTransaction);
+        result.signed_planetmint_transaction =
+          Transaction.serializeTransactionIntoCanonicalString(tx)
       }
 
       if(zencode.match(BROADCAST)) {
-        const [ signedTxB64 ] = zencode.paramsOf(BROADCAST);
-        if( !result[signedTxB64] ) {
+        const [ serializedSignedTx ] = zencode.paramsOf(BROADCAST);
+        if( !result[serializedSignedTx] ) {
           throw new Error("Signed planetmint transaction not found");
         }
         if( !connection ) {
           throw new Error("Connection not defined");
         }
-        const signedTx = JSON.parse(b64ToUtf8(result[signedTxB64]));
+        const signedTx = JSON.parse(result[serializedSignedTx]);
         try {
           const txResult = await connection.postTransactionCommit(signedTx)
           result.txid = txResult.id;
