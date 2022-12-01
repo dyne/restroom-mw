@@ -41,7 +41,8 @@
   },
   "dependencies": {
     "base64url": "3.0.1",
-    "web3": "1.7.0",
-    "bigchaindb-driver": "4.3.0"
+    "bigchaindb-driver": "4.3.0",
+    "bs58": "^5.0.0",
+    "web3": "1.7.0"
   }
 }

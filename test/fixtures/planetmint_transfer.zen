@@ -1,16 +1,21 @@
 Rule unknown ignore
+Scenario 'eddsa': Create the key
+Scenario 'planetmint': Create the key
 
 # Restroom onBefore
 Given I have a planetmint endpoint named 'endpoint'
+Given I prepare the planetmint transaction to transfer 'txid' to 'recipient_public_key'
 
 # Zenroom
-Given I have a 'base58 dictionary' named 'ed25519 keypair'
+Given I have the 'keyring'
 Given I have a 'string' named 'endpoint'
+Given I have a 'string' named 'planetmint transaction'
+Given I have a 'base58' named 'eddsa_public_key'
 
+When I create the planetmint signatures of 'planetmint transaction'
 
 # Restrom onSuccess
-Then I create the planetmint transaction to transfer the asset in 'txid' to 'recipient_public_key'
-Then I create the signed planetmint transaction of 'planetmint_transaction'
+Then I prepare the signed planetmint transaction of 'planetmint_transaction' from 'eddsa_public_key'
 Then ask planetmint to broadcast the 'signed_planetmint_transaction'
 # Zenroom
 Then print the data

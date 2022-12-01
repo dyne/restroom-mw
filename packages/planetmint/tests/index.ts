@@ -17,9 +17,9 @@ test.before(async (t) => {
   t.context.app = supertest(app);
 });
 
-test.serial("Store the signed tx of an asset", async (t) => {
+test("Store the signed tx of an asset", async (t) => {
   const { app } = t.context;
-  const asset = {city: "Berlin", temperature: "22"};
+  const asset = {timestamp: new Date().getTime(), city: "Berlin", temperature: "22"};
   const res = await app.post("/planetmint_store_asset")
     .send({keys: {}, data: {asset}});
   t.is(res.status, 200, res.text);
@@ -31,9 +31,11 @@ test.serial("Store the signed tx of an asset", async (t) => {
   t.is(res.body.hash, resRetrieve.body.hash);
 });
 
-test.serial("Store the signed tx of an asset with metadata", async (t) => {
+test("Store the signed tx of an asset with metadata", async (t) => {
   const { app } = t.context;
-  const res = await app.post("/planetmint_store_asset_metadata");
+  const metadata = {timestamp: new Date().getTime().toString()};
+  const res = await app.post("/planetmint_store_asset_metadata")
+    .send({keys: {}, data: {metadata}});
   t.is(res.status, 200, res.text);
   t.is(typeof res.body.txid, "string");
   t.is(res.body.txid.length, 64);
@@ -50,65 +52,84 @@ test.skip("Retrieve a zenroom object", async (t) => {
   t.is(res.body.hash, hash);
 });
 
-test.serial("Retrieve object that doesn't exist", async (t) => {
+test("Retrieve object that doesn't exist", async (t) => {
   const { app } = t.context;
   const res = await app.post("/planetmint_retrieve_no_exist");
   t.is(res.status, 500, res.text);
 });
 
-test.serial("Create asset, transfer it and then trasnfer it back", async (t) => {
+test("Create asset, transfer it and then trasnfer it back", async (t) => {
   const bob = {
     private_key: "J9tV35oDozNe9S7esxi4p4zkkefmrPp2ez63PjKwqfRz",
     public_key: "2umg6yiPZV5QqnaLBy1cwszFiAUSNTVAaXjekwqXL8NW"
   };
   const { app } = t.context;
-  const asset = {timestamp: new Date().getTime()};
+  const asset = {timestamp: new Date().getTime(), to_be_transfered: true};
   const resCreate = await app.post("/planetmint_store_asset")
     .send({keys: {}, data: {asset}});
   t.is(resCreate.status, 200, resCreate.text);
   const resTransfer1 = await app.post("/planetmint_transfer")
     .send({keys: {}, data: {
       txid: resCreate.body.txid,
-      ed25519_keypair: resCreate.body.ed25519_keypair,
+      keyring: {
+        eddsa: resCreate.body.keyring.eddsa,
+      },
+      eddsa_public_key: resCreate.body.eddsa_public_key,
       recipient_public_key: bob.public_key,
     }});
   t.is(resTransfer1.status, 200, resTransfer1.text);
   const resTransfer2 = await app.post("/planetmint_transfer")
     .send({keys: {}, data: {
       txid: resTransfer1.body.txid,
-      ed25519_keypair: bob,
-      recipient_public_key: resCreate.body.ed25519_keypair.public_key,
+      keyring: {
+        eddsa: bob.private_key,
+      },
+      eddsa_public_key: bob.public_key,
+      recipient_public_key: resCreate.body.eddsa_public_key,
     }});
   t.is(resTransfer2.status, 200, resTransfer2.text);
 });
 
-test.serial("Create a token and transfer it", async (t) => {
+test("Create a token and transfer it", async (t) => {
+  const bob = {
+    private_key: "J9tV35oDozNe9S7esxi4p4zkkefmrPp2ez63PjKwqfRz",
+    public_key: "2umg6yiPZV5QqnaLBy1cwszFiAUSNTVAaXjekwqXL8NW"
+  };
   const { app } = t.context;
   const asset = {timestamp: new Date().getTime(), name: "MY SUPER COIN 💣️"};
   const resCreate = await app.post("/planetmint_store_asset_amount")
     .send({keys: {}, data: {asset}});
   t.is(resCreate.status, 200, resCreate.text);
-  console.log(resCreate.body.ed25519_keypair);
+  console.log(`{ 'txid': ${resCreate.body.txid} }`);
   const resTransfer1 = await app.post("/planetmint_transfer_token")
     .send({keys: {}, data: {
       txid: resCreate.body.txid,
-      sender: resCreate.body.ed25519_keypair,
+      keyring: {
+        eddsa: resCreate.body.keyring.eddsa,
+      },
+      eddsa_public_key: resCreate.body.eddsa_public_key,
+      public_key: bob.public_key
     }});
   t.is(resTransfer1.status, 200, resTransfer1.text);
-  console.log(resTransfer1.body.receiver);
   const resTransfer2 = await app.post("/planetmint_transfer_token2")
     .send({keys: {}, data: {
       txid: resCreate.body.txid,
-      ed25519_keypair: resTransfer1.body.receiver,
-      receiver: resCreate.body.ed25519_keypair.public_key,
+      keyring: {
+        eddsa: bob.private_key,
+      },
+      eddsa_public_key: bob.public_key,
+      receiver: resCreate.body.eddsa_public_key,
       amount: "40000000000000000"
     }});
   t.is(resTransfer2.status, 200, resTransfer2.text);
   const resTransfer3 = await app.post("/planetmint_transfer_token2")
     .send({keys: {}, data: {
       txid: resCreate.body.txid,
-      ed25519_keypair: resCreate.body.ed25519_keypair,
-      receiver: resTransfer1.body.receiver.public_key,
+      keyring: {
+        eddsa: resCreate.body.keyring.eddsa,
+      },
+      eddsa_public_key: resCreate.body.eddsa_public_key,
+      receiver: bob.public_key,
       amount: "50000000000000000"
     }});
   t.is(resTransfer3.status, 200, resTransfer3.text);

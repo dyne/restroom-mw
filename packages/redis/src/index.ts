@@ -90,10 +90,12 @@ export default (req: Request, res: Response, next: NextFunction) => {
 
     const getFromRedis = async (action: string) => {
       client = client || (await getRedisClient());
-      const [key, outputVariable] = namedParamsOf(action);
-      console.log(key, outputVariable);
-      await client.sendCommand(["SETNX", key, "{}"]);
-      data[outputVariable] = JSON.parse((await client.get(key)) ?? {});
+      const chkParams = zencode.chunkedParamsOf(action, 2);
+      for (const [keyName, outputVariable] of chkParams) {
+        const key = content[keyName] || keyName;
+        await client.sendCommand(["SETNX", key, "{}"]);
+        data[outputVariable] = JSON.parse((await client.get(key)) ?? {});
+      }
     };
 
     if (zencode.match(Action.GET)) await getFromRedis(Action.GET);
