@@ -78,8 +78,10 @@ export default (req: Request, res: Response, next: NextFunction) => {
     if (zencode.match(DOWNLOAD)) {
       const allPassOutputs = zencode.paramsOf(DOWNLOAD);
       for (let i = 0; i < allPassOutputs.length; i += 2) {
-        const file = result[allPassOutputs[i]]
-        const folder = input[allPassOutputs[i + 1]];
+        const file = result[allPassOutputs[i]] ||
+          input[allPassOutputs[i]];
+        const folder = result[allPassOutputs[i + 1]] ||
+          input[allPassOutputs[i + 1]];
 
         if(!file) {
           throw new Error(`[FILES] url not defined`);
@@ -110,8 +112,10 @@ export default (req: Request, res: Response, next: NextFunction) => {
     if (zencode.match(STORE_RESULT)) {
       const allPassOutputs = zencode.paramsOf(STORE_RESULT);
       for (let i = 0; i < allPassOutputs.length; i += 2) {
-        const variable = result[allPassOutputs[i]]
-        const file = input[allPassOutputs[i + 1]]
+        const variable = result[allPassOutputs[i]] ||
+          input[allPassOutputs[i]];
+        const file = result[allPassOutputs[i + 1]] ||
+          input[allPassOutputs[i + 1]];
 
         if(!variable) {
           throw new Error(`[FILES] variable not defined`);
