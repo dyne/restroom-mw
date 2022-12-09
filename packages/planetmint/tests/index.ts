@@ -58,7 +58,7 @@ test("Retrieve object that doesn't exist", async (t) => {
   t.is(res.status, 500, res.text);
 });
 
-test("Create asset, transfer it and then trasnfer it back", async (t) => {
+test.skip("Create asset, transfer it and then trasnfer it back", async (t) => {
   const bob = {
     private_key: "J9tV35oDozNe9S7esxi4p4zkkefmrPp2ez63PjKwqfRz",
     public_key: "2umg6yiPZV5QqnaLBy1cwszFiAUSNTVAaXjekwqXL8NW"
@@ -90,7 +90,7 @@ test("Create asset, transfer it and then trasnfer it back", async (t) => {
   t.is(resTransfer2.status, 200, resTransfer2.text);
 });
 
-test("Create a token and transfer it", async (t) => {
+test.skip("Create a token and transfer it", async (t) => {
   const bob = {
     private_key: "J9tV35oDozNe9S7esxi4p4zkkefmrPp2ez63PjKwqfRz",
     public_key: "2umg6yiPZV5QqnaLBy1cwszFiAUSNTVAaXjekwqXL8NW"
