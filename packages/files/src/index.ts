@@ -53,13 +53,14 @@ const validatePath = (p: string) => {
 export default (req: Request, res: Response, next: NextFunction) => {
   const rr = new Restroom(req, res);
 
-
   rr.onBefore(async (params) => {
     const { zencode, keys, data } = params;
+    input = rr.combineDataKeys(data, keys);
 
     if (zencode.match(READ)) {
       const params = zencode.paramsOf(READ);
-      for(const file of params) {
+      for(const f of params) {
+        const file = input[f] || f;
         validatePath(file);
         const absoluteFile = path.join(FILES_DIR, file)
         try {

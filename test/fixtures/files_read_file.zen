@@ -1,6 +1,10 @@
-Rule unknown ignore
+Rule caller restroom-mw
+# from variable
+Given I read the content of 'path'
+# from string
+Given I read the content of 'lerna.json'
+
 Given I have a 'string' named 'name'
+Given I have a 'string' named 'npmClient'
 Given I have a 'string' named 'var'
-Given I read the content of 'packages/files/package.json'
-Given I read the content of 'package.json'
 Then print data
