@@ -55,11 +55,12 @@ export default (req: Request, res: Response, next: NextFunction) => {
 
   rr.onBefore(async (params) => {
     const { zencode, keys, data } = params;
+    input = rr.combineDataKeys(data, keys);
 
     if (zencode.match(READ)) {
       const params = zencode.paramsOf(READ);
       for(const f of params) {
-        const file = data[f] || JSON.parse(keys)[f] || f;
+        const file = input[f] || f;
         validatePath(file);
         const absoluteFile = path.join(FILES_DIR, file)
         try {
