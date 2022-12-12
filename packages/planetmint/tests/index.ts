@@ -17,7 +17,7 @@ test.before(async (t) => {
   t.context.app = supertest(app);
 });
 
-test("Store the signed tx of an asset", async (t) => {
+test.skip("Store the signed tx of an asset", async (t) => {
   const { app } = t.context;
   const asset = {timestamp: new Date().getTime(), city: "Berlin", temperature: "22"};
   const res = await app.post("/planetmint_store_asset")
@@ -31,7 +31,7 @@ test("Store the signed tx of an asset", async (t) => {
   t.is(res.body.hash, resRetrieve.body.hash);
 });
 
-test("Store the signed tx of an asset with metadata", async (t) => {
+test.skip("Store the signed tx of an asset with metadata", async (t) => {
   const { app } = t.context;
   const metadata = {timestamp: new Date().getTime().toString()};
   const res = await app.post("/planetmint_store_asset_metadata")
@@ -52,7 +52,7 @@ test.skip("Retrieve a zenroom object", async (t) => {
   t.is(res.body.hash, hash);
 });
 
-test("Retrieve object that doesn't exist", async (t) => {
+test.skip("Retrieve object that doesn't exist", async (t) => {
   const { app } = t.context;
   const res = await app.post("/planetmint_retrieve_no_exist");
   t.is(res.status, 500, res.text);
