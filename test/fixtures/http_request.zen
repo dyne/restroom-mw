@@ -1,0 +1,4 @@
+Given I have a 'string dictionary' named 'http request'
+When I pickup from path 'http request.http version'
+When I pickup from path 'http request.socket.remote address'
+Then print data

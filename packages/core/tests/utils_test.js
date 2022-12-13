@@ -147,6 +147,7 @@ test("getContracts works correctly", async (t) => {
     "/hash-test",
     "/http-output",
     "/http-test",
+    "/http_request",
     "/keygen",
     "/planetmint_retrieve",
     "/planetmint_retrieve_no_exist",
@@ -219,14 +220,42 @@ test("Complete message", async (t) => {
   t.is("<h2>404: This contract does not exists</h2>", result);
 });
 
+const generateEmptyRequest = () => {
+  const req = {
+    baseUrl: null, httpVersion: null, headers: null,
+    path: null, method: null, protocol: null,
+    body: { data: null },
+    socket: { localPort: null, localAddress: null,
+              remotePort: null, remoteFamily: null,
+              remoteAddress: null }};
+  const result = {
+    http_request: {
+      base_url: null,
+      headers: null,
+      http_version: null,
+      method: null,
+      path: null,
+      protocol: null,
+      socket: {
+        local_address: null,
+        local_port: null,
+        remote_address: null,
+        remote_family: null,
+        remote_port: null,
+      },
+    },
+  }
+  return { req, result }
+}
+
 test("getData works correctly", (t) => {
-  const req = { body: { data: null } };
+  const { req, result } = generateEmptyRequest();
   const res = { locals: { zenroom_data: null } };
-  t.deepEqual(getData(req, res), {});
+  t.deepEqual(getData(req, res), result);
 });
 
 test("getData with empty request", (t) => {
-  const req = { body: { data: null } };
+  const { req, result } = generateEmptyRequest();
   const res = { locals: { zenroom_data: 42 } };
 
   t.is(42, res.locals.zenroom_data || req.body.data || {});
