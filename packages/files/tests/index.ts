@@ -71,3 +71,15 @@ test.serial("Read data from file", async (t) => {
   t.is(res.body.npmClient, "yarn");
   t.is(res.body['var'], "here since the beginning");
 });
+
+test.serial('List content of directory', async (t) => {
+  const { app } = t.context;
+  const res = await app.post("/files_ls");
+  t.is(res.status, 200, res.text);
+  t.is(res.body.folder1.length, 6);
+  for(const file of res.body.folder1) {
+    t.is(file.blksize, 4096);
+    t.is(file.mode.substr(0, 2), '40'); // All directory
+  }
+  t.is(res.body.folder2.length, 15);
+})

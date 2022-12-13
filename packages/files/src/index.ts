@@ -2,6 +2,7 @@ import {Restroom} from "@restroom-mw/core";
 import axios from "axios";
 import {NextFunction, Request, Response} from "express";
 import fs from 'fs'
+import { readdir, stat } from 'node:fs/promises';
 import os from 'os'
 import extract from 'extract-zip';
 import path from 'path';
@@ -21,10 +22,9 @@ import {DOWNLOAD} from "./actions";
  * Store the content of the variable `myVariable` in the filesystem at the path
  * `myFolder` on the server
  */
-
 import {STORE_RESULT} from "./actions";
 
-import {READ} from "./actions";
+import {READ, LS} from "./actions";
 
 
 /**
@@ -42,10 +42,12 @@ const validatePath = (p: string) => {
     throw new Error(`FILES_DIR is not defined`);
 
   if (FILES_DIR != "/") {
+    // Even if path contains .., they are resolved in a absolute path
+    // https://github.com/nodejs/node/blob/74a6f0bd0763a1aa1a241da55322c2556834036b/lib/path.js#L507-L508
     const relative = path.relative(FILES_DIR, p);
-    const isSubdir = relative && !relative.startsWith('..') && !path.isAbsolute(relative);
+    const isSubdir = !relative.startsWith('..') && !path.isAbsolute(relative);
     if (!isSubdir) {
-      throw new Error(`Result path outside ${FILES_DIR}`)
+      throw new Error(`Result path ${relative} outside ${FILES_DIR}`)
     }
   }
 }
@@ -70,6 +72,50 @@ export default (req: Request, res: Response, next: NextFunction) => {
           throw new Error(`[FILES] error while reading the file ${absoluteFile}`);
         }
       }
+    }
+    if (zencode.match(LS)) {
+      const params = zencode.chunkedParamsOf(LS, 2);
+      const fileStats: Record<string, any> = {}
+      const allLs = (await Promise.all(params.map(
+        async ([p, name]: string[]) => {
+          const f = input[p] || p;
+          validatePath(f);
+          try {
+            const content = await readdir(f)
+            // I am not checking if `name` is used multiple times
+            fileStats[name] = []
+            return content.map((current) => [name, f, current]);
+          } catch(e) {
+            throw new Error(`[FILES] error while reading the file ${f}`);
+          }
+        }))).flat()
+      // list with all files I want to see the stats of
+      const allStats = await Promise.all(allLs.map(async ([name, p, current]) => {
+        const currentFile = path.join(p, current)
+        const fileStat = await stat(currentFile)
+        return [name, current, fileStat]
+      }))
+      for(const [name, current, currentStat] of allStats) {
+        // see https://unix.stackexchange.com/questions/317855/file-mode-on-macosx#317907
+        // for the meaning of the mode field
+        fileStats[name].push({
+          'name': current,
+          'mode': currentStat.mode.toString(8),
+          'dev': currentStat.dev,
+          'nlink': currentStat.nlink,
+          'uid': currentStat.uid,
+          'gid': currentStat.gid,
+          'size': currentStat.size,
+          'blksize': currentStat.blksize,
+          'blocks': currentStat.blocks,
+          'atime': currentStat.atime.toISOString(),
+          'mtime': currentStat.mtime.toISOString(),
+          'ctime': currentStat.ctime.toISOString(),
+          'birthtime': currentStat.birthtime.toISOString(),
+        })
+      }
+      Object.assign(data, fileStats)
+
     }
     input = rr.combineDataKeys(data, keys);
   });

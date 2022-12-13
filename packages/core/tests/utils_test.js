@@ -139,6 +139,7 @@ test("getContracts works correctly", async (t) => {
     "/fabric_read_write",
     "/fabric_retrieve",
     "/fabric_store",
+    "/files_ls",
     "/files_no_dest",
     "/files_no_url",
     "/files_read_file",
