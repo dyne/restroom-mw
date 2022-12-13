@@ -36,5 +36,5 @@ test.serial("OnSuccess is always executed on empty result", async (t) => {
   t.true(log.calledOnce);
   t.true(log.calledWith("success!"));
   t.is(res.status, 200);
-  t.deepEqual(res.body, []);
+  t.true('http_request' in res.body);
 });
