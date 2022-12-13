@@ -96,6 +96,8 @@ export default (req: Request, res: Response, next: NextFunction) => {
         return [name, current, fileStat]
       }))
       for(const [name, current, currentStat] of allStats) {
+        // see https://unix.stackexchange.com/questions/317855/file-mode-on-macosx#317907
+        // for the meaning of the mode field
         fileStats[name].push({
           'name': current,
           'mode': currentStat.mode.toString(8),
