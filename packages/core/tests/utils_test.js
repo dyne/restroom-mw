@@ -149,6 +149,7 @@ test("getContracts works correctly", async (t) => {
     "/http-output",
     "/http-test",
     "/keygen",
+    "/logger_append",
     "/planetmint_retrieve",
     "/planetmint_retrieve_no_exist",
     "/planetmint_store_asset",
