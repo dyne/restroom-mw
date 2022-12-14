@@ -1,6 +1,7 @@
 import { TextDecoder } from "util";
 import { Zencode } from "@restroom-mw/zencode";
 import { ObjectLiteral } from "@restroom-mw/types";
+import path from 'path';
 
 require("dotenv").config();
 
@@ -101,3 +102,26 @@ export const zencodeNamedParamsOf =
         return acc;
       }, []);
     };
+
+/**
+ * Returns a function that verify if a path is inside another given path
+ *
+ *
+ * @param parentDir
+ * @returns validate function
+ */
+export const validateSubdir = (parentDir: string) =>
+  (p: string) => {
+    if (!parentDir)
+      throw new Error(`parent directory is not defined`);
+
+    if (parentDir !== "/") {
+      // Even if path contains .., they are resolved in a absolute path
+      // https://github.com/nodejs/node/blob/74a6f0bd0763a1aa1a241da55322c2556834036b/lib/path.js#L507-L508
+      const relative = path.relative(parentDir, p);
+      const isSubdir = !relative.startsWith('..') && !path.isAbsolute(relative);
+      if (!isSubdir) {
+        throw new Error(`Result path ${relative} outside ${parentDir}`)
+      }
+    }
+}

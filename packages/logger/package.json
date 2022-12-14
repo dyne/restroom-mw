@@ -1,0 +1,36 @@
+{
+  "name": "@restroom-mw/logger",
+  "version": "0.13.0",
+  "description": "Utilities middleware to work with files for Restroom",
+  "author": "Alberto Lerda <alberto@dyne.org>",
+  "homepage": "https://dyne.github.io/restroom-mw/",
+  "license": "AGPL-3.0",
+  "main": "dist/index.js",
+  "files": [
+    "src",
+    "dist"
+  ],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dyne/restroom-mw.git"
+  },
+  "scripts": {
+    "clean": "rimraf dist && rimraf tsconfig.tsbuildinfo",
+    "doc": "documentation readme src/** -g -f md -s 'API' --readme-file ../../docs/packages/redis.md --shallow",
+    "links": "yarn link",
+    "unlinks": "yarn unlink",
+    "watch": "tsc -b tsconfig.json -w",
+    "build": "tsc -b tsconfig.json"
+  },
+  "bugs": {
+    "url": "https://github.com/dyne/restroom-mw/issues"
+  },
+  "dependencies": {
+    "axios": "^0.26.0",
+    "extract-zip": "2.0.1"
+  },
+  "gitHead": "5015ad3c33829d0690ed914900c45f0576b70aee"
+}
