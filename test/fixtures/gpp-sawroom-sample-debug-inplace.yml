@@ -9,7 +9,7 @@ blocks:
 
       Scenario simple: Generate a random password
 
-      Given nothing
+      Given I have a 'string dictionary' named 'http request'
 
       When I create the random object of '128' bits
       When I rename the 'random_object' to 'myRandom'

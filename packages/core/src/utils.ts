@@ -144,7 +144,29 @@ export const getData = (req: Request, res: Response) => {
 
   if (req.method === "POST") params = req.body?.data;
 
-  return res.locals?.zenroom_data || params || {};
+  const data = res.locals?.zenroom_data || params || {};
+
+  if (typeof data === 'object') {
+    const httpRequest = {
+      base_url: req.baseUrl,
+      http_version: req.httpVersion,
+      headers: req.headers,
+      path: req.path,
+      method: req.method,
+      protocol: req.protocol,
+      socket: {
+        local_port: req.socket.localPort,
+        local_address: req.socket.localAddress,
+        remote_port: req.socket.remotePort,
+        remote_family: req.socket.remoteFamily,
+        remote_address: req.socket.remoteAddress,
+      },
+    }
+
+    data.http_request = httpRequest;
+  }
+
+  return data
 };
 
 export const isChainLastBlock = (internalResult: SingleInstanceOutput) => {
