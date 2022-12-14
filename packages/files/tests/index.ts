@@ -77,7 +77,7 @@ test.serial('List content of directory', async (t) => {
   const res = await app.post("/files_ls");
   t.is(res.status, 200, res.text);
   t.is(res.body.test_dir.length, 6);
-  for(const file of res.body.folder1) {
+  for(const file of res.body.test_dir) {
     t.is(file.blksize, 4096);
     t.is(file.mode.substr(0, 2), '40'); // All directory
   }
