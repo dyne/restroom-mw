@@ -181,7 +181,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     const isChain = contractName.split(DOT)[1] === CHAIN_EXTENSION || false;
     const keys = isChain ? EMPTY_OBJECT_STRING : getKeys(contractName);
     const globalContext = createGlobalContext();
-    const dirsInContractName = contractName.split(SLASH);
+    const dirsInContractName = contractName.substring(0, contractName.lastIndexOf(SLASH));
     try {
       return isChain
         ? executeChain({
@@ -189,7 +189,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
           data,
           globalContext
         },
-        (dirsInContractName.length > 1) ? dirsInContractName[0] : null,
+        (dirsInContractName.length > 0) ? dirsInContractName : null,
         )
         : callRestroom({
             data: data,
