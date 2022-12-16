@@ -33,8 +33,8 @@ export default (req: Request, res: Response, next: NextFunction) => {
       for(const [repoUrlName, repoPathName] of args) {
         const repoUrl = input[repoUrlName] || repoUrlName;
         const repoPath = input[repoPathName] || repoPathName;
-        validatePath(repoPath);
         const absoluteRepo = path.resolve(path.join(FILES_DIR, repoPath));
+        validatePath(absoluteRepo);
 
         await git.clone({ fs, http, dir: absoluteRepo, url: repoUrl })
       }
@@ -44,8 +44,8 @@ export default (req: Request, res: Response, next: NextFunction) => {
       let errorMsg = null;
       await Promise.all(args.map(async ([pathName]: string[]) => {
         const repo = input[pathName] || pathName;
-        validatePath(repo)
         const absolutePath = path.resolve(path.join(FILES_DIR, repo));
+        validatePath(absolutePath)
         return git.findRoot({fs, filepath: absolutePath}).catch(
           () => errorMsg = repo
         );
@@ -64,8 +64,8 @@ export default (req: Request, res: Response, next: NextFunction) => {
       const [repoPathName] = zencode.paramsOf(Action.COMMIT);
       const repoPath = result[repoPathName]
         || input[repoPathName] || repoPathName;
-      validatePath(repoPath);
       const absoluteRepo = path.resolve(path.join(FILES_DIR, repoPath));
+      validatePath(absoluteRepo);
       const commitDict = result.commit || input.commit
       if(!commitDict) {
         throw new Error(`[GIT] commit details not found`)
