@@ -6,8 +6,12 @@ import git from 'isomorphic-git'
 import http from 'isomorphic-git/http/node'
 import path from 'path'
 import fs from 'fs'
+import {validateSubdir} from "@restroom-mw/utils"
 
 export const FILES_DIR = process.env.FILES_DIR;
+
+// save path must be subdirs of FILES_DIR
+const validatePath = validateSubdir(FILES_DIR);
 
 type ZenroomCommit = {
   author: string;
@@ -27,9 +31,9 @@ export default (req: Request, res: Response, next: NextFunction) => {
     if (zencode.match(Action.CLONE)) {
       const args = zencode.chunkedParamsOf(Action.CLONE, 2);
       for(const [repoUrlName, repoPathName] of args) {
-        // validatePath()
         const repoUrl = input[repoUrlName] || repoUrlName;
         const repoPath = input[repoPathName] || repoPathName;
+        validatePath(repoPath);
         const absoluteRepo = path.resolve(path.join(FILES_DIR, repoPath));
 
         await git.clone({ fs, http, dir: absoluteRepo, url: repoUrl })
@@ -40,7 +44,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
       let errorMsg = null;
       await Promise.all(args.map(async ([pathName]: string[]) => {
         const repo = input[pathName] || pathName;
-        // validatePath()
+        validatePath(repo)
         const absolutePath = path.resolve(path.join(FILES_DIR, repo));
         return git.findRoot({fs, filepath: absolutePath}).catch(
           () => errorMsg = repo
@@ -60,7 +64,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
       const [repoPathName] = zencode.paramsOf(Action.COMMIT);
       const repoPath = result[repoPathName]
         || input[repoPathName] || repoPathName;
-      //validatePath(repoPath);
+      validatePath(repoPath);
       const absoluteRepo = path.resolve(path.join(FILES_DIR, repoPath));
       const commitDict = result.commit || input.commit
       if(!commitDict) {
@@ -69,7 +73,6 @@ export default (req: Request, res: Response, next: NextFunction) => {
       const commit = commitDict as ZenroomCommit;
 
       await Promise.all(commit.files.map((file) => {
-        //validatePath(file)
         return git.add({fs, dir: absoluteRepo, filepath: file})
       }))
 
