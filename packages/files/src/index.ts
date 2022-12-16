@@ -25,7 +25,7 @@ import {DOWNLOAD} from "./actions";
  */
 import {STORE_RESULT} from "./actions";
 
-import {READ, LS} from "./actions";
+import {READ, READ_AND_SAVE, LS} from "./actions";
 
 
 /**
@@ -60,7 +60,21 @@ export default (req: Request, res: Response, next: NextFunction) => {
           throw new Error(`[FILES] error while reading the file ${absoluteFile}`);
         }
       }
-    }
+    };
+    if (zencode.match(READ_AND_SAVE)) {
+      const chkParams = zencode.chunkedParamsOf(READ_AND_SAVE, 2);
+      for(const [f, outputVariable] of chkParams) {
+        const file = input[f] || f;
+        validatePath(file);
+        const absoluteFile = path.join(FILES_DIR, file);
+        try {
+          const content = fs.readFileSync(absoluteFile, 'utf8');
+          data[ outputVariable ] = JSON.parse(content);
+        } catch(e) {
+          throw new Error(`[FILES] error while reading the file ${absoluteFile}`);
+        }
+      }
+    };
     if (zencode.match(LS)) {
       const params = zencode.chunkedParamsOf(LS, 2);
       const fileStats: Record<string, any> = {}
