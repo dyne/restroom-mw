@@ -7,6 +7,7 @@ import os from 'os'
 import extract from 'extract-zip';
 import path from 'path';
 import {ObjectLiteral} from "@restroom-mw/types";
+import {validateSubdir} from "@restroom-mw/utils"
 
 require("dotenv").config();
 /**
@@ -37,20 +38,7 @@ export const FILES_DIR = process.env.FILES_DIR;
 let input: ObjectLiteral = {};
 
 // save path must be subdirs of FILES_DIR
-const validatePath = (p: string) => {
-  if (!FILES_DIR)
-    throw new Error(`FILES_DIR is not defined`);
-
-  if (FILES_DIR != "/") {
-    // Even if path contains .., they are resolved in a absolute path
-    // https://github.com/nodejs/node/blob/74a6f0bd0763a1aa1a241da55322c2556834036b/lib/path.js#L507-L508
-    const relative = path.relative(FILES_DIR, p);
-    const isSubdir = !relative.startsWith('..') && !path.isAbsolute(relative);
-    if (!isSubdir) {
-      throw new Error(`Result path ${relative} outside ${FILES_DIR}`)
-    }
-  }
-}
+const validatePath = validateSubdir(FILES_DIR);
 
 export default (req: Request, res: Response, next: NextFunction) => {
   const rr = new Restroom(req, res);
