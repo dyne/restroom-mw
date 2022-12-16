@@ -1,0 +1,12 @@
+Rule unknown ignore
+
+Given I have a 'string dictionary' named 'http request'
+Given I have a 'string dictionary' named 'commit'
+Given I clone the repository 'repo' in 'current'
+Given I verify the path 'current' is a git repository
+
+When I create the random 'random string'
+Then print 'random_string'
+Then I store 'random_string' in the file 'file'
+Then I make a new commit to the git repository in 'current'
+
