@@ -50,3 +50,10 @@ test.serial("Add a file that don't exist", async (t) => {
   t.is(res.status, 500, res.text);
   t.true(res.body.exception.includes("Could not find"))
 });
+
+test.serial("Commit passing wrong argument", async (t) => {
+  const { app } = t.context;
+  const res = await app.post("/wrong_argument")
+  t.is(res.status, 500, res.text);
+  t.true(res.body.exception.includes("No name was provided for"))
+});
