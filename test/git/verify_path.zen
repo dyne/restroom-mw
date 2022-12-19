@@ -1,0 +1,4 @@
+Rule unknown ignore
+
+Given I have a 'string' named 'current'
+Given I verify the path 'current' is a git repository
