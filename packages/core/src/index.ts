@@ -44,6 +44,7 @@ import { validateForEach,
   validateNoLoopInChain,
 } from "./validations";
 import { ChainInput } from "./chain-input";
+import { Express } from "express/index"
 const functionHooks = initHooks;
 
 const DEBUG_MODE = 'debug';
@@ -472,6 +473,24 @@ function initializeSingleContext(block:string):BlockContext{
     zenFile: null,
     currentBlock: block
   };
+}
+
+export const addMiddlewares =
+  async (baseUrl: string, app: Express) => {
+  const mws = [
+    'db', 'ethereum', 'fabric', 'files', 'git', 'http', 'logger',
+    'planetmint', 'redis', 'sawroom', 'timestamp', 'ui',
+
+  ]
+  const mwsUsed = mws.filter( (mw) =>
+    (process.env[`USE_${mw.toUpperCase()}`] || 'n') === 'y'
+  ).map((mw: string) => import(`../../${mw}/src/index`));
+
+  for(const mw of await Promise.all(mwsUsed)) {
+    app.use(mw.default)
+  }
+  const mwCore = await import(`../../core/src/index`)
+  app.use(`${baseUrl}/*`, mwCore.default);
 }
 
 export const {

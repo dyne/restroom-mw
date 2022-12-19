@@ -5,18 +5,18 @@ import fs from 'fs';
 import supertest, { SuperTest, Test } from "supertest";
 import os from 'os';
 import path from 'path';
-const test = anyTest as TestFn<{ app: SuperTest<Test> }>;
-
-process.env.ZENCODE_DIR = "./test/fixtures";
 process.env.LOGGER_DIR = ".";
-const logger = require("../src/index");
+process.env.ZENCODE_DIR = "./test/fixtures";
+process.env.FILES_DIR = ".";
+process.env.USE_HTTP = "y";
+process.env.USE_LOGGER = "y";
 const zencode = require("../../core/src/index");
+const test = anyTest as TestFn<{ app: SuperTest<Test> }>;
 
 test.before(async (t) => {
   const app = express();
   app.use(bodyParser.json());
-  app.use(logger.default);
-  app.use("/*", zencode.default);
+  await zencode.addMiddlewares("", app);
   t.context = { app: supertest(app) };
 });
 
@@ -25,18 +25,15 @@ test("Log to file", async (t) => {
   if(fs.existsSync('testlog')) {
     fs.unlinkSync('testlog');
   }
+  fs.writeFileSync('testlog', '');
   const res = await app.post("/logger_append").send(
     {keys: {}, data: { path: "testlog" }}
   );
   t.is(res.status, 200, res.text);
   let count = 0;
-  fs.createReadStream('testlog')
-    .on('data', (chunk) => {
-      for (const c of chunk)
-        if (c === '\n') count++;
-    })
-    .on('end', () =>
-      t.is(count, 4)
-    );
+  const dati = fs.readFileSync('testlog').toString();
+  for (const c of dati)
+    if (c === '\n') count++;
+  t.is(count, 4)
 });
 
