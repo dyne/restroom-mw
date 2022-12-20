@@ -487,10 +487,10 @@ export const addMiddlewares =
   )
 
   for(const mw of mwsUsed) {
-    const imported = await import(`../../${mw}/src/index`)
+    const imported = await import(`@restroom-mw/${mw}`)
     app.use(imported.default)
   }
-  const mwCore = await import(`../../core/src/index`)
+  const mwCore = await import(`@restroom-mw/core`)
   app.use(`${baseUrl}/*`, mwCore.default);
 }
 
