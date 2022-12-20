@@ -53,7 +53,7 @@ const EMPTY_OBJECT_STRING = "{}";
 const EMPTY_STRING = "";
 const FOREACH_INDEX_DEFAULT_VALUE = "myTempElement";
 
-export default async (req: Request, res: Response, next: NextFunction) => {
+const dispatch = async (req: Request, res: Response, next: NextFunction) => {
   if (req.url === "/favicon.ico") {
     return;
   }
@@ -463,6 +463,8 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   buildEndpointResponse(await restroomDispatch(contractName, data), res);
 };
 
+export default dispatch;
+
 function initializeSingleContext(block:string):BlockContext{
   return {
     keys: null,
@@ -490,8 +492,7 @@ export const addMiddlewares =
     const imported = await import(`@restroom-mw/${mw}`)
     app.use(imported.default)
   }
-  const mwCore = await import(`@restroom-mw/core`)
-  app.use(`${baseUrl}/*`, mwCore.default);
+  app.use(`${baseUrl}/*`, dispatch);
 }
 
 export const {
