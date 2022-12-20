@@ -44,6 +44,7 @@ import { validateForEach,
   validateNoLoopInChain,
 } from "./validations";
 import { ChainInput } from "./chain-input";
+import { Express } from "express/index"
 const functionHooks = initHooks;
 
 const DEBUG_MODE = 'debug';
@@ -52,7 +53,7 @@ const EMPTY_OBJECT_STRING = "{}";
 const EMPTY_STRING = "";
 const FOREACH_INDEX_DEFAULT_VALUE = "myTempElement";
 
-export default async (req: Request, res: Response, next: NextFunction) => {
+const dispatch = async (req: Request, res: Response, next: NextFunction) => {
   if (req.url === "/favicon.ico") {
     return;
   }
@@ -462,6 +463,8 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   buildEndpointResponse(await restroomDispatch(contractName, data), res);
 };
 
+export default dispatch;
+
 function initializeSingleContext(block:string):BlockContext{
   return {
     keys: null,
@@ -472,6 +475,24 @@ function initializeSingleContext(block:string):BlockContext{
     zenFile: null,
     currentBlock: block
   };
+}
+
+export const addMiddlewares =
+  async (baseUrl: string, app: Express) => {
+  const mws = [
+    'db', 'ethereum', 'fabric', 'files', 'git', 'http', 'logger',
+    'planetmint', 'redis', 'sawroom', 'timestamp', 'ui',
+
+  ]
+  const mwsUsed = mws.filter( (mw) =>
+    (process.env[`USE_${mw.toUpperCase()}`] || 'n') === 'y'
+  )
+
+  for(const mw of mwsUsed) {
+    const imported = await import(`@restroom-mw/${mw}`)
+    app.use(imported.default)
+  }
+  app.use(`${baseUrl}/*`, dispatch);
 }
 
 export const {
