@@ -47,32 +47,29 @@ export default (req: Request, res: Response, next: NextFunction) => {
     const { zencode, keys, data } = params;
     input = rr.combineDataKeys(data, keys);
 
+    const readFromFile = ( file: string ) => {
+      let content
+      const f = input[file] || file;
+      validatePath(f);
+      const absoluteFile = path.join(FILES_DIR, f);
+      try {
+        content = fs.readFileSync(absoluteFile, 'utf8');
+      } catch(e) {
+        throw new Error(`[FILES] error while reading the file ${absoluteFile}`);
+      }
+      return JSON.parse(content);
+    }
+
     if (zencode.match(READ)) {
       const params = zencode.paramsOf(READ);
       for(const f of params) {
-        const file = input[f] || f;
-        validatePath(file);
-        const absoluteFile = path.join(FILES_DIR, file)
-        try {
-          const content = fs.readFileSync(absoluteFile, 'utf8')
-          Object.assign(data, JSON.parse(content))
-        } catch(e) {
-          throw new Error(`[FILES] error while reading the file ${absoluteFile}`);
-        }
+        Object.assign(data, readFromFile(f));
       }
     };
     if (zencode.match(READ_AND_SAVE)) {
       const chkParams = zencode.chunkedParamsOf(READ_AND_SAVE, 2);
       for(const [f, outputVariable] of chkParams) {
-        const file = input[f] || f;
-        validatePath(file);
-        const absoluteFile = path.join(FILES_DIR, file);
-        try {
-          const content = fs.readFileSync(absoluteFile, 'utf8');
-          data[ outputVariable ] = JSON.parse(content);
-        } catch(e) {
-          throw new Error(`[FILES] error while reading the file ${absoluteFile}`);
-        }
+        data[ outputVariable ] = readFromFile(f);
       }
     };
     if (zencode.match(LS)) {
