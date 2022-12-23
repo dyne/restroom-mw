@@ -68,7 +68,7 @@ test.serial("Read data from file", async (t) => {
   var res = await app.post("/files_read_file");
   t.is(res.status, 200, res.text);
   t.is(res.body.name, "restroom-mw");
-  t.is(res.body.npmClient, "yarn");
+  t.is(res.body.lerna_content.npmClient, "yarn");
   t.is(res.body['var'], "here since the beginning");
 });
 

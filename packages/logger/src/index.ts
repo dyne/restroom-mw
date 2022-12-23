@@ -25,8 +25,9 @@ export default (req: Request, res: Response, next: NextFunction) => {
     const {result, zencode} = params;
 
     const addLog = (sentences: string[], where: string) => {
-      validatePath(where);
-      const ws = fs.createWriteStream(where, {flags: "a"});
+      const absolutePath = path.resolve(path.join(LOGGER_DIR, where));
+      validatePath(absolutePath);
+      const ws = fs.createWriteStream(absolutePath, {flags: "a"});
       ws.on('error',  (error) => {
         throw new Error(
           `[LOGGER] An error occurred while writing to ${where}\n${error}`)
