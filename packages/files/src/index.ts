@@ -50,8 +50,8 @@ export default (req: Request, res: Response, next: NextFunction) => {
     const readFromFile = ( file: string ) => {
       let content
       const f = input[file] || file;
-      validatePath(f);
-      const absoluteFile = path.join(FILES_DIR, f);
+      const absoluteFile = path.resolve(path.join(FILES_DIR, f));
+      validatePath(absoluteFile);
       try {
         content = fs.readFileSync(absoluteFile, 'utf8');
       } catch(e) {
