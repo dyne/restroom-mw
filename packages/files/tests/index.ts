@@ -70,6 +70,7 @@ test.serial("Read data from file", async (t) => {
   t.is(res.body.name, "restroom-mw");
   t.is(res.body.lerna_content.npmClient, "yarn");
   t.is(res.body['var'], "here since the beginning");
+  t.is(res.body.file_no_exist.length, 0);
 });
 
 test.serial('List content of directory', async (t) => {

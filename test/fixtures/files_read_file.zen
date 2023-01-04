@@ -3,8 +3,10 @@ Rule caller restroom-mw
 Given I read the content of 'path'
 # from string
 Given I read the content of 'lerna.json' and save the output into 'lerna_content'
+Given I read the content of 'this_file_does_not_exist' and save the output into 'file_no_exist'
 
 Given I have a 'string' named 'name'
 Given I have a 'string dictionary' named 'lerna_content'
 Given I have a 'string' named 'var'
+Given I have a 'string dictionary' named 'file_no_exist'
 Then print data
