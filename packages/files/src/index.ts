@@ -55,7 +55,9 @@ export default (req: Request, res: Response, next: NextFunction) => {
       try {
         content = fs.readFileSync(absoluteFile, 'utf8');
       } catch(e) {
-        throw new Error(`[FILES] error while reading the file ${absoluteFile}`);
+        // TODO: add not-fatal (warning) log in restroom
+        //throw new Error(`[FILES] error while reading the file ${absoluteFile}`);
+        content = "{}";
       }
       return JSON.parse(content);
     }
