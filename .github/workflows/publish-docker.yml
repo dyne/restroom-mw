@@ -10,8 +10,13 @@
 name: Create and publish a Docker image
 
 on:
-  push:
-    branches: ['master']
+  workflow_run:
+    workflows: 
+      - "Node.js CI"
+    types:
+      - completed
+    branches:
+      - master
 
 jobs:
   publish_docker_image:
