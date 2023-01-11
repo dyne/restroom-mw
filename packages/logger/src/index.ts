@@ -38,7 +38,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
     if (zencode.match(APPEND)) {
       const params = zencode.chunkedParamsOf(APPEND, 2);
       for(const [ sentence, where ] of params) {
-        addLog([ input[sentence] || sentence ], where);
+        addLog([ result[sentence] || input[sentence] || sentence ], where);
       }
     }
     if (zencode.match(APPEND_NAMED)) {
@@ -49,7 +49,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
           throw new Error(
             `[LOGGER] Could not find path to log ${pathName}`)
         }
-        addLog([ input[sentence] || sentence ], logPath);
+        addLog([ result[sentence] || input[sentence] || sentence ], logPath);
       }
     }
     if (zencode.match(APPEND_ARRAY)) {

@@ -34,6 +34,6 @@ test("Log to file", async (t) => {
   const dati = fs.readFileSync('testlog').toString();
   for (const c of dati)
     if (c === '\n') count++;
-  t.is(count, 4)
+  t.is(count, 4);
 });
 
