@@ -73,7 +73,9 @@ export default (req: Request, res: Response, next: NextFunction) => {
       const commit = commitDict as ZenroomCommit;
 
       await Promise.all(commit.files.map((file) => {
-        return git.add({fs, dir: absoluteRepo, filepath: file})
+        const absoluteFile = path.resolve(path.join(FILES_DIR, file));
+        return git.add({fs, dir: absoluteRepo,
+          filepath: path.relative(absoluteRepo, absoluteFile)})
       }))
 
       await git.commit({fs, dir: absoluteRepo,
