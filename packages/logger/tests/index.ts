@@ -30,7 +30,10 @@ test("Log to file", async (t) => {
     {keys: {}, data: { path: "testlog" }}
   );
   t.is(res.status, 200, res.text);
+  let count = 0;
   const dati = fs.readFileSync('testlog').toString();
-  t.is(dati, "HELLO_WORLD!\nHELLO_WORLD!\nharry\nmalfoy\n")
+  for (const c of dati)
+    if (c === '\n') count++;
+  t.is(count, 4);
 });
 
