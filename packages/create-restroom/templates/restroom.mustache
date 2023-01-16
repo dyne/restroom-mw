@@ -13,6 +13,9 @@ import fabric from "@restroom-mw/fabric";
 {{#@restroom-mw/files}}
 import files from "@restroom-mw/files";
 {{/@restroom-mw/files}}
+{{#@restroom-mw/logger}}
+import logger from "@restroom-mw/logger";
+{{/@restroom-mw/logger}}
 {{#@restroom-mw/http}}
 import rrhttp from "@restroom-mw/http";
 {{/@restroom-mw/http}}
@@ -63,6 +66,9 @@ app.use(fabric.default);
 {{#@restroom-mw/files}}
 app.use(files.default);
 {{/@restroom-mw/files}}
+{{#@restroom-mw/logger}}
+app.use(logger.default);
+{{/@restroom-mw/logger}}
 {{#@restroom-mw/http}}
 app.use(rrhttp.default);
 {{/@restroom-mw/http}}
