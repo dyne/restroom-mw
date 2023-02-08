@@ -371,3 +371,14 @@ test("Http results in zenroom", async (t) => {
   t.is(res.body.output404.status, 404);
   t.is(res.body.output500.status, 500);
 });
+
+test("Read http request", async (t) => {
+  const app = express();
+  app.use(bodyParser.json());
+  app.use(http);
+  app.use("/*", zencode);
+
+  const res = await request(app).post("/http-request");
+  t.is(res.body.http_request.base_url, "/http-request")
+  t.is(res.body.http_request.protocol, "http")
+});
