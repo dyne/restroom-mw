@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 import express from "express";
 import supertest, { SuperTest, Test } from "supertest";
 
+import { CID } from 'multiformats'
 const test = anyTest as TestFn<{ app: SuperTest<Test> }>;
 
 process.env.ZENCODE_DIR = "./test/fixtures";
@@ -17,7 +18,7 @@ test.before(async (t) => {
   t.context.app = supertest(app);
 });
 
-test.skip("Store the signed tx of an asset", async (t) => {
+test.serial("Store the signed tx of an asset", async (t) => {
   const { app } = t.context;
   const asset = {timestamp: new Date().getTime(), city: "Berlin", temperature: "22"};
   const res = await app.post("/planetmint_store_asset")
@@ -31,7 +32,7 @@ test.skip("Store the signed tx of an asset", async (t) => {
   t.is(res.body.hash, resRetrieve.body.hash);
 });
 
-test.skip("Store the signed tx of an asset with metadata", async (t) => {
+test.serial("Store the signed tx of an asset with metadata", async (t) => {
   const { app } = t.context;
   const metadata = {timestamp: new Date().getTime().toString()};
   const res = await app.post("/planetmint_store_asset_metadata")
@@ -52,13 +53,13 @@ test.skip("Retrieve a zenroom object", async (t) => {
   t.is(res.body.hash, hash);
 });
 
-test.skip("Retrieve object that doesn't exist", async (t) => {
+test.serial("Retrieve object that doesn't exist", async (t) => {
   const { app } = t.context;
   const res = await app.post("/planetmint_retrieve_no_exist");
   t.is(res.status, 500, res.text);
 });
 
-test.skip("Create asset, transfer it and then trasnfer it back", async (t) => {
+test.serial("Create asset, transfer it and then trasnfer it back", async (t) => {
   const bob = {
     private_key: "J9tV35oDozNe9S7esxi4p4zkkefmrPp2ez63PjKwqfRz",
     public_key: "2umg6yiPZV5QqnaLBy1cwszFiAUSNTVAaXjekwqXL8NW"
@@ -90,7 +91,7 @@ test.skip("Create asset, transfer it and then trasnfer it back", async (t) => {
   t.is(resTransfer2.status, 200, resTransfer2.text);
 });
 
-test.skip("Create a token and transfer it", async (t) => {
+test.serial("Create a token and transfer it", async (t) => {
   const bob = {
     private_key: "J9tV35oDozNe9S7esxi4p4zkkefmrPp2ez63PjKwqfRz",
     public_key: "2umg6yiPZV5QqnaLBy1cwszFiAUSNTVAaXjekwqXL8NW"

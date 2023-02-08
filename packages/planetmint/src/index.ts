@@ -2,14 +2,17 @@ import { Restroom } from "@restroom-mw/core";
 import { ObjectLiteral } from "@restroom-mw/types";
 import { zencodeNamedParamsOf } from '@restroom-mw/utils';
 
-import { Ed25519Keypair, Connection, Transaction } from "bigchaindb-driver";
 import { TransactionOperations, TransactionUnspentOutput,
-         TransactionCommon }
-  from "bigchaindb-driver/types/transaction"
+  TransactionCommon } from "@planetmint/driver"
+import { Connection, Transaction } from '@planetmint/driver'
+import { CID } from 'multiformats/cid'
+import * as json from 'multiformats/codecs/json'
+import { sha256 } from 'multiformats/hashes/sha2'
 import { Ed25519Sha256 } from 'crypto-conditions'
 import { NextFunction, Request, Response } from "express";
 import base58 from 'bs58';
 import { sha3_256 } from 'js-sha3'
+import axios from 'axios'
 import {
   CONNECT,
   ASSET,
@@ -30,19 +33,10 @@ interface TransactionRetrieved {
 
 require("dotenv").config();
 
-const utf8ToB64 = ( str: string ) => {
-  return Buffer.from( str, 'utf-8').toString( 'base64' );
-}
-
-const b64ToUtf8 = ( str: string ) => {
-  return Buffer.from( str, 'base64').toString( 'utf-8' );
-}
-
-const sha256Hash = (data: string) => {
-    return sha3_256
-        .create()
-        .update(data)
-        .hex()
+async function toCID(obj: any) {
+  const bytes = json.encode(obj)
+  const assetHash = await sha256.digest(bytes)
+  return CID.create(1, json.code, assetHash).toString()
 }
 
 export default async (req: Request, res: Response, next: NextFunction) => {
@@ -65,27 +59,44 @@ export default async (req: Request, res: Response, next: NextFunction) => {
 
       if(zencode.match(RETRIEVE)) {
         const [ id, out ] =  namedParamsOf(RETRIEVE);
+        const storageAddr = input.zenswarm_storage
+        if(!storageAddr) {
+          throw new Error("Zenswarm storage not defined");
+        }
         try {
-          const receipt = await connection.getTransaction(id);
-          const txResult: TransactionRetrieved = { 'asset': receipt.asset };
-          if(receipt.metadata) {
-            txResult.metadata = receipt.metadata;
+          const receipt = await connection.getTransaction(id)
+          const assetTx = receipt.assets[0]
+          let asset: Record<string, any> = null
+
+          if(receipt.operation === "CREATE") {
+            const cid = (assetTx as {data: string}).data;
+            const fromStorage = await axios.post(`${storageAddr}/retrieve`, {
+              key: cid,
+            });
+            asset = fromStorage.data[0].value
+          } else {
+            asset = assetTx
           }
+
+          const txResult: TransactionRetrieved = { 'asset': asset };
+          /*if(receipt.metadata) {
+            txResult.metadata = receipt.metadata;
+          }*/
           data[ out ]= txResult;
         } catch (e) {
           throw new Error(`Transaction not found: ${id}`);
         }
       }
 
-      const storeAsset = ( publicKey: string, asset: Record<string, any>, metadata: Record<string, any>,
-          amount: string = "1" ) => {
-        const eddsaPublicKey = input[publicKey]
+      const storeAsset = async ( publicKey: string, assetCID: string,
+          metadataCID: string, amount: string = "1" ) => {
+        const eddsaPublicKey = input[publicKey];
         if(!eddsaPublicKey) {
           throw new Error("Public key not found");
         }
         const tx = Transaction.makeCreateTransaction(
-          asset,
-          metadata,
+          [ assetCID ],
+          metadataCID,
           [ Transaction.makeOutput(
             Transaction.makeEd25519Condition(
               eddsaPublicKey),
@@ -94,16 +105,31 @@ export default async (req: Request, res: Response, next: NextFunction) => {
           eddsaPublicKey
         );
         data.planetmint_transaction =
-              Transaction.serializeTransactionIntoCanonicalString(tx)
+          Transaction.serializeTransactionIntoCanonicalString(tx)
+      }
+      const storeTarantool = async (key: string, value: Record<string, any>) => {
+        const storageAddr = input.zenswarm_storage
+        if(!storageAddr) {
+          throw new Error("Zenswarm storage not defined");
+        }
+        const fromStorage = await axios.post(`${storageAddr}/retrieve`, {
+          key,
+        });
+        // TODO: If there is something already stored check that is equal
+        if(fromStorage.data.length === 0) {
+          await axios.post(`${storageAddr}/store`, {key, value});
+        }
+
       }
 
       if(zencode.match(ASSET)) {
         const [ asset, publicKey ] = zencode.paramsOf(ASSET);
-        const metadata: Record<string, any> = null;
         if( !input[ asset ] ) {
           throw new Error("Asset not found");
         }
-        storeAsset(publicKey, input[ asset ], metadata, "1" );
+        const assetCID = await toCID(input[ asset ]);
+        storeTarantool(assetCID, input[asset])
+        storeAsset(publicKey, assetCID, null, "1" );
       }
 
       if(zencode.match(ASSET_METADATA)) {
@@ -114,19 +140,28 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         if( !input[metadata] ) {
           throw new Error("Metadata not found");
         }
-        storeAsset(publicKey, input[ asset ], input[ metadata ], "1" );
+        const storageAddr = input.zenswarm_storage
+        if(!storageAddr) {
+          throw new Error("Zenswarm storage not defined");
+        }
+        const assetCID = await toCID(input[ asset ]);
+        const metadataCID = await toCID(input[metadata]);
+        storeTarantool(assetCID, input[asset])
+        storeTarantool(metadataCID, input[metadata])
+        storeAsset(publicKey, assetCID, metadataCID, "1" );
       }
 
       if(zencode.match(ASSET_AMOUNT)) {
         const [ amount, asset, publicKey ] = zencode.paramsOf(ASSET_AMOUNT);
-        const metadata: Record<string, any> = null;
         if( !input[asset] ) {
           throw new Error("Asset not found");
         }
         if( !input[amount] ) {
           throw new Error("Amount not found");
         }
-        storeAsset(publicKey, input[ asset ], metadata, input[ amount ]);
+        const assetCID = await toCID(input[ asset ]);
+        storeTarantool(assetCID, input[asset])
+        storeAsset(publicKey, assetCID, null, input[ amount ]);
       }
 
       if(zencode.match(ASSET_AMOUNT_METADATA)) {
@@ -167,7 +202,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
           null
         );
         data.planetmint_transaction =
-              Transaction.serializeTransactionIntoCanonicalString(tx)
+          Transaction.serializeTransactionIntoCanonicalString(tx)
       }
 
       if(zencode.match(TRANSFER_AMOUNT)) {
@@ -193,7 +228,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
 
         // Read UTXO
         const txs = await
-          connection.listOutputs(senderPublicKey, false)
+        connection.listOutputs(senderPublicKey, false)
 
         // Filter UTXO that refer to the current COIN (asset txid)
         const txsUsed = []
@@ -202,11 +237,12 @@ export default async (req: Request, res: Response, next: NextFunction) => {
           return {
             txOld,
             txDict: await connection.getTransaction
-              <TransactionOperations.TRANSFER>(txOld.transaction_id)}
+            <TransactionOperations.TRANSFER>(txOld.transaction_id)}
         }))
 
         for(const {txOld, txDict} of txsResolved) {
-          const assetId = txDict.asset.id ? txDict.asset.id : txDict.id;
+          const asset = txDict.assets[0] as {id: string}
+          const assetId = asset.id ? asset.id : txDict.id;
           if(assetId === txid) {
             // Refer to the current coin, we will use it!
             txsUsed.push({
@@ -226,8 +262,8 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         const tx = Transaction.makeTransferTransaction(
           txsUsed,
           [ Transaction.makeOutput(
-              Transaction.makeEd25519Condition(
-                senderPublicKey), (currentAmount-amount).toString(10)),
+            Transaction.makeEd25519Condition(
+              senderPublicKey), (currentAmount-amount).toString(10)),
             Transaction.makeOutput(
               Transaction.makeEd25519Condition(
                 recipientPublicKey), amountStr)
@@ -235,7 +271,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
           null
         );
         data.planetmint_transaction =
-              Transaction.serializeTransactionIntoCanonicalString(tx)
+          Transaction.serializeTransactionIntoCanonicalString(tx)
       }
       rrData = data;
     });
@@ -246,7 +282,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       if(zencode.match(SIGNATURE)) {
         const [ planetmintTransactionName, publicKeyName ] = zencode.paramsOf(SIGNATURE);
         const planetmintTransaction = result[planetmintTransactionName]
-            || input[planetmintTransactionName];
+          || input[planetmintTransactionName];
         if( !planetmintTransaction ) {
           throw new Error("Planetmint transaction not found");
         }
@@ -261,7 +297,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         }
         const publicKey = base58.decode(publicKeyBS58)
         const tx = JSON.parse(planetmintTransaction) as
-          TransactionCommon<TransactionOperations>;
+        TransactionCommon<TransactionOperations>;
         tx.inputs.forEach((txInput, index) => {
           const ed25519Fulfillment = new Ed25519Sha256()
           ed25519Fulfillment.setPublicKey(Buffer.from(publicKey))
