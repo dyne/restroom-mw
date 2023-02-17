@@ -1,3 +1,4 @@
 {
-	"endpoint": "https://test.ipdb.io/api/v1/"
+  "endpoint": "https://test.ipdb.io/api/v1/",
+  "zenswarm_storage": "http://65.109.162.224:8081"
 }
