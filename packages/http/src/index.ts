@@ -5,6 +5,7 @@ import axios from "axios";
 import { NextFunction, Request, Response } from "express";
 import https from "https";
 import {
+  READ_REQUEST,
   EXTERNAL_CONNECTION,
   EXTERNAL_OUTPUT,
   PARALLEL_GET,
@@ -46,6 +47,26 @@ export default (req: Request, res: Response, next: NextFunction) => {
     }) => {
       let { zencode, keys, data } = params;
       content = rr.combineDataKeys(data, keys);
+
+      if (zencode.match(READ_REQUEST)) {
+        const httpRequest = {
+          base_url: req.baseUrl,
+          http_version: req.httpVersion,
+          headers: req.headers,
+          path: req.path,
+          method: req.method,
+          protocol: req.protocol,
+          socket: {
+            local_port: req.socket.localPort,
+            local_address: req.socket.localAddress,
+            remote_port: req.socket.remotePort,
+            remote_family: req.socket.remoteFamily,
+            remote_address: req.socket.remoteAddress,
+          },
+        }
+
+        data.http_request = httpRequest;
+      }
 
       if (zencode.match(EXTERNAL_CONNECTION)) {
         externalSourceKeys = zencode.paramsOf(EXTERNAL_CONNECTION);

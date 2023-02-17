@@ -1,0 +1,12 @@
+{
+  "repo": "https://github.com/dyne/restroom-github-action.git",
+  "current": ".",
+  "file": "interestingFile.txt",
+  "commit": {
+    "message": "My interesting random file",
+    "email": "restroom@dyne.org",
+    "files": ["interestingFile.txt"]
+  }
+
+}
+

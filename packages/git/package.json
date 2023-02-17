@@ -1,0 +1,43 @@
+{
+  "name": "@restroom-mw/git",
+  "version": "0.13.0",
+  "description": "Git middleware for restroom",
+  "author": "Alberto Lerda <alberto@dyne.org>",
+  "homepage": "https://dyne.github.io/restroom-mw/",
+  "license": "AGPL-3.0",
+  "main": "dist/index.js",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/puria/restroom-mw.git"
+  },
+  "scripts": {
+    "clean": "rimraf dist && rimraf tsconfig.tsbuildinfo",
+    "doc": "documentation readme src/** -g -f md -s 'API' --readme-file ../../docs/packages/git.md --shallow",
+    "watch": "tsc -b tsconfig.json -w",
+    "build": "tsc -b tsconfig.json",
+    "links": "yarn link",
+    "unlinks": "yarn unlink",
+    "test": "ava"
+  },
+  "ava": {
+    "babel": true
+  },
+  "bugs": {
+    "url": "https://github.com/dyne/restroom-mw/issues"
+  },
+  "dependencies": {
+    "isomorphic-git": "^1.21.0"
+  },
+  "gitHead": "5015ad3c33829d0690ed914900c45f0576b70aee",
+  "devDependencies": {
+    "turbo": "^1.2.9"
+  }
+}

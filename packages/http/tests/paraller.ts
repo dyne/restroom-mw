@@ -17,7 +17,7 @@ test.before(async (t) => {
   t.context = { app: supertest(app) };
 });
 
-test.serial("http executes parallel requests", async (t) => {
+test("http executes parallel requests", async (t) => {
   const { app } = t.context;
   const res = await app.post("/parallel");
   t.is(res.status, 200);

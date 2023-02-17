@@ -46,6 +46,7 @@
   },
   "gitHead": "5015ad3c33829d0690ed914900c45f0576b70aee",
   "devDependencies": {
+    "@types/express": "^4.17.15",
     "@types/js-yaml": "^4.0.3"
   }
 }

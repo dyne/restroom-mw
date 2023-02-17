@@ -73,7 +73,7 @@ in ${chalk.green(root)}.`);
   const deps_of_deps = middleware_deps.map((d: string) => mws_deps[d.replace('@next', '')] ?? []).flat();
 
   const dependencies = [
-    "zenroom@next",
+    "zenroom@latest",
     "@restroom-mw/core@" + version,
     "@restroom-mw/zencode@" + version,
     "@restroom-mw/utils@" + version,

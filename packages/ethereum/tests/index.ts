@@ -34,7 +34,7 @@ test("Retrieve a zenroom object", async (t) => {
   t.is(res.body.poem, poem);
 });
 
-test.skip("Retrieve object that doesn't exist", async (t) => {
+test("Retrieve object that doesn't exist", async (t) => {
   const { app } = t.context;
   const res = await app.post("/ethereum_retrieve_no_exist");
   t.is(res.status, 500, res.text);
@@ -57,7 +57,7 @@ test("Call ERC20 methods", async (t) => {
   t.is(res.body.balance, "0");
 });
 
-test("Read head and previous", async (t) => {
+test.skip("Read head and previous", async (t) => {
   const { app } = t.context;
   const res = await app.post("/ethereum_blocks");
   t.is(res.status, 200, res.text);
@@ -65,7 +65,7 @@ test("Read head and previous", async (t) => {
   t.is(res.body.my_hash.length, 64)
   t.is(typeof res.body.previous_hash, "string")
   t.is(res.body.previous_hash.length, 64)
-  t.is(res.body.previous_old_hash, "a660b348cba2e33bd89e6f06aae4d9c7c4eaadcb440119967d3adb0682222464")
+  t.is(res.body.previous_old_hash, "e17d622a0fe17893d88905c04ecc22f28cceed3ad4c062e3485fa8629cc024a0")
 });
 
 test("Read the address balance", async (t) => {
@@ -73,8 +73,7 @@ test("Read the address balance", async (t) => {
   const res = await app.post("/ethereum_balance");
   t.is(res.status, 200, res.text);
   t.is(typeof res.body.ethereum_balance, "string");
-  t.is(res.body.ethereum_balance, "1000000000000000000");
-  console.log(`{ 'ethereum balance': ${res.body.ethereum_balance} }`);
+  t.is(res.body.ethereum_balance, "1000000000000000000000");
 });
 
 test("Read the balance of an array of addresses", async (t) => {

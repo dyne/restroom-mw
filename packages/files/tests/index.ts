@@ -65,10 +65,22 @@ test.serial("Save result to file", async (t) => {
 test.serial("Read data from file", async (t) => {
   const { app } = t.context;
 
-  // Delete file if it already exist (this way I know if the next step creates it again)
   var res = await app.post("/files_read_file");
   t.is(res.status, 200, res.text);
   t.is(res.body.name, "restroom-mw");
+  t.is(res.body.lerna_content.npmClient, "yarn");
   t.is(res.body['var'], "here since the beginning");
+  t.is(res.body.file_no_exist.length, 0);
 });
 
+test.serial('List content of directory', async (t) => {
+  const { app } = t.context;
+  const res = await app.post("/files_ls");
+  t.is(res.status, 200, res.text);
+  t.is(res.body.test_dir.length, 7);
+  for(const file of res.body.test_dir) {
+    t.is(file.blksize, 4096);
+    t.is(file.mode.substr(0, 2), '40'); // All directory
+  }
+  t.is(res.body.packages_dir.length, 17);
+})

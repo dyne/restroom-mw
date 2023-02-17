@@ -1,0 +1,6 @@
+Rule unknown ignore
+Given I list the content of directory 'current' as 'test_dir'
+Given I list the content of directory 'packages' as 'packages_dir'
+Given I have a 'string dictionary' named 'packages_dir'
+Given I have a 'string dictionary' named 'test_dir'
+Then print data
