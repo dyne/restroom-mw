@@ -1,6 +1,5 @@
 Rule unknown ignore
 
-Given I have a 'string dictionary' named 'http request'
 Given I have a 'string dictionary' named 'commit'
 Given I clone the repository 'repo' in 'current'
 Given I verify the path 'current' is a git repository

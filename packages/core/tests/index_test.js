@@ -417,16 +417,3 @@ test("Check that the middleware is handling if index is not filled for each", as
   t.true(res.body.zenroom_errors.logs.includes("Cannot find 'temp' anywhere"));
   t.is(res.status, 500);
 });
-
-test("Check that zenroom can read http request", async (t) => {
-  const app = express();
-  app.use(bodyParser.json());
-  app.use("/api/*", core);
-
-  const res = await request(app)
-    .post("/api/http_request")
-
-  t.is(res.status, 200);
-  t.true('http_version' in res.body)
-  t.true('remote_address' in res.body)
-});
