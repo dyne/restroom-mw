@@ -5,14 +5,10 @@ import { zencodeNamedParamsOf } from '@restroom-mw/utils';
 import { TransactionOperations, TransactionUnspentOutput,
   TransactionCommon } from "@planetmint/driver"
 import { Connection, Transaction } from '@planetmint/driver'
-import { CID } from 'multiformats/cid'
-import * as json from 'multiformats/codecs/json'
-import { sha256 } from 'multiformats/hashes/sha2'
 import { Ed25519Sha256 } from 'crypto-conditions'
 import { NextFunction, Request, Response } from "express";
 import base58 from 'bs58';
 import { sha3_256 } from 'js-sha3'
-import axios from 'axios'
 import {
   CONNECT,
   ASSET,
@@ -48,12 +44,6 @@ const readIPFS = async (cid: string) => {
   return JSON.parse(uint8ArrayToString(data))
 }
 
-async function toCID(obj: any) {
-  const bytes = json.encode(obj)
-  const assetHash = await sha256.digest(bytes)
-  return CID.create(1, json.code, assetHash).toString()
-}
-
 export default async (req: Request, res: Response, next: NextFunction) => {
   if(ipfs == null) {
     ipfs = await IPFS.create()
@@ -84,7 +74,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
 
           if(receipt.operation === "CREATE") {
             const cid = (assetTx as {data: string}).data;
-	    asset = await readIPFS(cid)
+            asset = await readIPFS(cid)
           } else {
             asset = assetTx
           }
