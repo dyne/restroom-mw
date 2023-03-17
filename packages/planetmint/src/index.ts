@@ -25,6 +25,11 @@ import {
   BROADCAST,
   RETRIEVE,
 } from "./actions";
+import * as IPFS from 'ipfs-core'
+import all from 'it-all'
+import { concat as uint8ArrayConcat } from 'uint8arrays/concat'
+import { fromString as uint8ArrayFromString } from 'uint8arrays/from-string'
+import { toString as uint8ArrayToString } from 'uint8arrays/to-string'
 
 interface TransactionRetrieved {
   asset: Record<string, any>;
@@ -33,6 +38,16 @@ interface TransactionRetrieved {
 
 require("dotenv").config();
 
+var ipfs: any = null
+const storeIPFS = async (data: any) => {
+  const { cid } = await ipfs.add(uint8ArrayFromString(JSON.stringify(data)))
+  return cid.toString()
+}
+const readIPFS = async (cid: string) => {
+  const data = uint8ArrayConcat(await all(ipfs.cat(cid)))
+  return JSON.parse(uint8ArrayToString(data))
+}
+
 async function toCID(obj: any) {
   const bytes = json.encode(obj)
   const assetHash = await sha256.digest(bytes)
@@ -40,6 +55,9 @@ async function toCID(obj: any) {
 }
 
 export default async (req: Request, res: Response, next: NextFunction) => {
+  if(ipfs == null) {
+    ipfs = await IPFS.create()
+  }
   let connection: Connection = null;
   let input: ObjectLiteral = null;
   let rrData: ObjectLiteral = null;
@@ -59,10 +77,6 @@ export default async (req: Request, res: Response, next: NextFunction) => {
 
       if(zencode.match(RETRIEVE)) {
         const [ id, out ] =  namedParamsOf(RETRIEVE);
-        const storageAddr = input.zenswarm_storage
-        if(!storageAddr) {
-          throw new Error("Zenswarm storage not defined");
-        }
         try {
           const receipt = await connection.getTransaction(id)
           const assetTx = receipt.assets[0]
@@ -70,10 +84,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
 
           if(receipt.operation === "CREATE") {
             const cid = (assetTx as {data: string}).data;
-            const fromStorage = await axios.post(`${storageAddr}/retrieve`, {
-              key: cid,
-            });
-            asset = fromStorage.data[0].value
+	    asset = await readIPFS(cid)
           } else {
             asset = assetTx
           }
@@ -107,29 +118,14 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         data.planetmint_transaction =
           Transaction.serializeTransactionIntoCanonicalString(tx)
       }
-      const storeTarantool = async (key: string, value: Record<string, any>) => {
-        const storageAddr = input.zenswarm_storage
-        if(!storageAddr) {
-          throw new Error("Zenswarm storage not defined");
-        }
-        const fromStorage = await axios.post(`${storageAddr}/retrieve`, {
-          key,
-        });
-        // TODO: If there is something already stored check that is equal
-        if(fromStorage.data.length === 0) {
-          await axios.post(`${storageAddr}/store`, {key, value});
-        }
-
-      }
 
       if(zencode.match(ASSET)) {
         const [ asset, publicKey ] = zencode.paramsOf(ASSET);
         if( !input[ asset ] ) {
           throw new Error("Asset not found");
         }
-        const assetCID = await toCID(input[ asset ]);
-        storeTarantool(assetCID, input[asset])
-        storeAsset(publicKey, assetCID, null, "1" );
+        const assetCID = await storeIPFS(input[asset]);
+        storeAsset(publicKey, assetCID.toString(), null, "1" );
       }
 
       if(zencode.match(ASSET_METADATA)) {
@@ -144,10 +140,8 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         if(!storageAddr) {
           throw new Error("Zenswarm storage not defined");
         }
-        const assetCID = await toCID(input[ asset ]);
-        const metadataCID = await toCID(input[metadata]);
-        storeTarantool(assetCID, input[asset])
-        storeTarantool(metadataCID, input[metadata])
+        const assetCID = await storeIPFS(input[asset]);
+        const metadataCID = await storeIPFS(input[metadata]);
         storeAsset(publicKey, assetCID, metadataCID, "1" );
       }
 
@@ -159,8 +153,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         if( !input[amount] ) {
           throw new Error("Amount not found");
         }
-        const assetCID = await toCID(input[ asset ]);
-        storeTarantool(assetCID, input[asset])
+        const assetCID = await storeIPFS(input[asset]);
         storeAsset(publicKey, assetCID, null, input[ amount ]);
       }
 
