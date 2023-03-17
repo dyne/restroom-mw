@@ -126,10 +126,6 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         if( !input[metadata] ) {
           throw new Error("Metadata not found");
         }
-        const storageAddr = input.zenswarm_storage
-        if(!storageAddr) {
-          throw new Error("Zenswarm storage not defined");
-        }
         const assetCID = await storeIPFS(input[asset]);
         const metadataCID = await storeIPFS(input[metadata]);
         storeAsset(publicKey, assetCID, metadataCID, "1" );
