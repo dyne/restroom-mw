@@ -1,6 +1,6 @@
 import { Restroom } from "@restroom-mw/core";
 import { ObjectLiteral } from "@restroom-mw/types";
-import { UTF8_DECODER, zencodeNamedParamsOf } from '@restroom-mw/utils';
+import { UTF8_DECODER, zencodeNamedParamsOf } from "@restroom-mw/utils";
 
 import { NextFunction, Request, Response } from "express";
 import {
@@ -21,26 +21,28 @@ import {
   READ_OWNER,
   READ_ASSET,
 } from "./actions";
-import Web3 from 'web3';
+import Web3 from "web3";
 // import * as ERC20_ABI from './erc20_abi.json'
 
 require("dotenv").config();
 
-const ERC20_ABI = require('./erc20_abi.json');
-const ERC721_ABI = require('./erc721_abi.json');
-const ERC721_METADATA_ABI = require('./erc721_metadata_abi.json');
+const ERC20_ABI = require("./erc20_abi.json");
+const ERC721_ABI = require("./erc721_abi.json");
+const ERC721_METADATA_ABI = require("./erc721_metadata_abi.json");
 
 let web3: Web3 = null;
 
-const BLOCKCHAIN = "ethereum"
-const ERC721_TRANSFER_EVENT = "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
+const BLOCKCHAIN = "ethereum";
+const ERC721_TRANSFER_EVENT =
+  "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef";
 
 const validateWeb3 = () => {
-  if (web3 == null) throw Error("No connection to a client")
-}
+  if (web3 == null) throw Error("No connection to a client");
+};
 
 export default async (req: Request, res: Response, next: NextFunction) => {
-  const rr = new Restroom(req, res, [CONNECT,
+  const rr = new Restroom(req, res, [
+    CONNECT,
     NONCE,
     GAS_PRICE,
     RETRIEVE,
@@ -55,7 +57,8 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     BROADCAST,
     READ_TOKEN_ID,
     READ_OWNER,
-    READ_ASSET]);
+    READ_ASSET,
+  ]);
   // preserve data passed to zenroom also in restroom
   let rrData: Record<string, string> = {};
 
@@ -65,8 +68,12 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       const input = rr.combineDataKeys(data, keys);
       const namedParamsOf = zencodeNamedParamsOf(zencode, input);
 
-      const callErc20 = async (command: string, contractAddress: string,
-        variableName: string, args: string[]) => {
+      const callErc20 = async (
+        command: string,
+        contractAddress: string,
+        variableName: string,
+        args: string[]
+      ) => {
         if (!web3.utils.isAddress(contractAddress)) {
           throw new Error(`Not an ethereum address ${contractAddress}`);
         }
@@ -74,12 +81,18 @@ export default async (req: Request, res: Response, next: NextFunction) => {
 
         const fz = (() => {
           switch (command) {
-            case "decimals": return erc20.methods.decimals;
-            case "name": return erc20.methods.name;
-            case "symbol": return erc20.methods.symbol;
-            case "total supply": return erc20.methods.totalSupply;
-            case "balance": return erc20.methods.balanceOf;
-            default: return null;
+            case "decimals":
+              return erc20.methods.decimals;
+            case "name":
+              return erc20.methods.name;
+            case "symbol":
+              return erc20.methods.symbol;
+            case "total supply":
+              return erc20.methods.totalSupply;
+            case "balance":
+              return erc20.methods.balanceOf;
+            default:
+              return null;
           }
         })();
 
@@ -89,12 +102,11 @@ export default async (req: Request, res: Response, next: NextFunction) => {
 
         const result = await fz(...args).call();
 
-
         data[variableName] = result;
-      }
+      };
 
       if (zencode.match(CONNECT)) {
-        const [endpoint] = namedParamsOf(CONNECT)
+        const [endpoint] = namedParamsOf(CONNECT);
         web3 = new Web3(endpoint);
       }
 
@@ -117,9 +129,9 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         for (const params of chkParams) {
           const tag = input[params[0]];
           const variable = params[1];
-          const receipt = await web3.eth.getTransactionReceipt("0x" + tag)
+          const receipt = await web3.eth.getTransactionReceipt("0x" + tag);
           if (!receipt) {
-            throw new Error("Transaction id doesn't exist")
+            throw new Error("Transaction id doesn't exist");
           }
           if (!receipt.status) {
             throw new Error("Failed transaction");
@@ -128,7 +140,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
             const dataRead = receipt.logs[0].data.slice(2);
             data[variable] = dataRead;
           } catch (e) {
-            throw new Error("Empty transaction")
+            throw new Error("Empty transaction");
           }
         }
       }
@@ -150,7 +162,12 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         for (const params of chkParams) {
           const command = params[0];
           const contractAddress = input[params[1]] || params[1];
-          await callErc20(command, contractAddress, command.replace(" ", "_"), []);
+          await callErc20(
+            command,
+            contractAddress,
+            command.replace(" ", "_"),
+            []
+          );
         }
       }
 
@@ -161,8 +178,9 @@ export default async (req: Request, res: Response, next: NextFunction) => {
           const command = params[0];
           const arg = input[params[1]] || params[1];
           const contractAddress = input[params[2]] || params[2];
-          await callErc20(command, contractAddress, command.replace(" ", "_"),
-            ['0x' + arg]);
+          await callErc20(command, contractAddress, command.replace(" ", "_"), [
+            "0x" + arg,
+          ]);
         }
       }
 
@@ -174,8 +192,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
           const arg = input[params[1]] || params[1];
           const contractAddress = input[params[2]] || params[2];
           const variableName = params[3];
-          await callErc20(command, contractAddress, variableName,
-            ['0x' + arg]);
+          await callErc20(command, contractAddress, variableName, ["0x" + arg]);
         }
       }
 
@@ -194,12 +211,11 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         const chkParams = zencode.chunkedParamsOf(READ_PREVIOUS, 3);
         for (const params of chkParams) {
           const storage = params[0];
-          const blockHash = input[params[1]] || data[params[1]]
-            || params[1];
+          const blockHash = input[params[1]] || data[params[1]] || params[1];
           const variableName = params[2];
           if (storage.toLowerCase() == BLOCKCHAIN) {
             validateWeb3();
-            const result = await web3.eth.getBlock('0x' + blockHash);
+            const result = await web3.eth.getBlock("0x" + blockHash);
             data[variableName] = result.parentHash.slice(2);
           }
         }
@@ -216,9 +232,11 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       if (zencode.match(READ_BALANCE_ARRAY)) {
         validateWeb3();
 
-        for (const [addressesName, balancesName]
-          of zencode.chunkedParamsOf(READ_BALANCE_ARRAY, 2)) {
-          const addressesInput = input[addressesName] || data[addressesName]
+        for (const [addressesName, balancesName] of zencode.chunkedParamsOf(
+          READ_BALANCE_ARRAY,
+          2
+        )) {
+          const addressesInput = input[addressesName] || data[addressesName];
           if (!addressesInput) {
             throw new Error(`Could not find ${addressesInput} anywhere`);
           }
@@ -226,22 +244,25 @@ export default async (req: Request, res: Response, next: NextFunction) => {
             throw new Error(`${addressesInput} is not an array`);
           }
           const balances = await Promise.all(
-            addressesInput.map(v => web3.eth.getBalance(v)))
-          data[balancesName] = balances.map(v => { return { wei_value: v.toString() } })
+            addressesInput.map((v) => web3.eth.getBalance(v))
+          );
+          data[balancesName] = balances.map((v) => {
+            return { wei_value: v.toString() };
+          });
         }
       }
-
 
       // ERC 721
       if (zencode.match(READ_TOKEN_ID)) {
         validateWeb3();
         const [txidName] = namedParamsOf(READ_TOKEN_ID);
         const txid = input[txidName] || txidName;
-        const receipt = await web3.eth.getTransactionReceipt('0x' + txid);
+        const receipt = await web3.eth.getTransactionReceipt("0x" + txid);
         const log = receipt.logs.find(
-          v => v.topics.length > 0 && v.topics[0] === ERC721_TRANSFER_EVENT);
+          (v) => v.topics.length > 0 && v.topics[0] === ERC721_TRANSFER_EVENT
+        );
         if (!log) {
-          throw new Error("Token Id not found")
+          throw new Error("Token Id not found");
         }
         data.erc721_id = parseInt(log.topics[3], 16);
       }
@@ -249,21 +270,26 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       if (zencode.match(READ_OWNER)) {
         validateWeb3();
         const [tokenName, contractName] = namedParamsOf(READ_OWNER);
-        const contractAddress = data[contractName] || input[contractName] || contractName;
+        const contractAddress =
+          data[contractName] || input[contractName] || contractName;
         const token = data[tokenName] || input[tokenName] || tokenName;
         const erc721 = new web3.eth.Contract(ERC721_ABI, contractAddress);
-        const owner = await erc721.methods.ownerOf(token).call()
-        data.owner = owner.substring(2)
+        const owner = await erc721.methods.ownerOf(token).call();
+        data.owner = owner.substring(2);
       }
 
       if (zencode.match(READ_ASSET)) {
         validateWeb3();
         const [tokenName, contractName] = namedParamsOf(READ_ASSET);
-        const contractAddress = data[contractName] || input[contractName] || contractName;
+        const contractAddress =
+          data[contractName] || input[contractName] || contractName;
         const token = data[tokenName] || input[tokenName] || tokenName;
-        const erc721 = new web3.eth.Contract(ERC721_METADATA_ABI, contractAddress);
-        const asset = await erc721.methods.tokenURI(token).call()
-        data.asset = asset
+        const erc721 = new web3.eth.Contract(
+          ERC721_METADATA_ABI,
+          contractAddress
+        );
+        const asset = await erc721.methods.tokenURI(token).call();
+        data.asset = asset;
       }
     });
 
@@ -276,7 +302,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
           const rawtx = result[params[0]];
           const tag = params[1];
           if (rawtx && tag) {
-            const receipt = await web3.eth.sendSignedTransaction('0x' + rawtx);
+            const receipt = await web3.eth.sendSignedTransaction("0x" + rawtx);
             if (receipt.status) {
               result[tag] = receipt.transactionHash.substring(2); // Remove 0x
             } else {
