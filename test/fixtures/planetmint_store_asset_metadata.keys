@@ -5,7 +5,6 @@
   },
   "endpoint": "https://test.ipdb.io/api/v1/",
   "eddsa_public_key": "4mNyVD8BmXBgs4oFtuA9kxtSApX5GcVu5iMQFGvr5tfV",
-  "zenswarm_storage": "http://65.109.162.224:8081",
   "keyring": {
     "eddsa": "6sqqSD1W8ABqMi6rLBsP2eLwZQtk1yrsiHMhjQPFdWh4"
   }
