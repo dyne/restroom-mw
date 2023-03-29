@@ -4,42 +4,42 @@ import express from "express";
 import chalk from "chalk";
 import bodyParser from "body-parser";
 import zencode from "@restroom-mw/core";
+{{#@restroom-mw/timestamp}}
+import timestamp from "@restroom-mw/timestamp";
+{{/@restroom-mw/timestamp}}
+{{#@restroom-mw/git}}
+import git from "@restroom-mw/git";
+{{/@restroom-mw/git}}
 {{#@restroom-mw/db}}
 import db from "@restroom-mw/db";
 {{/@restroom-mw/db}}
-{{#@restroom-mw/fabric}}
-import fabric from "@restroom-mw/fabric";
-{{/@restroom-mw/fabric}}
 {{#@restroom-mw/files}}
 import files from "@restroom-mw/files";
 {{/@restroom-mw/files}}
-{{#@restroom-mw/logger}}
-import logger from "@restroom-mw/logger";
-{{/@restroom-mw/logger}}
-{{#@restroom-mw/http}}
-import rrhttp from "@restroom-mw/http";
-{{/@restroom-mw/http}}
 {{#@restroom-mw/redis}}
 import rrredis from "@restroom-mw/redis";
 {{/@restroom-mw/redis}}
+{{#@restroom-mw/http}}
+import rrhttp from "@restroom-mw/http";
+{{/@restroom-mw/http}}
+{{#@restroom-mw/fabric}}
+import fabric from "@restroom-mw/fabric";
+{{/@restroom-mw/fabric}}
+{{#@restroom-mw/planetmint}}
+import planetmint from "@restroom-mw/planetmint";
+{{/@restroom-mw/planetmint}}
 {{#@restroom-mw/sawroom}}
 import sawroom from "@restroom-mw/sawroom";
 {{/@restroom-mw/sawroom}}
 {{#@restroom-mw/ethereum}}
 import ethereum from "@restroom-mw/ethereum";
 {{/@restroom-mw/ethereum}}
-{{#@restroom-mw/planetmint}}
-import planetmint from "@restroom-mw/planetmint";
-{{/@restroom-mw/planetmint}}
-{{#@restroom-mw/timestamp}}
-import timestamp from "@restroom-mw/timestamp";
-{{/@restroom-mw/timestamp}}
+{{#@restroom-mw/logger}}
+import logger from "@restroom-mw/logger";
+{{/@restroom-mw/logger}}
 {{#@restroom-mw/ui}}
 import ui from "@restroom-mw/ui";
 {{/@restroom-mw/ui}}
-{{#@restroom-mw/git}}
-import git from "@restroom-mw/git";
-{{/@restroom-mw/git}}
 
 import http from "http";
 import morgan from "morgan"
