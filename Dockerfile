@@ -36,4 +36,4 @@ ENV CHAIN_EXT=chain
 ENV YML_EXT=yml
 
 # yarn install and run
-CMD yarn start
+CMD yarn upgrade zenroom@latest && yarn start
