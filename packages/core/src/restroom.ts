@@ -108,7 +108,7 @@ export class Restroom {
     try {
       return JSON.parse(notNull);
     } catch (err) {
-      throw new Error(errorMessage ?? err)
+      throw new Error(errorMessage ?? err);
     }
   }
 

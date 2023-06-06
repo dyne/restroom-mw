@@ -5,7 +5,7 @@ const core = require("../../packages/core/src/index").default;
 const ui = require("../../packages/ui/src/index").default;
 const db = require("../../packages/db/src/index").default;
 const httpmw = require("../../packages/http/src/index").default;
-const sawroom = require("../../packages/sawroom/src/index").default;
+const nflx = require("../../packages/influxdb/src/index").default;
 import http from "http";
 
 const app = express();
@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 app.set("json spaces", 2);
 app.use(httpmw);
 app.use(db);
-app.use(sawroom);
+app.use(nflx);
 app.use("/api/*", core);
 app.use("/docs", ui({
   path: process.env.ZENCODE_DIR,

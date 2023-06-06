@@ -1,0 +1,9 @@
+{
+  "influx": {
+    "token": "Lewt6V4FsKqGb4jAd3j6OSc_SYfY4-UXMXtBRA4c4f3CjOZdP_lFJeeNUYN1MgptpNeBZniPXmz-WVly6_XCXw==",
+    "url": "http://localhost:8086",
+    "org": "puria"
+  },
+  "query": "from(bucket:'puria')",
+  "query2": "from(bucket:'puria')"
+}
