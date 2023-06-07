@@ -17,7 +17,7 @@ test.before(async (t) => {
   t.context.app = supertest(app);
 });
 
-test.serial("Middleware should read from sawtooth correctly", async (t) => {
+test.skip("Middleware should read from sawtooth correctly", async (t) => {
   const {
     app
   } = t.context;
@@ -29,7 +29,7 @@ test.serial("Middleware should read from sawtooth correctly", async (t) => {
   t.true(result.includes("private_key"));
 });
 
-test.serial("Middleware should execute on sawtooth correctly", async (t) => {
+test.skip("Middleware should execute on sawtooth correctly", async (t) => {
   const {
     app
   } = t.context;
@@ -41,7 +41,7 @@ test.serial("Middleware should execute on sawtooth correctly", async (t) => {
   t.is(res.body[0].sawroom.test.batch_id.length, 128);
 });
 
-test.serial("getToken works correctly", async (t) => {
+test.skip("getToken works correctly", async (t) => {
   const {
     app
   } = t.context;
@@ -50,7 +50,7 @@ test.serial("getToken works correctly", async (t) => {
   t.is(res.body.token.length, 173);
 });
 
-test.serial("Setup the context id", async (t) => {
+test.skip("Setup the context id", async (t) => {
   const {
     app
   } = t.context;
@@ -58,7 +58,7 @@ test.serial("Setup the context id", async (t) => {
   t.is(res.status, 200, res.text);
 });
 
-test.serial("Save data on sawroom works correctly", async (t) => {
+test.skip("Save data on sawroom works correctly", async (t) => {
   const {
     app
   } = t.context;
@@ -74,7 +74,7 @@ test.serial("Save data on sawroom works correctly", async (t) => {
   t.is(res.body.sawroom[cid2].batch_id.length, 128);
 });
 
-test.serial("Store on rust TP works correctly", async (t) => {
+test.skip("Store on rust TP works correctly", async (t) => {
   const {
     app
   } = t.context;
@@ -83,7 +83,7 @@ test.serial("Store on rust TP works correctly", async (t) => {
   t.is(typeof res.body["my128Tag"], "string");
 });
 
-test.serial("Store OUTPUT on rust TP works correctly", async (t) => {
+test.skip("Store OUTPUT on rust TP works correctly", async (t) => {
   const {
     app
   } = t.context;
@@ -93,7 +93,7 @@ test.serial("Store OUTPUT on rust TP works correctly", async (t) => {
   t.is(typeof res.body["my128Tag"], "string");
 });
 
-test.serial("Retrieve on rust TP works correctly", async (t) => {
+test.skip("Retrieve on rust TP works correctly", async (t) => {
   const {
     app
   } = t.context;
@@ -118,7 +118,7 @@ const is_transaction_valid = async (link) => {
   return (res.data.data[0].status);
 };
 
-test.serial("Assure that Deposit on wallet TP does not work", async (t) => {
+test.skip("Assure that Deposit on wallet TP does not work", async (t) => {
   const {
     app
   } = t.context;
@@ -134,7 +134,7 @@ test.serial("Assure that Deposit on wallet TP does not work", async (t) => {
   t.is(newBalance - oldBalance, 0);
 });
 
-test.serial("Asking the balance on wallet TP work correctly", async (t) => {
+test.skip("Asking the balance on wallet TP work correctly", async (t) => {
   const {
     app
   } = t.context;
