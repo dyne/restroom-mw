@@ -1,15 +1,12 @@
-Scenario 'InfluxDB': Connect to influx and read data
-Rule unknown ignore
+Rule caller restroom-mw
 
-Given I have a 'string dictionary' named 'influx'
-Given I have a 'string' named 'query'
-Given I have a 'string dictionary' named 'result'
-Given I have a 'string' named 'query2'
-Given I have a 'string dictionary' named 'result2'
 Given I connect to influxdb with the connection object named 'influx'
 
-When I run the query named 'query' and save the output into 'result'
-When I run the query named 'query2' and save the output into 'result2'
-When I create the random object of '256' bits
+Given I run the query named 'query1' and save the output into 'result1'
+Given I have a 'string' named 'result1'
 
-Then print all the 'result2'
+Given I run the query named 'query2' and save the output into 'result2'
+Given I have a 'string' named 'result2'
+
+Then print the 'result1'
+Then print the 'result2'
