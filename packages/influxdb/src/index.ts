@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from "express";
 import { ObjectLiteral } from "@restroom-mw/types";
 import { Zencode } from "@restroom-mw/zencode";
 import { InfluxDB } from "@influxdata/influxdb-client";
-import { CONNECT, QUERY } from "./actions";
+import { CONNECT, QUERY, QUERY_ARRAY } from "./actions";
 import { zencodeNamedParamsOf } from "@restroom-mw/utils";
 
 export default (req: Request, res: Response, next: NextFunction) => {
@@ -35,7 +35,29 @@ export default (req: Request, res: Response, next: NextFunction) => {
         const chunks = zencode.chunkedParamsOf(QUERY, 2);
         for (let [query, output] of chunks) {
           const q = content[query as string];
-          data[output as string] = await client.queryRaw(q);
+          const res: any[] = []
+          for await (const {values, tableMeta} of client.iterateRows(q)) {
+            const o = tableMeta.toObject(values)
+            res.push(o);
+          }
+          data[output as string ] = res;
+        }
+      }
+
+      if (zencode.match(QUERY_ARRAY)) {
+        if (!client)
+          throw new Error("Can't connect to the influxdb address provided");
+        const chunks = zencode.chunkedParamsOf(QUERY_ARRAY, 2);
+        for (let [queryName, output] of chunks) {
+          const queryArray = content[queryName as string];
+          const res: any[] = [];
+          for (let query of queryArray) {
+            for await (const {values, tableMeta} of client.iterateRows(query)) {
+              const o = tableMeta.toObject(values);
+              res.push(o);
+            }
+          }
+          data[output as string ] = res;
         }
       }
     }
