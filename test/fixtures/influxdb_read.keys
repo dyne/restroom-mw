@@ -1,9 +1,9 @@
 {
   "influx": {
-    "token": "Lewt6V4FsKqGb4jAd3j6OSc_SYfY4-UXMXtBRA4c4f3CjOZdP_lFJeeNUYN1MgptpNeBZniPXmz-WVly6_XCXw==",
+    "token": "PO2t9KsbqN4j8mDeIXZ2uqvNtmfcUXRRe2umYZxN1tdVFFG6C93zXm4hudc03jhERsW3tdCmke0dVDLVcycTIw==",
     "url": "http://localhost:8086",
-    "org": "puria"
+    "org": "dyne"
   },
-  "query": "from(bucket:'puria')",
-  "query2": "from(bucket:'puria')"
+  "query1": "from(bucket:\"dyne\")|> range(start: -1h) |> filter(fn: (r) => r._measurement == \"weather\")",
+  "query2": "from(bucket:\"dyne\")|> range(start: -1h) |> filter(fn: (r) => r._measurement == \"weather\")"
 }
