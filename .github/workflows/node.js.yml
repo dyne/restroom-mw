@@ -30,6 +30,25 @@ jobs:
     - uses: supercharge/redis-github-action@1.4.0
       with:
         redis-version: 6
+    - name: Install & Setup InfluxDB
+      run: |
+        cd /tmp
+        wget https://dl.influxdata.com/platform/nightlies/influx_nightly_linux_amd64.tar.gz
+        tar xvfz influx_nightly_linux_amd64.tar.gz
+        sudo cp influx_nightly_linux_amd64/influx /usr/local/bin/
+        sudo cp influx_nightly_linux_amd64/influxd /usr/local/bin/
+        influxd &
+        sleep 10
+    - name: Setup InfluxDB use
+      run: |
+        influx setup \
+          --username ci_user \
+          --password password \
+          --org dyne \
+          --bucket dyne \
+          --retention 1d \
+          --token PO2t9KsbqN4j8mDeIXZ2uqvNtmfcUXRRe2umYZxN1tdVFFG6C93zXm4hudc03jhERsW3tdCmke0dVDLVcycTIw== \
+          --force
     - run: yarn
     - run: yarn add -W zenroom
     - run: yarn build
