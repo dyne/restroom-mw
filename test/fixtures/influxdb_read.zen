@@ -2,7 +2,7 @@ Rule caller restroom-mw
 
 Given I connect to influxdb with the connection object named 'influx'
 
-Given I run the query named 'query' and save the output into 'result'
+Given I execute the flux query named 'query' and save the output into 'result'
 Given I have a 'string dictionary' named 'result'
 
 Then print the 'result'
