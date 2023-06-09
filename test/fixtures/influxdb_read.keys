@@ -4,6 +4,7 @@
     "url": "http://localhost:8086",
     "org": "dyne"
   },
-  "query1": "from(bucket:\"dyne\")|> range(start: -1h) |> filter(fn: (r) => r._measurement == \"weather\")",
-  "query2": "from(bucket:\"dyne\")|> range(start: -1h) |> filter(fn: (r) => r._measurement == \"weather\")"
+  "query": "from(bucket:\"dyne\")|> range(start: -10y, stop: now()) |> filter(fn: (r) => r._measurement == \"airSensors\" and r.sensor_id == \"TLM0100\" and r._field == \"co\") |> mean()",
 }
+
+
