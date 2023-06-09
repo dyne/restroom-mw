@@ -17,12 +17,40 @@ test.before(async (t) => {
   t.context = { app: supertest(app) };
 });
 
-test.skip("Middleware should read from influxDB", async (t) => {
+test.serial("Middleware should perform a query to influxDB", async (t) => {
   const { app } = t.context;
   const res = await app.post("/influxdb_read");
-  console.log(res)
   const result = res.body;
-  console.log(result);
   t.is(res.status, 200, res.text);
+  t.true(Object.keys(result).includes("result"));
+  t.true(Object.keys(result.result[0]).includes("_field"));
+  t.true(Object.keys(result.result[0]).includes("_measurement"));
+  t.true(Object.keys(result.result[0]).includes("_start"));
+  t.true(Object.keys(result.result[0]).includes("_stop"));
+  t.true(Object.keys(result.result[0]).includes("_value"));
+  t.true(Object.keys(result.result[0]).includes("result"));
+  t.true(Object.keys(result.result[0]).includes("sensor_id"));
+  t.true(Object.keys(result.result[0]).includes("table"));
+  t.is(result.result[0]._value, 0.476194);
+});
+
+
+test.serial("Middleware should perform an array of query to influxDB", async (t) => {
+  const { app } = t.context;
+  const res = await app.post("/influxdb_read_array");
+  const result = res.body;
+  t.is(res.status, 200, res.text);
+  t.true(Object.keys(result).includes("result"));
+  t.is(result.result.length, 8)
+  for( let r of result.result ) {
+    t.true(Object.keys(r).includes("_field"));
+    t.true(Object.keys(r).includes("_measurement"));
+    t.true(Object.keys(r).includes("_start"));
+    t.true(Object.keys(r).includes("_stop"));
+    t.true(Object.keys(r).includes("_value"));
+    t.true(Object.keys(r).includes("result"));
+    t.true(Object.keys(r).includes("sensor_id"));
+    t.true(Object.keys(r).includes("table"));
+  };
 });
 
