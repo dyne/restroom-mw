@@ -3,8 +3,25 @@ import { NextFunction, Request, Response } from "express";
 import { ObjectLiteral } from "@restroom-mw/types";
 import { Zencode } from "@restroom-mw/zencode";
 import { InfluxDB } from "@influxdata/influxdb-client";
-import { FLUX_CONNECT, FLUX_QUERY, FLUX_QUERY_ARRAY } from "./actions";
 import { zencodeNamedParamsOf } from "@restroom-mw/utils";
+
+/**
+ * Given I connect to influxdb with the connection object named 'influx'
+ * @param {Object} influx - A dictionary of the form `{token: string, url: string, org: string}`
+ */
+import { FLUX_CONNECT } from "./actions";
+/**
+ * Given I execute the flux query named 'query' and save the output into 'result'
+ * @param {string} query - The variable name that contains the flux query
+ * @param {string} result - The variable name that will contain the result of the query
+ */
+import { FLUX_QUERY } from "./actions"
+/**
+ * Given I execute the array of flux queries named 'query_array' and save the output into 'result'
+ * @param {string} query_array - The variable name that contains the array of flux queries
+ * @param {string} result - The variable name that will contain the result of the queries
+ */
+import { FLUX_QUERY_ARRAY } from "./actions"
 
 export default (req: Request, res: Response, next: NextFunction) => {
   const rr = new Restroom(req, res);
