@@ -3,63 +3,7 @@ import { Restroom } from "@restroom-mw/core";
 import { NextFunction, Request, Response } from "express";
 import { zencodeNamedParamsOf } from "@restroom-mw/utils";
 import { ObjectLiteral } from "@restroom-mw/types";
-
-/**
- *
- * @enum {string}
- */
-enum Action {
-  /**
-   * Given I have a redis connection on {}
-   * @param {string} connection url
-   */
-  CONNECT = "have a redis connection on {}",
-  /**
-   * Given I write data into redis under the key {}
-   * @param {string} key
-   */
-  SET = "write data into redis under the key {}",
-  /**
-   * Given I read from redis the data under the key {} and save the output into {}
-   * @param {string} key
-   * @param {string} output
-   */
-  GET = `read from redis the data under the key {} and save the output into {}`,
-  /**
-   * Given I write data into redis under the key named {}
-   * @param {string} key
-   */
-  SET_NAMED = "write data into redis under the key named by {}",
-  /**
-   * Given I read from redis the data under the key named {} and save the output into {}
-   * @param {string} key
-   * @param {string} output
-   */
-  GET_NAMED = `read from redis the data under the key named {} and save the output into {}`,
-  /**
-   * Given I read from redis the data under the key named {} and save the output into {}
-   * @param {string} key
-   * @param {string} output
-   */
-  GET_KEYS_CONTAIN = "read from redis the data under the keys containing {} and save the output into {}",
-  /**
-   * Then I write {} into redis under the key named by {}
-   * @param {string} object
-   * @param {string} key
-   */
-  SET_OBJECT_NAMED = "write {} into redis under the key named by {}",
-  /**
-   * Given I read into {} and increment the key named by {}
-   * @param {string} object
-   * @param {string} key
-   */
-  INCREMENT = "read into {} and increment the key named by {}",
-  /*
-   * Then I remove the key {} in redis
-   * @param {string} key
-   */
-  DEL = `remove the key {} in redis`,
-}
+import { Action } from "./actions"
 
 const REDIS_LUA_FILTER_KEY_AND_GET = "local keys = redis.call('KEYS', '*'..KEYS[1]..'*'); return redis.call('MGET', unpack(keys))"
 export default (req: Request, res: Response, next: NextFunction) => {
