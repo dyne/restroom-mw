@@ -24,9 +24,11 @@ export default (req: Request, res: Response, next: NextFunction) => {
       if (zencode.match(CONNECT)) {
         const connection_string: any = namedParams(CONNECT)[0];
         const { url, token } = connection_string;
-        client = new InfluxDB({ url, token }).getQueryApi(
-          connection_string.org
-        );
+        client = new InfluxDB({
+          url,
+          token,
+          transportOptions: { rejectUnauthorized: false },
+        }).getQueryApi(connection_string.org);
       }
 
       if (zencode.match(QUERY)) {
@@ -37,8 +39,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
           const q = content[query as string];
           const res: any[] = []
           for await (const {values, tableMeta} of client.iterateRows(q)) {
-            const o = tableMeta.toObject(values)
-            res.push(o);
+            res.push(tableMeta.toObject(values));
           }
           data[output as string ] = res;
         }
@@ -53,8 +54,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
           const res: any[] = [];
           for (let query of queryArray) {
             for await (const {values, tableMeta} of client.iterateRows(query)) {
-              const o = tableMeta.toObject(values);
-              res.push(o);
+              res.push(tableMeta.toObject(values));
             }
           }
           data[output as string ] = res;
