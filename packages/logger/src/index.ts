@@ -6,7 +6,30 @@ import {ObjectLiteral} from "@restroom-mw/types";
 import {validateSubdir} from "@restroom-mw/utils";
 
 require("dotenv").config();
-import {APPEND, APPEND_NAMED, APPEND_ARRAY} from "./actions";
+
+/**
+ * Given I append the string 'log' to the logfile in 'log_path'
+ * @param {string} log - It can be the name of the variable that contains the log string
+ *        or the log string itself
+ * @param {string} log_path - Path to the log file under the `FILES_DIR` directory
+ */
+import { APPEND } from "./actions";
+/**
+ * Given I append the string 'log' to the logfile named by 'log_name'
+ * @param {string} log - It can be the name of the variable that contains the log string
+ *        or the log string itself
+ * @param {string} log_name - Name of the variable the contains the path to log file under
+ *         the `FILES_DIR` directory
+ */
+import { APPEND_NAMED } from "./actions"
+/**
+ * Given I append the array of strings 'log_array' to the logfile named by 'log_name'
+ * @param {string} log - The name of the variable that contains the array of log strings
+ * @param {string} log_name - Name of the variable the contains the path to log file under
+ *         the `FILES_DIR` directory
+ */
+import { APPEND_ARRAY } from "./actions"
+
 export const LOGGER_DIR = process.env.LOGGER_DIR;
 
 const validatePath = validateSubdir(LOGGER_DIR);
