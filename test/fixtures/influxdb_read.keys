@@ -1,0 +1,10 @@
+{
+  "influx": {
+    "token": "PO2t9KsbqN4j8mDeIXZ2uqvNtmfcUXRRe2umYZxN1tdVFFG6C93zXm4hudc03jhERsW3tdCmke0dVDLVcycTIw==",
+    "url": "http://localhost:8086",
+    "org": "dyne"
+  },
+  "query": "from(bucket:\"dyne\")|> range(start: -10y, stop: now()) |> filter(fn: (r) => r._measurement == \"airSensors\" and r.sensor_id == \"TLM0100\" and r._field == \"co\") |> mean()",
+}
+
+

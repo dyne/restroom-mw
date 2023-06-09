@@ -1,0 +1,8 @@
+Rule caller restroom-mw
+
+Given I connect to influxdb with the connection object named 'influx'
+
+Given I execute the array of flux queries named 'query_array' and save the output into 'result'
+Given I have a 'string dictionary' named 'result'
+
+Then print the 'result'

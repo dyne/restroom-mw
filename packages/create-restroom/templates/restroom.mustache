@@ -19,6 +19,9 @@ import files from "@restroom-mw/files";
 {{#@restroom-mw/redis}}
 import rrredis from "@restroom-mw/redis";
 {{/@restroom-mw/redis}}
+{{#@restroom-mw/influxdb}}
+import rrredis from "@restroom-mw/influxdb";
+{{/@restroom-mw/influxdb}}
 {{#@restroom-mw/http}}
 import rrhttp from "@restroom-mw/http";
 {{/@restroom-mw/http}}
@@ -78,6 +81,9 @@ app.use(rrhttp.default);
 {{#@restroom-mw/redis}}
 app.use(rrredis.default);
 {{/@restroom-mw/redis}}
+{{#@restroom-mw/influxdb}}
+app.use(influxdb.default);
+{{/@restroom-mw/influxdb}}
 {{#@restroom-mw/sawroom}}
 app.use(sawroom.default);
 {{/@restroom-mw/sawroom}}

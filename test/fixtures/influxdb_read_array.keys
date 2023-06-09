@@ -1,0 +1,17 @@
+{
+  "influx": {
+    "token": "PO2t9KsbqN4j8mDeIXZ2uqvNtmfcUXRRe2umYZxN1tdVFFG6C93zXm4hudc03jhERsW3tdCmke0dVDLVcycTIw==",
+    "url": "http://localhost:8086",
+    "org": "dyne"
+  },
+  "query_array": [
+    "from(bucket:\"dyne\")|> range(start: -10y, stop: now()) |> filter(fn: (r) => r._measurement == \"airSensors\" and r.sensor_id == \"TLM0100\" and r._field == \"co\") |> mean()",
+    "from(bucket:\"dyne\")|> range(start: -10y, stop: now()) |> filter(fn: (r) => r._measurement == \"airSensors\" and r.sensor_id == \"TLM0101\" and r._field == \"co\") |> mean()",
+    "from(bucket:\"dyne\")|> range(start: -10y, stop: now()) |> filter(fn: (r) => r._measurement == \"airSensors\" and r.sensor_id == \"TLM0102\" and r._field == \"co\") |> mean()",
+    "from(bucket:\"dyne\")|> range(start: -10y, stop: now()) |> filter(fn: (r) => r._measurement == \"airSensors\" and r.sensor_id == \"TLM0103\" and r._field == \"co\") |> mean()",
+    "from(bucket:\"dyne\")|> range(start: -10y, stop: now()) |> filter(fn: (r) => r._measurement == \"airSensors\" and r.sensor_id == \"TLM0200\" and r._field == \"co\") |> mean()",
+    "from(bucket:\"dyne\")|> range(start: -10y, stop: now()) |> filter(fn: (r) => r._measurement == \"airSensors\" and r.sensor_id == \"TLM0201\" and r._field == \"co\") |> mean()",
+    "from(bucket:\"dyne\")|> range(start: -10y, stop: now()) |> filter(fn: (r) => r._measurement == \"airSensors\" and r.sensor_id == \"TLM0202\" and r._field == \"co\") |> mean()",
+    "from(bucket:\"dyne\")|> range(start: -10y, stop: now()) |> filter(fn: (r) => r._measurement == \"airSensors\" and r.sensor_id == \"TLM0203\" and r._field == \"co\") |> mean()",
+  ]
+}

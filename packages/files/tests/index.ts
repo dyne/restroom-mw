@@ -82,5 +82,5 @@ test.serial('List content of directory', async (t) => {
     t.is(file.blksize, 4096);
     t.is(file.mode.substr(0, 2), '40'); // All directory
   }
-  t.is(res.body.packages_dir.length, 17);
+  t.is(res.body.packages_dir.length, 18);
 })

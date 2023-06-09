@@ -1,0 +1,35 @@
+{
+  "name": "@restroom-mw/influxdb",
+  "version": "0.13.0",
+  "description": "📈 Influxdb middleware for Restroom",
+  "author": "Puria Nafisi Azizi <puria@dyne.org>",
+  "homepage": "https://dyne.github.io/restroom-mw/",
+  "license": "AGPL-3.0",
+  "main": "dist/index.js",
+  "files": [
+    "src",
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dyne/restroom-mw.git"
+  },
+  "scripts": {
+    "clean": "rimraf dist && rimraf tsconfig.tsbuildinfo",
+    "doc": "documentation readme src/** -g -f md -s 'API' --readme-file ../../docs/packages/influx.md --shallow",
+    "links": "yarn link",
+    "unlinks": "yarn unlink",
+    "watch": "tsc -b tsconfig.json -w",
+    "build": "tsc -b tsconfig.json"
+  },
+  "bugs": {
+    "url": "https://github.com/dyne/restroom-mw/issues"
+  },
+  "dependencies": {
+    "@influxdata/influxdb-client": "^1.33.2"
+  }
+}
