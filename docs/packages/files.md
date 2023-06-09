@@ -7,30 +7,105 @@
 #### Table of Contents
 
 *   [DOWNLOAD](#download)
+    *   [Parameters](#parameters)
 *   [STORE_RESULT](#store_result)
+    *   [Parameters](#parameters-1)
+*   [READ](#read)
+    *   [Parameters](#parameters-2)
+*   [READ_AND_SAVE](#read_and_save)
+    *   [Parameters](#parameters-3)
+*   [LS](#ls)
+    *   [Parameters](#parameters-4)
 *   [FILES_DIR](#files_dir)
 
 ### DOWNLOAD
 
-[packages/files/src/index.ts:17-17](https://github.com/dyne/restroom-mw/blob/8bcf193be31549f8b5764f826d90bc30406c8b1a/packages/files/src/index.ts#L17-L17 "Source code on GitHub")
+[packages/files/src/index.ts:21-21](https://github.com/dyne/restroom-mw/blob/e43ad0a47d8279dd400b07b65a84709e28955ed9/packages/files/src/index.ts#L21-L21 "Source code on GitHub")
 
-`download the 'myUrl' and extract it into 'myFolder'`
-
+`Then I download the 'myUrl' and extract it into 'myFolder'`<br><br>
 Download a zip file located at the url `myUrl` and extract it at the path
-`myFolder` on the server.
+`myFolder`  under the `FILES_DIR` on the server.
+
+#### Parameters
+
+*   `myUrl` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the variable containing the url
+*   `myFolder` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the variable containing the path to
+    the folder where the data will be stored
 
 ### STORE_RESULT
 
-[packages/files/src/index.ts:25-25](https://github.com/dyne/restroom-mw/blob/8bcf193be31549f8b5764f826d90bc30406c8b1a/packages/files/src/index.ts#L25-L25 "Source code on GitHub")
+[packages/files/src/index.ts:30-30](https://github.com/dyne/restroom-mw/blob/e43ad0a47d8279dd400b07b65a84709e28955ed9/packages/files/src/index.ts#L30-L30 "Source code on GitHub")
 
-`store 'myVariable' in the file 'myFolder'`
-
+`Then I store 'myVariable' in the file 'myFile'`<br><br>
 Store the content of the variable `myVariable` in the filesystem at the path
-`myFolder` on the server
+`myFile` under the `FILES_DIR` directory on the server
+
+#### Parameters
+
+*   `myVariable` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the variable containing the data to be stored
+*   `myFile` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the variable containing the path to the file where
+    the data will be stored
+
+### READ
+
+[packages/files/src/index.ts:37-37](https://github.com/dyne/restroom-mw/blob/e43ad0a47d8279dd400b07b65a84709e28955ed9/packages/files/src/index.ts#L37-L37 "Source code on GitHub")
+
+`Given I read the content of 'myFile'`<br><br>
+write the content of 'myFile', found under the `FILES_DIR` directory, in the data
+
+#### Parameters
+
+*   `myFile` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** It can be the name of the variable that contains the path
+    to the file or the path itself
+
+### READ_AND_SAVE
+
+[packages/files/src/index.ts:45-45](https://github.com/dyne/restroom-mw/blob/e43ad0a47d8279dd400b07b65a84709e28955ed9/packages/files/src/index.ts#L45-L45 "Source code on GitHub")
+
+`Given I read the content of 'myFile' and save the output into 'myVariable'`<br><br>
+Write the content of 'myFile' in the data under the key 'myVariable'
+
+#### Parameters
+
+*   `myFile` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** It can be the name of the variable that contains the path
+    to the file or the path itself
+*   `myVariable` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the variable where the content of the file will be stored
+
+### LS
+
+[packages/files/src/index.ts:73-73](https://github.com/dyne/restroom-mw/blob/e43ad0a47d8279dd400b07b65a84709e28955ed9/packages/files/src/index.ts#L73-L73 "Source code on GitHub")
+
+`Given I list the content of directory 'dir_path' as 'dir_result'`<br><br>
+Write the list of objects found in *dir_path*, under the `FILES_DIR` directory, in the data,
+the result is an array of dictionaries whose structure is:
+
+    {
+    atime: '2022-06-13T07:00:34.870Z',
+    birthtime: '2022-06-13T07:00:34.870Z',
+    blksize: 4096,
+    blocks: 8,
+    ctime: '2022-08-09T11:09:22.718Z',
+    dev: 2055,
+    gid: 1000,
+    mode: '40755',
+    mtime: '2022-08-09T11:09:22.718Z',
+    name: 'zencode',
+    nlink: 6,
+    size: 4096,
+    uid: 1000
+    }
+
+In particular, if `mode` starts with `40` the current item is a directory
+
+#### Parameters
+
+*   `dir_path` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Variable name containing the path to the directory
+    under the `FILES_DIR` directory
+*   `dir_result` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the variable where the result will be stored
 
 ### FILES_DIR
 
-[packages/files/src/index.ts:35-35](https://github.com/dyne/restroom-mw/blob/8bcf193be31549f8b5764f826d90bc30406c8b1a/packages/files/src/index.ts#L35-L35 "Source code on GitHub")
+[packages/files/src/index.ts:80-80](https://github.com/dyne/restroom-mw/blob/e43ad0a47d8279dd400b07b65a84709e28955ed9/packages/files/src/index.ts#L80-L80 "Source code on GitHub")
 
 Base dir to store data for the user
 
