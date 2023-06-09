@@ -20,11 +20,13 @@
 
 ### DOWNLOAD
 
-[packages/files/src/index.ts:21-21](https://github.com/dyne/restroom-mw/blob/e43ad0a47d8279dd400b07b65a84709e28955ed9/packages/files/src/index.ts#L21-L21 "Source code on GitHub")
+[packages/files/src/actions.ts:10-10](https://github.com/dyne/restroom-mw/blob/e4ab3a7c7133e3353e1132db4cd3df886c1864fb/packages/files/src/actions.ts#L10-L10 "Source code on GitHub")
 
 `Then I download the 'myUrl' and extract it into 'myFolder'`<br><br>
 Download a zip file located at the url `myUrl` and extract it at the path
 `myFolder`  under the `FILES_DIR` on the server.
+
+Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
 
 #### Parameters
 
@@ -34,11 +36,13 @@ Download a zip file located at the url `myUrl` and extract it at the path
 
 ### STORE_RESULT
 
-[packages/files/src/index.ts:30-30](https://github.com/dyne/restroom-mw/blob/e43ad0a47d8279dd400b07b65a84709e28955ed9/packages/files/src/index.ts#L30-L30 "Source code on GitHub")
+[packages/files/src/actions.ts:19-19](https://github.com/dyne/restroom-mw/blob/e4ab3a7c7133e3353e1132db4cd3df886c1864fb/packages/files/src/actions.ts#L19-L19 "Source code on GitHub")
 
 `Then I store 'myVariable' in the file 'myFile'`<br><br>
 Store the content of the variable `myVariable` in the filesystem at the path
 `myFile` under the `FILES_DIR` directory on the server
+
+Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
 
 #### Parameters
 
@@ -48,10 +52,12 @@ Store the content of the variable `myVariable` in the filesystem at the path
 
 ### READ
 
-[packages/files/src/index.ts:37-37](https://github.com/dyne/restroom-mw/blob/e43ad0a47d8279dd400b07b65a84709e28955ed9/packages/files/src/index.ts#L37-L37 "Source code on GitHub")
+[packages/files/src/actions.ts:26-26](https://github.com/dyne/restroom-mw/blob/e4ab3a7c7133e3353e1132db4cd3df886c1864fb/packages/files/src/actions.ts#L26-L26 "Source code on GitHub")
 
 `Given I read the content of 'myFile'`<br><br>
 write the content of 'myFile', found under the `FILES_DIR` directory, in the data
+
+Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
 
 #### Parameters
 
@@ -60,10 +66,12 @@ write the content of 'myFile', found under the `FILES_DIR` directory, in the dat
 
 ### READ_AND_SAVE
 
-[packages/files/src/index.ts:45-45](https://github.com/dyne/restroom-mw/blob/e43ad0a47d8279dd400b07b65a84709e28955ed9/packages/files/src/index.ts#L45-L45 "Source code on GitHub")
+[packages/files/src/actions.ts:34-34](https://github.com/dyne/restroom-mw/blob/e4ab3a7c7133e3353e1132db4cd3df886c1864fb/packages/files/src/actions.ts#L34-L34 "Source code on GitHub")
 
 `Given I read the content of 'myFile' and save the output into 'myVariable'`<br><br>
 Write the content of 'myFile' in the data under the key 'myVariable'
+
+Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
 
 #### Parameters
 
@@ -73,7 +81,7 @@ Write the content of 'myFile' in the data under the key 'myVariable'
 
 ### LS
 
-[packages/files/src/index.ts:73-73](https://github.com/dyne/restroom-mw/blob/e43ad0a47d8279dd400b07b65a84709e28955ed9/packages/files/src/index.ts#L73-L73 "Source code on GitHub")
+[packages/files/src/actions.ts:62-62](https://github.com/dyne/restroom-mw/blob/e4ab3a7c7133e3353e1132db4cd3df886c1864fb/packages/files/src/actions.ts#L62-L62 "Source code on GitHub")
 
 `Given I list the content of directory 'dir_path' as 'dir_result'`<br><br>
 Write the list of objects found in *dir_path*, under the `FILES_DIR` directory, in the data,
@@ -97,6 +105,8 @@ the result is an array of dictionaries whose structure is:
 
 In particular, if `mode` starts with `40` the current item is a directory
 
+Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
+
 #### Parameters
 
 *   `dir_path` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Variable name containing the path to the directory
@@ -105,7 +115,7 @@ In particular, if `mode` starts with `40` the current item is a directory
 
 ### FILES_DIR
 
-[packages/files/src/index.ts:80-80](https://github.com/dyne/restroom-mw/blob/e43ad0a47d8279dd400b07b65a84709e28955ed9/packages/files/src/index.ts#L80-L80 "Source code on GitHub")
+[packages/files/src/index.ts:20-20](https://github.com/dyne/restroom-mw/blob/e4ab3a7c7133e3353e1132db4cd3df886c1864fb/packages/files/src/index.ts#L20-L20 "Source code on GitHub")
 
 Base dir to store data for the user
 
