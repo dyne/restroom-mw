@@ -23,123 +23,138 @@ app.use("/api/*", zencode);
 
 #### Table of Contents
 
-*   [Action](#action)
-    *   [CONNECT](#connect)
-        *   [Parameters](#parameters)
-    *   [SET](#set)
-        *   [Parameters](#parameters-1)
-    *   [GET](#get)
-        *   [Parameters](#parameters-2)
-    *   [SET_NAMED](#set_named)
-        *   [Parameters](#parameters-3)
-    *   [GET_NAMED](#get_named)
-        *   [Parameters](#parameters-4)
-    *   [GET_KEYS_CONTAIN](#get_keys_contain)
-        *   [Parameters](#parameters-5)
-    *   [SET_OBJECT_NAMED](#set_object_named)
-        *   [Parameters](#parameters-6)
-    *   [INCREMENT](#increment)
-        *   [Parameters](#parameters-7)
+*   [CONNECT](#connect)
+    *   [Parameters](#parameters)
+*   [SET](#set)
+    *   [Parameters](#parameters-1)
+*   [GET](#get)
+    *   [Parameters](#parameters-2)
+*   [SET_NAMED](#set_named)
+    *   [Parameters](#parameters-3)
+*   [GET_NAMED](#get_named)
+    *   [Parameters](#parameters-4)
+*   [GET_KEYS_CONTAIN](#get_keys_contain)
+    *   [Parameters](#parameters-5)
+*   [SET_OBJECT_NAMED](#set_object_named)
+    *   [Parameters](#parameters-6)
+*   [INCREMENT](#increment)
+    *   [Parameters](#parameters-7)
+*   [DEL](#del)
+    *   [Parameters](#parameters-8)
 
-### Action
+### CONNECT
 
-[packages/redis/src/index.ts:11-62](https://github.com/dyne/restroom-mw/blob/8bcf193be31549f8b5764f826d90bc30406c8b1a/packages/redis/src/index.ts#L11-L62 "Source code on GitHub")
+[packages/redis/src/actions.ts:7-7](https://github.com/dyne/restroom-mw/blob/e4ab3a7c7133e3353e1132db4cd3df886c1864fb/packages/redis/src/actions.ts#L7-L7 "Source code on GitHub")
 
-Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
-
-#### CONNECT
-
-[packages/redis/src/index.ts:16-16](https://github.com/dyne/restroom-mw/blob/8bcf193be31549f8b5764f826d90bc30406c8b1a/packages/redis/src/index.ts#L16-L16 "Source code on GitHub")
-
-Given I have a redis connection on {}
+`Given I have a redis connection on 'redis_url'`<br><br>
+Connect to redis database at url *redis_url*
 
 Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
 
-##### Parameters
+#### Parameters
 
-*   `connection` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** url
+*   `redis_url` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Connection url
 
-#### SET
+### SET
 
-[packages/redis/src/index.ts:21-21](https://github.com/dyne/restroom-mw/blob/8bcf193be31549f8b5764f826d90bc30406c8b1a/packages/redis/src/index.ts#L21-L21 "Source code on GitHub")
+[packages/redis/src/actions.ts:13-13](https://github.com/dyne/restroom-mw/blob/e4ab3a7c7133e3353e1132db4cd3df886c1864fb/packages/redis/src/actions.ts#L13-L13 "Source code on GitHub")
 
-Given I write data into redis under the key {}
-
-Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
-
-##### Parameters
-
-*   `key` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
-
-#### GET
-
-[packages/redis/src/index.ts:27-27](https://github.com/dyne/restroom-mw/blob/8bcf193be31549f8b5764f826d90bc30406c8b1a/packages/redis/src/index.ts#L27-L27 "Source code on GitHub")
-
-Given I read from redis the data under the key {} and save the output into {}
-
-##### Parameters
-
-*   `key` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
-*   `output` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
-
-#### SET_NAMED
-
-[packages/redis/src/index.ts:32-32](https://github.com/dyne/restroom-mw/blob/8bcf193be31549f8b5764f826d90bc30406c8b1a/packages/redis/src/index.ts#L32-L32 "Source code on GitHub")
-
-Given I write data into redis under the key named {}
+`Then I write data into redis under the key 'myKey'`<br><br>
+Write into redis the zencode output under the key *myKey*
 
 Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
 
-##### Parameters
+#### Parameters
 
-*   `key` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+*   `myKey` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the variable containing the key or the key itself
 
-#### GET_NAMED
+### GET
 
-[packages/redis/src/index.ts:38-38](https://github.com/dyne/restroom-mw/blob/8bcf193be31549f8b5764f826d90bc30406c8b1a/packages/redis/src/index.ts#L38-L38 "Source code on GitHub")
+[packages/redis/src/actions.ts:20-20](https://github.com/dyne/restroom-mw/blob/e4ab3a7c7133e3353e1132db4cd3df886c1864fb/packages/redis/src/actions.ts#L20-L20 "Source code on GitHub")
 
-Given I read from redis the data under the key named {} and save the output into {}
+`Given I read from redis the data under the key 'myKey' and save the output into 'myVariable'`<br><br>
+Read from redis the data under the key *myKey* and save them in the data under the variable *myVariable*
 
-##### Parameters
+#### Parameters
 
-*   `key` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
-*   `output` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+*   `myKey` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the variable containing the key or the key itself
+*   `myVariable` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the variable where will be store the result
 
-#### GET_KEYS_CONTAIN
+### SET_NAMED
 
-[packages/redis/src/index.ts:44-44](https://github.com/dyne/restroom-mw/blob/8bcf193be31549f8b5764f826d90bc30406c8b1a/packages/redis/src/index.ts#L44-L44 "Source code on GitHub")
+[packages/redis/src/actions.ts:26-26](https://github.com/dyne/restroom-mw/blob/e4ab3a7c7133e3353e1132db4cd3df886c1864fb/packages/redis/src/actions.ts#L26-L26 "Source code on GitHub")
 
-Given I read from redis the data under the key named {} and save the output into {}
-
-Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
-
-##### Parameters
-
-*   `key` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
-*   `output` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
-
-#### SET_OBJECT_NAMED
-
-[packages/redis/src/index.ts:50-50](https://github.com/dyne/restroom-mw/blob/8bcf193be31549f8b5764f826d90bc30406c8b1a/packages/redis/src/index.ts#L50-L50 "Source code on GitHub")
-
-Then I write {} into redis under the key named by {}
+`Given/Then I write data into redis under the key named by 'myKey'`<br><br>
+Write into redis the zencode output under the key named by *myKey*
 
 Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
 
-##### Parameters
+#### Parameters
 
-*   `object` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
-*   `key` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+*   `myKey` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the variable containing the key
 
-#### INCREMENT
+### GET_NAMED
 
-[packages/redis/src/index.ts:56-56](https://github.com/dyne/restroom-mw/blob/8bcf193be31549f8b5764f826d90bc30406c8b1a/packages/redis/src/index.ts#L56-L56 "Source code on GitHub")
+[packages/redis/src/actions.ts:33-33](https://github.com/dyne/restroom-mw/blob/e4ab3a7c7133e3353e1132db4cd3df886c1864fb/packages/redis/src/actions.ts#L33-L33 "Source code on GitHub")
 
-Given I read into {} and increment the key named by {}
+`Given I read from redis the data under the key named 'myKey' and save the output into 'myVariable'`<br><br>
+Read from redis the data under the key *myKey* and save them in the data under the variable *myVariable*
+
+#### Parameters
+
+*   `myKey` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the variable containing the key or the key itself
+*   `myVariable` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the variable where will be store the result
+
+### GET_KEYS_CONTAIN
+
+[packages/redis/src/actions.ts:40-40](https://github.com/dyne/restroom-mw/blob/e4ab3a7c7133e3353e1132db4cd3df886c1864fb/packages/redis/src/actions.ts#L40-L40 "Source code on GitHub")
+
+`Given I read from redis the data under the key containing 'pattern' and save the output into 'myVariable'`<br><br>
+Read from redis the data under the keys that contains the pattern *pattern* and save the result in the data under the variable *myVariable*
 
 Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
 
-##### Parameters
+#### Parameters
 
-*   `object` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
-*   `key` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+*   `pattern` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the variable containing the pattern or the pattern itself
+*   `myVariable` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the the variable where will be store the result
+
+### SET_OBJECT_NAMED
+
+[packages/redis/src/actions.ts:47-47](https://github.com/dyne/restroom-mw/blob/e4ab3a7c7133e3353e1132db4cd3df886c1864fb/packages/redis/src/actions.ts#L47-L47 "Source code on GitHub")
+
+`Then I write 'myVariable' into redis under the key named by 'myKey'`<br><br>
+Write into redis the value of *myVariable* under the key named by *myKey*
+
+Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
+
+#### Parameters
+
+*   `myVariable` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the variable containing the data to be stored
+*   `myKey` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the the variable containing the key
+
+### INCREMENT
+
+[packages/redis/src/actions.ts:55-55](https://github.com/dyne/restroom-mw/blob/e4ab3a7c7133e3353e1132db4cd3df886c1864fb/packages/redis/src/actions.ts#L55-L55 "Source code on GitHub")
+
+`Given I read into 'myVariable' and increment the key named by 'myKey'`<br><br>
+Read from redis the data under the key *myKey*, save the result in the data under the variable *myVariable*
+and increment the value of the data under *myKey* of one.
+
+Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
+
+#### Parameters
+
+*   `myVariable` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the variable where will be store the result
+*   `key` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the variable containing the key or the key itself
+
+### DEL
+
+[packages/redis/src/actions.ts:61-61](https://github.com/dyne/restroom-mw/blob/e4ab3a7c7133e3353e1132db4cd3df886c1864fb/packages/redis/src/actions.ts#L61-L61 "Source code on GitHub")
+
+`Then I remove the key 'myKey' in redis`<br><br>
+Remove the data under the key *myKey* on redis
+
+#### Parameters
+
+*   `myKey` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the variable containing the key
