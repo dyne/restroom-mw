@@ -22,6 +22,10 @@
   - [@restroom-mw/redis](/packages/redis.md)
   - [@restroom-mw/sawroom](/packages/sawroom.md)
   - [@restroom-mw/timestamp](/packages/timestamp.md)
+  - [@restroom-mw/influxdb](/packages/influxdb.md)
+  - [@restroom-mw/git](/packages/git.md)
+  - [@restroom-mw/logger](/packages/logger.md)
+  - [@restroom-mw/planetmint](/packages/planetmint.md)
 
 - 🧰 Tools
 
