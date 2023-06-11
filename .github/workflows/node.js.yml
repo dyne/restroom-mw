@@ -76,7 +76,7 @@ jobs:
     - run: yarn build
     - run: git update-index --assume-unchanged package.json
     - name: Install lerna globally
-      run: npm install --global --loglevel=error lerna
+      run: npm install --global --loglevel=error lerna@6.6.1
     - name: Authenticate with Registry and publish
       run: |
           yarn logout
