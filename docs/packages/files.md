@@ -20,11 +20,11 @@
 
 ### DOWNLOAD
 
-[packages/files/src/actions.ts:10-10](https://github.com/dyne/restroom-mw/blob/e4ab3a7c7133e3353e1132db4cd3df886c1864fb/packages/files/src/actions.ts#L10-L10 "Source code on GitHub")
+[packages/files/src/actions.ts:10-10](https://github.com/dyne/restroom-mw/blob/157d039c44215a999e17400467c97fdacd9b014c/packages/files/src/actions.ts#L10-L10 "Source code on GitHub")
 
 `Then I download the 'myUrl' and extract it into 'myFolder'`<br><br>
-Download a zip file located at the url `myUrl` and extract it at the path
-`myFolder`  under the `FILES_DIR` on the server.
+Download a zip file located at the url *myUrl* and extract it at the path
+*myFolder*  under the *FILES_DIR* on the server.
 
 Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
 
@@ -36,11 +36,11 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 ### STORE_RESULT
 
-[packages/files/src/actions.ts:19-19](https://github.com/dyne/restroom-mw/blob/e4ab3a7c7133e3353e1132db4cd3df886c1864fb/packages/files/src/actions.ts#L19-L19 "Source code on GitHub")
+[packages/files/src/actions.ts:19-19](https://github.com/dyne/restroom-mw/blob/157d039c44215a999e17400467c97fdacd9b014c/packages/files/src/actions.ts#L19-L19 "Source code on GitHub")
 
 `Then I store 'myVariable' in the file 'myFile'`<br><br>
-Store the content of the variable `myVariable` in the filesystem at the path
-`myFile` under the `FILES_DIR` directory on the server
+Store the content of the variable *myVariable* in the filesystem at the path
+*myFile* under the *FILES_DIR* directory on the server
 
 Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
 
@@ -52,10 +52,10 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 ### READ
 
-[packages/files/src/actions.ts:26-26](https://github.com/dyne/restroom-mw/blob/e4ab3a7c7133e3353e1132db4cd3df886c1864fb/packages/files/src/actions.ts#L26-L26 "Source code on GitHub")
+[packages/files/src/actions.ts:26-26](https://github.com/dyne/restroom-mw/blob/157d039c44215a999e17400467c97fdacd9b014c/packages/files/src/actions.ts#L26-L26 "Source code on GitHub")
 
 `Given I read the content of 'myFile'`<br><br>
-write the content of 'myFile', found under the `FILES_DIR` directory, in the data
+write the content of *myFile*, found under the *FILES_DIR* directory, in the data
 
 Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
 
@@ -66,10 +66,10 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 ### READ_AND_SAVE
 
-[packages/files/src/actions.ts:34-34](https://github.com/dyne/restroom-mw/blob/e4ab3a7c7133e3353e1132db4cd3df886c1864fb/packages/files/src/actions.ts#L34-L34 "Source code on GitHub")
+[packages/files/src/actions.ts:34-34](https://github.com/dyne/restroom-mw/blob/157d039c44215a999e17400467c97fdacd9b014c/packages/files/src/actions.ts#L34-L34 "Source code on GitHub")
 
 `Given I read the content of 'myFile' and save the output into 'myVariable'`<br><br>
-Write the content of 'myFile' in the data under the key 'myVariable'
+Write the content of *myFile* in the data under the key *myVariable*
 
 Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
 
@@ -81,10 +81,10 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 ### LS
 
-[packages/files/src/actions.ts:62-62](https://github.com/dyne/restroom-mw/blob/e4ab3a7c7133e3353e1132db4cd3df886c1864fb/packages/files/src/actions.ts#L62-L62 "Source code on GitHub")
+[packages/files/src/actions.ts:62-62](https://github.com/dyne/restroom-mw/blob/157d039c44215a999e17400467c97fdacd9b014c/packages/files/src/actions.ts#L62-L62 "Source code on GitHub")
 
 `Given I list the content of directory 'dir_path' as 'dir_result'`<br><br>
-Write the list of objects found in *dir_path*, under the `FILES_DIR` directory, in the data,
+Write the list of objects found in *dir_path*, under the *FILES_DIR* directory, in the data,
 the result is an array of dictionaries whose structure is:
 
     {
@@ -110,12 +110,12 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 #### Parameters
 
 *   `dir_path` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Variable name containing the path to the directory
-    under the `FILES_DIR` directory
+    under the *FILES_DIR* directory
 *   `dir_result` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the variable where the result will be stored
 
 ### FILES_DIR
 
-[packages/files/src/index.ts:20-20](https://github.com/dyne/restroom-mw/blob/e4ab3a7c7133e3353e1132db4cd3df886c1864fb/packages/files/src/index.ts#L20-L20 "Source code on GitHub")
+[packages/files/src/index.ts:20-20](https://github.com/dyne/restroom-mw/blob/157d039c44215a999e17400467c97fdacd9b014c/packages/files/src/index.ts#L20-L20 "Source code on GitHub")
 
 Base dir to store data for the user
 
