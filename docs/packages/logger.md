@@ -30,37 +30,44 @@ app.use("/api/*", zencode);
 
 ### APPEND
 
-[packages/logger/src/index.ts:16-16](https://github.com/dyne/restroom-mw/blob/94f0175e8f68e71f61c59104fa9afc7b28d35c44/packages/logger/src/index.ts#L16-L16 "Source code on GitHub")
+[packages/logger/src/actions.ts:9-9](https://github.com/dyne/restroom-mw/blob/2a68de5cae1f97047d10f76475f1c55465eac6ea/packages/logger/src/actions.ts#L9-L9 "Source code on GitHub")
 
-Given I append the string 'log' to the logfile in 'log_path'
+`Then I append the string 'log' to the logfile in 'logPath'`<br><br>
+Append the string *log* to the logfile in the *logPath* under the *LOGGER_DIR* directory
+
+Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
 
 #### Parameters
 
-*   `log` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** It can be the name of the variable that contains the log string
+*   `log` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** The name of the variable that contains the log string
     or the log string itself
-*   `log_path` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Path to the log file under the `FILES_DIR` directory
+*   `logPath` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Path to the log file
 
 ### APPEND_NAMED
 
-[packages/logger/src/index.ts:24-24](https://github.com/dyne/restroom-mw/blob/94f0175e8f68e71f61c59104fa9afc7b28d35c44/packages/logger/src/index.ts#L24-L24 "Source code on GitHub")
+[packages/logger/src/actions.ts:17-17](https://github.com/dyne/restroom-mw/blob/2a68de5cae1f97047d10f76475f1c55465eac6ea/packages/logger/src/actions.ts#L17-L17 "Source code on GitHub")
 
-Given I append the string 'log' to the logfile named by 'log_name'
+`Then I append the string 'log' to the logfile named by 'logName'`<br><br>
+Append the string *log* to the logfile in the variable *logName* under the *LOGGER_DIR* directory
+
+Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
 
 #### Parameters
 
-*   `log` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** It can be the name of the variable that contains the log string
+*   `log` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** The name of the variable that contains the log string
     or the log string itself
-*   `log_name` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the variable the contains the path to log file under
-    the `FILES_DIR` directory
+*   `logName` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the variable the contains the path to log file
 
 ### APPEND_ARRAY
 
-[packages/logger/src/index.ts:31-31](https://github.com/dyne/restroom-mw/blob/94f0175e8f68e71f61c59104fa9afc7b28d35c44/packages/logger/src/index.ts#L31-L31 "Source code on GitHub")
+[packages/logger/src/actions.ts:24-24](https://github.com/dyne/restroom-mw/blob/2a68de5cae1f97047d10f76475f1c55465eac6ea/packages/logger/src/actions.ts#L24-L24 "Source code on GitHub")
 
-Given I append the array of strings 'log_array' to the logfile named by 'log_name'
+`Then I append the array of strings 'logArray' to the logfile named by 'logName'`<br><br>
+Append the array of strings *logArray* to the logfile in the variable *logName* under the *LOGGER_DIR* directory
+
+Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
 
 #### Parameters
 
-*   `log` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** The name of the variable that contains the array of log strings
-*   `log_name` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the variable the contains the path to log file under
-    the `FILES_DIR` directory
+*   `logArray` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** The name of the variable that contains the array of log strings
+*   `logName` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the variable the contains the path to log file
