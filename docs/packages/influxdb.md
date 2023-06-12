@@ -30,9 +30,13 @@ app.use("/api/*", zencode);
 
 ### FLUX_CONNECT
 
-[packages/influxdb/src/index.ts:12-12](https://github.com/dyne/restroom-mw/blob/34f641c0cb7089442f3ba5c1b5831254eec67c57/packages/influxdb/src/index.ts#L12-L12 "Source code on GitHub")
+[packages/influxdb/src/actions.ts:8-8](https://github.com/dyne/restroom-mw/blob/157d039c44215a999e17400467c97fdacd9b014c/packages/influxdb/src/actions.ts#L8-L8 "Source code on GitHub")
 
-Given I connect to influxdb with the connection object named 'influx'
+`Given I connect to influxdb with the connection object named 'influx'`<br><br>
+Connect to influxdb at *influx.url* under the organization *influx.org*
+using the token API *influx.token*
+
+Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
 
 #### Parameters
 
@@ -40,9 +44,12 @@ Given I connect to influxdb with the connection object named 'influx'
 
 ### FLUX_QUERY
 
-[packages/influxdb/src/index.ts:18-18](https://github.com/dyne/restroom-mw/blob/34f641c0cb7089442f3ba5c1b5831254eec67c57/packages/influxdb/src/index.ts#L18-L18 "Source code on GitHub")
+[packages/influxdb/src/actions.ts:15-15](https://github.com/dyne/restroom-mw/blob/157d039c44215a999e17400467c97fdacd9b014c/packages/influxdb/src/actions.ts#L15-L15 "Source code on GitHub")
 
-Given I execute the flux query named 'query' and save the output into 'result'
+`Given I execute the flux query named 'query' and save the output into 'result'`<br><br>
+Execute the flux query *query* and store the result in the data under the variable *result*
+
+Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
 
 #### Parameters
 
@@ -51,9 +58,12 @@ Given I execute the flux query named 'query' and save the output into 'result'
 
 ### FLUX_QUERY_ARRAY
 
-[packages/influxdb/src/index.ts:24-24](https://github.com/dyne/restroom-mw/blob/34f641c0cb7089442f3ba5c1b5831254eec67c57/packages/influxdb/src/index.ts#L24-L24 "Source code on GitHub")
+[packages/influxdb/src/actions.ts:22-22](https://github.com/dyne/restroom-mw/blob/157d039c44215a999e17400467c97fdacd9b014c/packages/influxdb/src/actions.ts#L22-L22 "Source code on GitHub")
 
-Given I execute the array of flux queries named 'query_array' and save the output into 'result'
+`Given I execute the array of flux queries named 'query_array' and save the output into 'result'`<br><br>
+Execute the array of flux queries *query_array* and store the result in the data under the variable *result*
+
+Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
 
 #### Parameters
 
