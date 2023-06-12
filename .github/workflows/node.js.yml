@@ -46,7 +46,7 @@ jobs:
           --password password \
           --org dyne \
           --bucket dyne \
-          --retention 1d \
+          --retention 0 \
           --token PO2t9KsbqN4j8mDeIXZ2uqvNtmfcUXRRe2umYZxN1tdVFFG6C93zXm4hudc03jhERsW3tdCmke0dVDLVcycTIw== \
           --force
         influx write --bucket dyne --file test/fixtures/influxdb_data.lp
