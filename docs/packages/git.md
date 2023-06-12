@@ -1,9 +1,10 @@
 # @restroom-mw/git
 
 Is a basic middleware that can be used to:
-* check if a folder is a git repository;
-* clone a git repository;
-* create commit in a git repository.
+
+*   check if a folder is a git repository;
+*   clone a git repository;
+*   create commit in a git repository.
 
 ## Usage
 
@@ -25,32 +26,64 @@ app.use("/api/*", zencode);
 #### Table of Contents
 
 *   [VERIFY](#verify)
+    *   [Parameters](#parameters)
 *   [CLONE](#clone)
+    *   [Parameters](#parameters-1)
 *   [COMMIT](#commit)
+    *   [Parameters](#parameters-2)
 
 ### VERIFY
 
-[packages/git/src/actions.ts:6-6](https://github.com/dyne/restroom-mw/blob/f8f1470eda275abcf9a4379c7b75b777808111d4/packages/git/src/actions.ts#L6-L6 "Source code on GitHub")
+[packages/git/src/actions.ts:9-9](https://github.com/dyne/restroom-mw/blob/2a68de5cae1f97047d10f76475f1c55465eac6ea/packages/git/src/actions.ts#L9-L9 "Source code on GitHub")
 
-Verify that the given directory is a git repository
-(i.e. it exists the .git directory)
+`Given I verify the path 'myFolder' is a git repository`<br><br>
+Verify that the directory defined by the path *myFolder*, under the *FILES_DIR*
+directory, is a git repository (i.e. it exists the .git directory)
 
 Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
+
+#### Parameters
+
+*   `myFolder` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the variable containing the path
+    or the path itself
 
 ### CLONE
 
-[packages/git/src/actions.ts:11-11](https://github.com/dyne/restroom-mw/blob/f8f1470eda275abcf9a4379c7b75b777808111d4/packages/git/src/actions.ts#L11-L11 "Source code on GitHub")
+[packages/git/src/actions.ts:19-19](https://github.com/dyne/restroom-mw/blob/2a68de5cae1f97047d10f76475f1c55465eac6ea/packages/git/src/actions.ts#L19-L19 "Source code on GitHub")
 
-Clone the repository in the specified directory under
-the `FILES_DIR` directory
+`Given I clone the repository 'myRepo' in 'myDirectory'`<br><br>
+Clone the repository *myRepo* in the specified directory *myDirectory* under
+the *FILES_DIR* directory
 
 Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
+
+#### Parameters
+
+*   `myRepo` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the variable containing the repository url
+    or the repository url itself
+*   `myDirectory` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the variable containing the path
+    or the path itself where the repo will be cloned
 
 ### COMMIT
 
-[packages/git/src/actions.ts:16-16](https://github.com/dyne/restroom-mw/blob/f8f1470eda275abcf9a4379c7b75b777808111d4/packages/git/src/actions.ts#L16-L16 "Source code on GitHub")
+[packages/git/src/actions.ts:35-35](https://github.com/dyne/restroom-mw/blob/2a68de5cae1f97047d10f76475f1c55465eac6ea/packages/git/src/actions.ts#L35-L35 "Source code on GitHub")
 
-Add files to a local repository and
-create a commit in the repository
+`Then make a new commit to the git repository in 'myDirectory'`<br><br>
+Add files to a local repository *myDirectory* and create a commit in the repository,
+the commit that will be created is passed in the data or in the output as:
+
+```json
+{"commit": {
+  "message": "My interesting random file",
+  "author": "restroom",
+  "email": "restroom@dyne.org",
+  "files": ["interestingFile.txt"]
+}}
+```
 
 Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
+
+#### Parameters
+
+*   `myDirectory` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the variable containing the path to the
+    local repository or the path itself
