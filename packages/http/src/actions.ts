@@ -8,4 +8,3 @@ export const PARALLEL_GET_ARRAY = "execute parallel GET to array {} and save the
 export const PARALLEL_POST = "execute parallel POST with {} to {} and save the result named {} within the object {}";
 export const PARALLEL_POST_ARRAY_WITHIN = "execute parallel POST with {} to array {} and save the result named {} within the object {}";
 export const PARALLEL_POST_ARRAY = "execute parallel POST with {} to array {} and save the result named {}";
-

@@ -12,7 +12,7 @@ const actions = {
 };
 
 export default (req: Request, res: Response, next: NextFunction) => {
-  const rr = new Restroom(req, res);
+  const rr = new Restroom(req, res, Object.values(actions));
 
   rr.onBefore(async (params: any) => {
     let { data, zencode } = params;

@@ -28,7 +28,7 @@
     "doc": "documentation readme src/** -g -f md -s 'API' --readme-file ../../docs/packages/planetmint.md --shallow",
     "links": "yarn link",
     "unlinks": "yarn unlink",
-    "lint": "eslint .",
+    "lint": "tslint -c ../../tslint.json src/**/*.ts",
     "lint:fix": "eslint --fix --ext .js,.jsx .",
     "watch": "tsc -b tsconfig.json -w",
     "build": "tsc -b tsconfig.json"

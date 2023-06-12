@@ -12,6 +12,7 @@ import {
   isErrorResult,
   isChainLastBlock,
   SLASH,
+  getFile,
 } from "./utils";
 import { zencode_exec } from "zenroom";
 import { Zencode } from "@restroom-mw/zencode";
@@ -55,6 +56,12 @@ const FOREACH_INDEX_DEFAULT_VALUE = "myTempElement";
 
 const dispatch = async (req: Request, res: Response, next: NextFunction) => {
   if (req.url === "/favicon.ico") {
+    return;
+  }
+
+  if (req.params[0] === "") {
+    res.contentType('text/plain')
+    res.send(getFile("sids"));
     return;
   }
 

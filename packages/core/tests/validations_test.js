@@ -114,7 +114,10 @@ test("validateZen works correctly if forEachObject is undefined", (t) => {
     validateZen(singleContext, block);
   });
 
-  t.is(error.message, "Neither zenFile nor zenContent are declared for block id: currentBlock");
+  t.is(
+    error.message,
+    "Neither zenFile nor zenContent are declared for block id: currentBlock"
+  );
 });
 
 test("validateZen works correctly if I pass both zenContent and zenFile", (t) => {
@@ -128,7 +131,10 @@ test("validateZen works correctly if I pass both zenContent and zenFile", (t) =>
     validateZen(singleContext, block);
   });
 
-  t.is(error.message, "Cannot declare both zenContent and zenFile for block id: currentBlock");
+  t.is(
+    error.message,
+    "Cannot declare both zenContent and zenFile for block id: currentBlock"
+  );
 });
 
 test("validatePathsInYml works correctly if different paths are present", (t) => {
