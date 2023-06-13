@@ -36,14 +36,14 @@ export default (req: Request, res: Response, next: NextFunction) => {
       sentences.forEach( (v) => ws.write(`${v}\n`) )
     }
 
-    if (zencode.match(APPEND)) {
-      const params = zencode.chunkedParamsOf(APPEND, 2);
+    if (zencode.match(Action.APPEND)) {
+      const params = zencode.chunkedParamsOf(Action.APPEND, 2);
       for(const [ sentence, where ] of params) {
         addLog([ result[sentence] || input[sentence] || sentence ], where);
       }
     }
-    if (zencode.match(APPEND_NAMED)) {
-      const params = zencode.chunkedParamsOf(APPEND_NAMED, 2);
+    if (zencode.match(Action.APPEND_NAMED)) {
+      const params = zencode.chunkedParamsOf(Action.APPEND_NAMED, 2);
       for(const [ sentence, pathName ] of params) {
         const logPath = result[pathName] || input[pathName];
         if(!logPath) {
@@ -53,8 +53,8 @@ export default (req: Request, res: Response, next: NextFunction) => {
         addLog([ result[sentence] || input[sentence] || sentence ], logPath);
       }
     }
-    if (zencode.match(APPEND_ARRAY)) {
-      const params = zencode.chunkedParamsOf(APPEND_ARRAY, 2);
+    if (zencode.match(Action.APPEND_ARRAY)) {
+      const params = zencode.chunkedParamsOf(Action.APPEND_ARRAY, 2);
       for(const [arrayName, where] of params) {
         const sentences = input[arrayName] || result[arrayName];
         if(!sentences || !Array.isArray(sentences)) {

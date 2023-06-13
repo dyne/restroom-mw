@@ -46,20 +46,20 @@ export default (req: Request, res: Response, next: NextFunction) => {
       return JSON.parse(content);
     }
 
-    if (zencode.match(READ)) {
-      const params = zencode.paramsOf(READ);
+    if (zencode.match(Action.READ)) {
+      const params = zencode.paramsOf(Action.READ);
       for(const f of params) {
         Object.assign(data, readFromFile(f));
       }
     };
-    if (zencode.match(READ_AND_SAVE)) {
-      const chkParams = zencode.chunkedParamsOf(READ_AND_SAVE, 2);
+    if (zencode.match(Action.READ_AND_SAVE)) {
+      const chkParams = zencode.chunkedParamsOf(Action.READ_AND_SAVE, 2);
       for(const [f, outputVariable] of chkParams) {
         data[ outputVariable ] = readFromFile(f);
       }
     };
-    if (zencode.match(LS)) {
-      const params = zencode.chunkedParamsOf(LS, 2);
+    if (zencode.match(Action.LS)) {
+      const params = zencode.chunkedParamsOf(Action.LS, 2);
       const fileStats: Record<string, any> = {}
       const allLs = (await Promise.all(params.map(
         async ([p, name]: string[]) => {
@@ -107,8 +107,8 @@ export default (req: Request, res: Response, next: NextFunction) => {
 
   rr.onSuccess(async (params) => {
     const {result, zencode} = params;
-    if (zencode.match(DOWNLOAD)) {
-      const allPassOutputs = zencode.paramsOf(DOWNLOAD);
+    if (zencode.match(Action.DOWNLOAD)) {
+      const allPassOutputs = zencode.paramsOf(Action.DOWNLOAD);
       for (let i = 0; i < allPassOutputs.length; i += 2) {
         const file = result[allPassOutputs[i]] ||
           input[allPassOutputs[i]];
@@ -141,8 +141,8 @@ export default (req: Request, res: Response, next: NextFunction) => {
         }
       }
     }
-    if (zencode.match(STORE_RESULT)) {
-      const allPassOutputs = zencode.paramsOf(STORE_RESULT);
+    if (zencode.match(Action.STORE_RESULT)) {
+      const allPassOutputs = zencode.paramsOf(Action.STORE_RESULT);
       for (let i = 0; i < allPassOutputs.length; i += 2) {
         const variable = result[allPassOutputs[i]] ||
           input[allPassOutputs[i]];
