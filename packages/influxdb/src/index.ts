@@ -21,8 +21,8 @@ export default (req: Request, res: Response, next: NextFunction) => {
       content = rr.combineDataKeys(data, keys);
       const namedParams = zencodeNamedParamsOf(zencode, content);
 
-      if (zencode.match(FLUX_CONNECT)) {
-        const connection_string: any = namedParams(FLUX_CONNECT)[0];
+      if (zencode.match(Action.FLUX_CONNECT)) {
+        const connection_string: any = namedParams(Action.FLUX_CONNECT)[0];
         const { url, token } = connection_string;
         client = new InfluxDB({
           url,
@@ -31,10 +31,10 @@ export default (req: Request, res: Response, next: NextFunction) => {
         }).getQueryApi(connection_string.org);
       }
 
-      if (zencode.match(FLUX_QUERY)) {
+      if (zencode.match(Action.FLUX_QUERY)) {
         if (!client)
           throw new Error("Can't connect to the influxdb address provided");
-        const chunks = zencode.chunkedParamsOf(FLUX_QUERY, 2);
+        const chunks = zencode.chunkedParamsOf(Action.FLUX_QUERY, 2);
         for (let [query, output] of chunks) {
           const q = content[query as string];
           const res: any[] = []
@@ -45,10 +45,10 @@ export default (req: Request, res: Response, next: NextFunction) => {
         }
       }
 
-      if (zencode.match(FLUX_QUERY_ARRAY)) {
+      if (zencode.match(Action.FLUX_QUERY_ARRAY)) {
         if (!client)
           throw new Error("Can't connect to the influxdb address provided");
-        const chunks = zencode.chunkedParamsOf(FLUX_QUERY_ARRAY, 2);
+        const chunks = zencode.chunkedParamsOf(Action.FLUX_QUERY_ARRAY, 2);
         for (let [queryName, output] of chunks) {
           const queryArray = content[queryName as string];
           const res: any[] = [];

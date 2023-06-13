@@ -1,4 +1,4 @@
-enum Action {
+export enum Action {
   /**
    * `Given I have a redis connection on 'redis_url'`<br><br>
    * Connect to redis database at url *redis_url*
