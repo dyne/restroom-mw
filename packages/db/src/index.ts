@@ -113,7 +113,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
           const t = await db.transaction();
           const [o, m] = await db.query(content[statement], { transaction: t });
           await t.commit();
-          data[output] = JSON.stringify(o ? o : m)
+          data[output] = o ? o : m
         })
         await Promise.all(promises)
       }
