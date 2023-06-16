@@ -15,3 +15,17 @@ query_3: |
   WHERE name like 'Bob';
 
 query_4: SELECT * FROM member;
+
+query_5: |
+  INSERT INTO member
+  (name) VALUES (?);
+
+query5_params:
+  - "Eve"
+
+query_6: |
+  INSERT INTO member
+  (name) VALUES (:name);
+
+query6_params:
+  name: "EEve"

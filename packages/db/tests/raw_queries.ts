@@ -44,9 +44,12 @@ test("Db should execute raw queries", async (t) => {
   t.is(res.status, 200, res.text);
 
   const results = Object.keys(res.body);
-  t.deepEqual(results, ['result_1', 'result_2', 'result_3', 'result_4',]);
+  t.deepEqual(results,
+    ['result_1', 'result_2', 'result_3', 'result_4', 'result_5', 'result_6']);
   t.true(res.body.result_1.lastID > 1);
   t.true(res.body.result_2.lastID > 1);
   t.deepEqual(res.body.result_3, []);
   t.deepEqual(Object.keys(res.body.result_4[0]), ['date', 'name']);
+  t.true(res.body.result_5.lastID > 1);
+  t.true(res.body.result_6.lastID > 1);
 });

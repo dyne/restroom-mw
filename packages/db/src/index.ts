@@ -52,7 +52,6 @@ const enum ACTIONS {
   EXECUTE_SQL = "execute the SQL statement named {} on the database named {} and save the result into {}",
 
   /**
-   * **TBD**
    * Given I execute the SQL statement named {} pass the parameters named {} on the database named {} and save the result into {}
    *
    * @param {string} statement name of the SQL statement
@@ -112,6 +111,20 @@ export default (req: Request, res: Response, next: NextFunction) => {
           const db = new Sequelize(content[database]);
           const t = await db.transaction();
           const [o, m] = await db.query(content[statement], { transaction: t });
+          await t.commit();
+          data[output] = o ? o : m
+        })
+        await Promise.all(promises)
+      }
+
+      if (zencode.match(ACTIONS.EXECUTE_SQL_WITH_PARAMS)) {
+        const promises = zencode.chunkedParamsOf(ACTIONS.EXECUTE_SQL_WITH_PARAMS, 4).map(async ([statement, parameters, database, output]: [content: string, parameters: string, database: string, output: string]) => {
+          const db = new Sequelize(content[database]);
+          const t = await db.transaction();
+          const [o, m] = await db.query(content[statement], {
+            transaction: t,
+            replacements: content[parameters]
+          });
           await t.commit();
           data[output] = o ? o : m
         })
