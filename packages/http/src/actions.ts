@@ -9,4 +9,5 @@ export enum Action {
   PARALLEL_POST = "execute parallel POST with {} to {} and save the result named {} within the object {}",
   PARALLEL_POST_ARRAY_WITHIN = "execute parallel POST with {} to array {} and save the result named {} within the object {}",
   PARALLEL_POST_ARRAY = "execute parallel POST with {} to array {} and save the result named {}",
+  PARALLEL_POST_ARRAY_DIFFERENT_DATA = "execute parallel POST with array {} to array {} and save the result named {}",
 }

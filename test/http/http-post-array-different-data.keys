@@ -1,0 +1,30 @@
+{
+  "urls": [
+    https://apiroom.net/api/matteocristino/Return_input_as_output,
+    https://apiroom.net/api/matteocristino/Return_input_as_output,
+    https://apiroom.net/api/matteocristino/Return_input_as_output,
+    https://apiroom.net/api/matteocristino/Return_input_as_output
+  ],
+  "data": [
+    {
+      "data": {
+        "input": "test_1"
+      }
+    },
+    {
+      "data": {
+        "input": "test_2"
+      }
+    },
+    {
+      "data": {
+        "input": "test_3"
+      }
+    },
+    {
+      "data": {
+        "input": "test_4"
+      }
+    },
+  ]
+}

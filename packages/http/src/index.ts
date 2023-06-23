@@ -103,6 +103,20 @@ export default (req: Request, res: Response, next: NextFunction) => {
         }
       }
 
+      if (zencode.match(Action.PARALLEL_POST_ARRAY_DIFFERENT_DATA)) {
+        for (const [dataName, urlsName, i] of chunks(zencode.paramsOf(Action.PARALLEL_POST_ARRAY_DIFFERENT_DATA), 3)) {
+          const urls = content[urlsName];
+          const data = content[dataName];
+          for(let j = 0; j < urls.length; j++) {
+            parallel_promises.push(axios.post(urls[j], data[j], { validateStatus: () => true }));
+            parallel_params.push({
+              output: null,
+              index: [i, j],
+            });
+          }
+        }
+      }
+
       if (zencode.match(Action.PARALLEL_POST)) {
         for (const [d, url, i, o] of chunks(
           zencode.paramsOf(Action.PARALLEL_POST),

@@ -1,0 +1,10 @@
+Rule caller restroom-mw
+
+# The contract behind the urls is a simple rename API, that is:
+# Given I have a 'string' named 'input'
+# When I rename 'input' to 'output'
+# Then print the 'output'
+Given I execute parallel POST with array 'data' to array 'urls' and save the result named 'result'
+Given I have a 'string array' named 'result'
+
+Then print the 'result'
