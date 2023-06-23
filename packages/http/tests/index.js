@@ -349,6 +349,25 @@ test.skip("Parallel post for arrays", async (t) => {
   t.is(res.body.allResults.results.length, 3)
 });
 
+test("Parallel post with array of data for array of urls", async (t) => {
+  const app = express();
+  app.use(bodyParser.json());
+  app.use(http);
+  app.use("/*", zencode);
+
+  const res = await request(app).post("/http-post-array-different-data");
+  t.is(res.status, 200);
+  t.is(res.body.result.length, 4);
+  t.is(res.body.result[0].status, 200);
+  t.is(res.body.result[0].result.output, 'test_1');
+  t.is(res.body.result[1].status, 200);
+  t.is(res.body.result[1].result.output, 'test_2');
+  t.is(res.body.result[2].status, 200);
+  t.is(res.body.result[2].result.output, 'test_3');
+  t.is(res.body.result[3].status, 200);
+  t.is(res.body.result[3].result.output, 'test_4');
+});
+
 test("Check broken http", async (t) => {
   const app = express();
   app.use(bodyParser.json());
