@@ -4,18 +4,7 @@ import { Zencode } from "@restroom-mw/zencode";
 import axios from "axios";
 import { NextFunction, Request, Response } from "express";
 import https from "https";
-import {
-  READ_REQUEST,
-  EXTERNAL_CONNECTION,
-  EXTERNAL_OUTPUT,
-  PARALLEL_GET,
-  PARALLEL_GET_ARRAY,
-  PARALLEL_POST,
-  PARALLEL_POST_ARRAY_WITHIN,
-  PARALLEL_POST_ARRAY,
-  PASS_OUTPUT,
-  POST_AND_SAVE_TO_VARIABLE,
-} from "./actions";
+import { Action } from "./actions";
 import {
   checkEndpointDefined,
   checkForDuplicates,
@@ -40,7 +29,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
       let { zencode, keys, data } = params;
       content = rr.combineDataKeys(data, keys);
 
-      if (zencode.match(READ_REQUEST)) {
+      if (zencode.match(Action.READ_REQUEST)) {
         const httpRequest = {
           base_url: req.baseUrl,
           http_version: req.httpVersion,
@@ -60,13 +49,13 @@ export default (req: Request, res: Response, next: NextFunction) => {
         data.http_request = httpRequest;
       }
 
-      if (zencode.match(EXTERNAL_CONNECTION)) {
-        externalSourceKeys = zencode.paramsOf(EXTERNAL_CONNECTION);
+      if (zencode.match(Action.EXTERNAL_CONNECTION)) {
+        externalSourceKeys = zencode.paramsOf(Action.EXTERNAL_CONNECTION);
         checkForDuplicates(externalSourceKeys);
       }
 
-      if (zencode.match(PARALLEL_GET_ARRAY)) {
-        for (const [urlsName, i, o] of chunks(zencode.paramsOf(PARALLEL_GET_ARRAY), 3)) {
+      if (zencode.match(Action.PARALLEL_GET_ARRAY)) {
+        for (const [urlsName, i, o] of chunks(zencode.paramsOf(Action.PARALLEL_GET_ARRAY), 3)) {
           const urls = content[urlsName]
           for(let j = 0; j < urls.length; j++) {
             parallel_promises.push(axios.get(urls[j], { validateStatus: () => true }));
@@ -78,8 +67,8 @@ export default (req: Request, res: Response, next: NextFunction) => {
         }
       }
 
-      if (zencode.match(PARALLEL_GET)) {
-        for (const [url, i, o] of chunks(zencode.paramsOf(PARALLEL_GET), 3)) {
+      if (zencode.match(Action.PARALLEL_GET)) {
+        for (const [url, i, o] of chunks(zencode.paramsOf(Action.PARALLEL_GET), 3)) {
           parallel_promises.push(axios.get(content[url], { validateStatus: () => true }));
           parallel_params.push({
             output: o,
@@ -88,8 +77,8 @@ export default (req: Request, res: Response, next: NextFunction) => {
         }
       }
 
-      if (zencode.match(PARALLEL_POST_ARRAY_WITHIN)) {
-        for (const [d, urlsName, i, o] of chunks(zencode.paramsOf(PARALLEL_POST_ARRAY_WITHIN), 4)) {
+      if (zencode.match(Action.PARALLEL_POST_ARRAY_WITHIN)) {
+        for (const [d, urlsName, i, o] of chunks(zencode.paramsOf(Action.PARALLEL_POST_ARRAY_WITHIN), 4)) {
           const urls = content[urlsName]
           for(let j = 0; j < urls.length; j++) {
             parallel_promises.push(axios.post(urls[j], content[d], { validateStatus: () => true }));
@@ -101,8 +90,8 @@ export default (req: Request, res: Response, next: NextFunction) => {
         }
       }
 
-      if (zencode.match(PARALLEL_POST_ARRAY)) {
-        for (const [d, urlsName, i] of chunks(zencode.paramsOf(PARALLEL_POST_ARRAY), 3)) {
+      if (zencode.match(Action.PARALLEL_POST_ARRAY)) {
+        for (const [d, urlsName, i] of chunks(zencode.paramsOf(Action.PARALLEL_POST_ARRAY), 3)) {
           const urls = content[urlsName]
           for(let j = 0; j < urls.length; j++) {
             parallel_promises.push(axios.post(urls[j], content[d], { validateStatus: () => true }))
@@ -114,9 +103,9 @@ export default (req: Request, res: Response, next: NextFunction) => {
         }
       }
 
-      if (zencode.match(PARALLEL_POST)) {
+      if (zencode.match(Action.PARALLEL_POST)) {
         for (const [d, url, i, o] of chunks(
-          zencode.paramsOf(PARALLEL_POST),
+          zencode.paramsOf(Action.PARALLEL_POST),
           4
         )) {
           parallel_promises.push(axios.post(content[url], content[d]));
@@ -152,9 +141,9 @@ export default (req: Request, res: Response, next: NextFunction) => {
         });
       }
 
-      if (zencode.match(POST_AND_SAVE_TO_VARIABLE)) {
+      if (zencode.match(Action.POST_AND_SAVE_TO_VARIABLE)) {
         for (const [url, postData, variable] of chunks(
-          zencode.paramsOf(POST_AND_SAVE_TO_VARIABLE),
+          zencode.paramsOf(Action.POST_AND_SAVE_TO_VARIABLE),
           3
         )) {
           let error: any = null;
@@ -169,8 +158,8 @@ export default (req: Request, res: Response, next: NextFunction) => {
         }
       }
 
-      if (zencode.match(EXTERNAL_OUTPUT)) {
-        const allExternalOutputs = zencode.paramsOf(EXTERNAL_OUTPUT);
+      if (zencode.match(Action.EXTERNAL_OUTPUT)) {
+        const allExternalOutputs = zencode.paramsOf(Action.EXTERNAL_OUTPUT);
         checkEndpointDefined(externalSourceKeys);
 
         //join the two values in each EXTERNAL_OUTPUT
@@ -212,10 +201,10 @@ export default (req: Request, res: Response, next: NextFunction) => {
         }
       }
 
-      if (zencode.match(PASS_OUTPUT)) {
+      if (zencode.match(Action.PASS_OUTPUT)) {
         // run checks ACTION PASS_OUTPUT endpoints have been defined in zencode, keys, or data
         const allPassOutputs = zencode
-          .paramsOf(PASS_OUTPUT)
+          .paramsOf(Action.PASS_OUTPUT)
           .map((urlKey: string) => {
             return { urlKey };
           });
@@ -226,8 +215,8 @@ export default (req: Request, res: Response, next: NextFunction) => {
 
   rr.onSuccess(async (params) => {
     const { result, zencode } = params;
-    if (zencode.match(PASS_OUTPUT)) {
-      const allPassOutputs = zencode.paramsOf(PASS_OUTPUT);
+    if (zencode.match(Action.PASS_OUTPUT)) {
+      const allPassOutputs = zencode.paramsOf(Action.PASS_OUTPUT);
       for (const output of allPassOutputs) {
         try {
           const url = content[output];
