@@ -1,0 +1,6 @@
+Rule unknown ignore
+Given I have a 'string dictionary' named 'timestamps'
+Given I have a 'string dictionary' named 'header'
+Given I execute parallel GET to 'get_url' and save the result named 'one' within the object 'timestamps' with header 'header'
+Given I execute parallel GET to 'get_url' and save the result named 'two' within the object 'timestamps' with header 'header'
+Then print the 'timestamps'

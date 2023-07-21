@@ -1,7 +1,7 @@
 import { Restroom } from "@restroom-mw/core";
 import { ObjectLiteral } from "@restroom-mw/types";
 import { Zencode } from "@restroom-mw/zencode";
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 import { NextFunction, Request, Response } from "express";
 import https from "https";
 import { Action } from "./actions";
@@ -19,6 +19,18 @@ export default (req: Request, res: Response, next: NextFunction) => {
   let externalSourceKeys: string[] = [];
   let parallel_params: { output: string; index: [string , number]}[] = [];
   let parallel_promises: Promise<any>[] = [];
+
+  function generic_get(url: string, ind: [string, number], o: string, headers?: Record<string, string>){
+    let opts: AxiosRequestConfig = { validateStatus: () => true }
+    if(headers){
+      opts.headers = headers
+    }
+    parallel_promises.push(axios.get(url, opts));
+    parallel_params.push({
+      output: o,
+      index: ind,
+    });
+  }
 
   rr.onBefore(
     async (params: {
@@ -58,22 +70,20 @@ export default (req: Request, res: Response, next: NextFunction) => {
         for (const [urlsName, i, o] of chunks(zencode.paramsOf(Action.PARALLEL_GET_ARRAY), 3)) {
           const urls = content[urlsName]
           for(let j = 0; j < urls.length; j++) {
-            parallel_promises.push(axios.get(urls[j], { validateStatus: () => true }));
-            parallel_params.push({
-              output: o,
-              index: [i, j],
-            });
+            generic_get(urls[j], [i, j], o);
           }
         }
       }
 
       if (zencode.match(Action.PARALLEL_GET)) {
         for (const [url, i, o] of chunks(zencode.paramsOf(Action.PARALLEL_GET), 3)) {
-          parallel_promises.push(axios.get(content[url], { validateStatus: () => true }));
-          parallel_params.push({
-            output: o,
-            index: [i, -1],
-          });
+          generic_get(content[url], [i, -1], o);
+        }
+      }
+
+      if (zencode.match(Action.PARALLEL_GET_HEADER)) {
+        for (const [url, i, o, header] of chunks(zencode.paramsOf(Action.PARALLEL_GET_HEADER), 4)) {
+          generic_get(content[url], [i, -1], o, content[header]);
         }
       }
 

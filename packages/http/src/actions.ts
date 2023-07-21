@@ -70,6 +70,18 @@ export enum Action {
    * @param {string} myObject - Name of the varibale where will be store myResult
    */
   PARALLEL_GET = "execute parallel GET to {} and save the result named {} within the object {}",
+   /**
+   * `Given I execute parallel GET to 'myEndpoint' and save the result named 'myResult' within the object 'myObject'`<br><br>
+   * By repeating this statment *n* times it will perform *n* parallel get to *myEndpoint* and store the result in
+   * *myObject.myResult* which will be a dictionary with two entries:
+   * * **status**: will contain the status code
+   * * **result**: in case of success will contain the result otherwise it is a empty string
+   * @param {string} myEndpoint - Name of the variable containing the url's endpoint or the url's endpoint itself
+   * @param {string} myResult - Name of the varibale where will be store the reuslt of the get
+   * @param {string} myObject - Name of the varibale where will be store myResult
+   * @param {string} myHeader - Name of the variable contatining the header
+   */
+   PARALLEL_GET_HEADER = "execute parallel GET to {} and save the result named {} within the object {} with header {}",
   /**
    * `Given I execute parallel GET to array 'myEndpointArray' and save the result named 'myResult' within the object 'myObject'`<br><br>
    * Perform parallel get to array *myEndpointArray* and store the result in *myObject.myResult* which will be an array of dictionary with two entries:

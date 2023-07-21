@@ -1,5 +1,5 @@
 import bodyParser from "body-parser";
-import express from "express";
+import express, { Request, Response } from "express";
 import supertest, { SuperTest, Test } from "supertest";
 import anyTest, { TestFn } from "ava";
 
@@ -8,12 +8,21 @@ const test = anyTest as TestFn<{ app: SuperTest<Test> }>;
 process.env.ZENCODE_DIR = "./test/http";
 const httpmw = require("../src/index");
 const rr = require("@restroom-mw/core");
+const PORT = 3021
 
 test.before(async (t) => {
   const app = express();
   app.use(bodyParser.json());
+  app.get("/header-get", (req : Request, res : Response) => {
+    if(req.headers.hasOwnProperty("key") && req.headers["key"] == "value"){
+      res.send(200);
+    } else {
+      res.send(500);
+    }
+  })
   app.use(httpmw.default);
   app.use("/*", rr.default);
+  app.listen(PORT, () => console.log("Server up and running on "));
   t.context = { app: supertest(app) };
 });
 
@@ -33,4 +42,21 @@ test("http executes parallel requests", async (t) => {
   t.true(Math.abs(Number(result.one.result) - Number(result.two.result)) < 30);
   t.true(Math.abs(Number(result.three.result) - Number(result.four.result)) < 30);
   t.true(Math.abs(Number(result.one.result) - Number(result.three.result)) < 30);
+});
+
+test("Check parallel get with header", async (t) => {
+  const data = {
+    data: {
+      get_url: `http://localhost:${PORT}/header-get`,
+    },
+  };
+  const {app} = t.context;
+  const res = await app.post("/http-parallel-header").send(data);
+  t.is(res.status, 200);
+  const result = res.body.timestamps;
+  t.true(result.hasOwnProperty("one"));
+  t.true(result.hasOwnProperty("two"));
+  t.is(result.one.status, 200)
+  t.is(result.two.status, 200)
+
 });
