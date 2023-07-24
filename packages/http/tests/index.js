@@ -6,6 +6,7 @@ import bodyParser from "body-parser";
 process.env.ZENCODE_DIR = "./test/http";
 const http = require("..").default;
 const zencode = require("../../core").default;
+const TEST_PORT = 3020
 
 test("Middleware db should exists", (t) => {
   t.truthy(typeof http, "object");
@@ -71,6 +72,24 @@ test.before(async (t) => {
         },
       ],
     };
+    app.get("/header-get", (req, res) => {
+      if(req.headers.hasOwnProperty("key") && req.headers["key"] == "value"){
+        res.send(200);
+      } else {
+        res.send(500);
+      }
+    });
+    app.get("/header-array-get", (req, res) => {
+      if(req.headers.hasOwnProperty("key1") && req.headers["key1"] == "value1"){
+        res.send(200);
+      } else if (req.headers.hasOwnProperty("key2") && req.headers["key2"] == "value2"){
+        res.send(200);
+      } else if (req.headers.hasOwnProperty("key3") && req.headers["key3"] == "value3"){
+        res.send(200);
+      } else {
+        res.send(500);
+      }
+    });
     res.status(200).send(output);
   });
 
@@ -335,6 +354,65 @@ test("Parallel get for arrays", async (t) => {
     Object.keys(res.body).includes("myObject"),
     'could not find "myObject " in response'
   );
+});
+
+test("Parallel get for arrays with single header", async (t) => {
+  const data = {
+    data: {
+      myArray: [
+        `http://localhost:${TEST_PORT}/header-get`,
+        `http://localhost:${TEST_PORT}/header-get`,
+        `http://localhost:${TEST_PORT}/header-get`,
+        `http://localhost:${TEST_PORT}/header-get`,
+        `http://localhost:${TEST_PORT}/header-get`,
+        `http://localhost:${TEST_PORT}/header-get`,
+      ],
+    },
+  };
+
+  const app = express();
+  app.use(bodyParser.json());
+  app.use(http);
+  app.use("/*", zencode);
+
+  const res = await request(app).post("/http-get-array-header").send(data);
+  t.is(res.status, 200);
+  t.true(
+    Object.keys(res.body).includes("myObject"),
+    'could not find "myObject " in response'
+  );
+  for(let j = 0; j < 6; j++) {
+    t.is(res.body.myObject.myResult[j].status, 200);
+  }
+});
+
+test("Parallel get for arrays with header array", async (t) => {
+  const data = {
+    data: {
+      myArray: [
+        `http://localhost:${TEST_PORT}/header-array-get`,
+        `http://localhost:${TEST_PORT}/header-array-get`,
+        `http://localhost:${TEST_PORT}/header-array-get`,
+      ],
+    },
+  };
+  // "http://apiroom.net:3312/"
+  // http://localhost:${TEST_PORT}/header-array-get
+
+  const app = express();
+  app.use(bodyParser.json());
+  app.use(http);
+  app.use("/*", zencode);
+
+  const res = await request(app).post("/http-get-array-h").send(data);
+  t.is(res.status, 200);
+  t.true(
+    Object.keys(res.body).includes("myObject"),
+    'could not find "myObject " in response'
+  );
+  for(let j = 0; j < 3; j++) {
+    t.is(res.body.myObject.myResult[j].status, 200);
+  }
 });
 
 test.skip("Parallel post for arrays", async (t) => {

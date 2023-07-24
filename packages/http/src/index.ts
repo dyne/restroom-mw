@@ -20,12 +20,32 @@ export default (req: Request, res: Response, next: NextFunction) => {
   let parallel_params: { output: string; index: [string , number]}[] = [];
   let parallel_promises: Promise<any>[] = [];
 
-  function generic_get(url: string, ind: [string, number], o: string, headers?: Record<string, string>){
-    let opts: AxiosRequestConfig = { validateStatus: () => true }
+  // function genericGet(url: string, ind: [string, number], o: string, headers?: Record<string, string>){
+  //   let opts: AxiosRequestConfig = { validateStatus: () => true }
+  //   if(headers){
+  //     opts.headers = headers
+  //   }
+  //   parallel_promises.push(axios.get(url, opts));
+  //   parallel_params.push({
+  //     output: o,
+  //     index: ind,
+  //   });
+  // }
+
+  function genericGet(url: string, ind: [string, number], o: string, headers?: Record<string, string>){
+    genericRequest(ind, o, {url, method: "get"}, headers);
+  }
+
+  function genericPost(url: string, ind: [string, number], o: string, data: any, headers?: Record<string, string>){
+    genericRequest(ind, o, {url, data, method: "post"}, headers);
+  }
+
+  function genericRequest(ind: [string, number], o: string, req: Record<string, string>, headers?: Record<string, string>){
+    let opts: AxiosRequestConfig = { validateStatus: () => true };
     if(headers){
-      opts.headers = headers
+      opts.headers = headers;
     }
-    parallel_promises.push(axios.get(url, opts));
+    parallel_promises.push(axios({...req, ...opts}));
     parallel_params.push({
       output: o,
       index: ind,
@@ -70,20 +90,41 @@ export default (req: Request, res: Response, next: NextFunction) => {
         for (const [urlsName, i, o] of chunks(zencode.paramsOf(Action.PARALLEL_GET_ARRAY), 3)) {
           const urls = content[urlsName]
           for(let j = 0; j < urls.length; j++) {
-            generic_get(urls[j], [i, j], o);
+            genericGet(urls[j], [i, j], o);
+          }
+        }
+      }
+      if (zencode.match(Action.PARALLEL_GET_ARRAY_HEADER)) {
+        for (const [urlsName, i, o, headerName] of chunks(zencode.paramsOf(Action.PARALLEL_GET_ARRAY_HEADER), 4)) {
+          const urls = content[urlsName];
+          const header = content[headerName];
+          if(Array.isArray(header)) {
+            if(urls.length === header.length){
+              for(let j = 0; j < urls.length; j++) {
+                genericGet(urls[j], [i, j], o, header[j]);
+              }
+            } else {
+              throw new Error(`[HTTP] different length of arrays ${urlsName} and ${headerName}`);
+            }
+          } else if (header.constructor === Object){
+            for(let j = 0; j < urls.length; j++) {
+              genericGet(urls[j], [i, j], o, header);
+            }
+          } else{
+            throw new Error(`[HTTP] unrecognised instance of ${headerName}`);
           }
         }
       }
 
       if (zencode.match(Action.PARALLEL_GET)) {
         for (const [url, i, o] of chunks(zencode.paramsOf(Action.PARALLEL_GET), 3)) {
-          generic_get(content[url], [i, -1], o);
+          genericGet(content[url], [i, -1], o);
         }
       }
 
       if (zencode.match(Action.PARALLEL_GET_HEADER)) {
         for (const [url, i, o, header] of chunks(zencode.paramsOf(Action.PARALLEL_GET_HEADER), 4)) {
-          generic_get(content[url], [i, -1], o, content[header]);
+          genericGet(content[url], [i, -1], o, content[header]);
         }
       }
 
