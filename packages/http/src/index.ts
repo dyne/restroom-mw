@@ -132,11 +132,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
         for (const [d, urlsName, i, o] of chunks(zencode.paramsOf(Action.PARALLEL_POST_ARRAY_WITHIN), 4)) {
           const urls = content[urlsName]
           for(let j = 0; j < urls.length; j++) {
-            parallel_promises.push(axios.post(urls[j], content[d], { validateStatus: () => true }));
-            parallel_params.push({
-              output: o,
-              index: [i, j],
-            });
+            genericPost(urls[j], [i,j], o, content[d]);
           }
         }
       }
@@ -145,11 +141,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
         for (const [d, urlsName, i] of chunks(zencode.paramsOf(Action.PARALLEL_POST_ARRAY), 3)) {
           const urls = content[urlsName]
           for(let j = 0; j < urls.length; j++) {
-            parallel_promises.push(axios.post(urls[j], content[d], { validateStatus: () => true }))
-            parallel_params.push({
-              output: null,
-              index: [i, j],
-            });
+            genericPost(urls[j], [i,j], null, content[d]);
           }
         }
       }
@@ -159,25 +151,20 @@ export default (req: Request, res: Response, next: NextFunction) => {
           const urls = content[urlsName];
           const data = content[dataName];
           for(let j = 0; j < urls.length; j++) {
-            parallel_promises.push(axios.post(urls[j], data[j], { validateStatus: () => true }));
-            parallel_params.push({
-              output: null,
-              index: [i, j],
-            });
+            genericPost(urls[j], [i,j], null, data[j]);
           }
         }
       }
 
+      if (zencode.match(Action.PARALLEL_POST_HEADER)) {
+        for (const [d, url, i, o, header] of chunks(zencode.paramsOf(Action.PARALLEL_POST_HEADER), 5)) {
+          genericPost(content[url], [i,-1], o, d, content[header]);
+        }
+      }
+
       if (zencode.match(Action.PARALLEL_POST)) {
-        for (const [d, url, i, o] of chunks(
-          zencode.paramsOf(Action.PARALLEL_POST),
-          4
-        )) {
-          parallel_promises.push(axios.post(content[url], content[d]));
-          parallel_params.push({
-            output: o,
-            index: [i, -1],
-          });
+        for (const [d, url, i, o] of chunks(zencode.paramsOf(Action.PARALLEL_POST), 4)) {
+          genericPost(url, [i,-1], o, d);
         }
       }
 

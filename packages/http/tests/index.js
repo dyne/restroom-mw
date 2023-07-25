@@ -79,6 +79,13 @@ test.before(async (t) => {
         res.send(500);
       }
     });
+    app.post("/header-post", (req, res) => {
+      if(req.headers.hasOwnProperty("key") && req.headers["key"] == "value"){
+        res.send(200);
+      } else {
+        res.send(500);
+      }
+    });
     app.get("/header-array-get", (req, res) => {
       if(req.headers.hasOwnProperty("key1") && req.headers["key1"] == "value1"){
         res.send(200);
@@ -413,6 +420,27 @@ test("Parallel get for arrays with header array", async (t) => {
   for(let j = 0; j < 3; j++) {
     t.is(res.body.myObject.myResult[j].status, 200);
   }
+});
+
+test("Parallel post with header", async (t) => {
+  const data = {
+    data: {
+      endpoint: `http://localhost:${TEST_PORT}/header-post`,
+    },
+  };
+
+  const app = express();
+  app.use(bodyParser.json());
+  app.use(http);
+  app.use("/*", zencode);
+
+  const res = await request(app).post("/http-parallel-post-header").send(data);
+  t.is(res.status, 200);
+  t.true(
+    Object.keys(res.body).includes("allResults"),
+    'could not find "allResults" in response'
+  );
+  t.is(res.body.allResults.results.status, 200);
 });
 
 test.skip("Parallel post for arrays", async (t) => {
