@@ -97,6 +97,17 @@ test.before(async (t) => {
         res.send(500);
       }
     });
+    app.post("/header-array-post", (req, res) => {
+      if(req.headers.hasOwnProperty("key1") && req.headers["key1"] == "value1"){
+        res.send(200);
+      } else if (req.headers.hasOwnProperty("key2") && req.headers["key2"] == "value2"){
+        res.send(200);
+      } else if (req.headers.hasOwnProperty("key3") && req.headers["key3"] == "value3"){
+        res.send(200);
+      } else {
+        res.send(500);
+      }
+    });
     res.status(200).send(output);
   });
 
@@ -403,8 +414,6 @@ test("Parallel get for arrays with header array", async (t) => {
       ],
     },
   };
-  // "http://apiroom.net:3312/"
-  // http://localhost:${TEST_PORT}/header-array-get
 
   const app = express();
   app.use(bodyParser.json());
@@ -453,6 +462,60 @@ test.skip("Parallel post for arrays", async (t) => {
   t.is(res.status, 200);
   t.is(res.body.results.length, 3)
   t.is(res.body.allResults.results.length, 3)
+});
+
+test("Parallel post for arrays with single header", async (t) => {
+  const data = {
+    data: {
+      endpoints: [
+        `http://localhost:${TEST_PORT}/header-post`,
+        `http://localhost:${TEST_PORT}/header-post`,
+        `http://localhost:${TEST_PORT}/header-post`
+      ],
+    },
+  };
+
+  const app = express();
+  app.use(bodyParser.json());
+  app.use(http);
+  app.use("/*", zencode);
+
+  const res = await request(app).post("/http-post-array-h").send(data);
+  t.is(res.status, 200);
+  t.true(
+    Object.keys(res.body).includes("results"),
+    'could not find "results" in response'
+  );
+  for(let j = 0; j < 3; j++) {
+    t.is(res.body.results[j].status, 200);
+  }
+});
+
+test("Parallel post for arrays with header array", async (t) => {
+  const data = {
+    data: {
+      endpoints: [
+        `http://localhost:${TEST_PORT}/header-array-post`,
+        `http://localhost:${TEST_PORT}/header-array-post`,
+        `http://localhost:${TEST_PORT}/header-array-post`,
+      ],
+    },
+  };
+
+  const app = express();
+  app.use(bodyParser.json());
+  app.use(http);
+  app.use("/*", zencode);
+
+  const res = await request(app).post("/http-post-array-ha").send(data);
+  t.is(res.status, 200);
+  t.true(
+    Object.keys(res.body).includes("results"),
+    'could not find "results" in response'
+  );
+  for(let j = 0; j < 3; j++) {
+    t.is(res.body.results[j].status, 200);
+  }
 });
 
 test("Parallel post with array of data for array of urls", async (t) => {

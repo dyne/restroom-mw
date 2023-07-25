@@ -1,0 +1,7 @@
+Rule unknown ignore
+Given I have a 'string dictionary' named 'output'
+Given I have a 'string array' named 'endpoints'
+Given I have a 'string dictionary' named 'results'
+Given I have a 'string array' named 'header'
+Given I execute parallel POST with 'output' to array 'endpoints' and save the result named 'results' with header 'header'
+Then print all data

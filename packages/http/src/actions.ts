@@ -151,6 +151,18 @@ export enum Action {
    * @param {string} myResult - Name of the varibale where will be store the reuslt of the post
    */
   PARALLEL_POST_ARRAY = "execute parallel POST with {} to array {} and save the result named {}",
+   /**
+   * `Given I execute parallel POST with 'myData' to array 'myEndpointArray' with header 'myHeader' and save the result named 'myResult'`<br><br>
+   * Perform parallel post to array *myEndpointArray* with data contained in *myData* and store the result in
+   * *myResult* which will be an array of dictionary with two entries:
+   * * **status**: will contain the status code
+   * * **result**: in case of success will contain the result otherwise it is a empty string
+   * @param {string} myData - Name of the variable containing the data of the post
+   * @param {string} myEndpointArray - Name of the variable containing the array of urls' endpoint
+   * @param {string} myResult - Name of the varibale where will be store the reuslt of the post
+   * @param {string} myHeader - Name of the variable containing the header
+   */
+   PARALLEL_POST_ARRAY_HEADER = "execute parallel POST with {} to array {} and save the result named {} with header {}",
   /**
    * `Given I execute parallel POST with array 'myDataArray' to array 'myEndpointArray' and save the result named 'myResult'`<br><br>
    * Perform parallel post to array *myEndpointArray* and for the *n-th* endpoint uses the *n-th* entry found in the *myDataArray* as data
