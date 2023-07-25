@@ -12,6 +12,26 @@ test("Middleware db should exists", (t) => {
   t.truthy(typeof http, "object");
 });
 
+function checkHeader(req, res) {
+  if(req.headers.hasOwnProperty("key") && req.headers["key"] == "value"){
+    res.send(200);
+  } else {
+    res.send(500);
+  }
+}
+
+function checkHeaderArray(req, res) {
+  if(req.headers.hasOwnProperty("key1") && req.headers["key1"] == "value1"){
+    res.send(200);
+  } else if (req.headers.hasOwnProperty("key2") && req.headers["key2"] == "value2"){
+    res.send(200);
+  } else if (req.headers.hasOwnProperty("key3") && req.headers["key3"] == "value3"){
+    res.send(200);
+  } else {
+    res.send(500);
+  }
+}
+
 test.before(async (t) => {
   const app = express();
   app.use(bodyParser.json());
@@ -52,6 +72,10 @@ test.before(async (t) => {
         .send("Something is wrong with the result sent by zenroom");
     }
   });
+  app.get("/header-get", checkHeader);
+  app.post("/header-post", checkHeader);
+  app.get("/header-array-get", checkHeaderArray);
+  app.post("/header-array-post", checkHeaderArray);
   app.get("/storeoutput", (req, res) => {
     const output = {
       mySharedSecret: [{
@@ -72,42 +96,6 @@ test.before(async (t) => {
         },
       ],
     };
-    app.get("/header-get", (req, res) => {
-      if(req.headers.hasOwnProperty("key") && req.headers["key"] == "value"){
-        res.send(200);
-      } else {
-        res.send(500);
-      }
-    });
-    app.post("/header-post", (req, res) => {
-      if(req.headers.hasOwnProperty("key") && req.headers["key"] == "value"){
-        res.send(200);
-      } else {
-        res.send(500);
-      }
-    });
-    app.get("/header-array-get", (req, res) => {
-      if(req.headers.hasOwnProperty("key1") && req.headers["key1"] == "value1"){
-        res.send(200);
-      } else if (req.headers.hasOwnProperty("key2") && req.headers["key2"] == "value2"){
-        res.send(200);
-      } else if (req.headers.hasOwnProperty("key3") && req.headers["key3"] == "value3"){
-        res.send(200);
-      } else {
-        res.send(500);
-      }
-    });
-    app.post("/header-array-post", (req, res) => {
-      if(req.headers.hasOwnProperty("key1") && req.headers["key1"] == "value1"){
-        res.send(200);
-      } else if (req.headers.hasOwnProperty("key2") && req.headers["key2"] == "value2"){
-        res.send(200);
-      } else if (req.headers.hasOwnProperty("key3") && req.headers["key3"] == "value3"){
-        res.send(200);
-      } else {
-        res.send(500);
-      }
-    });
     res.status(200).send(output);
   });
 
