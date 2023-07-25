@@ -40,42 +40,23 @@ export default (req: Request, res: Response, next: NextFunction) => {
     });
   }
 
-  function requestArray(method_str: string, urlsName: string, i: string, o: string, headerName: string, dataName?: string){
+  function requestArray(makeRequest: (j: number, url: string, header: Record<string, string>) => void, urlsName: string, headerName: string){
     const urls = content[urlsName];
     const header = content[headerName];
-    let req_arr : Record<string, string>[] = []
-    if (method_str === "post"){
-      let d = content[dataName];
-      if ( ! Array.isArray(d)){
-        d = Array(urls.length).fill(d);
-      }
-      for(let j = 0; j < urls.length; j++){
-        req_arr[j] = {url: urls[j], data: d[j], method: "post"};
-      }
-    } else if (method_str === "get"){
-      for(let j = 0; j < urls.length; j++){
-        req_arr[j] = {url: urls[j], method: "get"};
-      }
-    } else {
-      throw new Error(`[HTTP] ${method_str} must be either "get" or "post"`);
-    }
-
-    for(let j = 0; j < urls.length; j++) {
-      if(Array.isArray(header)) {
-        if(urls.length === header.length){
-          for(let j = 0; j < urls.length; j++) {
-            genericRequest([i,j], o, req_arr[j], header[j]);
-          }
-        } else {
-          throw new Error(`[HTTP] different length of arrays ${urlsName} and ${headerName}`);
-        }
-      } else if (header.constructor === Object){
+    if(Array.isArray(header)) {
+      if(urls.length === header.length){
         for(let j = 0; j < urls.length; j++) {
-          genericRequest([i,j], o, req_arr[j], header);
+          makeRequest(j, urls[j], header[j])
         }
       } else {
-        throw new Error(`[HTTP] unrecognised instance of ${headerName}`);
+        throw new Error(`[HTTP] different length of arrays ${urlsName} and ${headerName}`);
       }
+    } else if (header.constructor === Object){
+      for(let j = 0; j < urls.length; j++) {
+        makeRequest(j, urls[j], header)
+      }
+    } else {
+      throw new Error(`[HTTP] unrecognised instance of ${headerName}`);
     }
   }
 
@@ -123,7 +104,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
       }
       if (zencode.match(Action.PARALLEL_GET_ARRAY_HEADER)) {
         for (const [urlsName, i, o, headerName] of chunks(zencode.paramsOf(Action.PARALLEL_GET_ARRAY_HEADER), 4)) {
-          requestArray("get", urlsName, i, o, headerName);
+          requestArray((j, url, header) => genericGet(url,[i,j], o, header), urlsName, headerName);
         }
       }
 
@@ -150,7 +131,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
 
       if (zencode.match(Action.PARALLEL_POST_ARRAY_WITHIN_HEADER)) {
         for (const [d, urlsName, i, o, headerName] of chunks(zencode.paramsOf(Action.PARALLEL_POST_ARRAY_WITHIN_HEADER), 5)) {
-          requestArray("post", urlsName, i, o, headerName, d);
+          requestArray((j, url, header) => genericPost(url,[i,j], o, content[d], header), urlsName, headerName);
         }
       }
 
@@ -165,7 +146,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
 
       if (zencode.match(Action.PARALLEL_POST_ARRAY_HEADER)) {
         for (const [d, urlsName, i, headerName] of chunks(zencode.paramsOf(Action.PARALLEL_POST_ARRAY_HEADER), 4)) {
-          requestArray("post", urlsName, i, null, headerName, d);
+          requestArray((j, url, header) => genericPost(url,[i,j], null, content[d], header), urlsName, headerName);
         }
       }
 
@@ -181,7 +162,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
 
       if (zencode.match(Action.PARALLEL_POST_ARRAY_DIFFERENT_DATA_HEADER)) {
         for (const [dataName, urlsName, i, headerName] of chunks(zencode.paramsOf(Action.PARALLEL_POST_ARRAY_DIFFERENT_DATA_HEADER), 4)) {
-          requestArray("post", urlsName, i, null, headerName, dataName);
+          requestArray((j, url, header) => genericPost(url,[i,j], null, content[dataName][j], header), urlsName, headerName);
         }
       }
 
