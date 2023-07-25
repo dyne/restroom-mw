@@ -590,6 +590,61 @@ test("Parallel post with array of data for array of urls", async (t) => {
   t.is(res.body.result[3].result.output, 'test_4');
 });
 
+
+test("Parallel post with array of data and single header", async (t) => {
+  const data = {
+    data: {
+      urls: [
+        `http://localhost:${TEST_PORT}/header-post`,
+        `http://localhost:${TEST_PORT}/header-post`,
+        `http://localhost:${TEST_PORT}/header-post`
+      ],
+    },
+  };
+
+  const app = express();
+  app.use(bodyParser.json());
+  app.use(http);
+  app.use("/*", zencode);
+
+  const res = await request(app).post("/http-post-array-data-h").send(data);
+  t.is(res.status, 200);
+  t.true(
+    Object.keys(res.body).includes("result"),
+    'could not find "result" in response'
+  );
+  for(let j = 0; j < 3; j++) {
+    t.is(res.body.result[j].status, 200);
+  }
+});
+
+test("Parallel post with array of data and header array", async (t) => {
+  const data = {
+    data: {
+      urls: [
+        `http://localhost:${TEST_PORT}/header-array-post`,
+        `http://localhost:${TEST_PORT}/header-array-post`,
+        `http://localhost:${TEST_PORT}/header-array-post`,
+      ],
+    },
+  };
+
+  const app = express();
+  app.use(bodyParser.json());
+  app.use(http);
+  app.use("/*", zencode);
+
+  const res = await request(app).post("/http-post-array-data-ha").send(data);
+  t.is(res.status, 200);
+  t.true(
+    Object.keys(res.body).includes("result"),
+    'could not find "result" in response'
+  );
+  for(let j = 0; j < 3; j++) {
+    t.is(res.body.result[j].status, 200);
+  }
+});
+
 test("Check broken http", async (t) => {
   const app = express();
   app.use(bodyParser.json());
