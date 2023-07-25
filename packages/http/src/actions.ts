@@ -116,7 +116,7 @@ export enum Action {
    */
   PARALLEL_POST = "execute parallel POST with {} to {} and save the result named {} within the object {}",
   /**
-   * `Given I execute parallel POST with 'myData' to 'myEndpoint' and save the result named 'myResult' within the object 'myObject'`<br><br>
+   * `Given I execute parallel POST with 'myData' to 'myEndpoint' and save the result named 'myResult' within the object 'myObject' with header 'myHeader'`<br><br>
    * By repeating this statment *n* times it will perform *n* parallel post to *myEndpoint* with data contained in *myData* and header contained in *myHeader* and store the result in
    * *myObject.myResult* which will be an array of dictionary with two entries:
    * * **status**: will contain the status code
@@ -141,8 +141,8 @@ export enum Action {
    */
   PARALLEL_POST_ARRAY_WITHIN = "execute parallel POST with {} to array {} and save the result named {} within the object {}",
   /**
-   * `Given I execute parallel POST with 'myData' to array 'myEndpointArray', with header 'myHeader' and save the result named 'myResult' within the object 'myObject'`<br><br>
-   * Perform parallel post to array *myEndpointArray* with data contained in *myData* and store the result in
+   * `Given I execute parallel POST with 'myData' to array 'myEndpointArray', with header 'myHeader' and save the result named 'myResult' within the object 'myObject' with header 'myHeader'`<br><br>
+   * Perform parallel post to array *myEndpointArray* with data contained in *myData* and header contained in *myHeader* and store the result in
    * *myObject.myResult* which will be an array of dictionary with two entries:
    * * **status**: will contain the status code
    * * **result**: in case of success will contain the result otherwise it is a empty string
@@ -165,8 +165,8 @@ export enum Action {
    */
   PARALLEL_POST_ARRAY = "execute parallel POST with {} to array {} and save the result named {}",
    /**
-   * `Given I execute parallel POST with 'myData' to array 'myEndpointArray' with header 'myHeader' and save the result named 'myResult'`<br><br>
-   * Perform parallel post to array *myEndpointArray* with data contained in *myData* and store the result in
+   * `Given I execute parallel POST with 'myData' to array 'myEndpointArray' with header 'myHeader' and save the result named 'myResult' with header 'myHeader'`<br><br>
+   * Perform parallel post to array *myEndpointArray* with data contained in *myData* and with header contained in *myHeader* and store the result in
    * *myResult* which will be an array of dictionary with two entries:
    * * **status**: will contain the status code
    * * **result**: in case of success will contain the result otherwise it is a empty string
@@ -188,8 +188,8 @@ export enum Action {
    */
   PARALLEL_POST_ARRAY_DIFFERENT_DATA = "execute parallel POST with array {} to array {} and save the result named {}",
     /**
-   * `Given I execute parallel POST with array 'myDataArray' to array 'myEndpointArray', with header 'myHeader' and save the result named 'myResult'`<br><br>
-   * Perform parallel post to array *myEndpointArray* and for the *n-th* endpoint uses the *n-th* entry found in the *myDataArray* as data
+   * `Given I execute parallel POST with array 'myDataArray' to array 'myEndpointArray' and save the result named 'myResult' with header 'myHeader'`<br><br>
+   * Perform parallel post to array *myEndpointArray* with header *myHeader* and for the *n-th* endpoint uses the *n-th* entry found in the *myDataArray* as data
    * and store the result in *myResult* which will be an array of dictionary with two entries:
    * * **status**: will contain the status code
    * * **result**: in case of success will contain the result otherwise it is a empty string
