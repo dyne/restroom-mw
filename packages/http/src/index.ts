@@ -40,26 +40,38 @@ export default (req: Request, res: Response, next: NextFunction) => {
     });
   }
 
-  function postHeaderArray(urlsName: string, i: string, o: string, dataName: string, headerName: string){
+  function requestArray(method_str: string, urlsName: string, i: string, o: string, headerName: string, dataName?: string){
     const urls = content[urlsName];
     const header = content[headerName];
-    let d = content[dataName];
-    if ( ! Array.isArray(d)){
-      d = Array(urls.length).fill(d);
+    let req_arr : Record<string, string>[] = []
+    if (method_str === "post"){
+      let d = content[dataName];
+      if ( ! Array.isArray(d)){
+        d = Array(urls.length).fill(d);
+      }
+      for(let j = 0; j < urls.length; j++){
+        req_arr[j] = {url: urls[j], data: d[j], method: "post"};
+      }
+    } else if (method_str === "get"){
+      for(let j = 0; j < urls.length; j++){
+        req_arr[j] = {url: urls[j], method: "get"};
+      }
+    } else {
+      throw new Error(`[HTTP] ${method_str} must be either "get" or "post"`);
     }
 
     for(let j = 0; j < urls.length; j++) {
       if(Array.isArray(header)) {
         if(urls.length === header.length){
           for(let j = 0; j < urls.length; j++) {
-            genericPost(urls[j], [i,j] , o, d[j], header[j]);
+            genericRequest([i,j], o, req_arr[j], header[j]);
           }
         } else {
           throw new Error(`[HTTP] different length of arrays ${urlsName} and ${headerName}`);
         }
       } else if (header.constructor === Object){
         for(let j = 0; j < urls.length; j++) {
-          genericPost(urls[j], [i,j], o, d[j], header);
+          genericRequest([i,j], o, req_arr[j], header);
         }
       } else {
         throw new Error(`[HTTP] unrecognised instance of ${headerName}`);
@@ -111,23 +123,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
       }
       if (zencode.match(Action.PARALLEL_GET_ARRAY_HEADER)) {
         for (const [urlsName, i, o, headerName] of chunks(zencode.paramsOf(Action.PARALLEL_GET_ARRAY_HEADER), 4)) {
-          const urls = content[urlsName];
-          const header = content[headerName];
-          if(Array.isArray(header)) {
-            if(urls.length === header.length){
-              for(let j = 0; j < urls.length; j++) {
-                genericGet(urls[j], [i, j], o, header[j]);
-              }
-            } else {
-              throw new Error(`[HTTP] different length of arrays ${urlsName} and ${headerName}`);
-            }
-          } else if (header.constructor === Object){
-            for(let j = 0; j < urls.length; j++) {
-              genericGet(urls[j], [i, j], o, header);
-            }
-          } else{
-            throw new Error(`[HTTP] unrecognised instance of ${headerName}`);
-          }
+          requestArray("get", urlsName, i, o, headerName);
         }
       }
 
@@ -154,7 +150,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
 
       if (zencode.match(Action.PARALLEL_POST_ARRAY_WITHIN_HEADER)) {
         for (const [d, urlsName, i, o, headerName] of chunks(zencode.paramsOf(Action.PARALLEL_POST_ARRAY_WITHIN_HEADER), 5)) {
-          postHeaderArray(urlsName, i, o, d, headerName);
+          requestArray("post", urlsName, i, o, headerName, d);
         }
       }
 
@@ -169,7 +165,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
 
       if (zencode.match(Action.PARALLEL_POST_ARRAY_HEADER)) {
         for (const [d, urlsName, i, headerName] of chunks(zencode.paramsOf(Action.PARALLEL_POST_ARRAY_HEADER), 4)) {
-          postHeaderArray(urlsName, i, null, d, headerName);
+          requestArray("post", urlsName, i, null, headerName, d);
         }
       }
 
@@ -185,7 +181,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
 
       if (zencode.match(Action.PARALLEL_POST_ARRAY_DIFFERENT_DATA_HEADER)) {
         for (const [dataName, urlsName, i, headerName] of chunks(zencode.paramsOf(Action.PARALLEL_POST_ARRAY_DIFFERENT_DATA_HEADER), 4)) {
-          postHeaderArray(urlsName, i, null, dataName, headerName);
+          requestArray("post", urlsName, i, null, headerName, dataName);
         }
       }
 
