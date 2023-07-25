@@ -137,6 +137,30 @@ export default (req: Request, res: Response, next: NextFunction) => {
         }
       }
 
+      if (zencode.match(Action.PARALLEL_POST_ARRAY_WITHIN_HEADER)) {
+        for (const [d, urlsName, i, o, headerName] of chunks(zencode.paramsOf(Action.PARALLEL_POST_ARRAY_WITHIN_HEADER), 5)) {
+          const urls = content[urlsName]
+          const header = content[headerName]
+          for(let j = 0; j < urls.length; j++) {
+            if(Array.isArray(header)) {
+              if(urls.length === header.length){
+                for(let j = 0; j < urls.length; j++) {
+                  genericPost(urls[j], [i,j], o, content[d], header[j]);
+                }
+              } else {
+                throw new Error(`[HTTP] different length of arrays ${urlsName} and ${headerName}`);
+              }
+            } else if (header.constructor === Object){
+              for(let j = 0; j < urls.length; j++) {
+                genericPost(urls[j], [i,j], o, content[d], header);
+              }
+            } else{
+              throw new Error(`[HTTP] unrecognised instance of ${headerName}`);
+            }
+          }
+        }
+      }
+
       if (zencode.match(Action.PARALLEL_POST_ARRAY)) {
         for (const [d, urlsName, i] of chunks(zencode.paramsOf(Action.PARALLEL_POST_ARRAY), 3)) {
           const urls = content[urlsName]

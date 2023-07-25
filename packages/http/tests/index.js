@@ -518,6 +518,59 @@ test("Parallel post for arrays with header array", async (t) => {
   }
 });
 
+test("Parallel post within for arrays with single header", async (t) => {
+  const data = {
+    data: {
+      endpoints: [
+        `http://localhost:${TEST_PORT}/header-post`,
+        `http://localhost:${TEST_PORT}/header-post`,
+        `http://localhost:${TEST_PORT}/header-post`
+      ],
+    },
+  };
+
+  const app = express();
+  app.use(bodyParser.json());
+  app.use(http);
+  app.use("/*", zencode);
+
+  const res = await request(app).post("/http-post-within-h").send(data);
+  t.is(res.status, 200);
+  t.true(
+    Object.keys(res.body).includes("allResults"),
+    'could not find "allResults" in response'
+  );
+  for(let j = 0; j < 3; j++) {
+    t.is(res.body.allResults.results[j].status, 200);
+  }
+});
+
+test("Parallel post within for arrays with header array", async (t) => {
+  const data = {
+    data: {
+      endpoints: [
+        `http://localhost:${TEST_PORT}/header-array-post`,
+        `http://localhost:${TEST_PORT}/header-array-post`,
+        `http://localhost:${TEST_PORT}/header-array-post`,
+      ],
+    },
+  };
+
+  const app = express();
+  app.use(bodyParser.json());
+  app.use(http);
+  app.use("/*", zencode);
+  const res = await request(app).post("/http-post-within-ha").send(data);
+  t.is(res.status, 200);
+  t.true(
+    Object.keys(res.body).includes("allResults"),
+    'could not find "allResults" in response'
+  );
+  for(let j = 0; j < 3; j++) {
+    t.is(res.body.allResults.results[j].status, 200);
+  }
+});
+
 test("Parallel post with array of data for array of urls", async (t) => {
   const app = express();
   app.use(bodyParser.json());
