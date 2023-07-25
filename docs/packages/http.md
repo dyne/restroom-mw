@@ -230,20 +230,32 @@ With this **keys**:
     *   [Parameters](#parameters-3)
 *   [PARALLEL_GET](#parallel_get)
     *   [Parameters](#parameters-4)
-*   [PARALLEL_GET_ARRAY](#parallel_get_array)
+*   [PARALLEL_GET_HEADER](#parallel_get_header)
     *   [Parameters](#parameters-5)
-*   [PARALLEL_POST](#parallel_post)
+*   [PARALLEL_GET_ARRAY](#parallel_get_array)
     *   [Parameters](#parameters-6)
-*   [PARALLEL_POST_ARRAY_WITHIN](#parallel_post_array_within)
+*   [PARALLEL_GET_ARRAY_HEADER](#parallel_get_array_header)
     *   [Parameters](#parameters-7)
-*   [PARALLEL_POST_ARRAY](#parallel_post_array)
+*   [PARALLEL_POST](#parallel_post)
     *   [Parameters](#parameters-8)
-*   [PARALLEL_POST_ARRAY_DIFFERENT_DATA](#parallel_post_array_different_data)
+*   [PARALLEL_POST_HEADER](#parallel_post_header)
     *   [Parameters](#parameters-9)
+*   [PARALLEL_POST_ARRAY_WITHIN](#parallel_post_array_within)
+    *   [Parameters](#parameters-10)
+*   [PARALLEL_POST_ARRAY_WITHIN_HEADER](#parallel_post_array_within_header)
+    *   [Parameters](#parameters-11)
+*   [PARALLEL_POST_ARRAY](#parallel_post_array)
+    *   [Parameters](#parameters-12)
+*   [PARALLEL_POST_ARRAY_HEADER](#parallel_post_array_header)
+    *   [Parameters](#parameters-13)
+*   [PARALLEL_POST_ARRAY_DIFFERENT_DATA](#parallel_post_array_different_data)
+    *   [Parameters](#parameters-14)
+*   [PARALLEL_POST_ARRAY_DIFFERENT_DATA_HEADER](#parallel_post_array_different_data_header)
+    *   [Parameters](#parameters-15)
 
 ### READ_REQUEST
 
-[packages/http/src/actions.ts:31-31](https://github.com/dyne/restroom-mw/blob/8db4074a7fb710ca3898d2dbf1660f32b07114d4/packages/http/src/actions.ts#L31-L31 "Source code on GitHub")
+[packages/http/src/actions.ts:31-31](https://github.com/RebeccaSelvaggini/restroom-mw/blob/e28a59c4454e3d0584565b5c9b06c50442468214/packages/http/src/actions.ts#L31-L31 "Source code on GitHub")
 
 `Given I read the http request`<br><br>
 Read the http_request that is coming form the outside, it will return
@@ -276,7 +288,7 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 ### EXTERNAL_CONNECTION
 
-[packages/http/src/actions.ts:37-37](https://github.com/dyne/restroom-mw/blob/8db4074a7fb710ca3898d2dbf1660f32b07114d4/packages/http/src/actions.ts#L37-L37 "Source code on GitHub")
+[packages/http/src/actions.ts:37-37](https://github.com/RebeccaSelvaggini/restroom-mw/blob/e28a59c4454e3d0584565b5c9b06c50442468214/packages/http/src/actions.ts#L37-L37 "Source code on GitHub")
 
 `Given I have a endpoint named 'myEndpoint'`<br><br>
 Set the endpoint to be used later in the other statements
@@ -289,7 +301,7 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 ### EXTERNAL_OUTPUT
 
-[packages/http/src/actions.ts:44-44](https://github.com/dyne/restroom-mw/blob/8db4074a7fb710ca3898d2dbf1660f32b07114d4/packages/http/src/actions.ts#L44-L44 "Source code on GitHub")
+[packages/http/src/actions.ts:44-44](https://github.com/RebeccaSelvaggini/restroom-mw/blob/e28a59c4454e3d0584565b5c9b06c50442468214/packages/http/src/actions.ts#L44-L44 "Source code on GitHub")
 
 `Given I connect to 'myEndpoint' and save the output into 'myResult'`<br><br>
 Connect to *myEndpoint* and store the result into *myResult*
@@ -303,7 +315,7 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 ### PASS_OUTPUT
 
-[packages/http/src/actions.ts:50-50](https://github.com/dyne/restroom-mw/blob/8db4074a7fb710ca3898d2dbf1660f32b07114d4/packages/http/src/actions.ts#L50-L50 "Source code on GitHub")
+[packages/http/src/actions.ts:50-50](https://github.com/RebeccaSelvaggini/restroom-mw/blob/e28a59c4454e3d0584565b5c9b06c50442468214/packages/http/src/actions.ts#L50-L50 "Source code on GitHub")
 
 `Then I pass the output to 'myEndpoint'`<br><br>
 Perform a post to *myEndpoint* with data the zencode output
@@ -316,7 +328,7 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 ### POST_AND_SAVE_TO_VARIABLE
 
-[packages/http/src/actions.ts:61-61](https://github.com/dyne/restroom-mw/blob/8db4074a7fb710ca3898d2dbf1660f32b07114d4/packages/http/src/actions.ts#L61-L61 "Source code on GitHub")
+[packages/http/src/actions.ts:61-61](https://github.com/RebeccaSelvaggini/restroom-mw/blob/e28a59c4454e3d0584565b5c9b06c50442468214/packages/http/src/actions.ts#L61-L61 "Source code on GitHub")
 
 `Given I connect to 'myEndpoint' and pass it the content of 'myVariable' and save the output into 'myResult'`<br><br>
 Perform a post to *myEndpoint* with data contained in *myVariable* and store the result in *myResult* which
@@ -335,7 +347,7 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 ### PARALLEL_GET
 
-[packages/http/src/actions.ts:72-72](https://github.com/dyne/restroom-mw/blob/8db4074a7fb710ca3898d2dbf1660f32b07114d4/packages/http/src/actions.ts#L72-L72 "Source code on GitHub")
+[packages/http/src/actions.ts:72-72](https://github.com/RebeccaSelvaggini/restroom-mw/blob/e28a59c4454e3d0584565b5c9b06c50442468214/packages/http/src/actions.ts#L72-L72 "Source code on GitHub")
 
 `Given I execute parallel GET to 'myEndpoint' and save the result named 'myResult' within the object 'myObject'`<br><br>
 By repeating this statment *n* times it will perform *n* parallel get to *myEndpoint* and store the result in
@@ -352,9 +364,29 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 *   `myResult` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the varibale where will be store the reuslt of the get
 *   `myObject` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the varibale where will be store myResult
 
+### PARALLEL_GET_HEADER
+
+[packages/http/src/actions.ts:84-84](https://github.com/RebeccaSelvaggini/restroom-mw/blob/e28a59c4454e3d0584565b5c9b06c50442468214/packages/http/src/actions.ts#L84-L84 "Source code on GitHub")
+
+`Given I execute parallel GET to 'myEndpoint' and save the result named 'myResult' within the object 'myObject' with header 'myHeader'`<br><br>
+By repeating this statment *n* times it will perform *n* parallel get to *myEndpoint* with header *myHeader* and store the result in
+*myObject.myResult* which will be a dictionary with two entries:
+
+*   **status**: will contain the status code
+*   **result**: in case of success will contain the result otherwise it is a empty string
+
+Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
+
+#### Parameters
+
+*   `myEndpoint` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the variable containing the url's endpoint or the url's endpoint itself
+*   `myResult` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the varibale where will be store the reuslt of the get
+*   `myObject` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the varibale where will be store myResult
+*   `myHeader` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the variable containing the header
+
 ### PARALLEL_GET_ARRAY
 
-[packages/http/src/actions.ts:82-82](https://github.com/dyne/restroom-mw/blob/8db4074a7fb710ca3898d2dbf1660f32b07114d4/packages/http/src/actions.ts#L82-L82 "Source code on GitHub")
+[packages/http/src/actions.ts:94-94](https://github.com/RebeccaSelvaggini/restroom-mw/blob/e28a59c4454e3d0584565b5c9b06c50442468214/packages/http/src/actions.ts#L94-L94 "Source code on GitHub")
 
 `Given I execute parallel GET to array 'myEndpointArray' and save the result named 'myResult' within the object 'myObject'`<br><br>
 Perform parallel get to array *myEndpointArray* and store the result in *myObject.myResult* which will be an array of dictionary with two entries:
@@ -370,9 +402,28 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 *   `myResult` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the varibale where will be store the reuslt of the get
 *   `myObject` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the varibale where will be store myResult
 
+### PARALLEL_GET_ARRAY_HEADER
+
+[packages/http/src/actions.ts:105-105](https://github.com/RebeccaSelvaggini/restroom-mw/blob/e28a59c4454e3d0584565b5c9b06c50442468214/packages/http/src/actions.ts#L105-L105 "Source code on GitHub")
+
+`Given I execute parallel GET to array 'myEndpointArray' and save the result named 'myResult' within the object 'myObject' with header 'myHeader'`<br><br>
+Perform parallel get to array *myEndpointArray* with header *myHeader* and store the result in *myObject.myResult* which will be an array of dictionary with two entries:
+
+*   **status**: will contain the status code
+*   **result**: in case of success will contain the result otherwise it is a empty string
+
+Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
+
+#### Parameters
+
+*   `myEndpointArray` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the variable containing the array of urls' endpoint
+*   `myResult` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the varibale where will be store the reuslt of the get
+*   `myObject` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the varibale where will be store myResult
+*   `myHeader` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the variable containing the header
+
 ### PARALLEL_POST
 
-[packages/http/src/actions.ts:94-94](https://github.com/dyne/restroom-mw/blob/8db4074a7fb710ca3898d2dbf1660f32b07114d4/packages/http/src/actions.ts#L94-L94 "Source code on GitHub")
+[packages/http/src/actions.ts:117-117](https://github.com/RebeccaSelvaggini/restroom-mw/blob/e28a59c4454e3d0584565b5c9b06c50442468214/packages/http/src/actions.ts#L117-L117 "Source code on GitHub")
 
 `Given I execute parallel POST with 'myData' to 'myEndpoint' and save the result named 'myResult' within the object 'myObject'`<br><br>
 By repeating this statment *n* times it will perform *n* parallel post to *myEndpoint* with data contained in *myData* and store the result in
@@ -390,9 +441,30 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 *   `myResult` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the varibale where will be store the reuslt of the post
 *   `myObject` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the varibale where will be store myResult
 
+### PARALLEL_POST_HEADER
+
+[packages/http/src/actions.ts:130-130](https://github.com/RebeccaSelvaggini/restroom-mw/blob/e28a59c4454e3d0584565b5c9b06c50442468214/packages/http/src/actions.ts#L130-L130 "Source code on GitHub")
+
+`Given I execute parallel POST with 'myData' to 'myEndpoint' and save the result named 'myResult' within the object 'myObject' with header 'myHeader'`<br><br>
+By repeating this statment *n* times it will perform *n* parallel post to *myEndpoint* with data contained in *myData* and header contained in *myHeader* and store the result in
+*myObject.myResult* which will be an array of dictionary with two entries:
+
+*   **status**: will contain the status code
+*   **result**: in case of success will contain the result otherwise it is a empty string
+
+Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
+
+#### Parameters
+
+*   `myData` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the variable containing the data of the post
+*   `myEndpoint` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the variable containing the url's endpoint
+*   `myResult` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the varibale where will be store the reuslt of the post
+*   `myObject` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the varibale where will be store myResult
+*   `myHeader` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the variable containing the header
+
 ### PARALLEL_POST_ARRAY_WITHIN
 
-[packages/http/src/actions.ts:106-106](https://github.com/dyne/restroom-mw/blob/8db4074a7fb710ca3898d2dbf1660f32b07114d4/packages/http/src/actions.ts#L106-L106 "Source code on GitHub")
+[packages/http/src/actions.ts:142-142](https://github.com/RebeccaSelvaggini/restroom-mw/blob/e28a59c4454e3d0584565b5c9b06c50442468214/packages/http/src/actions.ts#L142-L142 "Source code on GitHub")
 
 `Given I execute parallel POST with 'myData' to array 'myEndpointArray' and save the result named 'myResult' within the object 'myObject'`<br><br>
 Perform parallel post to array *myEndpointArray* with data contained in *myData* and store the result in
@@ -410,9 +482,30 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 *   `myResult` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the varibale where will be store the reuslt of the post
 *   `myObject` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the varibale where will be store myResult
 
+### PARALLEL_POST_ARRAY_WITHIN_HEADER
+
+[packages/http/src/actions.ts:155-155](https://github.com/RebeccaSelvaggini/restroom-mw/blob/e28a59c4454e3d0584565b5c9b06c50442468214/packages/http/src/actions.ts#L155-L155 "Source code on GitHub")
+
+`Given I execute parallel POST with 'myData' to array 'myEndpointArray', with header 'myHeader' and save the result named 'myResult' within the object 'myObject' with header 'myHeader'`<br><br>
+Perform parallel post to array *myEndpointArray* with data contained in *myData* and header contained in *myHeader* and store the result in
+*myObject.myResult* which will be an array of dictionary with two entries:
+
+*   **status**: will contain the status code
+*   **result**: in case of success will contain the result otherwise it is a empty string
+
+Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
+
+#### Parameters
+
+*   `myData` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the variable containing the data of the post
+*   `myEndpointArray` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the variable containing the array of urls' endpoint
+*   `myResult` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the varibale where will be store the reuslt of the post
+*   `myObject` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the varibale where will be store myResult
+*   `myHeader` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the variable containing the header
+
 ### PARALLEL_POST_ARRAY
 
-[packages/http/src/actions.ts:117-117](https://github.com/dyne/restroom-mw/blob/8db4074a7fb710ca3898d2dbf1660f32b07114d4/packages/http/src/actions.ts#L117-L117 "Source code on GitHub")
+[packages/http/src/actions.ts:166-166](https://github.com/RebeccaSelvaggini/restroom-mw/blob/e28a59c4454e3d0584565b5c9b06c50442468214/packages/http/src/actions.ts#L166-L166 "Source code on GitHub")
 
 `Given I execute parallel POST with 'myData' to array 'myEndpointArray' and save the result named 'myResult'`<br><br>
 Perform parallel post to array *myEndpointArray* with data contained in *myData* and store the result in
@@ -429,9 +522,29 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 *   `myEndpointArray` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the variable containing the array of urls' endpoint
 *   `myResult` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the varibale where will be store the reuslt of the post
 
+### PARALLEL_POST_ARRAY_HEADER
+
+[packages/http/src/actions.ts:178-178](https://github.com/RebeccaSelvaggini/restroom-mw/blob/e28a59c4454e3d0584565b5c9b06c50442468214/packages/http/src/actions.ts#L178-L178 "Source code on GitHub")
+
+`Given I execute parallel POST with 'myData' to array 'myEndpointArray' with header 'myHeader' and save the result named 'myResult' with header 'myHeader'`<br><br>
+Perform parallel post to array *myEndpointArray* with data contained in *myData* and with header contained in *myHeader* and store the result in
+*myResult* which will be an array of dictionary with two entries:
+
+*   **status**: will contain the status code
+*   **result**: in case of success will contain the result otherwise it is a empty string
+
+Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
+
+#### Parameters
+
+*   `myData` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the variable containing the data of the post
+*   `myEndpointArray` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the variable containing the array of urls' endpoint
+*   `myResult` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the varibale where will be store the reuslt of the post
+*   `myHeader` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the variable containing the header
+
 ### PARALLEL_POST_ARRAY_DIFFERENT_DATA
 
-[packages/http/src/actions.ts:128-128](https://github.com/dyne/restroom-mw/blob/8db4074a7fb710ca3898d2dbf1660f32b07114d4/packages/http/src/actions.ts#L128-L128 "Source code on GitHub")
+[packages/http/src/actions.ts:189-189](https://github.com/RebeccaSelvaggini/restroom-mw/blob/e28a59c4454e3d0584565b5c9b06c50442468214/packages/http/src/actions.ts#L189-L189 "Source code on GitHub")
 
 `Given I execute parallel POST with array 'myDataArray' to array 'myEndpointArray' and save the result named 'myResult'`<br><br>
 Perform parallel post to array *myEndpointArray* and for the *n-th* endpoint uses the *n-th* entry found in the *myDataArray* as data
@@ -447,3 +560,23 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 *   `myDataArray` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the variable containing the array of data of the post
 *   `myEndpointArray` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the variable containing the array of urls' endpoint
 *   `myResult` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the varibale where will be store the reuslt of the post
+
+### PARALLEL_POST_ARRAY_DIFFERENT_DATA_HEADER
+
+[packages/http/src/actions.ts:201-201](https://github.com/RebeccaSelvaggini/restroom-mw/blob/e28a59c4454e3d0584565b5c9b06c50442468214/packages/http/src/actions.ts#L201-L201 "Source code on GitHub")
+
+`Given I execute parallel POST with array 'myDataArray' to array 'myEndpointArray' and save the result named 'myResult' with header 'myHeader'`<br><br>
+Perform parallel post to array *myEndpointArray* with header *myHeader* and for the *n-th* endpoint uses the *n-th* entry found in the *myDataArray* as data
+and store the result in *myResult* which will be an array of dictionary with two entries:
+
+*   **status**: will contain the status code
+*   **result**: in case of success will contain the result otherwise it is a empty string
+
+Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
+
+#### Parameters
+
+*   `myDataArray` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the variable containing the array of data of the post
+*   `myEndpointArray` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the variable containing the array of urls' endpoint
+*   `myResult` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the varibale where will be store the reuslt of the post
+*   `myHeader` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of the variable containing the header
