@@ -2,6 +2,6 @@ Rule unknown ignore
 Given I have a 'string dictionary' named 'dataA'
 Given I have a 'string dictionary' named 'header'
 Given I have a 'string dictionary' named 'result'
-Given I execute parallel POST with array 'dataA' to array 'urls' and save the result named 'result' with header 'header'
+Given I execute parallel POST with array 'dataA' to array 'urls' with header 'header' and save the result named 'result'
 
 Then print all data

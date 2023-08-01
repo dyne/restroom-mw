@@ -103,7 +103,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
         }
       }
       if (zencode.match(Action.PARALLEL_GET_ARRAY_HEADER)) {
-        for (const [urlsName, i, o, headerName] of chunks(zencode.paramsOf(Action.PARALLEL_GET_ARRAY_HEADER), 4)) {
+        for (const [urlsName, headerName, i, o] of chunks(zencode.paramsOf(Action.PARALLEL_GET_ARRAY_HEADER), 4)) {
           requestArray((j, url, header) => genericGet(url,[i,j], o, header), urlsName, headerName);
         }
       }
@@ -115,7 +115,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
       }
 
       if (zencode.match(Action.PARALLEL_GET_HEADER)) {
-        for (const [url, i, o, header] of chunks(zencode.paramsOf(Action.PARALLEL_GET_HEADER), 4)) {
+        for (const [url, header, i, o] of chunks(zencode.paramsOf(Action.PARALLEL_GET_HEADER), 4)) {
           genericGet(content[url], [i, -1], o, content[header]);
         }
       }
@@ -130,7 +130,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
       }
 
       if (zencode.match(Action.PARALLEL_POST_ARRAY_WITHIN_HEADER)) {
-        for (const [d, urlsName, i, o, headerName] of chunks(zencode.paramsOf(Action.PARALLEL_POST_ARRAY_WITHIN_HEADER), 5)) {
+        for (const [d, urlsName, headerName, i, o] of chunks(zencode.paramsOf(Action.PARALLEL_POST_ARRAY_WITHIN_HEADER), 5)) {
           requestArray((j, url, header) => genericPost(url,[i,j], o, content[d], header), urlsName, headerName);
         }
       }
@@ -145,7 +145,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
       }
 
       if (zencode.match(Action.PARALLEL_POST_ARRAY_HEADER)) {
-        for (const [d, urlsName, i, headerName] of chunks(zencode.paramsOf(Action.PARALLEL_POST_ARRAY_HEADER), 4)) {
+        for (const [d, urlsName, headerName, i] of chunks(zencode.paramsOf(Action.PARALLEL_POST_ARRAY_HEADER), 4)) {
           requestArray((j, url, header) => genericPost(url,[i,j], null, content[d], header), urlsName, headerName);
         }
       }
@@ -161,13 +161,13 @@ export default (req: Request, res: Response, next: NextFunction) => {
       }
 
       if (zencode.match(Action.PARALLEL_POST_ARRAY_DIFFERENT_DATA_HEADER)) {
-        for (const [dataName, urlsName, i, headerName] of chunks(zencode.paramsOf(Action.PARALLEL_POST_ARRAY_DIFFERENT_DATA_HEADER), 4)) {
+        for (const [dataName, urlsName, headerName, i] of chunks(zencode.paramsOf(Action.PARALLEL_POST_ARRAY_DIFFERENT_DATA_HEADER), 4)) {
           requestArray((j, url, header) => genericPost(url,[i,j], null, content[dataName][j], header), urlsName, headerName);
         }
       }
 
       if (zencode.match(Action.PARALLEL_POST_HEADER)) {
-        for (const [d, url, i, o, header] of chunks(zencode.paramsOf(Action.PARALLEL_POST_HEADER), 5)) {
+        for (const [d, url, header, i, o] of chunks(zencode.paramsOf(Action.PARALLEL_POST_HEADER), 5)) {
           genericPost(content[url], [i,-1], o, d, content[header]);
         }
       }

@@ -4,5 +4,5 @@ Given I have a 'string' named 'endpoint'
 Given I have a 'string dictionary' named 'allResults'
 Given I have a 'string dictionary' named 'results'
 Given I have a 'string dictionary' named 'header'
-Given I execute parallel POST with 'output' to 'endpoint' and save the result named 'results' within the object 'allResults' with header 'header'
+Given I execute parallel POST with 'output' to 'endpoint' with header 'header' and save the result named 'results' within the object 'allResults'
 Then print all data

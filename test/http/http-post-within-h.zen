@@ -3,5 +3,5 @@ Given I have a 'string dictionary' named 'output'
 Given I have a 'string array' named 'endpoints'
 Given I have a 'string dictionary' named 'allResults'
 Given I have a 'string dictionary' named 'header'
-Given I execute parallel POST with 'output' to array 'endpoints' and save the result named 'results' within the object 'allResults' with header 'header'
+Given I execute parallel POST with 'output' to array 'endpoints' with header 'header' and save the result named 'results' within the object 'allResults'
 Then print all data

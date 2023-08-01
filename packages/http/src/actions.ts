@@ -81,7 +81,7 @@ export enum Action {
    * @param {string} myObject - Name of the varibale where will be store myResult
    * @param {string} myHeader - Name of the variable containing the header
    */
-   PARALLEL_GET_HEADER = "execute parallel GET to {} and save the result named {} within the object {} with header {}",
+   PARALLEL_GET_HEADER = "execute parallel GET to {} with header {} and save the result named {} within the object {}",
   /**
    * `Given I execute parallel GET to array 'myEndpointArray' and save the result named 'myResult' within the object 'myObject'`<br><br>
    * Perform parallel get to array *myEndpointArray* and store the result in *myObject.myResult* which will be an array of dictionary with two entries:
@@ -102,7 +102,7 @@ export enum Action {
    * @param {string} myObject - Name of the varibale where will be store myResult
    * @param {string} myHeader - Name of the variable containing the header
    */
-    PARALLEL_GET_ARRAY_HEADER = "execute parallel GET to array {} and save the result named {} within the object {} with header {}",
+    PARALLEL_GET_ARRAY_HEADER = "execute parallel GET to array {} with header {} and save the result named {} within the object {}",
   /**
    * `Given I execute parallel POST with 'myData' to 'myEndpoint' and save the result named 'myResult' within the object 'myObject'`<br><br>
    * By repeating this statment *n* times it will perform *n* parallel post to *myEndpoint* with data contained in *myData* and store the result in
@@ -127,7 +127,7 @@ export enum Action {
    * @param {string} myObject - Name of the varibale where will be store myResult
    * @param {string} myHeader - Name of the variable containing the header
    */
-  PARALLEL_POST_HEADER = "execute parallel POST with {} to {} and save the result named {} within the object {} with header {}",
+  PARALLEL_POST_HEADER = "execute parallel POST with {} to {} with header {} and save the result named {} within the object {}",
   /**
    * `Given I execute parallel POST with 'myData' to array 'myEndpointArray' and save the result named 'myResult' within the object 'myObject'`<br><br>
    * Perform parallel post to array *myEndpointArray* with data contained in *myData* and store the result in
@@ -152,7 +152,7 @@ export enum Action {
    * @param {string} myObject - Name of the varibale where will be store myResult
    * @param {string} myHeader - Name of the variable containing the header
    */
-  PARALLEL_POST_ARRAY_WITHIN_HEADER = "execute parallel POST with {} to array {} and save the result named {} within the object {} with header {}",
+  PARALLEL_POST_ARRAY_WITHIN_HEADER = "execute parallel POST with {} to array {} with header {} and save the result named {} within the object {}",
   /**
    * `Given I execute parallel POST with 'myData' to array 'myEndpointArray' and save the result named 'myResult'`<br><br>
    * Perform parallel post to array *myEndpointArray* with data contained in *myData* and store the result in
@@ -175,7 +175,7 @@ export enum Action {
    * @param {string} myResult - Name of the varibale where will be store the reuslt of the post
    * @param {string} myHeader - Name of the variable containing the header
    */
-   PARALLEL_POST_ARRAY_HEADER = "execute parallel POST with {} to array {} and save the result named {} with header {}",
+   PARALLEL_POST_ARRAY_HEADER = "execute parallel POST with {} to array {} with header {} and save the result named {}",
   /**
    * `Given I execute parallel POST with array 'myDataArray' to array 'myEndpointArray' and save the result named 'myResult'`<br><br>
    * Perform parallel post to array *myEndpointArray* and for the *n-th* endpoint uses the *n-th* entry found in the *myDataArray* as data
@@ -198,6 +198,6 @@ export enum Action {
    * @param {string} myResult - Name of the varibale where will be store the reuslt of the post
    * @param {string} myHeader - Name of the variable containing the header
    */
-  PARALLEL_POST_ARRAY_DIFFERENT_DATA_HEADER = "execute parallel POST with array {} to array {} and save the result named {} with header {}",
+  PARALLEL_POST_ARRAY_DIFFERENT_DATA_HEADER = "execute parallel POST with array {} to array {} with header {} and save the result named {}",
 
 }
