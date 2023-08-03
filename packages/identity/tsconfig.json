@@ -9,5 +9,5 @@
   }, {
     "path": "../types"
   }],
-  "exclude": ["node_modules", "dist", "tests"]
+  "exclude": ["dist", "tests"]
 }

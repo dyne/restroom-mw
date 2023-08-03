@@ -6,5 +6,5 @@ export enum Action {
    * @param {string} myUrl - Name of the variable containing the url of the resolver
    * @param {string} myOutput - Name of the variable where the output json will be stored
    */
-  RESOLVE_DID = "Given I resolve the did {} from {} and save the output into {}",
+  RESOLVE_DID = "resolve the did {} from {} and save the output into {}",
 }
