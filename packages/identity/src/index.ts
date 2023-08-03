@@ -4,6 +4,7 @@ import { Zencode } from "@restroom-mw/zencode";
 import { NextFunction, Request, Response } from "express";
 import axios from "axios";
 import { Action } from "./actions";
+import { url } from "inspector";
 
 export default (req: Request, res: Response, next: NextFunction) => {
   const rr = new Restroom(req, res);
@@ -20,12 +21,19 @@ export default (req: Request, res: Response, next: NextFunction) => {
 
       if (zencode.match(Action.RESOLVE_DID)) {
         let [did, urlName, o] = zencode.paramsOf(Action.RESOLVE_DID);
-        let url = content[urlName]
-        if( url[-1] !== "/") {
-          url = url + "/";
+        let check_url : URL;
+        let url_resolver : URL;
+        try {
+          check_url = new URL(content[urlName]);
+        } catch (err) {
+          throw new Error("The string " + content[urlName] + " is an invalid URL");
         }
-        const url_resolver = url + content[did];
-        const response = await axios.get(url_resolver);
+        try{
+          url_resolver = new URL(check_url.toString() + "/" + content[did]);
+        } catch(err){
+          throw new Error("The string " + content[did] + " is an invalid URL");
+        }
+        const response = await axios.get(url_resolver.toString());
         data[o] = response.data;
       }
     }
