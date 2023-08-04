@@ -1,8 +1,10 @@
 Rule caller restroom-mw
 
 Given I have a 'string' named 'myDid'
+Given I have a 'string' named 'myDid2'
 Given I have a 'string' named 'myUrl'
 Given I have a 'string dictionary' named 'myOutput'
+Given I have a 'string dictionary' named 'myOutput2'
 Given I resolve the did 'myDid' from 'myUrl' and save the output into 'myOutput'
-
+Given I resolve the did 'myDid2' from 'myUrl' and save the output into 'myOutput2'
 Then print all data

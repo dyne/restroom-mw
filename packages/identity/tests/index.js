@@ -18,7 +18,7 @@ test("Resolve did",
       Object.keys(res.body).includes("myOutput"),
       'could not find "myOutput " in response'
     );
-    const output = res.body.myOutput;
+    let output = res.body.myOutput;
     t.true(
       Object.keys(output).includes("didDocument"),
       'could not find "didDocument" in myOutput'
@@ -30,6 +30,23 @@ test("Resolve did",
     t.true(
       Object.keys(output).includes("@context"),
       'could not find "@context" in myOutput'
+    );
+    t.true(
+      Object.keys(res.body).includes("myOutput2"),
+      'could not find "myOutput2 " in response'
+    );
+    output = res.body.myOutput2;
+    t.true(
+      Object.keys(output).includes("didDocument"),
+      'could not find "didDocument" in myOutput2'
+    );
+    t.true(
+      Object.keys(output).includes("didDocumentMetadata"),
+      'could not find "didDocumentMetadata" in myOutput2'
+    );
+    t.true(
+      Object.keys(output).includes("@context"),
+      'could not find "@context" in myOutput2'
     );
     t.is(res.status, 200);
   });
