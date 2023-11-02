@@ -19,7 +19,7 @@ jobs:
     strategy:
       max-parallel: 1
       matrix:
-        node-version: [16.13.0, 18]
+        node-version: [18, 20]
 
     steps:
     - uses: actions/checkout@v3
@@ -85,4 +85,3 @@ jobs:
           lerna publish --no-verify-access -c -y --pre-dist-tag next --preid $(git rev-parse --short HEAD) --force-publish=*
       env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
