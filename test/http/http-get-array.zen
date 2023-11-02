@@ -1,4 +1,4 @@
 Rule unknown ignore
-Given I have a 'string dictionary' named 'myObject'
 Given I execute parallel GET to array 'myArray' and save the result named 'myResult' within the object 'myObject'
+Given I have a 'string dictionary' named 'myObject'
 Then print all data

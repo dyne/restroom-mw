@@ -1,5 +1,5 @@
 Rule unknown ignore
 Given that I have a sawroom endpoint named 'myEndpoint'
-Given I have a 'number' named 'myBalance'
 Given I ask sawroom to read the balance of the wallet 'myKey' and print it in 'myBalance'
+Given I have a 'number' named 'myBalance'
 Then print all data

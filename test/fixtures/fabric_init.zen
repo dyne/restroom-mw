@@ -6,7 +6,7 @@
 
 # NOTE: this whole script is managed by Restroom-mw, Zenroom does nothing here
 
-Rule caller restroom-mw
+Rule unknown ignore
 # Set the address of the endpoint as the tls certificate
 Given I have a fabric endpoint named 'endpoint' with tls certificate in 'tls'
 # More parameter to estabilish the connection (they are given in the config files of fabric)

@@ -1,10 +1,9 @@
 Rule unknown ignore
 
-Given I have a 'string dictionary' named 'commit'
 Given I verify the path 'current' is a git repository
+Given I have a 'string dictionary' named 'commit'
 
 When I create the random 'random string'
 Then print 'random_string'
 Then I store 'random_string' in the file 'file'
 Then I make a new commit to the git repository in 'current'
-

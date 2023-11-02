@@ -1,4 +1,4 @@
-Rule caller restroom-mw
+Rule unknown ignore
 Given I read the http request
 Given I have a 'string dictionary' named 'http request'
 When I pickup from path 'http request.http version'

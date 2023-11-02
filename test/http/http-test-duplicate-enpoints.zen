@@ -1,9 +1,9 @@
-Rule unknown ignore 
-Scenario 'ecdh': Create the keypair 
-Given that I have an endpoint named 'endpoint' 
-Given I have a 'string dictionary' named 'myData'
+Rule unknown ignore
+Scenario 'ecdh': Create the keypair
+Given that I have an endpoint named 'endpoint'
 Given I connect to 'endpoint' and save the output into 'myData'
 Given that I have an endpoint named 'endpoint'
-Given I have a 'string dictionary' named 'myData2'
 Given I connect to 'endpoint2' and save the output into 'myData2'
+Given I have a 'string dictionary' named 'myData'
+Given I have a 'string dictionary' named 'myData2'
 Then print the 'myData'

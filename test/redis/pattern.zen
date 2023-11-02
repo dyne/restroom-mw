@@ -1,5 +1,5 @@
-Rule caller restroom-mw
+Rule unknown ignore
 Given I have a valid redis connection on 'redis://localhost:6379'
-Given I have a 'string dictionary' named 'my data'
 Given I read from redis the data under the keys containing 'pattern' and save the output into 'my_data'
+Given I have a 'string dictionary' named 'my data'
 Then print all data

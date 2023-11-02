@@ -1,7 +1,7 @@
 Rule unknown ignore
+Given I execute parallel GET to 'get_url' and save the result named 'one' within the object 'timestamps'
+Given I execute parallel GET to 'get_url' and save the result named 'two' within the object 'timestamps'
+Given I execute parallel GET to 'get_url' and save the result named 'three' within the object 'timestamps'
+Given I execute parallel GET to 'get_url' and save the result named 'four' within the object 'timestamps'
 Given I have a 'string dictionary' named 'timestamps'
-When I execute parallel GET to 'get_url' and save the result named 'one' within the object 'timestamps'
-When I execute parallel GET to 'get_url' and save the result named 'two' within the object 'timestamps'
-When I execute parallel GET to 'get_url' and save the result named 'three' within the object 'timestamps'
-When I execute parallel GET to 'get_url' and save the result named 'four' within the object 'timestamps'
 Then print the 'timestamps'

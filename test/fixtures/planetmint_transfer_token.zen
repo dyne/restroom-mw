@@ -15,10 +15,9 @@ Given I have a 'string' named 'planetmint transaction'
 
 When I create the planetmint signatures of 'planetmint transaction'
 
-# Restrom onSuccess
-Then I prepare the signed planetmint transaction of 'planetmint_transaction' from 'eddsa_public_key'
-Then ask planetmint to broadcast the 'signed_planetmint_transaction'
 # Zenroom
 Then print the data
 
-
+# Restrom onSuccess
+Then I prepare the signed planetmint transaction of 'planetmint_transaction' from 'eddsa_public_key'
+Then ask planetmint to broadcast the 'signed_planetmint_transaction'

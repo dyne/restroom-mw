@@ -1,4 +1,4 @@
-Rule caller restroom-mw
+Rule unknown ignore
 Given I have a valid redis connection on 'redis://localhost:6379'
 Given I have a 'string dictionary' named 'data'
 Given I have a 'hex' named 'hex string'

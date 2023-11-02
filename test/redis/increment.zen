@@ -1,9 +1,7 @@
-Rule caller restroom-mw
+Rule unknown ignore
 Given I have a valid redis connection on 'redis://localhost:6379'
-Given I have a 'number' named 'incremented'
 Given I read into 'incremented' and increment the key named by 'key'
-Given I have a 'number' named 'succ'
 Given I read into 'succ' and increment the key named by 'key'
+Given I have a 'number' named 'incremented'
+Given I have a 'number' named 'succ'
 Then print data
-
-

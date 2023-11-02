@@ -1,5 +1,5 @@
 Rule unknown ignore
 Given that I have a sawroom endpoint named 'endpoint'
+Given I read from Sawroom the data in tag 'myTag' and save the output into 'myResult'
 And I have a 'string' named 'myResult'
-When I read from Sawroom the data in tag 'myTag' and save the output into 'myResult'
 Then print all data
