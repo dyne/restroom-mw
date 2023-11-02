@@ -7,6 +7,9 @@ import zencode from "@restroom-mw/core";
 {{#@restroom-mw/timestamp}}
 import timestamp from "@restroom-mw/timestamp";
 {{/@restroom-mw/timestamp}}
+{{#@restroom-mw/identity}}
+import identity from "@restroom-mw/identity";
+{{/@restroom-mw/identity}}
 {{#@restroom-mw/git}}
 import git from "@restroom-mw/git";
 {{/@restroom-mw/git}}
@@ -63,6 +66,9 @@ app.use(bodyParser.json());
 app.use(morgan("dev"));
 app.set("json spaces", 2);
 
+{{#@restroom-mw/identity}}
+app.use(identity.default);
+{{/@restroom-mw/identity}}
 {{#@restroom-mw/db}}
 app.use(db.default);
 {{/@restroom-mw/db}}
