@@ -11,7 +11,7 @@
     ]
   },
   "engines": {
-    "node": "^16.13.0 || ^18.0.0"
+    "node": "^18.0.0 || ^20.0.0"
   },
   "scripts": {
     "prerelease": "yarn build && yarn doc && git add docs && git commit -m 'docs: 📚️ 📝 Update docs'",
