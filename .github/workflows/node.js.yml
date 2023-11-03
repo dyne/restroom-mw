@@ -51,7 +51,6 @@ jobs:
           --force
         influx write --bucket dyne --file test/fixtures/influxdb_data.lp
     - run: yarn
-    - run: yarn add -W zenroom
     - run: yarn build
     - run: yarn test
     - uses: codecov/codecov-action@v3
