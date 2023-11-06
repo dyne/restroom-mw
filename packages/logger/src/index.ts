@@ -25,7 +25,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
   rr.onSuccess(async (params) => {
     const {result, zencode} = params;
 
-    const addLog = (sentences: string[], where: string) => {
+    const addLog = async (sentences: string[], where: string) => {
       const absolutePath = path.resolve(path.join(LOGGER_DIR, where));
       validatePath(absolutePath);
       const ws = fs.createWriteStream(absolutePath, {flags: "a"});
@@ -34,12 +34,15 @@ export default (req: Request, res: Response, next: NextFunction) => {
           `[LOGGER] An error occurred while writing to ${where}\n${error}`)
       });
       sentences.forEach( (v) => ws.write(`${v}\n`) )
+      await new Promise<void>((resolve, reject) => {
+        ws.close(() => resolve())
+      })
     }
 
     if (zencode.match(Action.APPEND)) {
       const params = zencode.chunkedParamsOf(Action.APPEND, 2);
       for(const [ sentence, where ] of params) {
-        addLog([ result[sentence] || input[sentence] || sentence ], where);
+        await addLog([ result[sentence] || input[sentence] || sentence ], where);
       }
     }
     if (zencode.match(Action.APPEND_NAMED)) {
@@ -50,7 +53,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
           throw new Error(
             `[LOGGER] Could not find path to log ${pathName}`)
         }
-        addLog([ result[sentence] || input[sentence] || sentence ], logPath);
+        await addLog([ result[sentence] || input[sentence] || sentence ], logPath);
       }
     }
     if (zencode.match(Action.APPEND_ARRAY)) {
@@ -61,7 +64,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
           throw new Error(
             `[LOGGER] Could not find sentences array to log ${arrayName}`)
         }
-        addLog(sentences,
+        await addLog(sentences,
           result[where] || input[where] || where);
       }
     }
