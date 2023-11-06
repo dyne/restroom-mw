@@ -1,7 +1,7 @@
 import { Restroom } from "@restroom-mw/core";
 import { ObjectLiteral } from "@restroom-mw/types";
 import { Zencode } from "@restroom-mw/zencode";
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 import { NextFunction, Request, Response } from "express";
 import https from "https";
 import { Action } from "./actions";
@@ -19,6 +19,46 @@ export default (req: Request, res: Response, next: NextFunction) => {
   let externalSourceKeys: string[] = [];
   let parallel_params: { output: string; index: [string , number]}[] = [];
   let parallel_promises: Promise<any>[] = [];
+
+  function genericGet(url: string, ind: [string, number], o: string, headers?: Record<string, string>){
+    genericRequest(ind, o, {url, method: "get"}, headers);
+  }
+
+  function genericPost(url: string, ind: [string, number], o: string, data: any, headers?: Record<string, string>){
+    genericRequest(ind, o, {url, data, method: "post"}, headers);
+  }
+
+  function genericRequest(ind: [string, number], o: string, req: Record<string, string>, headers?: Record<string, string>){
+    let opts: AxiosRequestConfig = { validateStatus: () => true };
+    if(headers){
+      opts.headers = headers;
+    }
+    parallel_promises.push(axios({...req, ...opts}));
+    parallel_params.push({
+      output: o,
+      index: ind,
+    });
+  }
+
+  function requestArray(makeRequest: (j: number, url: string, header: Record<string, string>) => void, urlsName: string, headerName: string){
+    const urls = content[urlsName];
+    const header = content[headerName];
+    if(Array.isArray(header)) {
+      if(urls.length === header.length){
+        for(let j = 0; j < urls.length; j++) {
+          makeRequest(j, urls[j], header[j])
+        }
+      } else {
+        throw new Error(`[HTTP] different length of arrays ${urlsName} and ${headerName}`);
+      }
+    } else if (header.constructor === Object){
+      for(let j = 0; j < urls.length; j++) {
+        makeRequest(j, urls[j], header)
+      }
+    } else {
+      throw new Error(`[HTTP] unrecognised instance of ${headerName}`);
+    }
+  }
 
   rr.onBefore(
     async (params: {
@@ -58,22 +98,25 @@ export default (req: Request, res: Response, next: NextFunction) => {
         for (const [urlsName, i, o] of chunks(zencode.paramsOf(Action.PARALLEL_GET_ARRAY), 3)) {
           const urls = content[urlsName]
           for(let j = 0; j < urls.length; j++) {
-            parallel_promises.push(axios.get(urls[j], { validateStatus: () => true }));
-            parallel_params.push({
-              output: o,
-              index: [i, j],
-            });
+            genericGet(urls[j], [i, j], o);
           }
+        }
+      }
+      if (zencode.match(Action.PARALLEL_GET_ARRAY_HEADER)) {
+        for (const [urlsName, headerName, i, o] of chunks(zencode.paramsOf(Action.PARALLEL_GET_ARRAY_HEADER), 4)) {
+          requestArray((j, url, header) => genericGet(url,[i,j], o, header), urlsName, headerName);
         }
       }
 
       if (zencode.match(Action.PARALLEL_GET)) {
         for (const [url, i, o] of chunks(zencode.paramsOf(Action.PARALLEL_GET), 3)) {
-          parallel_promises.push(axios.get(content[url], { validateStatus: () => true }));
-          parallel_params.push({
-            output: o,
-            index: [i, -1],
-          });
+          genericGet(content[url], [i, -1], o);
+        }
+      }
+
+      if (zencode.match(Action.PARALLEL_GET_HEADER)) {
+        for (const [url, header, i, o] of chunks(zencode.paramsOf(Action.PARALLEL_GET_HEADER), 4)) {
+          genericGet(content[url], [i, -1], o, content[header]);
         }
       }
 
@@ -81,12 +124,14 @@ export default (req: Request, res: Response, next: NextFunction) => {
         for (const [d, urlsName, i, o] of chunks(zencode.paramsOf(Action.PARALLEL_POST_ARRAY_WITHIN), 4)) {
           const urls = content[urlsName]
           for(let j = 0; j < urls.length; j++) {
-            parallel_promises.push(axios.post(urls[j], content[d], { validateStatus: () => true }));
-            parallel_params.push({
-              output: o,
-              index: [i, j],
-            });
+            genericPost(urls[j], [i,j], o, content[d]);
           }
+        }
+      }
+
+      if (zencode.match(Action.PARALLEL_POST_ARRAY_WITHIN_HEADER)) {
+        for (const [d, urlsName, headerName, i, o] of chunks(zencode.paramsOf(Action.PARALLEL_POST_ARRAY_WITHIN_HEADER), 5)) {
+          requestArray((j, url, header) => genericPost(url,[i,j], o, content[d], header), urlsName, headerName);
         }
       }
 
@@ -94,12 +139,14 @@ export default (req: Request, res: Response, next: NextFunction) => {
         for (const [d, urlsName, i] of chunks(zencode.paramsOf(Action.PARALLEL_POST_ARRAY), 3)) {
           const urls = content[urlsName]
           for(let j = 0; j < urls.length; j++) {
-            parallel_promises.push(axios.post(urls[j], content[d], { validateStatus: () => true }))
-            parallel_params.push({
-              output: null,
-              index: [i, j],
-            });
+            genericPost(urls[j], [i,j], null, content[d]);
           }
+        }
+      }
+
+      if (zencode.match(Action.PARALLEL_POST_ARRAY_HEADER)) {
+        for (const [d, urlsName, headerName, i] of chunks(zencode.paramsOf(Action.PARALLEL_POST_ARRAY_HEADER), 4)) {
+          requestArray((j, url, header) => genericPost(url,[i,j], null, content[d], header), urlsName, headerName);
         }
       }
 
@@ -108,25 +155,26 @@ export default (req: Request, res: Response, next: NextFunction) => {
           const urls = content[urlsName];
           const data = content[dataName];
           for(let j = 0; j < urls.length; j++) {
-            parallel_promises.push(axios.post(urls[j], data[j], { validateStatus: () => true }));
-            parallel_params.push({
-              output: null,
-              index: [i, j],
-            });
+            genericPost(urls[j], [i,j], null, data[j]);
           }
         }
       }
 
+      if (zencode.match(Action.PARALLEL_POST_ARRAY_DIFFERENT_DATA_HEADER)) {
+        for (const [dataName, urlsName, headerName, i] of chunks(zencode.paramsOf(Action.PARALLEL_POST_ARRAY_DIFFERENT_DATA_HEADER), 4)) {
+          requestArray((j, url, header) => genericPost(url,[i,j], null, content[dataName][j], header), urlsName, headerName);
+        }
+      }
+
+      if (zencode.match(Action.PARALLEL_POST_HEADER)) {
+        for (const [d, url, header, i, o] of chunks(zencode.paramsOf(Action.PARALLEL_POST_HEADER), 5)) {
+          genericPost(content[url], [i,-1], o, d, content[header]);
+        }
+      }
+
       if (zencode.match(Action.PARALLEL_POST)) {
-        for (const [d, url, i, o] of chunks(
-          zencode.paramsOf(Action.PARALLEL_POST),
-          4
-        )) {
-          parallel_promises.push(axios.post(content[url], content[d]));
-          parallel_params.push({
-            output: o,
-            index: [i, -1],
-          });
+        for (const [d, url, i, o] of chunks(zencode.paramsOf(Action.PARALLEL_POST), 4)) {
+          genericPost(url, [i,-1], o, d);
         }
       }
 
