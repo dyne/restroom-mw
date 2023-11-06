@@ -480,7 +480,7 @@ function initializeSingleContext(block:string):BlockContext{
 export const addMiddlewares =
   async (baseUrl: string, app: Express) => {
   const mws = [
-    'timestamp', 'git', 'db', 'files', 'redis', 'influxdb', 'http',
+    'timestamp', 'identity', 'git', 'db', 'files', 'redis', 'influxdb', 'http',
     'fabric', 'planetmint',  'sawroom', 'ethereum', 'logger', 'ui',
 
   ]
