@@ -1,7 +1,7 @@
 
 Rule unknown ignore
 Scenario sawroom: Login on sawroom rest api
-Given I have a 'string' named 'token'
 Given that I have a sawroom endpoint named 'endpoint'
-Given that I have a sawroom username named 'user' and a password named 'pass' 
+Given that I have a sawroom username named 'user' and a password named 'pass'
+Given I have a 'string' named 'token'
 Then print data

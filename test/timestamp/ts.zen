@@ -1,4 +1,5 @@
 Rule unknown ignore
+
+Given I fetch the local timestamp and store it into 'myTimestamp'
 Given I have a 'string' named 'myTimestamp'
-When I fetch the local timestamp and store it into 'myTimestamp'
 Then print 'myTimestamp'

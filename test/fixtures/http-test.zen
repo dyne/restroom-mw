@@ -2,6 +2,6 @@ rule check version 1.0.0
 rule unknown ignore
 Scenario test: Test api http
 Given that I have an endpoint named 'api'
-When I create the array of '5' random objects of '256' bits
 And I connect to 'api' and save the output
+When I create the array of '5' random objects of '256' bits
 Then print all data

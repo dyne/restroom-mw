@@ -1,6 +1,6 @@
 
 # Always use 'Rule caller restroom-mw' when using Restroom
-Rule caller restroom-mw
+Rule unknown ignore
 
 Scenario 'ecdh': Create the keypair 
 
@@ -23,8 +23,8 @@ and I rename the 'array' to 'randomArray'
 # and I rename the 'base64 dictionary' to 'outputData'
 
 # Organize the output of the endpoints in the string dictionary
-# When I insert 'timestamp' in 'outputData'
-# When I insert 'randomArray' in 'outputData'
+# When I move 'timestamp' in 'outputData'
+# When I move 'randomArray' in 'outputData'
 
 # Informative string
 When I write string 'see the results in https://beeceptor.com/console/dyneorg' in 'outputString'

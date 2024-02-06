@@ -3,9 +3,8 @@ rule check version 1.0.0
 
 Scenario sawroom: Save object data
 
-#Here we define a timestamp server, we connect to it and save the output into a Zenroom object 
-Given that I have an endpoint named 'timeServer' 
-Given I have a 'number' named 'timestamp'
+#Here we define a timestamp server, we connect to it and save the output into a Zenroom object
+Given that I have an endpoint named 'timeServer'
 Given I connect to 'timeServer' and save the output into 'timestamp'
 
 # Here we define the endpoint where Sawroom can be reached
@@ -16,6 +15,7 @@ Given that I have a sawroom endpoint named 'sawroomEndpoint'
 Given that I have an id for a sawroom context named 'myContextId1'
 Given that I have an id for a sawroom context named 'myContextId2'
 
+Given I have a 'number' named 'timestamp'
 
 
 # Here we create some random numbers
@@ -23,21 +23,21 @@ When I create the random object of '128' bits
 When I create the array of '5' random objects of '64' bits
 When I rename the 'array' to 'myRandomArray'
 
-When I create the 'string dictionary' 
+When I create the 'string dictionary'
 When I rename the 'string dictionary' to 'myPayload'
 
-When I insert 'timestamp' in 'myPayload'
-When I insert 'myRandomArray' in 'myPayload'
+When I move 'timestamp' in 'myPayload'
+When I move 'myRandomArray' in 'myPayload'
 
 
-# Here we print the output 
+# Here we print the output
 Then print the 'myPayload'
 #Then print the 'timestamp'
 
 
 
 # Here we ask Sawroom to save the data: If saving the data has succeded, Sawroom will return a batch id for each "context id" used
-# An arbitrary JSON object can be stored on chain 
+# An arbitrary JSON object can be stored on chain
 Then I ask sawroom to save the data named 'myPayload' with the context id 'myContextId1'
 # Then I ask sawroom to save the data named 'timestamp' with the context id 'myContextId1'
 # Currently you can not chain other Restroom-mw middlewares to the "Sawroom" middleware, for example you can random_object

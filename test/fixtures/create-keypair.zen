@@ -45,23 +45,23 @@ and I rename the 'base64 dictionary' to 'hashedAnswers'
 
 When I create the hash of 'question1'
 and I rename the 'hash' to 'question1.hash'
-When I insert 'question1.hash' in 'hashedAnswers'
+When I move 'question1.hash' in 'hashedAnswers'
 
 When I create the hash of 'question2'
 and I rename the 'hash' to 'question2.hash'
-When I insert 'question2.hash' in 'hashedAnswers'
+When I move 'question2.hash' in 'hashedAnswers'
 
 When I create the hash of 'question3'
 and I rename the 'hash' to 'question3.hash'
-When I insert 'question3.hash' in 'hashedAnswers'
+When I move 'question3.hash' in 'hashedAnswers'
 
 When I create the hash of 'question4'
 and I rename the 'hash' to 'question4.hash'
-When I insert 'question4.hash' in 'hashedAnswers'
+When I move 'question4.hash' in 'hashedAnswers'
 
 When I create the hash of 'question5'
 and I rename the 'hash' to 'question5.hash'
-When I insert 'question5.hash' in 'hashedAnswers'
+When I move 'question5.hash' in 'hashedAnswers'
 
 
 

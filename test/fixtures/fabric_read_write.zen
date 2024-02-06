@@ -15,7 +15,7 @@
 
 # NOTE: running the script may take some 10 seconds or more
 
-Rule caller restroom-mw
+Rule unknown ignore
 # In the first statement we set parameters for the Fabric network, that we know from the config of Fabric
 Given I have a fabric endpoint named 'endpoint' with tls certificate in 'tls'
 

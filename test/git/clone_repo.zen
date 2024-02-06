@@ -1,8 +1,8 @@
 Rule unknown ignore
 
-Given I have a 'string dictionary' named 'commit'
 Given I clone the repository 'repo' in 'current'
 Given I verify the path 'current' is a git repository
+Given I have a 'string dictionary' named 'commit'
 
 When I create the random 'random string'
 Then print 'random_string'

@@ -1,8 +1,8 @@
-Rule caller restroom-mw
+Rule unknown ignore
 Given I have a valid redis connection on 'redis://localhost:6379'
-Given I have a 'string dictionary' named 'redisResult'
-Given I have a 'string' named 'redisResult2'
 Given I read from redis the data under the key 'store-named:greeting' and save the output into 'redisResult'
 Given I read from redis the data under the key 'store-named:hex' and save the output into 'redisResult2'
+Given I have a 'string dictionary' named 'redisResult'
+Given I have a 'string' named 'redisResult2'
 Then print 'redisResult'
 Then print 'redisResult2'

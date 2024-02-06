@@ -26,9 +26,9 @@ blocks:
 
       Scenario 'ecdh': Encrypt a message with the password
 
+      Given that I have a sawroom endpoint named 'sawroomEndpoint'
       Given that I have a 'string' named 'password' inside 'user'
       Given that I have a 'string' named 'myRandom' inside 'user'
-      Given that I have a sawroom endpoint named 'sawroomEndpoint'
 
       When I encrypt the secret message 'myRandom' with 'password'
       Then print the 'secret_message'
@@ -45,8 +45,8 @@ blocks:
       Scenario 'ecdh': Decrypt the message with the password
 
       Given that I have a sawroom endpoint named 'endpoint'
-      And I have a 'secret_message' named 'secret_message' inside 'user'
       Given I read from Sawroom the data in tag 'transactionId' inside 'user' and save the output into 'secret_message'
+      And I have a 'secret_message' named 'secret_message' inside 'user'
       Given that I have a 'string' named 'password' inside 'user'
 
       When I decrypt the text of 'secret_message' with 'password'

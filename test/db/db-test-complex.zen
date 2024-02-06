@@ -1,13 +1,13 @@
-Rule caller restroom-mw
+Rule unknown ignore
 Scenario 'ecdh': Create the keypair
-Given I am 'John'
 Given I have a database uri named 'myDb1'
 Given I have a database uri named 'myDb2'
 Given I have a database table named 'myTable'
 Given I have a database table named 'myCache'
-Given I have a 'string dictionary' named 'myZenroomStringDictionary'
 # the value of the record could be 0 to max could be
 Given I read the record '3' of the table 'myTable' of the database 'myDb1' and save the result into 'myZenroomStringDictionary'
+Given I am 'John'
+Given I have a 'string dictionary' named 'myZenroomStringDictionary'
 When I create the ecdh key
 When I create the signature of 'myZenroomStringDictionary'
 When I create the array of '8' random objects of '256' bits

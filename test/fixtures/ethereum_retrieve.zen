@@ -1,8 +1,8 @@
-Rule unknown ignore 
+Rule unknown ignore
 Scenario ethereum
 Given I have a ethereum endpoint named 'fabchain'
-Given I have a 'hex' named 'poem bytes'
 Given I read the ethereum bytes with hash 'myTag' and save the output into 'poem_bytes'
+Given I have a 'hex' named 'poem bytes'
 When I create the string from the ethereum bytes named 'poem bytes'
 When I rename the 'string' to 'poem'
 

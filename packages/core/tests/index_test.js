@@ -414,6 +414,23 @@ test("Check that the middleware is handling if index is not filled for each", as
     .post("/api/consensusroom-test-foreach-temp1.chain")
     .send(_data);
 
-  t.true(res.body.zenroom_errors.logs.includes("Cannot find 'temp' anywhere"));
+  const lines = JSON.parse(res.body.zenroom_errors.logs);
+  let trace = null;
+  for(let log of lines) {
+    if(log.startsWith("J64 TRACE")) {
+      const encoded = log.substring("J64 TRACE: ".length);
+      trace = Buffer.from(encoded, 'base64').toString('utf-8');
+      break;
+    }
+  }
+  t.truthy(trace);
+  let found = false
+  for(let l of JSON.parse(trace)) {
+    if(l.startsWith("[!]") && l.includes("Cannot find 'temp' anywhere")) {
+      found = true
+      break;
+    }
+  }
+  t.true(found);
   t.is(res.status, 500);
 });

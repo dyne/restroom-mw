@@ -1,15 +1,15 @@
-Rule caller restroom-mw
+Rule unknown ignore
 Given I have a database uri named 'database'
+Given I execute the SQL statement named 'query_1' on the database named 'database' and save the result into 'result_1'
+Given I execute the SQL statement named 'query_2' on the database named 'database' and save the result into 'result_2'
+Given I execute the SQL statement named 'query_3' on the database named 'database' and save the result into 'result_3'
+Given I execute the SQL statement named 'query_4' on the database named 'database' and save the result into 'result_4'
+Given I execute the SQL statement named 'query_5' pass the parameters named 'query5_params' on the database named 'database' and save the result into 'result_5'
+Given I execute the SQL statement named 'query_6' pass the parameters named 'query6_params' on the database named 'database' and save the result into 'result_6'
 Given I have a 'string dictionary' named 'result_1'
 Given I have a 'string dictionary' named 'result_2'
 Given I have a 'string dictionary' named 'result_3'
-Given I have a 'string dictionary' named 'result_4'
+Given I have a 'string array' named 'result_4'
 Given I have a 'string dictionary' named 'result_5'
 Given I have a 'string dictionary' named 'result_6'
-When I execute the SQL statement named 'query_1' on the database named 'database' and save the result into 'result_1'
-When I execute the SQL statement named 'query_2' on the database named 'database' and save the result into 'result_2'
-When I execute the SQL statement named 'query_3' on the database named 'database' and save the result into 'result_3'
-When I execute the SQL statement named 'query_4' on the database named 'database' and save the result into 'result_4'
-When I execute the SQL statement named 'query_5' pass the parameters named 'query5_params' on the database named 'database' and save the result into 'result_5'
-When I execute the SQL statement named 'query_6' pass the parameters named 'query6_params' on the database named 'database' and save the result into 'result_6'
 Then print all data

@@ -1,4 +1,4 @@
-Rule caller restroom-mw
+Rule unknown ignore
 Given I have a valid redis connection on 'redis://localhost:6379'
 When I create the random object of '256' bits
 Then print all data

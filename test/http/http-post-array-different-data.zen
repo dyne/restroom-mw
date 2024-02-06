@@ -1,4 +1,4 @@
-Rule caller restroom-mw
+Rule unknown ignore
 
 # The contract behind the urls is a simple rename API, that is:
 # Given I have a 'string' named 'input'
