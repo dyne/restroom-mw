@@ -1,0 +1,9 @@
+{
+  "data": {
+    title: 'foo',
+    body: 'bar',
+    userId: 1,
+  },
+  "post_url": "https://jsonplaceholder.typicode.com/posts",
+  "header" : {"key" : "value"}
+}

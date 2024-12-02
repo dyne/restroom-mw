@@ -70,6 +70,18 @@ export enum Action {
    * @param {string} myObject - Name of the varibale where will be store myResult
    */
   PARALLEL_GET = "execute parallel GET to {} and save the result named {} within the object {}",
+   /**
+   * `Given I execute parallel GET to 'myEndpoint' and save the result named 'myResult' within the object 'myObject' with header 'myHeader'`<br><br>
+   * By repeating this statment *n* times it will perform *n* parallel get to *myEndpoint* with header *myHeader* and store the result in
+   * *myObject.myResult* which will be a dictionary with two entries:
+   * * **status**: will contain the status code
+   * * **result**: in case of success will contain the result otherwise it is a empty string
+   * @param {string} myEndpoint - Name of the variable containing the url's endpoint or the url's endpoint itself
+   * @param {string} myResult - Name of the varibale where will be store the reuslt of the get
+   * @param {string} myObject - Name of the varibale where will be store myResult
+   * @param {string} myHeader - Name of the variable containing the header
+   */
+   PARALLEL_GET_HEADER = "execute parallel GET to {} with header {} and save the result named {} within the object {}",
   /**
    * `Given I execute parallel GET to array 'myEndpointArray' and save the result named 'myResult' within the object 'myObject'`<br><br>
    * Perform parallel get to array *myEndpointArray* and store the result in *myObject.myResult* which will be an array of dictionary with two entries:
@@ -80,6 +92,17 @@ export enum Action {
    * @param {string} myObject - Name of the varibale where will be store myResult
    */
   PARALLEL_GET_ARRAY = "execute parallel GET to array {} and save the result named {} within the object {}",
+    /**
+   * `Given I execute parallel GET to array 'myEndpointArray' and save the result named 'myResult' within the object 'myObject' with header 'myHeader'`<br><br>
+   * Perform parallel get to array *myEndpointArray* with header *myHeader* and store the result in *myObject.myResult* which will be an array of dictionary with two entries:
+   * * **status**: will contain the status code
+   * * **result**: in case of success will contain the result otherwise it is a empty string
+   * @param {string} myEndpointArray - Name of the variable containing the array of urls' endpoint
+   * @param {string} myResult - Name of the varibale where will be store the reuslt of the get
+   * @param {string} myObject - Name of the varibale where will be store myResult
+   * @param {string} myHeader - Name of the variable containing the header
+   */
+    PARALLEL_GET_ARRAY_HEADER = "execute parallel GET to array {} with header {} and save the result named {} within the object {}",
   /**
    * `Given I execute parallel POST with 'myData' to 'myEndpoint' and save the result named 'myResult' within the object 'myObject'`<br><br>
    * By repeating this statment *n* times it will perform *n* parallel post to *myEndpoint* with data contained in *myData* and store the result in
@@ -93,6 +116,19 @@ export enum Action {
    */
   PARALLEL_POST = "execute parallel POST with {} to {} and save the result named {} within the object {}",
   /**
+   * `Given I execute parallel POST with 'myData' to 'myEndpoint' and save the result named 'myResult' within the object 'myObject' with header 'myHeader'`<br><br>
+   * By repeating this statment *n* times it will perform *n* parallel post to *myEndpoint* with data contained in *myData* and header contained in *myHeader* and store the result in
+   * *myObject.myResult* which will be an array of dictionary with two entries:
+   * * **status**: will contain the status code
+   * * **result**: in case of success will contain the result otherwise it is a empty string
+   * @param {string} myData - Name of the variable containing the data of the post
+   * @param {string} myEndpoint - Name of the variable containing the url's endpoint
+   * @param {string} myResult - Name of the varibale where will be store the reuslt of the post
+   * @param {string} myObject - Name of the varibale where will be store myResult
+   * @param {string} myHeader - Name of the variable containing the header
+   */
+  PARALLEL_POST_HEADER = "execute parallel POST with {} to {} with header {} and save the result named {} within the object {}",
+  /**
    * `Given I execute parallel POST with 'myData' to array 'myEndpointArray' and save the result named 'myResult' within the object 'myObject'`<br><br>
    * Perform parallel post to array *myEndpointArray* with data contained in *myData* and store the result in
    * *myObject.myResult* which will be an array of dictionary with two entries:
@@ -105,6 +141,19 @@ export enum Action {
    */
   PARALLEL_POST_ARRAY_WITHIN = "execute parallel POST with {} to array {} and save the result named {} within the object {}",
   /**
+   * `Given I execute parallel POST with 'myData' to array 'myEndpointArray', with header 'myHeader' and save the result named 'myResult' within the object 'myObject' with header 'myHeader'`<br><br>
+   * Perform parallel post to array *myEndpointArray* with data contained in *myData* and header contained in *myHeader* and store the result in
+   * *myObject.myResult* which will be an array of dictionary with two entries:
+   * * **status**: will contain the status code
+   * * **result**: in case of success will contain the result otherwise it is a empty string
+   * @param {string} myData - Name of the variable containing the data of the post
+   * @param {string} myEndpointArray - Name of the variable containing the array of urls' endpoint
+   * @param {string} myResult - Name of the varibale where will be store the reuslt of the post
+   * @param {string} myObject - Name of the varibale where will be store myResult
+   * @param {string} myHeader - Name of the variable containing the header
+   */
+  PARALLEL_POST_ARRAY_WITHIN_HEADER = "execute parallel POST with {} to array {} with header {} and save the result named {} within the object {}",
+  /**
    * `Given I execute parallel POST with 'myData' to array 'myEndpointArray' and save the result named 'myResult'`<br><br>
    * Perform parallel post to array *myEndpointArray* with data contained in *myData* and store the result in
    * *myResult* which will be an array of dictionary with two entries:
@@ -115,6 +164,18 @@ export enum Action {
    * @param {string} myResult - Name of the varibale where will be store the reuslt of the post
    */
   PARALLEL_POST_ARRAY = "execute parallel POST with {} to array {} and save the result named {}",
+   /**
+   * `Given I execute parallel POST with 'myData' to array 'myEndpointArray' with header 'myHeader' and save the result named 'myResult' with header 'myHeader'`<br><br>
+   * Perform parallel post to array *myEndpointArray* with data contained in *myData* and with header contained in *myHeader* and store the result in
+   * *myResult* which will be an array of dictionary with two entries:
+   * * **status**: will contain the status code
+   * * **result**: in case of success will contain the result otherwise it is a empty string
+   * @param {string} myData - Name of the variable containing the data of the post
+   * @param {string} myEndpointArray - Name of the variable containing the array of urls' endpoint
+   * @param {string} myResult - Name of the varibale where will be store the reuslt of the post
+   * @param {string} myHeader - Name of the variable containing the header
+   */
+   PARALLEL_POST_ARRAY_HEADER = "execute parallel POST with {} to array {} with header {} and save the result named {}",
   /**
    * `Given I execute parallel POST with array 'myDataArray' to array 'myEndpointArray' and save the result named 'myResult'`<br><br>
    * Perform parallel post to array *myEndpointArray* and for the *n-th* endpoint uses the *n-th* entry found in the *myDataArray* as data
@@ -126,4 +187,17 @@ export enum Action {
    * @param {string} myResult - Name of the varibale where will be store the reuslt of the post
    */
   PARALLEL_POST_ARRAY_DIFFERENT_DATA = "execute parallel POST with array {} to array {} and save the result named {}",
+    /**
+   * `Given I execute parallel POST with array 'myDataArray' to array 'myEndpointArray' and save the result named 'myResult' with header 'myHeader'`<br><br>
+   * Perform parallel post to array *myEndpointArray* with header *myHeader* and for the *n-th* endpoint uses the *n-th* entry found in the *myDataArray* as data
+   * and store the result in *myResult* which will be an array of dictionary with two entries:
+   * * **status**: will contain the status code
+   * * **result**: in case of success will contain the result otherwise it is a empty string
+   * @param {string} myDataArray - Name of the variable containing the array of data of the post
+   * @param {string} myEndpointArray - Name of the variable containing the array of urls' endpoint
+   * @param {string} myResult - Name of the varibale where will be store the reuslt of the post
+   * @param {string} myHeader - Name of the variable containing the header
+   */
+  PARALLEL_POST_ARRAY_DIFFERENT_DATA_HEADER = "execute parallel POST with array {} to array {} with header {} and save the result named {}",
+
 }

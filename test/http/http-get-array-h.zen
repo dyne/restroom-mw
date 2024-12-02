@@ -1,0 +1,5 @@
+Rule unknown ignore
+Given I have a 'string dictionary' named 'myObject'
+Given I have a 'string array' named 'headers'
+Given I execute parallel GET to array 'myArray' with header 'headers' and save the result named 'myResult' within the object 'myObject'
+Then print all data
