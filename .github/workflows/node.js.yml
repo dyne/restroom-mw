@@ -51,7 +51,7 @@ jobs:
           --force
         influx write --bucket dyne --file test/fixtures/influxdb_data.lp
     - run: yarn
-    - run: yarn add -W -D @types/glob
+    - run: rm -rf node_modules/@types/glob || true
     - run: yarn build
     - run: yarn test
     - uses: codecov/codecov-action@v3
